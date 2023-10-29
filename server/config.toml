@@ -1,0 +1,68 @@
+# 系统环境
+[environment]
+env = "dev" # prod/test/dev
+
+# 系统服务
+[server]
+# 系统服务地址配置
+[server.base]
+address = "127.0.0.1" # 服务地址
+port = 8000           # 服务端口
+# 上传路径配置
+[server.upload]
+filepath = "./upload" # 上传文件路径
+
+# mysql 数据库配置
+[mysql]
+# 参数配置
+[mysql.options]
+max_connections = 10 # 最大打开的连接数
+max_lifetime = 60    # 设置最大连接超时(min)
+enable_log = false   # 是否开启 SQL 日志
+# 只读数据库
+[mysql.read]
+key = "db"                  # db信息唯一标识
+host = "127.0.0.1"          # IP或域名
+port = 3306                 # 端口
+username = "one"            # 账号
+password = "pass"           # 密码
+db_name = "actix_admin_web" # 数据库名称
+# 读写数据库
+[mysql.write]
+key = "db"
+host = "127.0.0.1"
+port = 3306
+username = "one"
+password = "pass"
+db_name = "actix_admin_web"
+
+# sqlite3 数据库配置
+[sqlite]
+filepath = "data.dat" # 数据库路径
+pool_min_idle = 8     # 最小连接数
+pool_max_open = 32    # 最大连接数
+timeout_seconds = 15  # 连接超时时间单位秒
+
+# 日志
+[logger]
+# 终端配置
+[logger.console]
+level = "debug" # 日志级别, debug/info/warn/error/panic
+enable = true   # 是否启用，默认不启用
+# bunyan 终端配置
+[logger.console_bunyan]
+level = "debug" # 日志级别, trace/debug/info/warn/error
+enable = false   # 是否启用，默认不启用
+# 文件配置
+[logger.file]
+filepath = "logs"    # 日志路径
+filename = "app.log" # 日志文件名称
+level = "debug"      # 日志级别, trace/debug/info/warn/error
+enable = true        # 是否启用，默认不启用
+# 数据库配置
+[logger.db]
+# "mysql://127.0.0.1:3306@username:password/db_name"
+address = "sqlite://./data.dat" # 数据库地址
+log_name = "actix_admin_web"    # 日志记录器名称
+level = "debug"                 # 日志级别, trace/debug/info/warn/error
+enable = false                  # 是否启用，默认不启用

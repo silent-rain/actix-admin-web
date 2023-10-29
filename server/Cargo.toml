@@ -1,0 +1,29 @@
+[package]
+name = "actix-admin-web"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[workspace]
+members = [
+    # 数据库
+    "core/entity",
+    "core/migration",
+    "core/dao",
+    # 通用组件
+    "core/code",
+    "core/config",
+    "core/logger",
+    "core/response",
+    "core/database",
+    "core/utils",
+    # 业务
+    "core/dto",
+    "core/service",
+    "core/controller",
+    # App
+    "app/web",
+]
+
+[dependencies]

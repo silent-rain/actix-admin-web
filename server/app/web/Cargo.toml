@@ -1,0 +1,41 @@
+[package]
+name = "web"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+
+[dependencies]
+database = {path = "../../core/database"}
+migration = {path = "../../core/migration"}
+dao = {path = "../../core/dao"}
+dto = {path = "../../core/dto"}
+code = {path = "../../core/code"}
+config = {path = "../../core/config"}
+logger = {path = "../../core/logger"}
+response = {path = "../../core/response"}
+service = {path = "../../core/service"}
+
+actix-web = "4.4"
+actix-cors = "0.6"
+actix-files = "0.6"
+tracing-actix-web = "0.7"
+
+derive_more = "0.99"
+listenfd = "1.0"
+futures-util = "0.3"
+validator = {version = "0.16", features = ["derive"]}
+num_cpus = "1.16"
+tokio = {version = "1.33", features = []}
+serde = {version = "1.0", features = ["derive"]}
+serde_json = "1.0"
+dotenv = "0.15"
+log = "0.4"
+tracing = "0.1"
+once_cell = "1.18"
+rust-embed = {version = "8.0", features = [
+    "debug-embed",
+    "include-exclude",
+    "mime-guess",
+]}
