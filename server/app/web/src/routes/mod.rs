@@ -1,6 +1,7 @@
 //! 路由层
 use crate::middleware;
 
+pub mod resources;
 pub mod user;
 pub mod web_site;
 pub mod welcome;
@@ -20,7 +21,10 @@ pub fn register_api_routes() -> impl HttpServiceFactory {
         .service(
             web::scope("/v1")
                 // 用户管理
-                .service(user::register_routes()) // 角色管理
+                .service(user::list)
+                .service(user::info)
+                .service(user::add)
+                // 角色管理
                 // .service(
                 //     web::scope("/role")
                 //         .route("all", web::to(user::all))

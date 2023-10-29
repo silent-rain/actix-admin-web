@@ -2406,6 +2406,7 @@ dependencies = [
  "code",
  "serde",
  "serde_json",
+ "utoipa",
 ]
 
 [[package]]

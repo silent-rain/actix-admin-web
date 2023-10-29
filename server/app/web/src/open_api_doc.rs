@@ -1,13 +1,13 @@
 //! Auto generated OpenAPI documentation
-use utoipa::ToSchema;
 use utoipa::{
     openapi::security::{ApiKey, ApiKeyValue, SecurityScheme},
-    Modify, OpenApi,
+    Modify, OpenApi, ToSchema,
 };
 
-// use crate::models::response::APIResponse;
-// use crate::models::system::user::RegisterUser;
 use crate::routes;
+use response::Response;
+
+// use routes::user::list;
 
 // 注册 serde_json::Value
 // 让 open api 显示为对象
@@ -20,7 +20,12 @@ struct Value {}
 #[openapi(
     info(description = "My Api description"),
     paths(
+        // 打招呼
         routes::welcome::greet,
+        // 用户管理
+        routes::user::list,
+        routes::user::info,
+        routes::user::add,
         // 注册、登录
         // routes::system::user::register_user,
         // routes::system::user::login,
@@ -38,18 +43,10 @@ struct Value {}
         // routes::system::token_api_auth::update_token_uri_status,
         // routes::system::token_api_auth::update_token_uri_expire,
         // routes::system::token_api_auth::delete_token_uri,
-        // // 用户管理
-        // routes::system::user::get_user_info,
-        // routes::system::user::get_all,
-        // routes::system::user::delete_user,
-        // routes::system::user::update_first_name,
-        // routes::system::user::updateall,
-        // routes::system::user::find_user,
     ),
     components(
-       schemas(Value),
-        // schemas(APIResponse),
-        // schemas(RegisterUser),
+        schemas(Value),
+        schemas(Response),
     ),
     security(
         (),

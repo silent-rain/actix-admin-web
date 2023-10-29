@@ -1,6 +1,7 @@
 //! Web 静态资源服务
-use crate::controller::resources;
-use crate::utils::open_api_doc::ApiDoc;
+
+use super::resources;
+use crate::open_api_doc::ApiDoc;
 
 use actix_web::{dev::HttpServiceFactory, web};
 use utoipa::OpenApi;
@@ -24,8 +25,5 @@ pub fn register() -> impl HttpServiceFactory {
             SwaggerUi::new("/swagger-ui/{_:.*}").url("/api-docs/openapi.json", ApiDoc::openapi()),
         )
         // WEB 静态资源服务
-        .service(web::scope("").route(
-            "/{filename:.*}",
-            web::get().to(resources::Controller::index),
-        ))
+        .service(web::scope("").route("/{filename:.*}", web::get().to(resources::index)))
 }
