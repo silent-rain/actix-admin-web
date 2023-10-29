@@ -6,6 +6,7 @@ mod state;
 
 mod controller;
 mod routes;
+pub mod utils;
 
 use actix_web::{http::KeepAlive, web, App, HttpServer};
 use dotenv::dotenv;
@@ -69,8 +70,8 @@ async fn server(app_state: state::AppState, server_url: &str) -> std::io::Result
             .app_data(web::Data::new(app_state.clone()))
             // API 服务
             .service(routes::register_api_routes())
-            // 内嵌 静态资源
-            .service(routes::register_web_routes())
+            // 静态资源
+            .service(routes::web_site::register())
     })
     // 保持连接打开状态以等待后续请求, 使用操作系统保持活动状态
     .keep_alive(KeepAlive::Os)

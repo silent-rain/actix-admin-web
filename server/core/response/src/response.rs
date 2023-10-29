@@ -3,39 +3,31 @@ use code::Error;
 
 use actix_web::{body::BoxBody, http::header::ContentType, HttpRequest, HttpResponse, Responder};
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
+use serde_json::{json, Value};
 
 /// 数据列表
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct DataList<T: Serialize> {
-    data_list: Vec<T>,
+    data_list: T,
     total: u64,
-}
-
-/// 数据类型
-#[derive(Debug, Serialize, Deserialize, Clone)]
-enum Data<T: Serialize> {
-    Json(Value),
-    Data(T),
-    DataList(DataList<T>),
 }
 
 /// 响应结构
 #[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct Response<T: Serialize> {
+pub struct Response {
     code: u16,
     msg: String,
-    data: Data<T>,
+    data: Value,
 }
 
 #[allow(dead_code)]
-impl<T: Serialize> Response<T> {
+impl Response {
     /// 构建对象, 默认返回成功
     pub fn build() -> Self {
         Self {
             code: Error::OK.code(),
             msg: Error::OK.msg(),
-            data: Data::Json(Value::Null),
+            data: Value::Null,
         }
     }
     /// 错误码
@@ -55,24 +47,24 @@ impl<T: Serialize> Response<T> {
         self
     }
     /// 设置返回的数据
-    pub fn data(mut self, data: T) -> Self {
-        self.data = Data::Data(data);
+    pub fn data<T: Serialize>(mut self, data: T) -> Self {
+        self.data = json!(data);
         self
     }
     /// 设置返回的 Json 类型的数据
     pub fn json_data(mut self, data: Value) -> Self {
-        self.data = Data::Json(data);
+        self.data = data;
         self
     }
     /// 设置返回的数据列表
-    pub fn data_list(mut self, data_list: Vec<T>, total: u64) -> Self {
-        self.data = Data::DataList(DataList { data_list, total });
+    pub fn data_list<T: Serialize>(mut self, data_list: Vec<T>, total: u64) -> Self {
+        self.data = json!(DataList { data_list, total });
         self
     }
 }
 
 /// 实现 actix_web 响应
-impl<T: Serialize> Responder for Response<T> {
+impl Responder for Response {
     type Body = BoxBody;
 
     fn respond_to(self, _req: &HttpRequest) -> HttpResponse<Self::Body> {

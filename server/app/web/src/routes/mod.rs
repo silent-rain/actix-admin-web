@@ -1,8 +1,9 @@
-//!路由层
-use crate::controller::resources;
+//! 路由层
 use crate::middleware;
-mod user;
-use crate::controller::welcome;
+
+pub mod user;
+pub mod web_site;
+pub mod welcome;
 
 use actix_web::middleware::Logger;
 use actix_web::{dev::HttpServiceFactory, web};
@@ -26,26 +27,6 @@ pub fn register_api_routes() -> impl HttpServiceFactory {
                 //         .route("list", web::to(user::list)),
                 // ),
                 // 打招呼
-                .service(web::scope("").route("greet", web::get().to(welcome::Controller::greet))),
+                .service(welcome::greet),
         )
-}
-
-/// WEB 服务
-/// 注册 WEB 静态资源路由
-pub fn register_web_routes() -> impl HttpServiceFactory {
-    web::scope("")
-        // .wrap(actix_web::middleware::NormalizePath::default())
-        .wrap(actix_web::middleware::Compress::default())
-        // 静态资源
-        // 显示文件列表
-        // .service(Files::new("/", "../web/dist").show_files_listing())
-        // .service(
-        //     Files::new("/", "../web/dist")
-        //         .index_file("index.html")
-        //         .prefer_utf8(true),
-        // )
-        .service(web::scope("").route(
-            "/{filename:.*}",
-            web::get().to(resources::Controller::index),
-        ))
 }
