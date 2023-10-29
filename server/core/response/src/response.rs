@@ -5,6 +5,13 @@ use actix_web::{body::BoxBody, http::header::ContentType, HttpRequest, HttpRespo
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
+/// 数据列表
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct DataList<T: Serialize> {
+    data_list: T,
+    total: u64,
+}
+
 /// 响应结构
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Response {
@@ -57,18 +64,7 @@ impl Response {
     }
     /// Set the data of the `Response` to `data list`.
     pub fn data_list<T: Serialize>(mut self, data_list: &[T], total: u64) -> Self {
-        self.data = json!({
-            "data_list":data_list,
-            "total":total,
-        });
-        self
-    }
-    /// Set the data of the `Response` to `data list`.
-    pub fn data_list2(mut self, data_list: Value, total: u64) -> Self {
-        self.data = json!({
-            "data_list":data_list,
-            "total":total,
-        });
+        self.data = json!(DataList { data_list, total });
         self
     }
 }
@@ -85,14 +81,5 @@ impl Responder for Response {
         HttpResponse::Ok()
             .content_type(ContentType::json())
             .body(body)
-    }
-}
-
-pub type TauriResult = std::result::Result<Response, Response>;
-
-/// 实现 Tauri 响应转换
-impl From<Response> for TauriResult {
-    fn from(item: Response) -> Self {
-        Ok(item)
     }
 }
