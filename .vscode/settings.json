@@ -1,0 +1,14 @@
+{
+  "editor.formatOnSave": true, // 保存格式化
+  // Rust
+  "rust.all_targets": true,
+  "rust-analyzer.check.command": "clippy", // Rust 代码检查工具
+  "rust-analyzer.linkedProjects": [
+    "./server/Cargo.toml"
+  ],
+  "rust-analyzer.cargo.loadOutDirsFromCheck": true,
+  "rust-analyzer.procMacro.enable": true, // 开启宏检测
+  // comment  "rust-analyzer.diagnostics.disabled": [ "macro-error", "unresolved-proc-macro" ],
+  // "rust-analyzer.updates.channel": "nightly",
+  "rust-analyzer.checkOnSave.allTargets": true,
+}
