@@ -22,17 +22,11 @@ pub struct Response {
 
 #[allow(dead_code)]
 impl Response {
-    pub fn new(code: u16, msg: &str) -> Self {
-        Self {
-            code,
-            msg: msg.to_string(),
-            data: Value::Null,
-        }
-    }
+    /// 构建对象, 默认返回成功
     pub fn build() -> Self {
         Self {
             code: Error::OK.code(),
-            msg: "".to_string(),
+            msg: Error::OK.msg(),
             data: Value::Null,
         }
     }
@@ -42,27 +36,27 @@ impl Response {
         self.msg = code.msg();
         self
     }
-    /// 返回错误信息, 覆盖原始错误码信息
+    /// 返回错误信息, 覆盖错误码信息
     pub fn msg(mut self, msg: &str) -> Self {
         self.msg = msg.to_string();
         self
     }
-    /// 追加错误信息, 保留原始错误码信息
-    pub fn with_msg(mut self, msg: &str) -> Self {
+    /// 追加错误信息, 在错误码信息的基础上添加新的信息
+    pub fn append_msg(mut self, msg: &str) -> Self {
         self.msg = format!("{}, {}", self.msg, msg);
         self
     }
-    /// Set the data of the `Response` to `data`.
+    /// 设置返回的数据
     pub fn data<T: Serialize>(mut self, data: T) -> Self {
         self.data = json!(data);
         self
     }
-    /// Set the data of the `Response` to `data`.
-    pub fn data2(mut self, data: Value) -> Self {
+    /// 设置返回的 Json 类型的数据
+    pub fn json_data(mut self, data: Value) -> Self {
         self.data = data;
         self
     }
-    /// Set the data of the `Response` to `data list`.
+    /// 设置返回的数据列表
     pub fn data_list<T: Serialize>(mut self, data_list: &[T], total: u64) -> Self {
         self.data = json!(DataList { data_list, total });
         self
