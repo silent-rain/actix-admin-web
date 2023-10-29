@@ -21,7 +21,6 @@ members = [
     # 业务
     "core/dto",
     "core/service",
-    "core/controller",
     # App
     "app/web",
 ]

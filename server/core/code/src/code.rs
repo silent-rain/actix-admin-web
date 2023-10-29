@@ -55,45 +55,29 @@ pub enum Error {
     #[error("A possible error value when converting a String from a UTF-8 byte vector.")]
     FromUtf8Error(std::string::FromUtf8Error) = 10155,
 
-    // 数据库错误
-    /// 数据库初始化失败
     #[error("数据库初始化失败")]
     DbInitError(String) = 10200,
-    /// 数据库连接失败
     #[error("数据库连接失败")]
     DbConnectionError(String) = 10201,
-    /// 获取数据库实例失败
-    #[error("获取数据库实例失败")]
-    DbInstanceError = 10202,
-    /// 数据库关闭失败
     #[error("数据库关闭失败")]
     DbCloseError = 10203,
-    /// 查询数据失败
     #[error("查询数据失败")]
     DbQueryError = 10204,
-    /// 未查找到数据
     #[error("未查找到数据")]
     DbQueryEmptyError = 10205,
-    /// 数据添加失败
-    #[error("数据添加失败")]
+    #[error("添加数据失败")]
     DBAddError = 10206,
-    /// 数据更新失败
-    #[error("数据更新失败")]
+    #[error("更新数据失败")]
     DBUpdateError = 10207,
-    /// 数据删除失败
-    #[error("数据删除失败")]
+    #[error("删除数据失败")]
     DBDeleteError = 10208,
-    /// 数据批量删除失败
-    #[error("数据批量删除失败")]
+    #[error("批量删除数据失败")]
     DBBatchDeleteError = 10209,
-    /// 数据更新状态失败
-    #[error("数据更新状态失败")]
+    #[error("更新数据状态失败")]
     DBUpdateStatusError = 10210,
-    /// 数据已存在
     #[error("数据已存在")]
     DBDataExistError = 10211,
-    /// 数据存在子项
-    #[error("数据存在子项")]
+    #[error("数据已存在子项")]
     DBDataExistChildrenError = 10212,
 
     // 文件或目录操作
@@ -124,26 +108,6 @@ pub enum Error {
     #[error("日志初始化失败")]
     LoggerInitError(String) = 10351,
 
-    // Tauri 框架
-    /// 获取主窗口失败
-    #[error("获取主窗口失败")]
-    TauriMainWindowError = 10501,
-    /// 主窗口隐藏失败
-    #[error("主窗口隐藏失败")]
-    TauriMainWindowHideError = 10502,
-    /// 主窗口显示失败
-    #[error("主窗口显示失败")]
-    TauriMainWindowShowError = 10503,
-    /// 发送事件失败
-    #[error("发送事件失败")]
-    TauriEmitError = 10504,
-    /// 获取框架配置信息失败       
-    #[error("获取框架配置信息失败")]
-    TauriConfError = 10505,
-    /// 获取软件版本信息失败
-    #[error("获取软件版本信息失败")]
-    TauriPackageVersionError = 10506,
-
     /// 自定义错误
     #[error("自定义错误")]
     CustomError = 65535,
@@ -151,6 +115,7 @@ pub enum Error {
     // Other(Box<dyn std::error::Error + Send + Sync + 'static>),
 }
 
+/// 业务码序列化
 impl Serialize for Error {
     fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
     where

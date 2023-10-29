@@ -11,3 +11,7 @@ database = {path = "../database"}
 dao = {path = "../dao"}
 dto = {path = "../dto"}
 code = {path = "../code"}
+
+log = "0.4"
+tracing = {version = "0.1"}
+sea-orm = {version = "0.12"}

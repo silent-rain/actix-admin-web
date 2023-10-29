@@ -14,17 +14,14 @@ use validator::Validate;
 pub struct Controller;
 
 impl Controller {
-    pub async fn list(
-        state: web::Data<AppState>,
-        pagination: web::Query<Pagination>,
-    ) -> impl Responder {
-        let resp = user::Service::list(&state.db, pagination.page(), pagination.page_size()).await;
+    pub async fn list(state: web::Data<AppState>, page: web::Query<Pagination>) -> impl Responder {
+        let resp = user::Service::list(&state.db, page.into_inner()).await;
         let (results, total) = match resp {
             Ok(v) => v,
             Err(e) => return Response::build().code(e),
         };
 
-        Response::build().data_list(&results, total)
+        Response::build().data_list(results, total)
     }
 
     pub async fn info(
