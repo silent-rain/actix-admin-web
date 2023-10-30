@@ -2,7 +2,7 @@
 use crate::middleware;
 
 pub mod resources;
-pub mod user;
+pub mod perm_user;
 pub mod web_site;
 pub mod welcome;
 
@@ -21,9 +21,9 @@ pub fn register_api_routes() -> impl HttpServiceFactory {
         .service(
             web::scope("/v1")
                 // 用户管理
-                .service(user::list)
-                .service(user::info)
-                .service(user::add)
+                .service(perm_user::list)
+                .service(perm_user::info)
+                .service(perm_user::add)
                 // 角色管理
                 // .service(
                 //     web::scope("/role")

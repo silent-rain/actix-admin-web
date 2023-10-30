@@ -1,7 +1,7 @@
 //!用户管理
 use database::Pool;
 use dto::pagination::Pagination;
-use dto::perm_user::AddUserReq;
+use dto::perm_user::{AddUserReq, UserListReq};
 use entity::perm_user;
 use entity::prelude::PermUser;
 
@@ -28,7 +28,9 @@ impl<'a> Dao<'a> {
     }
 
     // 获取数据列表
-    pub async fn list(&self, page: Pagination) -> Result<(Vec<perm_user::Model>, u64), DbErr> {
+    pub async fn list(&self, req: UserListReq) -> Result<(Vec<perm_user::Model>, u64), DbErr> {
+        let page = Pagination::new(req.page, req.page_size);
+
         let paginator = PermUser::find()
             .order_by_asc(perm_user::Column::Id)
             .paginate(self.db.rdb(), page.page_size());

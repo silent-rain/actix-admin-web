@@ -9,7 +9,7 @@ use utoipa::ToSchema;
 /// 数据列表
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct DataList<T: Serialize> {
-    data_list: T,
+    data_list: Vec<T>,
     total: u64,
 }
 
@@ -21,7 +21,7 @@ pub struct Response {
     /// 返回信息
     msg: String,
     /// 返回数据
-    data: Value,
+    data: Option<Value>,
 }
 
 #[allow(dead_code)]
@@ -31,7 +31,7 @@ impl Response {
         Self {
             code: Error::OK.code(),
             msg: Error::OK.msg(),
-            data: Value::Null,
+            data: None,
         }
     }
     /// 错误码
@@ -46,23 +46,18 @@ impl Response {
         self
     }
     /// 追加错误信息, 在错误码信息的基础上添加新的信息
-    pub fn append_msg(mut self, msg: &str) -> Self {
+    pub fn with_msg(mut self, msg: &str) -> Self {
         self.msg = format!("{}, {}", self.msg, msg);
         self
     }
     /// 设置返回的数据
     pub fn data<T: Serialize>(mut self, data: T) -> Self {
-        self.data = json!(data);
-        self
-    }
-    /// 设置返回的 Json 类型的数据
-    pub fn json_data(mut self, data: Value) -> Self {
-        self.data = data;
+        self.data = Some(json!(data));
         self
     }
     /// 设置返回的数据列表
     pub fn data_list<T: Serialize>(mut self, data_list: Vec<T>, total: u64) -> Self {
-        self.data = json!(DataList { data_list, total });
+        self.data = Some(json!(DataList { data_list, total }));
         self
     }
 }

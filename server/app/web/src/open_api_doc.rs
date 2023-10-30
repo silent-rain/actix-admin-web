@@ -23,9 +23,9 @@ struct Value {}
         // 打招呼
         routes::welcome::greet,
         // 用户管理
-        routes::user::list,
-        routes::user::info,
-        routes::user::add,
+        routes::perm_user::list,
+        routes::perm_user::info,
+        routes::perm_user::add,
         // 注册、登录
         // routes::system::user::register_user,
         // routes::system::user::login,

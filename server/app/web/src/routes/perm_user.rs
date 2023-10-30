@@ -2,14 +2,14 @@
 
 use crate::state::AppState;
 use code::Error;
-use dto::perm_user::AddUserReq;
-use dto::{common::QueryIdReq, pagination::Pagination};
+use dto::perm_user::{AddUserReq, UserInfoReq, UserListReq};
 use response::Response;
 use service::user;
 
 use actix_web::{get, web, Responder};
 use validator::Validate;
 
+/// 用户列表查询
 #[utoipa::path(
     get,
     path = "/api/v1/user/list",
@@ -20,8 +20,8 @@ use validator::Validate;
     ),
 )]
 #[get("/user/list")]
-pub async fn list(state: web::Data<AppState>, page: web::Query<Pagination>) -> impl Responder {
-    let resp = user::Service::list(&state.db, page.into_inner()).await;
+pub async fn list(state: web::Data<AppState>, req: web::Query<UserListReq>) -> impl Responder {
+    let resp = user::Service::list(&state.db, req.into_inner()).await;
     let (results, total) = match resp {
         Ok(v) => v,
         Err(e) => return Response::build().code(e),
@@ -30,6 +30,7 @@ pub async fn list(state: web::Data<AppState>, page: web::Query<Pagination>) -> i
     Response::build().data_list(results, total)
 }
 
+/// 用户详情查询
 #[utoipa::path(
     get,
     path = "/api/v1/user/info",
@@ -40,7 +41,7 @@ pub async fn list(state: web::Data<AppState>, page: web::Query<Pagination>) -> i
     ),
 )]
 #[get("/user/info")]
-pub async fn info(state: web::Data<AppState>, params: web::Query<QueryIdReq>) -> impl Responder {
+pub async fn info(state: web::Data<AppState>, params: web::Query<UserInfoReq>) -> impl Responder {
     let resp = user::Service::info(&state.db, params.id).await;
 
     let result = match resp {
@@ -55,6 +56,7 @@ pub async fn info(state: web::Data<AppState>, params: web::Query<QueryIdReq>) ->
     Response::build().data(result)
 }
 
+/// 添加用户信息
 #[utoipa::path(
     get,
     path = "/api/v1/user/add",

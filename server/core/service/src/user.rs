@@ -2,7 +2,7 @@
 use code::Error;
 use dao::user::Dao;
 use database::Pool;
-use dto::{pagination::Pagination, perm_user::AddUserReq};
+use dto::perm_user::{AddUserReq, UserListReq};
 use entity::perm_user::Model;
 
 use sea_orm::DbErr::RecordNotFound;
@@ -13,8 +13,8 @@ pub struct Service;
 
 impl Service {
     /// 获取列表数据
-    pub async fn list(db: &Pool, page: Pagination) -> Result<(Vec<Model>, u64), Error> {
-        let results = Dao::new(db).list(page).await.map_err(|err| {
+    pub async fn list(db: &Pool, req: UserListReq) -> Result<(Vec<Model>, u64), Error> {
+        let results = Dao::new(db).list(req).await.map_err(|err| {
             error!("查询数据失败, error: {err:#?}");
             Error::DbQueryError
         })?;

@@ -13,10 +13,9 @@
 
 ### 前端
 
-- 语言：React + Typescript
+- 语言：
 - 构建工具: Vite
-- UI 框架：Antd
-- 全局状态管理：Hox
+- UI 框架：
 
 ## 功能列表
 
@@ -32,14 +31,6 @@
   - [x] 数据库自动迁移
   - [x] 数据库交互
     - 全局数据库实例
-    - App 仅仅支持离线数据库；
-- [ ] 跨端
-  - [x] Android
-  - [ ] IOS
-  - [x] Linux
-  - [x] Windows 11
-  - [ ] Mac
-  - [x] WEB
 
 ## 开发文档
 

@@ -2,6 +2,22 @@
 use serde::{Deserialize, Serialize};
 use validator::Validate;
 
+/// 用户列表查询
+#[derive(Default, Deserialize)]
+pub struct UserListReq {
+    /// 当前分页
+    pub page: u64,
+    /// 页面大小
+    pub page_size: u64,
+}
+
+/// 通过 ID 查询用户详情信息
+#[derive(Default, Deserialize)]
+pub struct UserInfoReq {
+    pub id: i32,
+}
+
+/// 添加用户
 #[derive(Serialize, Deserialize, Validate)]
 pub struct AddUserReq {
     #[validate(length(min = 3, message = "Name must be greater than 3 chars"))]
