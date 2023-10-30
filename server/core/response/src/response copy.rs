@@ -4,6 +4,7 @@ use code::Error;
 use actix_web::{body::BoxBody, http::header::ContentType, HttpRequest, HttpResponse, Responder};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
+use utoipa::ToSchema;
 
 /// 数据列表
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -13,7 +14,7 @@ pub struct DataList<T: Serialize> {
 }
 
 /// 响应结构
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, ToSchema)]
 pub struct Response {
     /// 返回业务码
     code: u16,

@@ -4,8 +4,6 @@ mod context;
 mod middleware;
 mod state;
 
-pub mod open_api_doc;
-
 mod routes;
 pub mod utils;
 

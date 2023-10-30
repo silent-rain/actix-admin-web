@@ -10,15 +10,6 @@ use actix_web::{get, web, Responder};
 use validator::Validate;
 
 /// 用户列表查询
-#[utoipa::path(
-    get,
-    path = "/api/v1/user/list",
-    params(
-    ),
-    responses(
-        (status = 200, description = "succesfully", body=Response),
-    ),
-)]
 #[get("/user/list")]
 pub async fn list(state: web::Data<AppState>, req: web::Query<UserListReq>) -> impl Responder {
     let resp = user::Service::list(&state.db, req.into_inner()).await;
@@ -31,15 +22,6 @@ pub async fn list(state: web::Data<AppState>, req: web::Query<UserListReq>) -> i
 }
 
 /// 用户详情查询
-#[utoipa::path(
-    get,
-    path = "/api/v1/user/info",
-    params(
-    ),
-    responses(
-        (status = 200, description = "succesfully", body=Response),
-    ),
-)]
 #[get("/user/info")]
 pub async fn info(state: web::Data<AppState>, params: web::Query<UserInfoReq>) -> impl Responder {
     let resp = user::Service::info(&state.db, params.id).await;
@@ -57,15 +39,6 @@ pub async fn info(state: web::Data<AppState>, params: web::Query<UserInfoReq>) -
 }
 
 /// 添加用户信息
-#[utoipa::path(
-    get,
-    path = "/api/v1/user/add",
-    params(
-    ),
-    responses(
-        (status = 200, description = "succesfully", body=Response),
-    ),
-)]
 #[get("/user/add")]
 pub async fn add(state: web::Data<AppState>, data: web::Json<AddUserReq>) -> impl Responder {
     let data = data.into_inner();

@@ -1,11 +1,8 @@
 //! Web 静态资源服务
 
 use super::resources;
-use crate::open_api_doc::ApiDoc;
 
 use actix_web::{dev::HttpServiceFactory, web};
-use utoipa::OpenApi;
-use utoipa_swagger_ui::SwaggerUi;
 
 /// WEB 服务
 pub fn register() -> impl HttpServiceFactory {
@@ -20,10 +17,6 @@ pub fn register() -> impl HttpServiceFactory {
         //         .index_file("index.html")
         //         .prefer_utf8(true),
         // )
-        // swagger-ui
-        .service(
-            SwaggerUi::new("/swagger-ui/{_:.*}").url("/api-docs/openapi.json", ApiDoc::openapi()),
-        )
         // WEB 静态资源服务
         .service(web::scope("").route("/{filename:.*}", web::get().to(resources::index)))
 }
