@@ -15,3 +15,23 @@ pub struct JsonLayer {
     max_level: tracing::Level,
 }
 ```
+
+## 将异步函数包装成同步函数
+
+```rust
+use async_std;
+
+fn sync_task(&self, output: Model) {
+    async_std::task::block_on(async move {
+        self.save_db(output).await;
+    })
+}
+```
+
+```rust
+fn sync_task(&self, output: Model) {
+    tokio::spawn(async move {
+        Self::save_db(output).await;
+    });
+}
+```

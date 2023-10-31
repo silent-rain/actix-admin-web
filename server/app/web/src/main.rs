@@ -68,7 +68,7 @@ async fn server(app_state: state::AppState, server_url: &str) -> std::io::Result
             .app_data(web::Data::new(context))
             .app_data(web::Data::new(app_state.clone()))
             // API 服务
-            .service(routes::register_api_routes())
+            .service(routes::register_api())
             // 静态资源
             .service(routes::web_site::register())
     })

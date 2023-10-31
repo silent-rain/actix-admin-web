@@ -1,26 +1,29 @@
 //! 数据库日志
 use database::DatabaseConnection;
+use once_cell::sync::OnceCell;
 use std::collections::BTreeMap;
 use tokio::sync::mpsc::Receiver;
 use tokio::sync::mpsc::Sender;
-use tracing_error::SpanTraceStatus;
 
 use config::logger::DbOptions;
 use dao::log_system::Dao;
+use database::DBRepo;
 use database::Pool;
 use entity::log_system::Model;
 
 use serde_json::Value;
 use tokio::sync::mpsc;
-use tracing::metadata::LevelFilter;
 use tracing::{span, Event, Metadata, Subscriber};
 use tracing_subscriber::{layer::Context, registry::LookupSpan, Layer};
+
+// 全局数据库对象
+static GLOBAL_DB: OnceCell<Pool> = OnceCell::new();
 
 /// josn 解析器
 #[derive(Debug, Clone)]
 pub struct JsonLayer {
     name: String,
-    max_level: LevelFilter,
+    max_level: tracing::Level,
     /// 通道发送者, 可以有多个发送者
     tx: Option<Sender<Model>>,
 }
@@ -29,7 +32,7 @@ impl Default for JsonLayer {
     fn default() -> JsonLayer {
         JsonLayer {
             name: "db_layer".to_owned(),
-            max_level: tracing::Level::WARN.into(),
+            max_level: tracing::Level::WARN,
             tx: None,
         }
     }
@@ -40,26 +43,10 @@ where
     S: tracing::Subscriber,
     S: for<'lookup> LookupSpan<'lookup>,
 {
-    /// 用于判断是否启用该层, 判断是否启用某个级别的 span
+    /// 用于判断是否启用该层
     /// 这里可以根据元数据中的级别、目标或其他信息来决定是否启用该层
     fn enabled(&self, metadata: &Metadata<'_>, _ctx: Context<'_, S>) -> bool {
-        // 日志级别过滤
-        if self.filter_level(metadata.level()) {
-            return false;
-        }
-
-        // // 数据过滤
-        // let target = metadata.target();
-        // if target == "sqlx::query"
-        //     || target == "sea_orm::driver::sqlx_sqlite"
-        //     || target == "sea_orm::database"
-        //     || target == "sea_orm::database::db_connection"
-        //     || target == "actix_server::worker"
-        // {
-        //     return false;
-        // }
-        // println!("a==========: {:#?}", target);
-        true
+        metadata.level() <= &self.max_level
     }
 
     /// 用于处理每次创建 span 时，指定了 follows from 关系的事件，也就是每次调用 span! 宏或其简写形式时，
@@ -97,13 +84,14 @@ where
         // 输出日志
         let span_id = Some(id.into_u64());
         let metadata = span.metadata();
-        let _parent_id = span.parent().map(|v| v.id().into_u64());
+        let parent_id = span.parent().map(|v| v.id().into_u64());
 
         let output = self.get_output_log(span_id, metadata, &fields, "new_span");
         let output = match output {
             Some(v) => v,
             None => return,
         };
+        println!("on_new_span parent_id: {:#?}", parent_id);
 
         self.send_data(output);
     }
@@ -134,13 +122,14 @@ where
         // 输出日志
         let span_id = Some(id.into_u64());
         let metadata = span.metadata();
-        let _parent_id = span.parent().map(|v| v.id().into_u64());
+        let parent_id = span.parent().map(|v| v.id().into_u64());
 
         let output = self.get_output_log(span_id, metadata, fields, "record");
         let output = match output {
             Some(v) => v,
             None => return,
         };
+        println!("on_record parent_id: {:#?}", parent_id);
 
         self.send_data(output);
     }
@@ -153,21 +142,10 @@ where
         // event.fields().any(|f| f.name() == "message")
 
         let metadata = event.metadata();
-        // 日志级别过滤
-        if self.filter_level(metadata.level()) {
-            return false;
-        }
-
-        // 数据过滤
         let target = metadata.target();
-        if target == "sqlx::query"
-            || target == "sea_orm::driver::sqlx_sqlite"
-            || target == "sea_orm::database::db_connection"
-            || target == "actix_server::worker"
-        {
+        if target == "sqlx::query" || target == "sea_orm::driver::sqlx_sqlite" {
             return false;
         }
-        println!("==========: {:#?}", target);
         true
     }
 
@@ -183,7 +161,7 @@ where
 
         // 输出日志
         let metadata = event.metadata();
-        let _parent_id = event.parent().map(|v| v.into_u64());
+        let parent_id = event.parent().map(|v| v.into_u64());
 
         let output = self.get_output_log(None, metadata, &fields, "event");
         let output = match output {
@@ -191,6 +169,7 @@ where
             None => return,
         };
 
+        println!("on_event parent_id: {:#?}", parent_id);
         self.send_data(output);
     }
 
@@ -210,12 +189,7 @@ where
         // 输出日志
         let span_id = Some(id.into_u64());
         let metadata = span.metadata();
-        let _parent_id = span.parent().map(|v| v.id().into_u64());
-
-        // 日志级别过滤
-        if self.filter_level(metadata.level()) {
-            return;
-        }
+        let parent_id = span.parent().map(|v| v.id().into_u64());
 
         let output = self.get_output_log(span_id, metadata, fields, "enter");
         let output = match output {
@@ -223,6 +197,7 @@ where
             None => return,
         };
 
+        println!("on_enter parent_id: {:#?}", parent_id);
         self.send_data(output);
     }
 
@@ -247,12 +222,7 @@ where
         // 输出日志
         let span_id = Some(id.into_u64());
         let metadata = span.metadata();
-        let _parent_id = span.parent().map(|v| v.id().into_u64());
-
-        // 日志级别过滤
-        if self.filter_level(metadata.level()) {
-            return;
-        }
+        let parent_id = span.parent().map(|v| v.id().into_u64());
 
         let output = self.get_output_log(span_id, metadata, fields, "exit");
         let output = match output {
@@ -260,6 +230,7 @@ where
             None => return,
         };
 
+        println!("on_exit parent_id: {:#?}", parent_id);
         self.send_data(output);
     }
 }
@@ -345,7 +316,7 @@ impl JsonLayer {
 
     /// 最大输出日志
     pub fn with_max_level(mut self, level: tracing::Level) -> Self {
-        self.max_level = level.into();
+        self.max_level = level;
         self
     }
 
@@ -353,11 +324,6 @@ impl JsonLayer {
     pub fn with_sender(mut self, tx: Sender<Model>) -> Self {
         self.tx = Some(tx);
         self
-    }
-
-    /// 日志级别过滤
-    fn filter_level(&self, level: &tracing::Level) -> bool {
-        level <= &self.max_level
     }
 
     /// 获取输出日志
@@ -376,11 +342,7 @@ impl JsonLayer {
         let fields_str = serde_json::to_string_pretty(&field_list).map_or("".to_string(), |v| v);
 
         // 获取当前 span 的 backtrace
-        let mut stack = String::new();
         let backtrace = tracing_error::SpanTrace::capture();
-        if backtrace.status() == SpanTraceStatus::EMPTY {
-            stack = backtrace.to_string();
-        }
 
         let output = Model {
             // user_id: todo!(),
@@ -398,7 +360,8 @@ impl JsonLayer {
             fields: Some(fields_str),
             field_data: serde_json::to_string_pretty(&fields).ok(),
             message: fields.get("message").map(|v| v.to_string()),
-            stack: Some(stack),
+            stack: Some(backtrace.to_string()),
+
             // code: todo!(),
             // code_msg: todo!(),
             ..Default::default()
@@ -433,7 +396,6 @@ impl JsonLayer {
     }
 }
 
-/// 数据入库
 struct FlushDb {
     db: Pool,
 }
@@ -451,23 +413,46 @@ impl FlushDb {
         FlushDb { db: pool }
     }
 
+    fn new2(conf: DbOptions) -> Self {
+        tokio::spawn(async move {
+            let wdb = Pool::connect(conf.address.clone())
+                .await
+                .expect("初始化数据库失败");
+            let pool = Pool {
+                rdb: DatabaseConnection::Disconnected,
+                wdb,
+            };
+            GLOBAL_DB.get_or_init(|| pool.clone());
+        });
+        FlushDb {}
+    }
+
+    /// 数据入库
+    async fn save_db2(output: Model) {
+        let db = match GLOBAL_DB.get() {
+            Some(db) => db,
+            None => return,
+        };
+        if let Err(err) = Dao::new(db).add(output).await {
+            println!("log add filed, err: {:#?}", err);
+        }
+    }
+
+    /// 将异步函数包装成同步函数
+    // fn sync_task(&self, output: Model) {
+    //     tokio::spawn(async move {
+    //         Self::save_db(output).await;
+    //     });
+    // }
+
     /// 循环接收数据入库
     async fn loop_data(&self, mut rx: Receiver<Model>) {
         while let Some(output) = rx.recv().await {
-            // let target = output.target.clone();
-            // if target == "sqlx::query"
-            //     || target == "sea_orm::driver::sqlx_sqlite"
-            //     || target == "sea_orm::database::db_connection"
-            //     || target == "actix_server::worker"
-            // {
-            //     return;
-            // }
-
-            println!("received: {:?}", output);
-
-            // if let Err(err) = Dao::new(&self.db).add(output).await {
-            //     println!("log add filed, err: {:#?}", err);
-            // }
+            println!("received: {:#?}", output);
+            // Self::save_db(output).await;
+            if let Err(err) = Dao::new(&self.db).add(output).await {
+                println!("log add filed, err: {:#?}", err);
+            }
         }
     }
 }
@@ -478,11 +463,11 @@ where
     S: Subscriber,
     for<'a> S: LookupSpan<'a>,
 {
-    let (tx, rx) = mpsc::channel::<Model>(100);
-    let conf = config.clone();
-    tokio::spawn(async move {
-        FlushDb::new(conf).await.loop_data(rx).await;
-    });
+    // 初始化数据库对象
+    // init_db(config.clone());
+
+    // 接收端接收数据时需修改状态，因此声明为 mut
+    let (tx, mut rx) = mpsc::channel::<Model>(100);
 
     let layer = JsonLayer::new(config.log_name.clone())
         .with_max_level(config.level.clone().into())

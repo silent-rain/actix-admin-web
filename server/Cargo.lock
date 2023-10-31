@@ -1783,7 +1783,6 @@ dependencies = [
 name = "logger"
 version = "0.1.0"
 dependencies = [
- "async-std",
  "chrono",
  "code",
  "color-eyre",
