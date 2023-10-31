@@ -35,7 +35,7 @@ async fn main() -> std::io::Result<()> {
     let database_url = cfg.sqlite.dns();
 
     // 初始化数据库
-    let db = database::init(database_url.clone(), database_url)
+    let db = database::Pool::init(database_url.clone(), database_url)
         .await
         .expect("初始化数据库失败");
 

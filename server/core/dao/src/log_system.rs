@@ -1,6 +1,6 @@
 //! 系统日志
 
-use database::Pool;
+use database::DBRepo;
 use entity::log_system;
 use entity::prelude::LogSystem;
 
@@ -8,13 +8,13 @@ use sea_orm::ActiveValue::NotSet;
 use sea_orm::{ActiveModelTrait, DbErr};
 use sea_orm::{EntityTrait, PaginatorTrait, QueryOrder};
 
-pub struct Dao<'a> {
-    db: &'a Pool,
+pub struct Dao<'a, DB: DBRepo> {
+    db: &'a DB,
 }
 
-impl<'a> Dao<'a> {
+impl<'a, DB: DBRepo> Dao<'a, DB> {
     /// 创建对象
-    pub fn new(db: &'a Pool) -> Self {
+    pub fn new(db: &'a DB) -> Self {
         Dao { db }
     }
 

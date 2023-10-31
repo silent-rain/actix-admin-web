@@ -5,6 +5,7 @@ use std::collections::BTreeMap;
 
 use config::logger::DbOptions;
 use dao::log_system::Dao;
+use database::DBRepo;
 use database::Pool;
 use entity::log_system::Model;
 
@@ -15,15 +16,10 @@ use tracing_subscriber::{layer::Context, registry::LookupSpan, Layer};
 // 全局数据库对象
 static GLOBAL_DB: OnceCell<Pool> = OnceCell::new();
 
-/// josn 解析器 Serialize, Deserialize, PartialEq
+/// josn 解析器
 #[derive(Debug, Clone)]
 pub struct JsonLayer {
     name: String,
-    // #[serde(
-    //     rename = "max_level",
-    //     deserialize_with = "utils::level::str_to_level",
-    //     serialize_with = "utils::level::level_to_str"
-    // )]
     max_level: tracing::Level,
 }
 
@@ -418,10 +414,10 @@ where
 /// 初始化数据库对象
 fn init_db(conf: DbOptions) {
     async_std::task::block_on(async move {
-        let rdb = database::connect(conf.address.clone())
+        let rdb = Pool::connect(conf.address.clone())
             .await
             .expect("初始化数据库失败");
-        let wdb = database::connect(conf.address.clone())
+        let wdb = Pool::connect(conf.address.clone())
             .await
             .expect("初始化数据库失败");
         let pool = Pool { rdb, wdb };

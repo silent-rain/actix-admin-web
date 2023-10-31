@@ -1,5 +1,3 @@
 //! 数据层
-pub mod common;
-mod dao;
-
-pub use dao::*;
+pub mod log_system;
+pub mod user;

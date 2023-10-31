@@ -1,5 +1,5 @@
 //!用户管理
-use database::Pool;
+use database::DBRepo;
 use dto::pagination::Pagination;
 use dto::perm_user::{AddUserReq, UserListReq};
 use entity::perm_user;
@@ -8,13 +8,13 @@ use entity::prelude::PermUser;
 use sea_orm::{ActiveModelTrait, DbErr, Set};
 use sea_orm::{EntityTrait, PaginatorTrait, QueryOrder};
 
-pub struct Dao<'a> {
-    db: &'a Pool,
+pub struct Dao<'a, DB: DBRepo> {
+    db: &'a DB,
 }
 
-impl<'a> Dao<'a> {
+impl<'a, DB: DBRepo> Dao<'a, DB> {
     /// 创建对象
-    pub fn new(db: &'a Pool) -> Self {
+    pub fn new(db: &'a DB) -> Self {
         Dao { db }
     }
 
