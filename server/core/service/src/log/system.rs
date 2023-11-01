@@ -3,7 +3,7 @@ use code::Error;
 use dao::log::system::Dao;
 use database::DBRepo;
 use dto::log::system::SystemLogListReq;
-use entity::log_system::Model;
+use entity::log::system::Model;
 
 use sea_orm::DbErr::RecordNotFound;
 use tracing::error;

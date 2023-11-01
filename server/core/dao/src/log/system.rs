@@ -3,7 +3,7 @@
 use database::DBRepo;
 use dto::log::system::SystemLogListReq;
 use dto::pagination::Pagination;
-use entity::log_system;
+use entity::log::system;
 use entity::prelude::LogSystem;
 
 use sea_orm::ActiveValue::NotSet;
@@ -21,23 +21,20 @@ impl<'a, DB: DBRepo> Dao<'a, DB> {
     }
 
     /// 获取所有数据
-    pub async fn all(&self) -> Result<Vec<log_system::Model>, DbErr> {
+    pub async fn all(&self) -> Result<Vec<system::Model>, DbErr> {
         let result = LogSystem::find()
-            .order_by_desc(log_system::Column::Id)
+            .order_by_desc(system::Column::Id)
             .all(self.db.rdb())
             .await?;
         Ok(result)
     }
 
     /// 获取数据列表
-    pub async fn list(
-        &self,
-        req: SystemLogListReq,
-    ) -> Result<(Vec<log_system::Model>, u64), DbErr> {
+    pub async fn list(&self, req: SystemLogListReq) -> Result<(Vec<system::Model>, u64), DbErr> {
         let page = Pagination::new(req.page, req.page_size);
 
         let paginator = LogSystem::find()
-            .order_by_desc(log_system::Column::Id)
+            .order_by_desc(system::Column::Id)
             .paginate(self.db.rdb(), page.page_size());
 
         let num_pages = paginator.num_items().await?;
@@ -49,13 +46,13 @@ impl<'a, DB: DBRepo> Dao<'a, DB> {
     }
 
     /// 获取详情信息
-    pub async fn info(&self, id: i32) -> Result<Option<log_system::Model>, DbErr> {
+    pub async fn info(&self, id: i32) -> Result<Option<system::Model>, DbErr> {
         LogSystem::find_by_id(id).one(self.db.rdb()).await
     }
 
     /// 添加详情信息
-    pub async fn add(&self, data: log_system::Model) -> Result<log_system::Model, DbErr> {
-        let mut active_model: log_system::ActiveModel = data.into();
+    pub async fn add(&self, data: system::Model) -> Result<system::Model, DbErr> {
+        let mut active_model: system::ActiveModel = data.into();
         active_model.id = NotSet;
         active_model.insert(self.db.wdb()).await
     }

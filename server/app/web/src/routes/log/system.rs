@@ -3,11 +3,11 @@
 use crate::state::AppState;
 use code::Error;
 use dto::log::system::{DeleteSystemLogReq, SystemLogInfoReq, SystemLogListReq};
-use entity::log_system::Model;
+use entity::log::system::Model;
 use response::Response;
+use service::log::system;
 
 use actix_web::{web, Responder, Scope};
-use service::log::system;
 
 /// 系统日志管理
 pub fn register() -> Scope {

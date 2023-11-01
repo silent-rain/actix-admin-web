@@ -11,7 +11,7 @@ use tracing_error::SpanTraceStatus;
 use config::logger::DbOptions;
 use dao::log::system::Dao;
 use database::Pool;
-use entity::log_system::Model;
+use entity::log::system::Model;
 
 use serde_json::Value;
 use tokio::sync::mpsc;
