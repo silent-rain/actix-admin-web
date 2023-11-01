@@ -400,8 +400,6 @@ impl JsonLayer {
             let mut rx = rx.lock().await;
 
             while let Some(output) = rx.recv().await {
-                println!("received: {:?}", output);
-
                 if let Err(err) = dao.add(output).await {
                     println!("log add filed, err: {:#?}", err);
                 }
