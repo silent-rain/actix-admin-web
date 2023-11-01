@@ -11,7 +11,7 @@ use service::log::system;
 
 /// 系统日志管理
 pub fn register() -> Scope {
-    web::scope("/system_log")
+    web::scope("/log/system")
         .route("/list", web::get().to(Routes::list))
         .route("/info", web::get().to(Routes::info))
         .route("/add", web::post().to(Routes::add))
