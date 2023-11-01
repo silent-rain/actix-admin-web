@@ -1,13 +1,13 @@
 //! 路由层
 use crate::middleware;
 
+pub mod log;
 pub mod perm_user;
 pub mod resources;
 pub mod web_site;
 pub mod welcome;
 
 use actix_web::middleware::Logger;
-use actix_web::Scope;
 use actix_web::{dev::HttpServiceFactory, web};
 use tracing_actix_web::TracingLogger;
 
@@ -22,21 +22,10 @@ pub fn register_api() -> impl HttpServiceFactory {
         .service(
             web::scope("/v1")
                 // 打招呼
-                .service(welcome_routes())
+                .service(welcome::register())
                 // 用户管理
-                .service(user_routes()),
+                .service(perm_user::register())
+                // 系统日志管理
+                .service(log::system::register()),
         )
-}
-
-/// 打招呼
-fn welcome_routes() -> Scope {
-    web::scope("/greet").route("", web::get().to(welcome::Routes::greet))
-}
-
-/// 用户管理
-fn user_routes() -> Scope {
-    web::scope("/user")
-        .route("/list", web::get().to(perm_user::Routes::list))
-        .route("/info", web::get().to(perm_user::Routes::info))
-        .route("/add", web::post().to(perm_user::Routes::add))
 }

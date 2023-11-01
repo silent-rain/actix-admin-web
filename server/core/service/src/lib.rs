@@ -1,2 +1,3 @@
 //! 服务层
-pub mod user;
+pub mod perm_user;
+pub mod log;

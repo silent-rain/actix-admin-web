@@ -9,7 +9,7 @@ use tracing::Event;
 use tracing_error::SpanTraceStatus;
 
 use config::logger::DbOptions;
-use dao::log_system::Dao;
+use dao::log::system::Dao;
 use database::Pool;
 use entity::log_system::Model;
 
