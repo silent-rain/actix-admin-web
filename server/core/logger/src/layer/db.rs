@@ -1,8 +1,11 @@
 //! 数据库日志
 use database::DatabaseConnection;
 use std::collections::BTreeMap;
+use std::sync::Arc;
 use tokio::sync::mpsc::Receiver;
 use tokio::sync::mpsc::Sender;
+use tokio::sync::Mutex;
+use tracing::Event;
 use tracing_error::SpanTraceStatus;
 
 use config::logger::DbOptions;
@@ -13,26 +16,17 @@ use entity::log_system::Model;
 use serde_json::Value;
 use tokio::sync::mpsc;
 use tracing::metadata::LevelFilter;
-use tracing::{span, Event, Metadata, Subscriber};
+use tracing::{span, Metadata, Subscriber};
 use tracing_subscriber::{layer::Context, registry::LookupSpan, Layer};
 
 /// josn 解析器
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct JsonLayer {
     name: String,
     max_level: LevelFilter,
     /// 通道发送者, 可以有多个发送者
-    tx: Option<Sender<Model>>,
-}
-
-impl Default for JsonLayer {
-    fn default() -> JsonLayer {
-        JsonLayer {
-            name: "db_layer".to_owned(),
-            max_level: tracing::Level::WARN.into(),
-            tx: None,
-        }
-    }
+    tx: Sender<Model>,
+    rx: Arc<Mutex<Receiver<Model>>>,
 }
 
 impl<S> Layer<S> for JsonLayer
@@ -41,24 +35,7 @@ where
     S: for<'lookup> LookupSpan<'lookup>,
 {
     /// 用于判断是否启用该层, 判断是否启用某个级别的 span
-    /// 这里可以根据元数据中的级别、目标或其他信息来决定是否启用该层
-    fn enabled(&self, metadata: &Metadata<'_>, _ctx: Context<'_, S>) -> bool {
-        // 日志级别过滤
-        if self.filter_level(metadata.level()) {
-            return false;
-        }
-
-        // // 数据过滤
-        // let target = metadata.target();
-        // if target == "sqlx::query"
-        //     || target == "sea_orm::driver::sqlx_sqlite"
-        //     || target == "sea_orm::database"
-        //     || target == "sea_orm::database::db_connection"
-        //     || target == "actix_server::worker"
-        // {
-        //     return false;
-        // }
-        // println!("a==========: {:#?}", target);
+    fn enabled(&self, _metadata: &Metadata<'_>, _ctx: Context<'_, S>) -> bool {
         true
     }
 
@@ -100,10 +77,6 @@ where
         let _parent_id = span.parent().map(|v| v.id().into_u64());
 
         let output = self.get_output_log(span_id, metadata, &fields, "new_span");
-        let output = match output {
-            Some(v) => v,
-            None => return,
-        };
 
         self.send_data(output);
     }
@@ -137,37 +110,13 @@ where
         let _parent_id = span.parent().map(|v| v.id().into_u64());
 
         let output = self.get_output_log(span_id, metadata, fields, "record");
-        let output = match output {
-            Some(v) => v,
-            None => return,
-        };
 
         self.send_data(output);
     }
 
     /// 用于判断是否启用某个事件
     #[inline]
-    fn event_enabled(&self, event: &Event<'_>, _ctx: Context<'_, S>) -> bool {
-        // 这里可以根据事件中的元数据或字段来决定是否启用该事件
-        // 例如，如果只想启用包含 message 字段的事件，可以这样写：
-        // event.fields().any(|f| f.name() == "message")
-
-        let metadata = event.metadata();
-        // 日志级别过滤
-        if self.filter_level(metadata.level()) {
-            return false;
-        }
-
-        // 数据过滤
-        let target = metadata.target();
-        if target == "sqlx::query"
-            || target == "sea_orm::driver::sqlx_sqlite"
-            || target == "sea_orm::database::db_connection"
-            || target == "actix_server::worker"
-        {
-            return false;
-        }
-        println!("==========: {:#?}", target);
+    fn event_enabled(&self, _event: &Event<'_>, _ctx: Context<'_, S>) -> bool {
         true
     }
 
@@ -186,10 +135,6 @@ where
         let _parent_id = event.parent().map(|v| v.into_u64());
 
         let output = self.get_output_log(None, metadata, &fields, "event");
-        let output = match output {
-            Some(v) => v,
-            None => return,
-        };
 
         self.send_data(output);
     }
@@ -218,10 +163,6 @@ where
         }
 
         let output = self.get_output_log(span_id, metadata, fields, "enter");
-        let output = match output {
-            Some(v) => v,
-            None => return,
-        };
 
         self.send_data(output);
     }
@@ -255,11 +196,6 @@ where
         }
 
         let output = self.get_output_log(span_id, metadata, fields, "exit");
-        let output = match output {
-            Some(v) => v,
-            None => return,
-        };
-
         self.send_data(output);
     }
 }
@@ -337,9 +273,12 @@ struct CustomFieldStorage(BTreeMap<String, serde_json::Value>);
 impl JsonLayer {
     /// 创建对象
     pub fn new(name: String) -> Self {
+        let (tx, rx) = mpsc::channel::<Model>(100);
         JsonLayer {
             name,
-            ..Default::default()
+            max_level: tracing::Level::WARN.into(),
+            tx,
+            rx: Arc::new(Mutex::new(rx)),
         }
     }
 
@@ -349,15 +288,20 @@ impl JsonLayer {
         self
     }
 
-    /// 设置通道发送者
-    pub fn with_sender(mut self, tx: Sender<Model>) -> Self {
-        self.tx = Some(tx);
-        self
-    }
-
-    /// 日志级别过滤
+    /// 过滤日志级别
     fn filter_level(&self, level: &tracing::Level) -> bool {
-        level <= &self.max_level
+        self.max_level.lt(level)
+    }
+    /// 过滤target日志数据
+    fn filter_target(&self, target: &str) -> bool {
+        if target == "sqlx::query"
+            || target == "sea_orm::driver::sqlx_sqlite"
+            || target == "sea_orm::database::db_connection"
+            || target == "actix_server::worker"
+        {
+            return true;
+        }
+        false
     }
 
     /// 获取输出日志
@@ -368,6 +312,15 @@ impl JsonLayer {
         fields: &BTreeMap<String, Value>,
         kind: &str,
     ) -> Option<Model> {
+        // 日志级别过滤
+        if self.filter_level(metadata.level()) {
+            return None;
+        }
+        // 过滤target日志数据
+        if self.filter_target(metadata.target()) {
+            return None;
+        }
+
         let field_list = metadata
             .fields()
             .iter()
@@ -420,55 +373,42 @@ impl JsonLayer {
     }
 
     /// 发送日志数据到通道
-    fn send_data(&self, output: Model) {
-        let tx = match self.tx.clone() {
+    fn send_data(&self, output: Option<Model>) {
+        let output = match output {
             Some(v) => v,
             None => return,
         };
+        let tx = self.tx.clone();
         tokio::spawn(async move {
             if let Err(err) = tx.send(output).await {
                 println!("receiver closed, err: {:#?}", err);
             }
         });
     }
-}
-
-/// 数据入库
-struct FlushDb {
-    db: Pool,
-}
-
-impl FlushDb {
-    /// 初始化数据库对象
-    async fn new(conf: DbOptions) -> Self {
-        let wdb = Pool::connect(conf.address.clone())
-            .await
-            .expect("初始化数据库失败");
-        let pool = Pool {
-            rdb: DatabaseConnection::Disconnected,
-            wdb,
-        };
-        FlushDb { db: pool }
-    }
 
     /// 循环接收数据入库
-    async fn loop_data(&self, mut rx: Receiver<Model>) {
-        while let Some(output) = rx.recv().await {
-            // let target = output.target.clone();
-            // if target == "sqlx::query"
-            //     || target == "sea_orm::driver::sqlx_sqlite"
-            //     || target == "sea_orm::database::db_connection"
-            //     || target == "actix_server::worker"
-            // {
-            //     return;
-            // }
+    pub fn loop_data(self, address: String) -> Self {
+        let rx = self.rx.clone();
 
-            println!("received: {:?}", output);
+        tokio::spawn(async move {
+            let wdb = Pool::connect(address).await.expect("初始化数据库失败");
+            let db = Pool {
+                rdb: DatabaseConnection::Disconnected,
+                wdb,
+            };
+            let dao = Dao::new(&db);
+            let mut rx = rx.lock().await;
 
-            // if let Err(err) = Dao::new(&self.db).add(output).await {
-            //     println!("log add filed, err: {:#?}", err);
-            // }
-        }
+            while let Some(output) = rx.recv().await {
+                println!("received: {:?}", output);
+
+                if let Err(err) = dao.add(output).await {
+                    println!("log add filed, err: {:#?}", err);
+                }
+            }
+        });
+
+        self
     }
 }
 
@@ -478,15 +418,9 @@ where
     S: Subscriber,
     for<'a> S: LookupSpan<'a>,
 {
-    let (tx, rx) = mpsc::channel::<Model>(100);
-    let conf = config.clone();
-    tokio::spawn(async move {
-        FlushDb::new(conf).await.loop_data(rx).await;
-    });
-
     let layer = JsonLayer::new(config.log_name.clone())
         .with_max_level(config.level.clone().into())
-        .with_sender(tx);
+        .loop_data(config.address.clone());
     Box::new(layer)
 }
 
@@ -499,7 +433,7 @@ mod tests {
 
     use once_cell::sync::Lazy;
     use tracing::{debug, debug_span, error, event, info, info_span, trace, warn, Level};
-    use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
+    use tracing_subscriber::layer::SubscriberExt;
 
     static INIT: Lazy<bool> = Lazy::new(|| {
         let conf = DbOptions {
@@ -608,9 +542,8 @@ mod tests {
 
     #[tokio::test]
     async fn test_code_error() {
-        tracing_subscriber::registry()
-            .with(JsonLayer::default())
-            .init();
+        setup();
+
         info!("second example");
         error!("{}", Error::UnknownError);
         if let Err(err) = create_err() {
