@@ -3,9 +3,9 @@
 pub use super::api_http::Entity as ApiHttp;
 pub use super::api_role_http_rel::Entity as ApiRoleHttpRel;
 pub use super::api_token::Entity as ApiToken;
-pub use super::log_http::Entity as LogHttp;
-pub use super::log_system::Entity as LogSystem;
-pub use super::log_web::Entity as LogWeb;
+pub use super::log::http::Entity as LogHttp;
+pub use super::log::system::Entity as LogSystem;
+pub use super::log::web::Entity as LogWeb;
 pub use super::perm_menu::Entity as PermMenu;
 pub use super::perm_role::Entity as PermRole;
 pub use super::perm_role_menu_rel::Entity as PermRoleMenuRel;
