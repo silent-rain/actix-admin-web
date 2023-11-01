@@ -39,7 +39,6 @@ pub struct Model {
     #[serde(default)]
     pub kind: String,
     /// 是否为事件
-    /// serialize_with = "i8_to_bool"
     #[serde(default)]
     pub is_event: bool,
     /// 是否为 span
@@ -66,7 +65,7 @@ pub struct Model {
     /// 备注
     pub note: Option<String>,
     /// 创建时间
-    pub created_at: Option<String>,
+    pub created_at: Option<DateTime>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

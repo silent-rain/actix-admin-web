@@ -61,8 +61,8 @@ level = "info"      # 日志级别, trace/debug/info/warn/error
 enable = true        # 是否启用，默认不启用
 # 数据库配置
 [logger.db]
-# "mysql://127.0.0.1:3306@username:password/db_name"
-address = "sqlite://./data.dat" # 数据库地址
+address = "mysql://one:pass@localhost:3306/actix_admin_web"
+# address = "sqlite://./data.dat" # 数据库地址
 log_name = "actix_admin_web"    # 日志记录器名称
 level = "debug"                 # 日志级别, trace/debug/info/warn/error
 enable = true                   # 是否启用，默认不启用

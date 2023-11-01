@@ -54,6 +54,7 @@ impl<'a, DB: DBRepo> Dao<'a, DB> {
     pub async fn add(&self, data: system::Model) -> Result<system::Model, DbErr> {
         let mut active_model: system::ActiveModel = data.into();
         active_model.id = NotSet;
+        active_model.created_at = NotSet;
         active_model.insert(self.db.wdb()).await
     }
 

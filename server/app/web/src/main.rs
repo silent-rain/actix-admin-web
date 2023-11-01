@@ -30,9 +30,9 @@ async fn main() -> std::io::Result<()> {
     let _guards = logger::init(cfg.logger.clone()).expect("初始化日志失败");
 
     // mysql dns
-    // let database_url = cfg.mysql.write.dns();
+    let database_url = cfg.mysql.write.dns();
     // sqlite dns
-    let database_url = cfg.sqlite.dns();
+    // let database_url = cfg.sqlite.dns();
 
     // 初始化数据库
     let db = database::Pool::init(database_url.clone(), database_url)

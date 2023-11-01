@@ -296,8 +296,9 @@ impl JsonLayer {
     fn filter_target(&self, target: &str) -> bool {
         if target == "sqlx::query"
             || target == "sea_orm::driver::sqlx_sqlite"
+            || target == "sea_orm::driver::sqlx_mysql"
             || target == "sea_orm::database::db_connection"
-            || target == "actix_server::worker"
+            // || target == "actix_server::worker"
         {
             return true;
         }
@@ -400,8 +401,9 @@ impl JsonLayer {
             let mut rx = rx.lock().await;
 
             while let Some(output) = rx.recv().await {
-                if let Err(err) = dao.add(output).await {
-                    println!("log add filed, err: {:#?}", err);
+                if let Err(err) = dao.add(output.clone()).await {
+                    println!("log add filed, data: {:?} \nerr: {:?}", output, err);
+                    panic!("xxxxxxxxxxxxxxxxxx");
                 }
             }
         });
