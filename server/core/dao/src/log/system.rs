@@ -37,7 +37,7 @@ impl<'a, DB: DBRepo> Dao<'a, DB> {
         let page = Pagination::new(req.page, req.page_size);
 
         let paginator = LogSystem::find()
-            .order_by_asc(log_system::Column::Id)
+            .order_by_desc(log_system::Column::Id)
             .paginate(self.db.rdb(), page.page_size());
 
         let num_pages = paginator.num_items().await?;

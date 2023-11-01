@@ -66,7 +66,6 @@ pub struct Model {
     /// 备注
     pub note: Option<String>,
     /// 创建时间
-    #[serde(skip)]
     pub created_at: Option<String>,
 }
 
