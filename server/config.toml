@@ -48,21 +48,21 @@ timeout_seconds = 15  # 连接超时时间单位秒
 # 终端配置
 [logger.console]
 level = "info" # 日志级别, debug/info/warn/error/panic
-enable = true   # 是否启用，默认不启用
+enable = false # 是否启用，默认不启用
 # bunyan 终端配置
 [logger.console_bunyan]
 level = "info" # 日志级别, trace/debug/info/warn/error
-enable = false  # 是否启用，默认不启用
+enable = true  # 是否启用，默认不启用
 # 文件配置
 [logger.file]
 filepath = "logs"    # 日志路径
 filename = "app.log" # 日志文件名称
-level = "info"      # 日志级别, trace/debug/info/warn/error
+level = "info"       # 日志级别, trace/debug/info/warn/error
 enable = true        # 是否启用，默认不启用
 # 数据库配置
 [logger.db]
 address = "mysql://one:pass@localhost:3306/actix_admin_web"
 # address = "sqlite://./data.dat" # 数据库地址
-log_name = "actix_admin_web"    # 日志记录器名称
-level = "debug"                 # 日志级别, trace/debug/info/warn/error
-enable = true                   # 是否启用，默认不启用
+log_name = "actix_admin_web" # 日志记录器名称
+level = "info"               # 日志级别, trace/debug/info/warn/error
+enable = true                # 是否启用，默认不启用

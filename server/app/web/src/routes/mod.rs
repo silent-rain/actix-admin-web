@@ -18,7 +18,7 @@ pub fn register_api() -> impl HttpServiceFactory {
         .wrap(Logger::default())
         .wrap(TracingLogger::default())
         .wrap(middleware::cors::wrap_cors())
-        .wrap(middleware::auth::SayHi)
+        // .wrap(middleware::auth::SayHi)
         .service(
             web::scope("/v1")
                 // 打招呼
