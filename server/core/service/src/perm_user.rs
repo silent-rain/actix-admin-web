@@ -49,4 +49,13 @@ impl<'a, DB: DBRepo> Service<'a, DB> {
         })?;
         Ok(result)
     }
+
+    /// 删除数据
+    pub async fn delete(&self, id: i32) -> Result<u64, Error> {
+        let result = self.dao.delete(id).await.map_err(|err| {
+            error!("删除数据失败, error: {err:#?}");
+            Error::DBDeleteError
+        })?;
+        Ok(result)
+    }
 }

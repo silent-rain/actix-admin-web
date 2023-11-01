@@ -2,12 +2,21 @@
 
 use crate::state::AppState;
 use code::Error;
-use dto::perm_user::{AddUserReq, UserInfoReq, UserListReq};
+use dto::perm_user::{AddUserReq, DeleteUserReq, UserInfoReq, UserListReq};
 use response::Response;
-use service::user;
+use service::perm_user;
 
-use actix_web::{web, Responder};
+use actix_web::{web, Responder, Scope};
 use validator::Validate;
+
+/// 用户管理
+pub fn register() -> Scope {
+    web::scope("/user")
+        .route("/list", web::get().to(Routes::list))
+        .route("/info", web::get().to(Routes::info))
+        .route("/add", web::post().to(Routes::add))
+        .route("/delete", web::delete().to(Routes::delete))
+}
 
 /// 路由层
 pub struct Routes;
@@ -15,7 +24,9 @@ pub struct Routes;
 impl Routes {
     /// 用户列表查询
     pub async fn list(state: web::Data<AppState>, req: web::Query<UserListReq>) -> impl Responder {
-        let resp = user::Service::new(&state.db).list(req.into_inner()).await;
+        let resp = perm_user::Service::new(&state.db)
+            .list(req.into_inner())
+            .await;
         let (results, total) = match resp {
             Ok(v) => v,
             Err(e) => return Response::build().code(e),
@@ -29,7 +40,7 @@ impl Routes {
         state: web::Data<AppState>,
         params: web::Query<UserInfoReq>,
     ) -> impl Responder {
-        let resp = user::Service::new(&state.db).info(params.id).await;
+        let resp = perm_user::Service::new(&state.db).info(params.id).await;
 
         let result = match resp {
             Ok(v) => v,
@@ -52,7 +63,7 @@ impl Routes {
                 .msg(&e.to_string());
         }
 
-        let resp = user::Service::new(&state.db).add(data).await;
+        let resp = perm_user::Service::new(&state.db).add(data).await;
 
         let result = match resp {
             Ok(v) => v,
@@ -60,5 +71,19 @@ impl Routes {
         };
 
         Response::build().data(result)
+    }
+
+    /// 删除用户
+    pub async fn delete(
+        state: web::Data<AppState>,
+        params: web::Query<DeleteUserReq>,
+    ) -> impl Responder {
+        let resp = perm_user::Service::new(&state.db).delete(params.id).await;
+        let _result = match resp {
+            Ok(v) => v,
+            Err(e) => return Response::build().code(e),
+        };
+
+        Response::build().msg("删除成功")
     }
 }

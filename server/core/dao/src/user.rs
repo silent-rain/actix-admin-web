@@ -48,7 +48,7 @@ impl<'a, DB: DBRepo> Dao<'a, DB> {
         PermUser::find_by_id(id).one(self.db.rdb()).await
     }
 
-    // 插入一个活动模型并返回一个新的 Model .其值是从数据库中检索的，因此将填充任何自动生成的字段。
+    // 添加详情信息
     pub async fn add(&self, data: AddUserReq) -> Result<perm_user::Model, DbErr> {
         let pear = perm_user::ActiveModel {
             nickname: Set(data.nickname),
@@ -61,5 +61,11 @@ impl<'a, DB: DBRepo> Dao<'a, DB> {
         };
 
         pear.insert(self.db.rdb()).await
+    }
+
+    /// 按主键删除信息
+    pub async fn delete(&self, id: i32) -> Result<u64, DbErr> {
+        let result = PermUser::delete_by_id(id).exec(self.db.wdb()).await?;
+        Ok(result.rows_affected)
     }
 }

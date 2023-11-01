@@ -1,4 +1,4 @@
-//!用户管理
+//! 用户管理
 use serde::{Deserialize, Serialize};
 use validator::Validate;
 
@@ -37,4 +37,10 @@ pub struct AddUserReq {
     pub password: String,
     pub password2: String,
     pub avatar: Option<String>,
+}
+
+/// 删除用户
+#[derive(Default, Deserialize)]
+pub struct DeleteUserReq {
+    pub id: i32,
 }
