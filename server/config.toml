@@ -14,7 +14,7 @@ filepath = "./upload" # 上传文件路径
 
 # mysql 数据库配置
 [mysql]
-migrator = true # 数据库自动迁移
+migrator = false # 数据库自动迁移
 
 # 参数配置
 [mysql.options]
@@ -41,9 +41,9 @@ db_name = "actix_admin_web"
 # sqlite3 数据库配置
 [sqlite]
 filepath = "data.dat?mode=rwc" # 数据库路径
-pool_min_idle = 8     # 最小连接数
-pool_max_open = 32    # 最大连接数
-timeout_seconds = 15  # 连接超时时间单位秒
+pool_min_idle = 8              # 最小连接数
+pool_max_open = 32             # 最大连接数
+timeout_seconds = 15           # 连接超时时间单位秒
 
 # 日志
 [logger]
