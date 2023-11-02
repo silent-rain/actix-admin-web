@@ -32,7 +32,12 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(User::Password).string().null())
                     .col(ColumnDef::new(User::Sort).integer().null())
                     .col(ColumnDef::new(User::Status).tiny_integer().null())
-                    .col(ColumnDef::new(User::CreatedAt).date_time().null())
+                    .col(
+                        ColumnDef::new(User::CreatedAt)
+                            .date_time()
+                            .null()
+                            .comment("创建时间"),
+                    )
                     .col(ColumnDef::new(User::UpdatedAt).date_time().null())
                     .to_owned(),
             )

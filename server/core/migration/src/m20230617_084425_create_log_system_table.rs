@@ -21,6 +21,7 @@ impl MigrationTrait for Migration {
                     )
                     .col(ColumnDef::new(LogSystem::UserId).integer().null())
                     .col(ColumnDef::new(LogSystem::Nickname).string().null())
+                    .col(ColumnDef::new(LogSystem::ParentSpanId).integer().null())
                     .col(ColumnDef::new(LogSystem::SpanId).integer().null())
                     .col(ColumnDef::new(LogSystem::Name).string().not_null())
                     .col(ColumnDef::new(LogSystem::ModulePath).string().null())
@@ -61,6 +62,7 @@ enum LogSystem {
     UserId,
     Nickname,
     Name,
+    ParentSpanId,
     SpanId,
     ModulePath,
     Target,

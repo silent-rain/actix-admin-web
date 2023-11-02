@@ -17,6 +17,9 @@ pub struct Model {
     /// 日志记录器名称
     #[serde(default)]
     pub name: String,
+    /// Parent Span Id
+    #[serde(default)]
+    pub parent_span_id: Option<u32>,
     /// Span Id
     #[serde(default)]
     pub span_id: Option<u32>,

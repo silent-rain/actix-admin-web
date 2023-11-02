@@ -1,4 +1,5 @@
 //! 数据库日志
+use chrono::Local;
 use database::DatabaseConnection;
 use std::collections::BTreeMap;
 use std::sync::Arc;
@@ -74,9 +75,9 @@ where
         // 输出日志
         let span_id = Some(id.into_u64());
         let metadata = span.metadata();
-        let _parent_id = span.parent().map(|v| v.id().into_u64());
+        let parent_id = span.parent().map(|v| v.id().into_u64());
 
-        let output = self.get_output_log(span_id, metadata, &fields, "new_span");
+        let output = self.get_output_log(parent_id, span_id, metadata, &fields, "new_span");
 
         self.send_data(output);
     }
@@ -107,9 +108,9 @@ where
         // 输出日志
         let span_id = Some(id.into_u64());
         let metadata = span.metadata();
-        let _parent_id = span.parent().map(|v| v.id().into_u64());
+        let parent_id = span.parent().map(|v| v.id().into_u64());
 
-        let output = self.get_output_log(span_id, metadata, fields, "record");
+        let output = self.get_output_log(parent_id, span_id, metadata, fields, "record");
 
         self.send_data(output);
     }
@@ -132,9 +133,9 @@ where
 
         // 输出日志
         let metadata = event.metadata();
-        let _parent_id = event.parent().map(|v| v.into_u64());
+        let parent_id = event.parent().map(|v| v.into_u64());
 
-        let output = self.get_output_log(None, metadata, &fields, "event");
+        let output = self.get_output_log(parent_id, None, metadata, &fields, "event");
 
         self.send_data(output);
     }
@@ -155,14 +156,14 @@ where
         // 输出日志
         let span_id = Some(id.into_u64());
         let metadata = span.metadata();
-        let _parent_id = span.parent().map(|v| v.id().into_u64());
+        let parent_id = span.parent().map(|v| v.id().into_u64());
 
         // 日志级别过滤
         if self.filter_level(metadata.level()) {
             return;
         }
 
-        let output = self.get_output_log(span_id, metadata, fields, "enter");
+        let output = self.get_output_log(parent_id, span_id, metadata, fields, "enter");
 
         self.send_data(output);
     }
@@ -188,14 +189,14 @@ where
         // 输出日志
         let span_id = Some(id.into_u64());
         let metadata = span.metadata();
-        let _parent_id = span.parent().map(|v| v.id().into_u64());
+        let parent_id = span.parent().map(|v| v.id().into_u64());
 
         // 日志级别过滤
         if self.filter_level(metadata.level()) {
             return;
         }
 
-        let output = self.get_output_log(span_id, metadata, fields, "exit");
+        let output = self.get_output_log(parent_id, span_id, metadata, fields, "exit");
         self.send_data(output);
     }
 }
@@ -298,7 +299,7 @@ impl JsonLayer {
             || target == "sea_orm::driver::sqlx_sqlite"
             || target == "sea_orm::driver::sqlx_mysql"
             || target == "sea_orm::database::db_connection"
-            // || target == "actix_server::worker"
+        // || target == "actix_server::worker"
         {
             return true;
         }
@@ -308,6 +309,7 @@ impl JsonLayer {
     /// 获取输出日志
     fn get_output_log(
         &self,
+        parent_span_id: Option<u64>,
         span_id: Option<u64>,
         metadata: &Metadata,
         fields: &BTreeMap<String, Value>,
@@ -327,18 +329,19 @@ impl JsonLayer {
             .iter()
             .map(|v| v.to_string())
             .collect::<Vec<String>>();
-        let fields_str = serde_json::to_string_pretty(&field_list).map_or("".to_string(), |v| v);
+        let fields_str = serde_json::to_string(&field_list).map_or("".to_string(), |v| v);
 
         // 获取当前 span 的 backtrace
-        let mut stack = String::new();
+        let mut stack = None;
         let backtrace = tracing_error::SpanTrace::capture();
-        if backtrace.status() == SpanTraceStatus::EMPTY {
-            stack = backtrace.to_string();
+        if backtrace.status() != SpanTraceStatus::EMPTY {
+            stack = Some(backtrace.to_string());
         }
 
         let output = Model {
             // user_id: todo!(),
             // nickname: todo!(),
+            parent_span_id: parent_span_id.map(|v| v as u32),
             span_id: span_id.map(|v| v as u32),
             name: self.name.clone(),
             module_path: metadata.module_path().map(|v| v.to_string()),
@@ -350,11 +353,12 @@ impl JsonLayer {
             is_span: metadata.is_span(),
             kind: kind.to_string(),
             fields: Some(fields_str),
-            field_data: serde_json::to_string_pretty(&fields).ok(),
+            field_data: serde_json::to_string(&fields).ok(),
             message: fields.get("message").map(|v| v.to_string()),
-            stack: Some(stack),
+            stack,
             // code: todo!(),
             // code_msg: todo!(),
+            created_at: Some(Local::now().naive_local()),
             ..Default::default()
         };
 
