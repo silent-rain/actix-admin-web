@@ -53,8 +53,8 @@ level = "info" # 日志级别, debug/info/warn/error/panic
 enable = true  # 是否启用，默认不启用
 # bunyan 终端配置
 [logger.console_bunyan]
-level = "info" # 日志级别, trace/debug/info/warn/error
-enable = false # 是否启用，默认不启用
+level = "debug" # 日志级别, trace/debug/info/warn/error
+enable = false  # 是否启用，默认不启用
 # 文件配置
 [logger.file]
 filepath = "logs"    # 日志路径

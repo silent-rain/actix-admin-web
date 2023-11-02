@@ -57,8 +57,7 @@ impl Pool {
     }
 
     /// 关闭数据库
-    #[allow(unused)]
-    async fn close(&self) -> Result<(), Error> {
+    pub async fn close(&self) -> Result<(), Error> {
         self.rdb
             .clone()
             .close()

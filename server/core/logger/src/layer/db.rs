@@ -274,7 +274,7 @@ struct CustomFieldStorage(BTreeMap<String, serde_json::Value>);
 impl JsonLayer {
     /// 创建对象
     pub fn new(name: String) -> Self {
-        let (tx, rx) = mpsc::channel::<Model>(100);
+        let (tx, rx) = mpsc::channel::<Model>(1000);
         JsonLayer {
             name,
             max_level: tracing::Level::WARN.into(),
@@ -334,7 +334,7 @@ impl JsonLayer {
         // 获取当前 span 的 backtrace
         let mut stack = None;
         let backtrace = tracing_error::SpanTrace::capture();
-        if backtrace.status() != SpanTraceStatus::EMPTY {
+        if backtrace.status() == SpanTraceStatus::EMPTY {
             stack = Some(backtrace.to_string());
         }
 
@@ -407,7 +407,6 @@ impl JsonLayer {
             while let Some(output) = rx.recv().await {
                 if let Err(err) = dao.add(output.clone()).await {
                     println!("log add filed, data: {:?} \nerr: {:?}", output, err);
-                    panic!("xxxxxxxxxxxxxxxxxx");
                 }
             }
         });

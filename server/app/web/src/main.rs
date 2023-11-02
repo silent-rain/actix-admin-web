@@ -26,7 +26,7 @@ async fn main() -> std::io::Result<()> {
     }
 
     let cfg = config::instance();
-    warn!("print config:\n{:#?}", cfg);
+    println!("print config:\n{:#?}", cfg);
 
     // 初始化日志
     let _guards = logger::init(cfg.logger.clone()).expect("初始化日志失败");
@@ -56,6 +56,9 @@ async fn main() -> std::io::Result<()> {
     if let Err(e) = server(app_state.clone(), &address).await {
         error!("server start faild. err: {e}");
     }
+
+    // 关闭数据库
+    let _ = db.close().await;
 
     warn!("See you again~");
     Ok(())
