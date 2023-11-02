@@ -45,9 +45,15 @@ impl Pool {
             .max_lifetime(Duration::from_secs(8))
             .sqlx_logging(false)
             .sqlx_logging_level(log::LevelFilter::Info);
-        Database::connect(opt)
+        let db = Database::connect(opt)
             .await
-            .map_err(|err| Error::DbConnectionError(err.to_string()))
+            .map_err(|err| Error::DbConnectionError(err.to_string()))?;
+
+        // 检查连接是否有效
+        db.ping()
+            .await
+            .map_err(|err| Error::DbConnectionAcquire(err.to_string()))?;
+        Ok(db)
     }
 
     /// 关闭数据库
@@ -75,5 +81,17 @@ impl DBRepo for Pool {
     /// 获取读写数据库实例
     fn wdb(&self) -> &DatabaseConnection {
         &self.wdb
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn test_connect() {
+        let db_url = "sqlite://../../data.dat?mode=rwc";
+        let db = Pool::connect(db_url.to_owned()).await.unwrap();
+        let _ = db.close().await;
     }
 }

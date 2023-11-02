@@ -4,8 +4,13 @@ use serde::{Deserialize, Serialize};
 /// Mysql 数据库配置
 #[derive(Debug, Default, Serialize, Deserialize, Clone)]
 pub struct Mysql {
+    /// 数据库自动迁移
+    pub migrator: bool,
+    /// 数据库参数
     pub options: Options,
+    /// 只读数据库账号配置
     pub read: MysqlAuth,
+    /// 读写数据库账号配置
     pub write: MysqlAuth,
 }
 
@@ -33,11 +38,7 @@ impl MysqlAuth {
     pub fn dns(&self) -> String {
         format!(
             "mysql://{}:{}@{}:{}/{}",
-            self.username,
-            self.password,
-            self.host,
-            self.port,
-            self.db_name,
+            self.username, self.password, self.host, self.port, self.db_name,
         )
     }
 }

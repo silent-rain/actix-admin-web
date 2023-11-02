@@ -6,6 +6,8 @@ mod state;
 
 mod routes;
 pub mod utils;
+use database::DBRepo;
+use migration::{Migrator, MigratorTrait};
 
 use actix_web::{http::KeepAlive, web, App, HttpServer};
 use dotenv::dotenv;
@@ -30,19 +32,21 @@ async fn main() -> std::io::Result<()> {
     let _guards = logger::init(cfg.logger.clone()).expect("初始化日志失败");
 
     // mysql dns
-    let database_url = cfg.mysql.write.dns();
+    // let database_url = cfg.mysql.write.dns();
     // sqlite dns
-    // let database_url = cfg.sqlite.dns();
+    let database_url = cfg.sqlite.dns();
 
     // 初始化数据库
     let db = database::Pool::init(database_url.clone(), database_url)
         .await
         .expect("初始化数据库失败");
 
-    // 应用中运行迁移器
-    // if let Err(e) = Migrator::up(db.wdb(), None).await {
-    //     log::error!("表迁移失败. err: {e}");
-    // }
+    if cfg.mysql.migrator {
+        // 库表迁移器
+        if let Err(e) = Migrator::up(db.wdb(), None).await {
+            error!("表迁移失败. err: {e}");
+        }
+    }
 
     // 共享状态
     let app_state = state::AppState { db: db.clone() };

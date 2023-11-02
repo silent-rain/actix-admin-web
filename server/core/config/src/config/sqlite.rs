@@ -13,7 +13,10 @@ pub struct Sqlite {
 impl Default for Sqlite {
     fn default() -> Sqlite {
         Sqlite {
-            filepath: "data.dat".to_string(),
+            // 只读: sqlite://path/to/db.sqlite?mode=ro
+            // 文件不存在: sqlite://path/to/db.sqlite?mode=rwc
+            // 内存: sqlite::memory:
+            filepath: "data.dat?mode=rwc".to_string(),
             pool_min_idle: 8,
             pool_max_open: 32,
             timeout_seconds: 15,

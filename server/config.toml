@@ -14,6 +14,8 @@ filepath = "./upload" # 上传文件路径
 
 # mysql 数据库配置
 [mysql]
+migrator = true # 数据库自动迁移
+
 # 参数配置
 [mysql.options]
 max_connections = 10 # 最大打开的连接数
@@ -38,7 +40,7 @@ db_name = "actix_admin_web"
 
 # sqlite3 数据库配置
 [sqlite]
-filepath = "data.dat" # 数据库路径
+filepath = "data.dat?mode=rwc" # 数据库路径
 pool_min_idle = 8     # 最小连接数
 pool_max_open = 32    # 最大连接数
 timeout_seconds = 15  # 连接超时时间单位秒
@@ -62,7 +64,7 @@ enable = true        # 是否启用，默认不启用
 # 数据库配置
 [logger.db]
 address = "mysql://one:pass@localhost:3306/actix_admin_web"
-# address = "sqlite://./data.dat" # 数据库地址
+# address = "sqlite://./data.dat?mode=rwc" # 数据库地址
 log_name = "actix_admin_web" # 日志记录器名称
 level = "info"               # 日志级别, trace/debug/info/warn/error
 enable = true                # 是否启用，默认不启用

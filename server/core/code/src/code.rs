@@ -59,6 +59,8 @@ pub enum Error {
     DbInitError(String) = 10200,
     #[error("数据库连接失败")]
     DbConnectionError(String) = 10201,
+    #[error("数据库ping失败")]
+    DbConnectionAcquire(String) = 10202,
     #[error("数据库关闭失败")]
     DbCloseError = 10203,
     #[error("查询数据失败")]
