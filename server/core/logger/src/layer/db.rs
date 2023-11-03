@@ -384,6 +384,9 @@ impl JsonLayer {
             None => return,
         };
         let tx = self.tx.clone();
+        if tx.is_closed() {
+            return;
+        }
         tokio::spawn(async move {
             if let Err(err) = tx.send(output).await {
                 println!("receiver closed, err: {:#?}", err);
