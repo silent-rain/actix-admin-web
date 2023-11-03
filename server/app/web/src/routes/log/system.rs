@@ -9,7 +9,7 @@ use service::log::system;
 
 use actix_web::{web, Responder, Scope};
 
-/// 系统日志管理
+/// 注册系统日志管理路由
 pub fn register() -> Scope {
     web::scope("/log/system")
         .route("/list", web::get().to(Routes::list))

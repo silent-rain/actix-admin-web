@@ -5,7 +5,7 @@ use response::Response;
 use actix_web::{web, Responder, Scope};
 use tracing::info;
 
-/// 打招呼
+/// 注册打招呼服务路由
 pub fn register() -> Scope {
     web::scope("/greet").route("", web::get().to(Routes::greet))
 }

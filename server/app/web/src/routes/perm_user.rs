@@ -9,7 +9,7 @@ use service::perm_user;
 use actix_web::{web, Responder, Scope};
 use validator::Validate;
 
-/// 用户管理
+/// 注册用户管理路由
 pub fn register() -> Scope {
     web::scope("/user")
         .route("/list", web::get().to(Routes::list))

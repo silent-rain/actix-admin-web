@@ -14,6 +14,7 @@ use dotenv::dotenv;
 use listenfd::ListenFd;
 use tracing::{error, warn};
 
+/// 程序入口
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     // 读取配置环境变量
@@ -64,7 +65,7 @@ async fn main() -> std::io::Result<()> {
     Ok(())
 }
 
-// 启动服务
+/// 启动服务
 async fn server(app_state: state::AppState, server_url: &str) -> std::io::Result<()> {
     let mut server = HttpServer::new(move || {
         let context = context::Context {

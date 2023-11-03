@@ -4,7 +4,7 @@ use super::resources;
 
 use actix_web::{dev::HttpServiceFactory, web};
 
-/// WEB 服务
+/// 注册 WEB 服务路由
 pub fn register() -> impl HttpServiceFactory {
     web::scope("")
         // .wrap(actix_web::middleware::NormalizePath::default())
