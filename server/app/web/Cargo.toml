@@ -24,7 +24,6 @@ actix-files = "0.6"
 tracing-actix-web = "0.7"
 
 async-trait = "0.1"
-derive_more = "0.99"
 listenfd = "1.0"
 futures-util = "0.3"
 validator = {version = "0.16", features = ["derive"]}
