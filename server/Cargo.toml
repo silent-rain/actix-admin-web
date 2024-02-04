@@ -1,11 +1,5 @@
-[package]
-name = "actix-admin-web"
-version = "0.1.0"
-edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [workspace]
+resolver = "2"
 members = [
     # 数据库
     "core/entity",
@@ -24,5 +18,4 @@ members = [
     # App
     "app/web",
 ]
-
-[dependencies]
+default-members = ["app/web"]

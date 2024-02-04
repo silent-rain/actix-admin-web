@@ -10,5 +10,5 @@ name = "code"
 path = "src/lib.rs"
 
 [dependencies]
-serde = {version = "1.0", features = ["derive"]}
-thiserror = {version = "1.0"}
+serde = { version = "1.0", features = ["derive"] }
+thiserror = { version = "1.0" }

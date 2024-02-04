@@ -1,4 +1,4 @@
-# Sea-Orm使用指南
+# Sea-Orm 使用指南
 
 ## 安装依赖
 
@@ -60,7 +60,6 @@ cd service
 cargo run --package migration -- up
 ```
 
-
 ## 根据数据库生成实体
 
 - 注意会覆盖原始文件
@@ -74,5 +73,5 @@ sea-orm-cli generate entity -u sqlite://data.db -o entity/src
 ```
 
 ## 参考文档
-- [sea-orm](https://www.sea-ql.org/SeaORM/docs/index/)
 
+- [sea-orm](https://www.sea-ql.org/SeaORM/docs/index/)

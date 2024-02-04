@@ -6,12 +6,12 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-entity = {path = "../entity"}
-database = {path = "../database"}
-dao = {path = "../dao"}
-dto = {path = "../dto"}
-code = {path = "../code"}
+entity = { path = "../entity" }
+database = { path = "../database" }
+dao = { path = "../dao" }
+dto = { path = "../dto" }
+code = { path = "../code" }
 
 log = "0.4"
-tracing = {version = "0.1"}
-sea-orm = {version = "0.12"}
+tracing = { version = "0.1" }
+sea-orm = { version = "0.12" }

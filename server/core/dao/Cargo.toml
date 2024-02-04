@@ -10,13 +10,12 @@ name = "dao"
 path = "src/lib.rs"
 
 [dependencies]
-entity = {path = "../entity"}
-database = {path = "../database"}
-dto = {path = "../dto"}
-code = {path = "../code"}
+entity = { path = "../entity" }
+database = { path = "../database" }
+dto = { path = "../dto" }
+code = { path = "../code" }
 
-async-trait = "0.1"
 serde_json = "1.0"
-serde = {version = "1.0", features = ["derive"]}
-sea-orm = {version = "0.12", features = ["macros", "debug-print"]}
+serde = { version = "1.0", features = ["derive"] }
+sea-orm = { version = "0.12", features = ["macros", "debug-print"] }
 sea-query = "0.30"

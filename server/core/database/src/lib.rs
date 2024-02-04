@@ -3,12 +3,10 @@ use std::time::Duration;
 
 use code::Error;
 
-use async_trait::async_trait;
 pub use sea_orm::DatabaseConnection;
 use sea_orm::{ConnectOptions, Database};
 
 /// 数据库特征
-#[async_trait]
 pub trait DBRepo {
     /// 获取只读数据库实例
     fn rdb(&self) -> &DatabaseConnection;
