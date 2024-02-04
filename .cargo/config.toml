@@ -1,0 +1,3 @@
+# [build]
+# 加快编译速度 +nightly
+# rustflags = ["-Z", "threads=8"]
