@@ -1,6 +1,6 @@
 //! 用户管理
-use crate::dao::user::Dao;
-use crate::dto::perm_user::{AddUserReq, UserListReq};
+use crate::dao::user::perm_user::Dao;
+use crate::dto::user::perm_user::{AddUserReq, UserListReq};
 
 use code::Error;
 use database::DBRepo;

@@ -1,30 +1,21 @@
 //! 用户管理
 
 use crate::{
-    dto::perm_user::{AddUserReq, DeleteUserReq, UserInfoReq, UserListReq},
-    service::perm_user,
+    dto::user::perm_user::{AddUserReq, DeleteUserReq, UserInfoReq, UserListReq},
+    service::user::perm_user,
     state::AppState,
 };
 
 use code::Error;
 use response::Response;
 
-use actix_web::{web, Responder, Scope};
+use actix_web::{web, Responder};
 use validator::Validate;
 
-/// 注册用户管理路由
-pub fn register() -> Scope {
-    web::scope("/user")
-        .route("/list", web::get().to(Routes::list))
-        .route("/info", web::get().to(Routes::info))
-        .route("/add", web::post().to(Routes::add))
-        .route("/delete", web::delete().to(Routes::delete))
-}
+/// 控制器
+pub struct Controller;
 
-/// 路由层
-pub struct Routes;
-
-impl Routes {
+impl Controller {
     /// 用户列表查询
     pub async fn list(state: web::Data<AppState>, req: web::Query<UserListReq>) -> impl Responder {
         let resp = perm_user::Service::new(&state.db)

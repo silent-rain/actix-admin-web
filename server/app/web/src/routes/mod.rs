@@ -2,11 +2,12 @@
 use crate::middleware;
 
 mod log;
-pub mod perm_user;
+pub mod user;
 pub mod web_site;
 pub mod welcome;
 
 use log::log_system;
+use user::perm_user;
 
 use actix_web::middleware::Logger;
 use actix_web::{dev::HttpServiceFactory, web};

@@ -10,26 +10,23 @@ edition = "2021"
 database = { path = "../../core/database" }
 migration = { path = "../../core/migration" }
 entity = { path = "../../core/entity" }
-# dao = { path = "../../core/dao" }
-# dto = { path = "../../core/dto" }
 code = { path = "../../core/code" }
 config = { path = "../../core/config" }
 # logger = { path = "../../core/logger" }
 response = { path = "../../core/response" }
-# service = { path = "../../core/service" }
 
 actix-web = "4.5"
 actix-cors = "0.7"
 actix-files = "0.6"
 tracing-actix-web = "0.7"
+tokio = { version = "1.36", features = [] }
 
+validator = { version = "0.16", features = ["derive"] }
 sea-orm = { version = "0.12" }
 
 listenfd = "1.0"
+num_cpus = "1.16.0"
 futures-util = "0.3"
-validator = { version = "0.16", features = ["derive"] }
-num_cpus = "1.16"
-tokio = { version = "1.36", features = [] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 dotenv = "0.15"

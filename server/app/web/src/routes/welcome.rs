@@ -1,25 +1,10 @@
 //! 欢迎语
-use crate::dto::welcome::GreetNameReq;
-use response::Response;
 
-use actix_web::{web, Responder, Scope};
-use tracing::info;
+use crate::controller::welcome::Controller;
 
-/// 注册打招呼服务路由
+use actix_web::{web, Scope};
+
+/// 注册路由
 pub fn register() -> Scope {
-    web::scope("/greet").route("", web::get().to(Routes::greet))
-}
-
-/// 路由层
-pub struct Routes;
-
-impl Routes {
-    /// 打招呼
-    pub async fn greet(req: web::Query<GreetNameReq>) -> impl Responder {
-        info!("Hello, {}! You've been greeted from Rust!", req.name);
-        Response::build().data(format!(
-            "Hello, {}! You've been greeted from Rust!",
-            req.name
-        ))
-    }
+    web::scope("/greet").route("", web::get().to(Controller::greet))
 }

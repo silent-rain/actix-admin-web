@@ -1,6 +1,6 @@
-//!用户管理
+//! 用户管理
 use crate::dto::pagination::Pagination;
-use crate::dto::perm_user::{AddUserReq, UserListReq};
+use crate::dto::user::perm_user::{AddUserReq, UserListReq};
 
 use database::DBRepo;
 use entity::perm_user;
