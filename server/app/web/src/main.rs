@@ -4,8 +4,12 @@ mod context;
 mod middleware;
 mod state;
 
+pub mod dao;
+pub mod dto;
 mod routes;
+pub mod service;
 pub mod utils;
+
 use database::DBRepo;
 use migration::{Migrator, MigratorTrait};
 

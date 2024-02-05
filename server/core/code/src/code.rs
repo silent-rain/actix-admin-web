@@ -10,7 +10,7 @@ use thiserror;
 pub enum Error {
     /// 成功
     #[error("ok")]
-    OK = 10000,
+    OK = 0,
     /// 未知错误
     #[error("未知错误")]
     UnknownError = 10001,

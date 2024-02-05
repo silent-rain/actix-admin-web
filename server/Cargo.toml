@@ -4,7 +4,6 @@ members = [
     # 数据库
     "core/entity",
     "core/migration",
-    "core/dao",
     # 通用组件
     "core/code",
     "core/config",
@@ -13,8 +12,9 @@ members = [
     "core/database",
     "core/utils",
     # 业务
-    "core/dto",
-    "core/service",
+    # "core/dto",
+    # "core/dao",
+    # "core/service",
     # App
     "app/web",
 ]

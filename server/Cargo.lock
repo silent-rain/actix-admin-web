@@ -2891,20 +2891,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "service"
-version = "0.1.0"
-dependencies = [
- "code",
- "dao",
- "database",
- "dto",
- "entity",
- "log",
- "sea-orm",
- "tracing",
-]
-
-[[package]]
 name = "sha1"
 version = "0.10.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3917,10 +3903,8 @@ dependencies = [
  "actix-web",
  "code",
  "config",
- "dao",
  "database",
  "dotenv",
- "dto",
  "entity",
  "futures-util",
  "listenfd",
@@ -3931,9 +3915,9 @@ dependencies = [
  "once_cell",
  "response",
  "rust-embed",
+ "sea-orm",
  "serde",
  "serde_json",
- "service",
  "tokio",
  "tracing",
  "tracing-actix-web",

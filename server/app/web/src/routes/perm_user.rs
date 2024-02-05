@@ -1,10 +1,13 @@
 //! 用户管理
 
-use crate::state::AppState;
+use crate::{
+    dto::perm_user::{AddUserReq, DeleteUserReq, UserInfoReq, UserListReq},
+    service::perm_user,
+    state::AppState,
+};
+
 use code::Error;
-use dto::perm_user::{AddUserReq, DeleteUserReq, UserInfoReq, UserListReq};
 use response::Response;
-use service::perm_user;
 
 use actix_web::{web, Responder, Scope};
 use validator::Validate;

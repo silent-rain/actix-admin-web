@@ -1,5 +1,5 @@
 //! 欢迎语
-use dto::welcome::GreetNameReq;
+use crate::dto::welcome::GreetNameReq;
 use response::Response;
 
 use actix_web::{web, Responder, Scope};
