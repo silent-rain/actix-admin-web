@@ -1,11 +1,12 @@
 //! 路由层
 use crate::middleware;
 
-pub mod log;
+mod log;
 pub mod perm_user;
-pub mod resources;
 pub mod web_site;
 pub mod welcome;
+
+use log::log_system;
 
 use actix_web::middleware::Logger;
 use actix_web::{dev::HttpServiceFactory, web};
@@ -26,6 +27,6 @@ pub fn register_api() -> impl HttpServiceFactory {
                 // 用户管理
                 .service(perm_user::register())
                 // 系统日志管理
-                .service(log::system::register()),
+                .service(log_system::register()),
         )
 }

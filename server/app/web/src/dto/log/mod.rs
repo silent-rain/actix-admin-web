@@ -1,2 +1,1 @@
-//! 日志
-pub mod system;
+pub mod log_system;

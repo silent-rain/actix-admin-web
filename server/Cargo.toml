@@ -1,20 +1,16 @@
 [workspace]
 resolver = "2"
 members = [
-    # 数据库
-    "core/entity",
-    "core/migration",
     # 通用组件
     "core/code",
     "core/config",
-    "core/logger",
+    # "core/logger",
     "core/response",
     "core/database",
     "core/utils",
-    # 业务
-    # "core/dto",
-    # "core/dao",
-    # "core/service",
+    # 数据库
+    "core/entity",
+    "core/migration",
     # App
     "app/web",
 ]

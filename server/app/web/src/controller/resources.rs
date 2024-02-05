@@ -1,4 +1,4 @@
-//! 静态资源路由
+//! 静态资源
 use crate::asset::AssetWebDist;
 
 use actix_web::{HttpRequest, HttpResponse};

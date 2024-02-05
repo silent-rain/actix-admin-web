@@ -1,2 +1,2 @@
-//! 日志
-pub mod system;
+//! 服务层
+pub mod log_system;

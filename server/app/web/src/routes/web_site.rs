@@ -1,6 +1,6 @@
 //! Web 静态资源服务
 
-use super::resources;
+use crate::controller::resources;
 
 use actix_web::{dev::HttpServiceFactory, web};
 
@@ -12,6 +12,7 @@ pub fn register() -> impl HttpServiceFactory {
         .wrap(actix_web::middleware::Compress::default())
         // 文件服务
         // .service(Files::new("/", "../web/dist").show_files_listing())
+        // WEB 静态资源服务
         // .service(
         //     Files::new("/", "../web/dist")
         //         .index_file("index.html")

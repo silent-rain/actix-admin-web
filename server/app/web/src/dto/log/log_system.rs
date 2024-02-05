@@ -3,7 +3,7 @@ use serde::Deserialize;
 
 /// 系统日志列表查询
 #[derive(Default, Deserialize)]
-pub struct SystemLogListReq {
+pub struct LogSystemListReq {
     /// 当前分页
     pub page: u64,
     /// 页面大小
@@ -12,12 +12,12 @@ pub struct SystemLogListReq {
 
 /// 查询系统日志信息
 #[derive(Default, Deserialize)]
-pub struct SystemLogInfoReq {
+pub struct LogSystemInfoReq {
     pub id: i32,
 }
 
 /// 删除系统日志信息
 #[derive(Default, Deserialize)]
-pub struct DeleteSystemLogReq {
+pub struct DeleteLogSystemReq {
     pub id: i32,
 }

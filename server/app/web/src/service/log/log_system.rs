@@ -1,8 +1,8 @@
 //! 系统日志
+use crate::{dao::log::log_system::Dao, dto::log::log_system::LogSystemListReq};
+
 use code::Error;
-use dao::log::system::Dao;
 use database::DBRepo;
-use dto::log::system::SystemLogListReq;
 use entity::log::system::Model;
 
 use sea_orm::DbErr::RecordNotFound;
@@ -20,7 +20,7 @@ impl<'a, DB: DBRepo> Service<'a, DB> {
     }
 
     /// 获取列表数据
-    pub async fn list(&self, req: SystemLogListReq) -> Result<(Vec<Model>, u64), Error> {
+    pub async fn list(&self, req: LogSystemListReq) -> Result<(Vec<Model>, u64), Error> {
         let results = self.dao.list(req).await.map_err(|err| {
             error!("查询数据失败, error: {err:#?}");
             Error::DbQueryError

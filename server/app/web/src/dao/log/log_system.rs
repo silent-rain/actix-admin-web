@@ -1,6 +1,6 @@
 //! 系统日志
 
-use crate::dto::log::system::SystemLogListReq;
+use crate::dto::log::log_system::LogSystemListReq;
 use crate::dto::pagination::Pagination;
 
 use database::DBRepo;
@@ -31,7 +31,7 @@ impl<'a, DB: DBRepo> Dao<'a, DB> {
     }
 
     /// 获取数据列表
-    pub async fn list(&self, req: SystemLogListReq) -> Result<(Vec<system::Model>, u64), DbErr> {
+    pub async fn list(&self, req: LogSystemListReq) -> Result<(Vec<system::Model>, u64), DbErr> {
         let page = Pagination::new(req.page, req.page_size);
 
         let paginator = LogSystem::find()
