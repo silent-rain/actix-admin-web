@@ -1,6 +1,6 @@
 //!输出到控制台
+use crate::config::ConsoleOptions;
 use crate::utils::time::local_time;
-use config::config::logger::ConsoleOptions;
 
 use tracing_subscriber::{
     fmt::{self, writer::MakeWriterExt},

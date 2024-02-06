@@ -8,10 +8,12 @@
 //!     https://course.rs/logs/tracing-logger.html#%E5%8A%9F%E8%83%BD%E9%BD%90%E5%85%A8%E7%9A%84-json-logger
 //!     https://github.com/bryanburgers/tracing
 //!     https://docs.rs/tracing-subscriber/latest/tracing_subscriber/layer/index.html
+pub mod config;
+pub mod dao;
 mod layer;
 pub mod utils;
 
-use config::logger::Logger;
+use config::Logger;
 
 use color_eyre::Result;
 use tracing_appender::non_blocking::WorkerGuard;

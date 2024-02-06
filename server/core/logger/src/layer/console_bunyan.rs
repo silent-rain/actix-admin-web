@@ -1,7 +1,7 @@
 //! 输出到控制台
 //! 该层专门涉及使用Bunyan格式格式化信息。
 //! 它依赖于上游的JsonStorageLayer来访问连接到每个跨度的字段。
-use config::logger::ConsoleBunyanOptions;
+use crate::config::ConsoleBunyanOptions;
 
 use tracing_bunyan_formatter::BunyanFormattingLayer;
 use tracing_subscriber::{

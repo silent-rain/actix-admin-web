@@ -10,12 +10,11 @@ name = "logger"
 path = "src/lib.rs"
 
 [dependencies]
-config = { path = "../config" }
 code = { path = "../code" }
 entity = { path = "../entity" }
 database = { path = "../database" }
-dao = { path = "../dao" }
 
+sea-orm = { version = "0.12" }
 futures = "0.3"
 once_cell = "1.19"
 time = { version = "0.3", features = ["macros"] }

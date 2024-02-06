@@ -1,8 +1,8 @@
 //! 输出到文件
 #![allow(unused)]
 
+use crate::config::FileOptions;
 use crate::utils::time::local_time;
-use config::logger::FileOptions;
 
 use tracing::Subscriber;
 use tracing_appender::non_blocking::WorkerGuard;

@@ -1,6 +1,6 @@
 //! 自定义打印输出日志
+use crate::config::ConsoleOptions;
 use crate::utils::time::local_time;
-use config::logger::ConsoleOptions;
 
 use tracing::Subscriber;
 use tracing_appender::non_blocking;

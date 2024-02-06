@@ -9,9 +9,9 @@ edition = "2021"
 [dependencies]
 database = { path = "../core/database" }
 migration = { path = "../core/migration" }
+logger = { path = "../core/logger" }
 entity = { path = "../core/entity" }
 code = { path = "../core/code" }
-# logger = { path = "../core/logger" }
 response = { path = "../core/response" }
 
 actix-web = "4.5"

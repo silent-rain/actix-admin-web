@@ -1,4 +1,4 @@
-//! 日志
+//! 配置
 
 use serde::{Deserialize, Serialize};
 
