@@ -29,7 +29,7 @@ pub struct ConsoleOptions {
 impl Default for ConsoleOptions {
     fn default() -> Self {
         Self {
-            level: Level::WARN,
+            level: Level::Warn,
             enable: false,
         }
     }
@@ -47,7 +47,7 @@ pub struct ConsoleBunyanOptions {
 impl Default for ConsoleBunyanOptions {
     fn default() -> Self {
         Self {
-            level: Level::WARN,
+            level: Level::Warn,
             enable: false,
         }
     }
@@ -72,7 +72,7 @@ impl Default for FileOptions {
         Self {
             filepath: "logs".to_owned(),
             filename: "app.log".to_owned(),
-            level: Level::WARN,
+            level: Level::Warn,
             enable: false,
         }
     }
@@ -96,7 +96,7 @@ impl Default for DbOptions {
         Self {
             address: "".to_owned(),
             log_name: "db_layer".to_owned(),
-            level: Level::WARN,
+            level: Level::Warn,
             enable: false,
         }
     }
@@ -106,20 +106,20 @@ impl Default for DbOptions {
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub enum Level {
     #[serde(rename = "trace")]
-    TRACE,
+    Trace,
     #[serde(rename = "debug")]
-    DEBUG,
+    Debug,
     #[serde(rename = "info")]
-    INFO,
+    Info,
     #[serde(rename = "warn")]
-    WARN,
+    Warn,
     #[serde(rename = "error")]
-    ERROR,
+    Error,
 }
 
 impl Default for Level {
     fn default() -> Self {
-        Self::WARN
+        Self::Warn
     }
 }
 
@@ -127,11 +127,11 @@ impl Default for Level {
 impl From<Level> for tracing::Level {
     fn from(level: Level) -> Self {
         match level {
-            Level::TRACE => tracing::Level::TRACE,
-            Level::DEBUG => tracing::Level::DEBUG,
-            Level::INFO => tracing::Level::INFO,
-            Level::WARN => tracing::Level::WARN,
-            Level::ERROR => tracing::Level::ERROR,
+            Level::Trace => tracing::Level::TRACE,
+            Level::Debug => tracing::Level::DEBUG,
+            Level::Info => tracing::Level::INFO,
+            Level::Warn => tracing::Level::WARN,
+            Level::Error => tracing::Level::ERROR,
         }
     }
 }
@@ -140,12 +140,12 @@ impl From<Level> for tracing::Level {
 impl From<String> for Level {
     fn from(level: String) -> Self {
         match level.as_str() {
-            "trace" => Level::TRACE,
-            "debug" => Level::DEBUG,
-            "info" => Level::INFO,
-            "warn" => Level::WARN,
-            "error" => Level::ERROR,
-            _ => Level::WARN,
+            "trace" => Level::Trace,
+            "debug" => Level::Debug,
+            "info" => Level::Info,
+            "warn" => Level::Warn,
+            "error" => Level::Error,
+            _ => Level::Warn,
         }
     }
 }
@@ -167,7 +167,7 @@ mod tests {
         println!("{:#?}", options);
         let ac = FileOptions {
             filepath: "logs".to_owned(),
-            level: Level::WARN,
+            level: Level::Warn,
             enable: true,
             ..Default::default()
         };

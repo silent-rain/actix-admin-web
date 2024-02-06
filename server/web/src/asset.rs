@@ -18,7 +18,7 @@ impl AssetDbDataFile {
 
 /// 配置文件
 #[derive(Debug, Default, RustEmbed)]
-#[folder = "../../"]
+#[folder = "../"]
 #[include = "config.toml"]
 pub struct AssetConfigFile;
 
@@ -33,7 +33,7 @@ impl AssetConfigFile {
 
 /// WEB 静态资源
 #[derive(Debug, Default, RustEmbed)]
-#[folder = "../../../web/dist/"]
+#[folder = "../../web/dist/"]
 pub struct AssetWebDist;
 
 impl AssetWebDist {

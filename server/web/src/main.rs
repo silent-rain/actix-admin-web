@@ -1,5 +1,6 @@
 //! 程序入口
 mod asset;
+mod config;
 mod context;
 mod middleware;
 mod state;
@@ -27,7 +28,8 @@ async fn main() -> std::io::Result<()> {
 
     // 加载配置文件
     if let Err(e) = config::init("config.toml") {
-        log::error!("配置文件加载失败. err: {e}");
+        log::error!("配置文件加载失败, err: {e}");
+        println!("配置文件加载失败, err: {e}");
         return Ok(());
     }
 
