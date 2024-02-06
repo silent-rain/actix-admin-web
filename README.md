@@ -22,15 +22,20 @@
 ### 后端
 
 - [x] 日志
-  - [x] 文件
-  - [x] 终端
-  - [x] 数据库
-- [x] 业务状态码
-- [x] 全局配置
+  - [x] 文件日志
+  - [x] 终端日志
+  - [x] 数据库日志
+- [x] 自定义业务状态码
 - [x] 数据库
-  - [x] 数据库自动迁移
-  - [x] 数据库交互
-    - 全局数据库实例
+  - [x] 自动迁移库表
+  - [x] 读写数据库
+- [ ] 依赖注入
+
+## 待办事项
+
+- 优化日志组件
+- 优化dao、service、controller
+- 添加依赖注入
 
 ## 开发文档
 
@@ -38,9 +43,3 @@
 - [编译与部署](./docs/编译与部署.md)
 - [Sea-Orm 使用指南](./docs/Sea-Orm使用指南.md)
 - [问题答疑](./docs/Q&A.md)
-
-## 参考文档
-
-- [sea-orm](https://www.sea-ql.org/SeaORM/docs/index/)
-- [actix-web](https://actix.rs/docs/handlers)
-- [validation](https://dev.to/chaudharypraveen98/form-validation-in-rust-404l)

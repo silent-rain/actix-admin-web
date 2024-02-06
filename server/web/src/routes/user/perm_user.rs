@@ -8,7 +8,7 @@ use actix_web::{web, Scope};
 pub fn register() -> Scope {
     web::scope("/user")
         .route("/list", web::get().to(Controller::list))
-        .route("/info", web::get().to(Controller::info))
-        .route("/add", web::post().to(Controller::add))
-        .route("/delete", web::delete().to(Controller::delete))
+        .route("", web::get().to(Controller::info))
+        .route("", web::post().to(Controller::add))
+        .route("", web::delete().to(Controller::delete))
 }
