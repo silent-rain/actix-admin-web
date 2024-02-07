@@ -2,8 +2,8 @@
 
 use crate::{
     dto::user::perm_user::{AddUserReq, DeleteUserReq, UserInfoReq, UserListReq},
+    inject::Provider,
     service::user::perm_user::PermUserService,
-    state::AppState,
 };
 
 use code::Error;
@@ -17,8 +17,12 @@ pub struct Controller;
 
 impl Controller {
     /// 用户列表查询
-    pub async fn list(state: web::Data<AppState>, req: web::Query<UserListReq>) -> impl Responder {
-        let resp = PermUserService::new(&state.db).list(req.into_inner()).await;
+    pub async fn list(
+        provider: web::Data<Provider>,
+        req: web::Query<UserListReq>,
+    ) -> impl Responder {
+        let perm_user_service: PermUserService = provider.provide();
+        let resp = perm_user_service.list(req.into_inner()).await;
         let (results, total) = match resp {
             Ok(v) => v,
             Err(e) => return Response::build().code(e),
@@ -29,10 +33,11 @@ impl Controller {
 
     /// 用户详情查询
     pub async fn info(
-        state: web::Data<AppState>,
+        provider: web::Data<Provider>,
         params: web::Query<UserInfoReq>,
     ) -> impl Responder {
-        let resp = PermUserService::new(&state.db).info(params.id).await;
+        let perm_user_service: PermUserService = provider.provide();
+        let resp = perm_user_service.info(params.id).await;
 
         let result = match resp {
             Ok(v) => v,
@@ -47,7 +52,7 @@ impl Controller {
     }
 
     /// 添加用户信息
-    pub async fn add(state: web::Data<AppState>, data: web::Json<AddUserReq>) -> impl Responder {
+    pub async fn add(provider: web::Data<Provider>, data: web::Json<AddUserReq>) -> impl Responder {
         let data = data.into_inner();
         if let Err(e) = data.validate() {
             return Response::build()
@@ -55,7 +60,8 @@ impl Controller {
                 .msg(&e.to_string());
         }
 
-        let resp = PermUserService::new(&state.db).add(data).await;
+        let perm_user_service: PermUserService = provider.provide();
+        let resp = perm_user_service.add(data).await;
 
         let result = match resp {
             Ok(v) => v,
@@ -67,10 +73,11 @@ impl Controller {
 
     /// 删除用户
     pub async fn delete(
-        state: web::Data<AppState>,
+        provider: web::Data<Provider>,
         params: web::Query<DeleteUserReq>,
     ) -> impl Responder {
-        let resp = PermUserService::new(&state.db).delete(params.id).await;
+        let perm_user_service: PermUserService = provider.provide();
+        let resp = perm_user_service.delete(params.id).await;
         let _result = match resp {
             Ok(v) => v,
             Err(e) => return Response::build().code(e),

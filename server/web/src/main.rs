@@ -1,4 +1,6 @@
 //! 程序入口
+use std::sync::Arc;
+
 mod asset;
 mod config;
 mod context;
@@ -8,6 +10,7 @@ mod state;
 pub mod controller;
 pub mod dao;
 pub mod dto;
+pub mod inject;
 pub mod routes;
 pub mod service;
 pub mod utils;
@@ -19,6 +22,8 @@ use actix_web::{http::KeepAlive, web, App, HttpServer};
 use dotenv::dotenv;
 use listenfd::ListenFd;
 use tracing::{error, warn};
+
+use crate::inject::Provider;
 
 /// 程序入口
 #[actix_web::main]
@@ -59,9 +64,12 @@ async fn main() -> std::io::Result<()> {
     // 共享状态
     let app_state = state::AppState { db: db.clone() };
 
+    // Using an Arc to share the provider across multiple threads.
+    let provider: Arc<Provider> = Arc::new(Provider::new(db.clone()));
+
     // 启动服务, 并阻塞
     let address = cfg.server.base.address();
-    if let Err(e) = server(app_state.clone(), &address).await {
+    if let Err(e) = server(app_state.clone(), provider, &address).await {
         error!("server start faild. err: {e}");
     }
 
@@ -73,7 +81,11 @@ async fn main() -> std::io::Result<()> {
 }
 
 /// 启动服务
-async fn server(app_state: state::AppState, server_url: &str) -> std::io::Result<()> {
+async fn server(
+    app_state: state::AppState,
+    provider: Arc<Provider>,
+    server_url: &str,
+) -> std::io::Result<()> {
     let mut server = HttpServer::new(move || {
         let context = context::Context {
             ..Default::default()
@@ -82,6 +94,7 @@ async fn server(app_state: state::AppState, server_url: &str) -> std::io::Result
         App::new()
             .app_data(web::Data::new(context))
             .app_data(web::Data::new(app_state.clone()))
+            .app_data(web::Data::new(provider.clone()))
             // API 服务
             .service(routes::register_api())
             // 静态资源

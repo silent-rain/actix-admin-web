@@ -6,19 +6,16 @@ use database::DBRepo;
 use entity::perm_user;
 use entity::prelude::PermUser;
 
+use nject::injectable;
 use sea_orm::{ActiveModelTrait, DbErr, Set};
 use sea_orm::{EntityTrait, PaginatorTrait, QueryOrder};
 
-pub struct PermUserDao<'a, DB: DBRepo> {
-    db: &'a DB,
+#[injectable]
+pub struct PermUserDao<'a> {
+    db: &'a dyn DBRepo,
 }
 
-impl<'a, DB: DBRepo> PermUserDao<'a, DB> {
-    /// 创建对象
-    pub fn new(db: &'a DB) -> Self {
-        PermUserDao { db }
-    }
-
+impl<'a> PermUserDao<'a> {
     /// 获取所有数据
     pub async fn all(&self) -> Result<Vec<perm_user::Model>, DbErr> {
         let result = PermUser::find()

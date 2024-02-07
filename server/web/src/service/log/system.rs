@@ -2,23 +2,19 @@
 use crate::{dao::log::system::LogSystemDao, dto::log::log_system::LogSystemListReq};
 
 use code::Error;
-use database::DBRepo;
 use entity::log::system::Model;
 
+use nject::injectable;
 use sea_orm::DbErr::RecordNotFound;
 use tracing::error;
 
 /// 服务
-pub struct LogSystemService<'a, DB: DBRepo> {
-    dao: LogSystemDao<'a, DB>,
+#[injectable]
+pub struct LogSystemService<'a> {
+    dao: LogSystemDao<'a>,
 }
 
-impl<'a, DB: DBRepo> LogSystemService<'a, DB> {
-    /// 创建对象
-    pub fn new(db: &'a DB) -> Self {
-        LogSystemService { dao: LogSystemDao::new(db) }
-    }
-
+impl<'a> LogSystemService<'a> {
     /// 获取列表数据
     pub async fn list(&self, req: LogSystemListReq) -> Result<(Vec<Model>, u64), Error> {
         let results = self.dao.list(req).await.map_err(|err| {

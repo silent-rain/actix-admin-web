@@ -1907,6 +1907,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "nject"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3bdcc7144148898cf4edfb54c54d933668bba8606df3950cd1d9b3f238de71da"
+dependencies = [
+ "nject-macro",
+]
+
+[[package]]
+name = "nject-macro"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f9ae2b8c644d60c0f163cce4f8118d424915861b1ded1b8cb1655d92ce9da61b"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.48",
+]
+
+[[package]]
 name = "nom"
 version = "7.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3861,6 +3881,7 @@ dependencies = [
  "log",
  "logger",
  "migration",
+ "nject",
  "num_cpus",
  "once_cell",
  "response",

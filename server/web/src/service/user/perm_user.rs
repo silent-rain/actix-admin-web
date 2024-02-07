@@ -3,23 +3,19 @@ use crate::dao::user::perm_user::PermUserDao;
 use crate::dto::user::perm_user::{AddUserReq, UserListReq};
 
 use code::Error;
-use database::DBRepo;
 use entity::perm_user::Model;
 
+use nject::injectable;
 use sea_orm::DbErr::RecordNotFound;
 use tracing::error;
 
 /// 服务
-pub struct PermUserService<'a, DB: DBRepo> {
-    dao: PermUserDao<'a, DB>,
+#[injectable]
+pub struct PermUserService<'a> {
+    dao: PermUserDao<'a>,
 }
 
-impl<'a, DB: DBRepo> PermUserService<'a, DB> {
-    /// 创建对象
-    pub fn new(db: &'a DB) -> Self {
-        PermUserService { dao: PermUserDao::new(db) }
-    }
-
+impl<'a> PermUserService<'a> {
     /// 获取列表数据
     pub async fn list(&self, req: UserListReq) -> Result<(Vec<Model>, u64), Error> {
         let results = self.dao.list(req).await.map_err(|err| {

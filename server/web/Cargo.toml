@@ -22,7 +22,7 @@ tokio = { version = "1.36", features = [] }
 
 validator = { version = "0.16", features = ["derive"] }
 sea-orm = { version = "0.12" }
-
+nject = "0.4"
 toml = "0.8"
 listenfd = "1.0"
 num_cpus = "1.16.0"

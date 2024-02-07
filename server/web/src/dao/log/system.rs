@@ -7,20 +7,17 @@ use database::DBRepo;
 use entity::log::system;
 use entity::prelude::LogSystem;
 
+use nject::injectable;
 use sea_orm::ActiveValue::NotSet;
 use sea_orm::{ActiveModelTrait, DbErr};
 use sea_orm::{EntityTrait, PaginatorTrait, QueryOrder};
 
-pub struct LogSystemDao<'a, DB: DBRepo> {
-    db: &'a DB,
+#[injectable]
+pub struct LogSystemDao<'a> {
+    db: &'a dyn DBRepo,
 }
 
-impl<'a, DB: DBRepo> LogSystemDao<'a, DB> {
-    /// 创建对象
-    pub fn new(db: &'a DB) -> Self {
-        LogSystemDao { db }
-    }
-
+impl<'a> LogSystemDao<'a> {
     /// 获取所有数据
     pub async fn all(&self) -> Result<Vec<system::Model>, DbErr> {
         let result = LogSystem::find()

@@ -1,9 +1,8 @@
 //! 系统日志
 
 use crate::dto::log::log_system::{DeleteLogSystemReq, LogSystemInfoReq, LogSystemListReq};
+use crate::inject::Provider;
 use crate::service::log::system::LogSystemService;
-
-use crate::state::AppState;
 
 use code::Error;
 use entity::log::system::Model;
@@ -17,12 +16,11 @@ pub struct Controller;
 impl Controller {
     /// 系统日志列表查询
     pub async fn list(
-        state: web::Data<AppState>,
+        provider: web::Data<Provider>,
         req: web::Query<LogSystemListReq>,
     ) -> impl Responder {
-        let resp = LogSystemService::new(&state.db)
-            .list(req.into_inner())
-            .await;
+        let log_system_service: LogSystemService = provider.provide();
+        let resp = log_system_service.list(req.into_inner()).await;
         let (results, total) = match resp {
             Ok(v) => v,
             Err(e) => return Response::build().code(e),
@@ -33,10 +31,11 @@ impl Controller {
 
     /// 系统日志详情查询
     pub async fn info(
-        state: web::Data<AppState>,
+        provider: web::Data<Provider>,
         params: web::Query<LogSystemInfoReq>,
     ) -> impl Responder {
-        let resp = LogSystemService::new(&state.db).info(params.id).await;
+        let log_system_service: LogSystemService = provider.provide();
+        let resp = log_system_service.info(params.id).await;
         let result = match resp {
             Ok(v) => v,
             Err(e) => return Response::build().code(e),
@@ -50,9 +49,10 @@ impl Controller {
     }
 
     /// 添加系统日志
-    pub async fn add(state: web::Data<AppState>, data: web::Json<Model>) -> impl Responder {
+    pub async fn add(provider: web::Data<Provider>, data: web::Json<Model>) -> impl Responder {
         let data = data.into_inner();
-        let resp = LogSystemService::new(&state.db).add(data).await;
+        let log_system_service: LogSystemService = provider.provide();
+        let resp = log_system_service.add(data).await;
         let result = match resp {
             Ok(v) => v,
             Err(e) => return Response::build().code(e),
@@ -63,10 +63,11 @@ impl Controller {
 
     /// 删除系统日志
     pub async fn delete(
-        state: web::Data<AppState>,
+        provider: web::Data<Provider>,
         params: web::Query<DeleteLogSystemReq>,
     ) -> impl Responder {
-        let resp = LogSystemService::new(&state.db).delete(params.id).await;
+        let log_system_service: LogSystemService = provider.provide();
+        let resp = log_system_service.delete(params.id).await;
         let _result = match resp {
             Ok(v) => v,
             Err(e) => return Response::build().code(e),
