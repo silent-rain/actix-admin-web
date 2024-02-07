@@ -65,7 +65,7 @@ pub fn init(config: Logger) -> Result<Vec<WorkerGuard>> {
     }
 
     // 用于针对各种错误的彩色、一致且格式良好的错误报告。
-    color_eyre::install()?;
+    // color_eyre::install()?;
 
     // 日志订阅器
     let subscriber = Registry::default()

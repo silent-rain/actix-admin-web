@@ -5,12 +5,12 @@ use std::fs::read_to_string;
 use std::sync::Arc;
 
 pub mod environment;
-pub mod logger;
 pub mod mysql;
 pub mod server;
 pub mod sqlite;
 
 use code::Error;
+pub use logger::config::Logger;
 
 use log::error;
 use once_cell::sync::OnceCell;
@@ -71,7 +71,7 @@ pub struct AppConfig {
     pub mysql: mysql::Mysql,
     /// 日志配置
     #[serde(default)]
-    pub logger: logger::Logger,
+    pub logger: Logger,
 }
 
 #[cfg(test)]
