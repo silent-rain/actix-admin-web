@@ -87,7 +87,7 @@ mod tests {
 
     #[test]
     fn test_include_str() {
-        // let yaml_str = include_str!("../../../../config.toml");
-        // assert_ne!(yaml_str, "");
+        let yaml_str = include_str!("../../config.toml");
+        assert_ne!(yaml_str, "");
     }
 }
