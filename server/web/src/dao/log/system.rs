@@ -11,14 +11,14 @@ use sea_orm::ActiveValue::NotSet;
 use sea_orm::{ActiveModelTrait, DbErr};
 use sea_orm::{EntityTrait, PaginatorTrait, QueryOrder};
 
-pub struct Dao<'a, DB: DBRepo> {
+pub struct LogSystemDao<'a, DB: DBRepo> {
     db: &'a DB,
 }
 
-impl<'a, DB: DBRepo> Dao<'a, DB> {
+impl<'a, DB: DBRepo> LogSystemDao<'a, DB> {
     /// 创建对象
     pub fn new(db: &'a DB) -> Self {
-        Dao { db }
+        LogSystemDao { db }
     }
 
     /// 获取所有数据

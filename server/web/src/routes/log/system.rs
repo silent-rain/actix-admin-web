@@ -1,6 +1,6 @@
 //! 系统日志
 
-use crate::controller::log::log_system::Controller;
+use crate::controller::log::system::Controller;
 
 use actix_web::{web, Scope};
 

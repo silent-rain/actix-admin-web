@@ -1,5 +1,5 @@
 //! 系统日志
-use crate::{dao::log::log_system::Dao, dto::log::log_system::LogSystemListReq};
+use crate::{dao::log::system::LogSystemDao, dto::log::log_system::LogSystemListReq};
 
 use code::Error;
 use database::DBRepo;
@@ -8,15 +8,15 @@ use entity::log::system::Model;
 use sea_orm::DbErr::RecordNotFound;
 use tracing::error;
 
-/// 用户服务
-pub struct Service<'a, DB: DBRepo> {
-    dao: Dao<'a, DB>,
+/// 服务
+pub struct LogSystemService<'a, DB: DBRepo> {
+    dao: LogSystemDao<'a, DB>,
 }
 
-impl<'a, DB: DBRepo> Service<'a, DB> {
+impl<'a, DB: DBRepo> LogSystemService<'a, DB> {
     /// 创建对象
     pub fn new(db: &'a DB) -> Self {
-        Service { dao: Dao::new(db) }
+        LogSystemService { dao: LogSystemDao::new(db) }
     }
 
     /// 获取列表数据

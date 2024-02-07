@@ -1,7 +1,7 @@
 //! 系统日志
 
 use crate::dto::log::log_system::{DeleteLogSystemReq, LogSystemInfoReq, LogSystemListReq};
-use crate::service::log::log_system::Service;
+use crate::service::log::system::LogSystemService;
 
 use crate::state::AppState;
 
@@ -20,7 +20,9 @@ impl Controller {
         state: web::Data<AppState>,
         req: web::Query<LogSystemListReq>,
     ) -> impl Responder {
-        let resp = Service::new(&state.db).list(req.into_inner()).await;
+        let resp = LogSystemService::new(&state.db)
+            .list(req.into_inner())
+            .await;
         let (results, total) = match resp {
             Ok(v) => v,
             Err(e) => return Response::build().code(e),
@@ -34,7 +36,7 @@ impl Controller {
         state: web::Data<AppState>,
         params: web::Query<LogSystemInfoReq>,
     ) -> impl Responder {
-        let resp = Service::new(&state.db).info(params.id).await;
+        let resp = LogSystemService::new(&state.db).info(params.id).await;
         let result = match resp {
             Ok(v) => v,
             Err(e) => return Response::build().code(e),
@@ -50,7 +52,7 @@ impl Controller {
     /// 添加系统日志
     pub async fn add(state: web::Data<AppState>, data: web::Json<Model>) -> impl Responder {
         let data = data.into_inner();
-        let resp = Service::new(&state.db).add(data).await;
+        let resp = LogSystemService::new(&state.db).add(data).await;
         let result = match resp {
             Ok(v) => v,
             Err(e) => return Response::build().code(e),
@@ -64,7 +66,7 @@ impl Controller {
         state: web::Data<AppState>,
         params: web::Query<DeleteLogSystemReq>,
     ) -> impl Responder {
-        let resp = Service::new(&state.db).delete(params.id).await;
+        let resp = LogSystemService::new(&state.db).delete(params.id).await;
         let _result = match resp {
             Ok(v) => v,
             Err(e) => return Response::build().code(e),

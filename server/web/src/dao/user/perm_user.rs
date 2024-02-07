@@ -9,14 +9,14 @@ use entity::prelude::PermUser;
 use sea_orm::{ActiveModelTrait, DbErr, Set};
 use sea_orm::{EntityTrait, PaginatorTrait, QueryOrder};
 
-pub struct Dao<'a, DB: DBRepo> {
+pub struct PermUserDao<'a, DB: DBRepo> {
     db: &'a DB,
 }
 
-impl<'a, DB: DBRepo> Dao<'a, DB> {
+impl<'a, DB: DBRepo> PermUserDao<'a, DB> {
     /// 创建对象
     pub fn new(db: &'a DB) -> Self {
-        Dao { db }
+        PermUserDao { db }
     }
 
     /// 获取所有数据

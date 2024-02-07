@@ -1,5 +1,5 @@
 //! 用户管理
-use crate::dao::user::perm_user::Dao;
+use crate::dao::user::perm_user::PermUserDao;
 use crate::dto::user::perm_user::{AddUserReq, UserListReq};
 
 use code::Error;
@@ -9,15 +9,15 @@ use entity::perm_user::Model;
 use sea_orm::DbErr::RecordNotFound;
 use tracing::error;
 
-/// 用户服务
-pub struct Service<'a, DB: DBRepo> {
-    dao: Dao<'a, DB>,
+/// 服务
+pub struct PermUserService<'a, DB: DBRepo> {
+    dao: PermUserDao<'a, DB>,
 }
 
-impl<'a, DB: DBRepo> Service<'a, DB> {
+impl<'a, DB: DBRepo> PermUserService<'a, DB> {
     /// 创建对象
     pub fn new(db: &'a DB) -> Self {
-        Service { dao: Dao::new(db) }
+        PermUserService { dao: PermUserDao::new(db) }
     }
 
     /// 获取列表数据

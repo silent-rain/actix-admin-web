@@ -2,7 +2,7 @@
 
 use crate::{
     dto::user::perm_user::{AddUserReq, DeleteUserReq, UserInfoReq, UserListReq},
-    service::user::perm_user,
+    service::user::perm_user::PermUserService,
     state::AppState,
 };
 
@@ -18,9 +18,7 @@ pub struct Controller;
 impl Controller {
     /// 用户列表查询
     pub async fn list(state: web::Data<AppState>, req: web::Query<UserListReq>) -> impl Responder {
-        let resp = perm_user::Service::new(&state.db)
-            .list(req.into_inner())
-            .await;
+        let resp = PermUserService::new(&state.db).list(req.into_inner()).await;
         let (results, total) = match resp {
             Ok(v) => v,
             Err(e) => return Response::build().code(e),
@@ -34,7 +32,7 @@ impl Controller {
         state: web::Data<AppState>,
         params: web::Query<UserInfoReq>,
     ) -> impl Responder {
-        let resp = perm_user::Service::new(&state.db).info(params.id).await;
+        let resp = PermUserService::new(&state.db).info(params.id).await;
 
         let result = match resp {
             Ok(v) => v,
@@ -57,7 +55,7 @@ impl Controller {
                 .msg(&e.to_string());
         }
 
-        let resp = perm_user::Service::new(&state.db).add(data).await;
+        let resp = PermUserService::new(&state.db).add(data).await;
 
         let result = match resp {
             Ok(v) => v,
@@ -72,7 +70,7 @@ impl Controller {
         state: web::Data<AppState>,
         params: web::Query<DeleteUserReq>,
     ) -> impl Responder {
-        let resp = perm_user::Service::new(&state.db).delete(params.id).await;
+        let resp = PermUserService::new(&state.db).delete(params.id).await;
         let _result = match resp {
             Ok(v) => v,
             Err(e) => return Response::build().code(e),
