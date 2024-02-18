@@ -1,6 +1,6 @@
 //! 用户管理
 
-use crate::controller::user::perm_user::Controller;
+use crate::controller::perm::perm_user::Controller;
 
 use actix_web::{web, Scope};
 

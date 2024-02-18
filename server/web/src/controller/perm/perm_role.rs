@@ -1,9 +1,9 @@
 //! 角色管理
 
 use crate::{
-    dto::user::perm_role::{AddRoleReq, DeleteRoleReq, GetRoleInfoReq, GetRoleListReq},
+    dto::perm::perm_role::{AddRoleReq, DeleteRoleReq, GetRoleInfoReq, GetRoleListReq},
     inject::Provider,
-    service::user::perm_role::PermRoleService,
+    service::perm::perm_role::PermRoleService,
 };
 
 use code::Error;

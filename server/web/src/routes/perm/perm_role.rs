@@ -1,6 +1,6 @@
 //! 角色管理
 
-use crate::controller::user::perm_role::Controller;
+use crate::controller::perm::perm_role::Controller;
 
 use actix_web::{web, Scope};
 

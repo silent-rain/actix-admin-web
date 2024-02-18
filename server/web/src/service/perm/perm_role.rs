@@ -1,6 +1,6 @@
 //! 角色管理
-use crate::dao::user::perm_role::PermRoleDao;
-use crate::dto::user::perm_role::{AddRoleReq, GetRoleListReq};
+use crate::dao::perm::perm_role::PermRoleDao;
+use crate::dto::perm::perm_role::{AddRoleReq, GetRoleListReq};
 
 use code::Error;
 use entity::perm_role;

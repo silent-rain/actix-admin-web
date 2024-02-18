@@ -1,6 +1,6 @@
 //! 角色管理
 use crate::dto::pagination::Pagination;
-use crate::dto::user::perm_role::{AddRoleReq, GetRoleListReq};
+use crate::dto::perm::perm_role::{AddRoleReq, GetRoleListReq};
 
 use database::DBRepo;
 use entity::perm_role;

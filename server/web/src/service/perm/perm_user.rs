@@ -1,6 +1,6 @@
 //! 用户管理
-use crate::dao::user::perm_user::PermUserDao;
-use crate::dto::user::perm_user::{AddUserReq, GetUserListReq};
+use crate::dao::perm::perm_user::PermUserDao;
+use crate::dto::perm::perm_user::{AddUserReq, GetUserListReq};
 
 use code::Error;
 use entity::perm_user;

@@ -1,9 +1,9 @@
 //! 用户管理
 
 use crate::{
-    dto::user::perm_user::{AddUserReq, DeleteUserReq, GetUserInfoReq, GetUserListReq},
+    dto::perm::perm_user::{AddUserReq, DeleteUserReq, GetUserInfoReq, GetUserListReq},
     inject::Provider,
-    service::user::perm_user::PermUserService,
+    service::perm::perm_user::PermUserService,
 };
 
 use code::Error;
