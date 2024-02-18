@@ -21,9 +21,7 @@ pub struct UserInfoReq {
 #[derive(Serialize, Deserialize, Validate)]
 pub struct AddUserReq {
     #[validate(length(min = 3, message = "Name must be greater than 3 chars"))]
-    pub realname: String,
-    #[validate(length(min = 3, message = "Name must be greater than 3 chars"))]
-    pub nickname: String,
+    pub username: String,
     pub gender: i8,
     #[validate(range(min = 18, max = 22, message = "Age must be between 18 to 22"))]
     pub age: i32,

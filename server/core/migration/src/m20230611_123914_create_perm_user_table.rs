@@ -10,35 +10,94 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(User::Table)
+                    .table(PermUser::Table)
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(User::Id)
+                        ColumnDef::new(PermUser::Id)
                             .integer()
                             .not_null()
                             .auto_increment()
-                            .primary_key(),
+                            .primary_key()
+                            .comment("用户ID"),
                     )
-                    .col(ColumnDef::new(User::Realname).string().not_null())
-                    .col(ColumnDef::new(User::Nickname).string().not_null())
-                    .col(ColumnDef::new(User::Gender).tiny_integer().not_null())
-                    .col(ColumnDef::new(User::Age).integer().null())
-                    .col(ColumnDef::new(User::Birthday).string().null())
-                    .col(ColumnDef::new(User::Avatar).string().null())
-                    .col(ColumnDef::new(User::Phone).string().null())
-                    .col(ColumnDef::new(User::Email).string().null())
-                    .col(ColumnDef::new(User::Intro).string().null())
-                    .col(ColumnDef::new(User::Note).string().null())
-                    .col(ColumnDef::new(User::Password).string().null())
-                    .col(ColumnDef::new(User::Sort).integer().null())
-                    .col(ColumnDef::new(User::Status).tiny_integer().null())
                     .col(
-                        ColumnDef::new(User::CreatedAt)
-                            .date_time()
+                        ColumnDef::new(PermUser::Username)
+                            .string()
+                            .not_null()
+                            .comment("用户名称"),
+                    )
+                    .col(
+                        ColumnDef::new(PermUser::Gender)
+                            .tiny_integer()
+                            .not_null()
+                            .comment("性别;1:男,2:女,3:保密"),
+                    )
+                    .col(
+                        ColumnDef::new(PermUser::Age)
+                            .integer()
                             .null()
+                            .comment("年龄"),
+                    )
+                    .col(
+                        ColumnDef::new(PermUser::Birthday)
+                            .string()
+                            .null()
+                            .comment("出生日期"),
+                    )
+                    .col(
+                        ColumnDef::new(PermUser::Avatar)
+                            .string()
+                            .null()
+                            .comment("头像地址"),
+                    )
+                    .col(
+                        ColumnDef::new(PermUser::Phone)
+                            .string()
+                            .null()
+                            .comment("电话号码"),
+                    )
+                    .col(
+                        ColumnDef::new(PermUser::Email)
+                            .string()
+                            .null()
+                            .comment("邮箱"),
+                    )
+                    .col(
+                        ColumnDef::new(PermUser::Intro)
+                            .string()
+                            .null()
+                            .comment("个人介绍"),
+                    )
+                    .col(
+                        ColumnDef::new(PermUser::Note)
+                            .string()
+                            .null()
+                            .comment("备注"),
+                    )
+                    .col(
+                        ColumnDef::new(PermUser::Password)
+                            .string()
+                            .null()
+                            .comment("hash 密码"),
+                    )
+                    .col(
+                        ColumnDef::new(PermUser::Status)
+                            .tiny_integer()
+                            .null()
+                            .comment("状态;1:启用,2:禁用"),
+                    )
+                    .col(
+                        ColumnDef::new(PermUser::CreatedAt)
+                            .date_time()
+                            .not_null()
                             .comment("创建时间"),
                     )
-                    .col(ColumnDef::new(User::UpdatedAt).date_time().null())
+                    .col(
+                        ColumnDef::new(PermUser::UpdatedAt)
+                            .date_time()
+                            .not_null()
+                            .comment("更新时间"),
+                    )
                     .to_owned(),
             )
             .await
@@ -47,19 +106,18 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
         manager
-            .drop_table(Table::drop().table(User::Table).to_owned())
+            .drop_table(Table::drop().table(PermUser::Table).to_owned())
             .await
     }
 }
 
 /// Learn more at https://docs.rs/sea-query#iden
 #[derive(Iden)]
-enum User {
+enum PermUser {
     #[iden = "perm_user"]
     Table,
     Id,
-    Realname,
-    Nickname,
+    Username,
     Gender,
     Age,
     Birthday,
@@ -69,7 +127,6 @@ enum User {
     Intro,
     Note,
     Password,
-    Sort,
     Status,
     CreatedAt,
     UpdatedAt,

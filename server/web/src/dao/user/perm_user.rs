@@ -48,7 +48,7 @@ impl<'a> PermUserDao<'a> {
     /// 添加详情信息
     pub async fn add(&self, data: AddUserReq) -> Result<perm_user::Model, DbErr> {
         let pear = perm_user::ActiveModel {
-            nickname: Set(data.nickname),
+            username: Set(data.username),
             gender: Set(data.gender),
             age: Set(Some(data.age)),
             phone: Set(Some(data.phone)),
@@ -91,9 +91,9 @@ impl<'a> PermUserDao<'a> {
     }
 
     // 指定字段删除
-    pub async fn delete_by_name(&self, name: String) -> Result<u64, DbErr> {
+    pub async fn delete_by_name(&self, username: String) -> Result<u64, DbErr> {
         let result = PermUser::delete_many()
-            .filter(perm_user::Column::Nickname.contains(&name))
+            .filter(perm_user::Column::Username.contains(&username))
             .exec(self.db.wdb())
             .await?;
 
