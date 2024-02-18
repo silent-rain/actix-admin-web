@@ -4,7 +4,7 @@ use validator::Validate;
 
 /// 用户列表查询
 #[derive(Default, Deserialize)]
-pub struct UserListReq {
+pub struct GetUserListReq {
     /// 当前分页
     pub page: u64,
     /// 页面大小
@@ -13,7 +13,7 @@ pub struct UserListReq {
 
 /// 通过 ID 查询用户详情信息
 #[derive(Default, Deserialize)]
-pub struct UserInfoReq {
+pub struct GetUserInfoReq {
     pub id: i32,
 }
 

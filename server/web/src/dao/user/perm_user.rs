@@ -1,6 +1,6 @@
 //! 用户管理
 use crate::dto::pagination::Pagination;
-use crate::dto::user::perm_user::{AddUserReq, UserListReq};
+use crate::dto::user::perm_user::{AddUserReq, GetUserListReq};
 
 use database::DBRepo;
 use entity::perm_user;
@@ -17,16 +17,17 @@ pub struct PermUserDao<'a> {
 
 impl<'a> PermUserDao<'a> {
     /// 获取所有数据
-    pub async fn all(&self) -> Result<Vec<perm_user::Model>, DbErr> {
-        let result = PermUser::find()
+    pub async fn all(&self) -> Result<(Vec<perm_user::Model>, u64), DbErr> {
+        let results = PermUser::find()
             .order_by_asc(perm_user::Column::Id)
             .all(self.db.rdb())
             .await?;
-        Ok(result)
+        let total = results.len() as u64;
+        Ok((results, total))
     }
 
     /// 获取数据列表
-    pub async fn list(&self, req: UserListReq) -> Result<(Vec<perm_user::Model>, u64), DbErr> {
+    pub async fn list(&self, req: GetUserListReq) -> Result<(Vec<perm_user::Model>, u64), DbErr> {
         let page = Pagination::new(req.page, req.page_size);
 
         let paginator = PermUser::find()
@@ -90,7 +91,7 @@ impl<'a> PermUserDao<'a> {
         Ok(result.rows_affected)
     }
 
-    // 指定字段删除
+    /// 指定字段删除
     pub async fn delete_by_name(&self, username: String) -> Result<u64, DbErr> {
         let result = PermUser::delete_many()
             .filter(perm_user::Column::Username.contains(&username))

@@ -1,7 +1,7 @@
 //! 用户管理
 
 use crate::{
-    dto::user::perm_user::{AddUserReq, DeleteUserReq, UserInfoReq, UserListReq},
+    dto::user::perm_user::{AddUserReq, DeleteUserReq, GetUserInfoReq, GetUserListReq},
     inject::Provider,
     service::user::perm_user::PermUserService,
 };
@@ -19,7 +19,7 @@ impl Controller {
     /// 用户列表查询
     pub async fn list(
         provider: web::Data<Provider>,
-        req: web::Query<UserListReq>,
+        req: web::Query<GetUserListReq>,
     ) -> impl Responder {
         let perm_user_service: PermUserService = provider.provide();
         let resp = perm_user_service.list(req.into_inner()).await;
@@ -34,7 +34,7 @@ impl Controller {
     /// 用户详情查询
     pub async fn info(
         provider: web::Data<Provider>,
-        params: web::Query<UserInfoReq>,
+        params: web::Query<GetUserInfoReq>,
     ) -> impl Responder {
         let perm_user_service: PermUserService = provider.provide();
         let resp = perm_user_service.info(params.id).await;
