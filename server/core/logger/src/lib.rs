@@ -86,7 +86,7 @@ mod tests {
     use super::*;
 
     use color_eyre::{eyre::eyre, Result};
-    use config::logger::{ConsoleBunyanOptions, ConsoleOptions, DbOptions, FileOptions};
+    use config::{ConsoleBunyanOptions, ConsoleOptions, DbOptions, FileOptions};
     use tracing::{debug, error, info, instrument, span, trace, warn, Level};
 
     #[instrument]

@@ -434,7 +434,6 @@ mod tests {
     use super::*;
 
     use code::Error;
-    use config::logger::DbOptions;
 
     use once_cell::sync::Lazy;
     use tracing::{debug, debug_span, error, event, info, info_span, trace, warn, Level};
