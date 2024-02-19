@@ -46,11 +46,11 @@ DATABASE_URL=sqlite://data.dat
 
 ```shell
 # 进入迁移目录
-cd service/core/migration
+cd server/core/migration
 
 # 指定数据库进行迁移
 # cargo run -- COMMAND
-cargo run -- -u sqlite://../../data.dat up
+cargo run -- -u sqlite://../../web/data.dat up
 
 # or 根据环境变量配置进行迁移
 cargo run -- up
