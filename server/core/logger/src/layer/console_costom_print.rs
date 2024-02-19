@@ -58,7 +58,6 @@ where
 mod tests {
     use super::*;
 
-    use config::logger::ConsoleOptions;
     use tracing::{debug, error, info, trace, warn};
     use tracing_subscriber::prelude::__tracing_subscriber_SubscriberExt;
 
