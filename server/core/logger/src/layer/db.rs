@@ -433,6 +433,7 @@ where
 mod tests {
     use super::*;
 
+    use crate::config;
     use code::Error;
 
     use once_cell::sync::Lazy;

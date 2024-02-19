@@ -35,6 +35,8 @@ where
 mod tests {
     use super::*;
 
+    use crate::config;
+
     use tracing::{debug, error, info, trace, warn};
 
     #[test]

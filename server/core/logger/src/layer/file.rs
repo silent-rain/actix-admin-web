@@ -69,6 +69,8 @@ where
 mod tests {
     use super::*;
 
+    use crate::config;
+
     use tracing::{debug, error, info, trace, warn};
     use tracing_subscriber::prelude::__tracing_subscriber_SubscriberExt;
 

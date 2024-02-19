@@ -28,6 +28,8 @@ where
 mod tests {
     use super::*;
 
+    use crate::config;
+
     use tracing::{debug, debug_span, error, event, info, info_span, trace, warn, Level};
 
     fn setup() {
