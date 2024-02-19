@@ -34,7 +34,7 @@ mod tests {
 
     fn setup() {
         let conf = ConsoleBunyanOptions {
-            level: config::Level::DEBUG,
+            level: config::Level::Debug,
             enable: true,
         };
         let layer = layer(&conf);
