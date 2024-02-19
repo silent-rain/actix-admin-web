@@ -40,7 +40,7 @@ mod tests {
     #[test]
     fn test_layer() {
         let conf = ConsoleOptions {
-            level: config::logger::Level::DEBUG,
+            level: config::Level::DEBUG,
             enable: true,
         };
         let layer = layer(&conf);

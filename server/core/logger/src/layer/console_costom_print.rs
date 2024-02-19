@@ -64,7 +64,7 @@ mod tests {
     #[test]
     fn test_non_blocking_layer() {
         let conf = ConsoleOptions {
-            level: config::logger::Level::DEBUG,
+            level: config::Level::DEBUG,
             enable: true,
         };
 

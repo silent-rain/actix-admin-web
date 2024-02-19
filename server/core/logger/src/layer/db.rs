@@ -442,7 +442,7 @@ mod tests {
     static INIT: Lazy<bool> = Lazy::new(|| {
         let conf = DbOptions {
             address: "sqlite://../../data.dat".to_string(),
-            level: config::logger::Level::DEBUG,
+            level: config::Level::DEBUG,
             enable: true,
             ..Default::default()
         };

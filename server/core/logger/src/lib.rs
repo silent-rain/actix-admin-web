@@ -124,20 +124,20 @@ mod tests {
     fn test_init_subscriber() {
         let conf = Logger {
             console: ConsoleOptions {
-                level: config::logger::Level::DEBUG,
+                level: config::Level::DEBUG,
                 enable: true,
             },
             console_bunyan: ConsoleBunyanOptions {
-                level: config::logger::Level::DEBUG,
+                level: config::Level::DEBUG,
                 enable: true,
             },
             file: FileOptions {
-                level: config::logger::Level::DEBUG,
+                level: config::Level::DEBUG,
                 enable: true,
                 ..Default::default()
             },
             db: DbOptions {
-                level: config::logger::Level::DEBUG,
+                level: config::Level::DEBUG,
                 enable: false,
                 ..Default::default()
             },

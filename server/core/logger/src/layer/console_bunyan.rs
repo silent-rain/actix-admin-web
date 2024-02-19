@@ -32,7 +32,7 @@ mod tests {
 
     fn setup() {
         let conf = ConsoleBunyanOptions {
-            level: config::logger::Level::DEBUG,
+            level: config::Level::DEBUG,
             enable: true,
         };
         let layer = layer(&conf);
