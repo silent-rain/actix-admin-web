@@ -7,8 +7,10 @@ pub mod web_site;
 pub mod welcome;
 
 use log::system;
+
 use perm::perm_role;
 use perm::perm_user;
+use perm::perm_user_role_rel;
 
 use actix_web::middleware::Logger;
 use actix_web::{dev::HttpServiceFactory, web};
@@ -29,6 +31,8 @@ pub fn register_api() -> impl HttpServiceFactory {
         .service(perm_user::register())
         // 角色管理
         .service(perm_role::register())
+        // 用户角色关联关系管理
+        .service(perm_user_role_rel::register())
         // 系统日志管理
         .service(system::register())
 }
