@@ -3,7 +3,6 @@
 # rustflags = ["-Z", "threads=8"]
 
 # 并行化加载来提高链接器性
-# sudo pacman -S mold
 # [target.x86_64-unknown-linux-gnu]
 # linker = "clang"
 # rustflags = ["-C", "link-arg=-fuse-ld=/usr/bin/mold"]
