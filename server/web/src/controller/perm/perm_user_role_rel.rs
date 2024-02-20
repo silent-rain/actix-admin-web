@@ -10,7 +10,10 @@ use crate::{
 
 use response::Response;
 
-use actix_web::{web, Responder};
+use actix_web::{
+    web::{Data, Json, Query},
+    Responder,
+};
 
 /// 控制器
 pub struct Controller;
@@ -18,8 +21,8 @@ pub struct Controller;
 impl Controller {
     /// 角色列表查询
     pub async fn list(
-        provider: web::Data<Provider>,
-        req: web::Query<GetUserRoleRelListReq>,
+        provider: Data<Provider>,
+        req: Query<GetUserRoleRelListReq>,
     ) -> impl Responder {
         let perm_user_service: PermUserRoleRelService = provider.provide();
         let resp = perm_user_service.list(req.into_inner()).await;
@@ -32,10 +35,7 @@ impl Controller {
     }
 
     /// 添加角色信息
-    pub async fn add(
-        provider: web::Data<Provider>,
-        data: web::Json<AddUserRoleRelReq>,
-    ) -> impl Responder {
+    pub async fn add(provider: Data<Provider>, data: Json<AddUserRoleRelReq>) -> impl Responder {
         let data = data.into_inner();
         let perm_user_service: PermUserRoleRelService = provider.provide();
         let resp = perm_user_service.add(data).await;
@@ -50,8 +50,8 @@ impl Controller {
 
     /// 删除关联关系
     pub async fn delete(
-        provider: web::Data<Provider>,
-        req: web::Query<DeleteUserRoleRelReq>,
+        provider: Data<Provider>,
+        req: Query<DeleteUserRoleRelReq>,
     ) -> impl Responder {
         let perm_user_service: PermUserRoleRelService = provider.provide();
         let resp = perm_user_service.delete(req.into_inner()).await;

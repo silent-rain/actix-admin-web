@@ -9,7 +9,10 @@ use crate::{
 use code::Error;
 use response::Response;
 
-use actix_web::{web, Responder};
+use actix_web::{
+    web::{Data, Json, Query},
+    Responder,
+};
 use validator::Validate;
 
 /// 控制器
@@ -17,10 +20,7 @@ pub struct Controller;
 
 impl Controller {
     /// 用户列表查询
-    pub async fn list(
-        provider: web::Data<Provider>,
-        req: web::Query<GetUserListReq>,
-    ) -> impl Responder {
+    pub async fn list(provider: Data<Provider>, req: Query<GetUserListReq>) -> impl Responder {
         let perm_user_service: PermUserService = provider.provide();
         let resp = perm_user_service.list(req.into_inner()).await;
         let (results, total) = match resp {
@@ -32,10 +32,7 @@ impl Controller {
     }
 
     /// 用户详情查询
-    pub async fn info(
-        provider: web::Data<Provider>,
-        params: web::Query<GetUserInfoReq>,
-    ) -> impl Responder {
+    pub async fn info(provider: Data<Provider>, params: Query<GetUserInfoReq>) -> impl Responder {
         let perm_user_service: PermUserService = provider.provide();
         let resp = perm_user_service.info(params.id).await;
 
@@ -52,7 +49,7 @@ impl Controller {
     }
 
     /// 添加用户信息
-    pub async fn add(provider: web::Data<Provider>, data: web::Json<AddUserReq>) -> impl Responder {
+    pub async fn add(provider: Data<Provider>, data: Json<AddUserReq>) -> impl Responder {
         let data = data.into_inner();
         if let Err(e) = data.validate() {
             return Response::build()
@@ -72,10 +69,7 @@ impl Controller {
     }
 
     /// 删除用户
-    pub async fn delete(
-        provider: web::Data<Provider>,
-        params: web::Query<DeleteUserReq>,
-    ) -> impl Responder {
+    pub async fn delete(provider: Data<Provider>, params: Query<DeleteUserReq>) -> impl Responder {
         let perm_user_service: PermUserService = provider.provide();
         let resp = perm_user_service.delete(params.id).await;
         let _result = match resp {

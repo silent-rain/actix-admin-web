@@ -8,17 +8,17 @@ use code::Error;
 use entity::log::system::Model;
 use response::Response;
 
-use actix_web::{web, Responder};
+use actix_web::{
+    web::{Data, Json, Query},
+    Responder,
+};
 
 /// 控制器
 pub struct Controller;
 
 impl Controller {
     /// 系统日志列表查询
-    pub async fn list(
-        provider: web::Data<Provider>,
-        req: web::Query<LogSystemListReq>,
-    ) -> impl Responder {
+    pub async fn list(provider: Data<Provider>, req: Query<LogSystemListReq>) -> impl Responder {
         let log_system_service: LogSystemService = provider.provide();
         let resp = log_system_service.list(req.into_inner()).await;
         let (results, total) = match resp {
@@ -30,10 +30,7 @@ impl Controller {
     }
 
     /// 系统日志详情查询
-    pub async fn info(
-        provider: web::Data<Provider>,
-        params: web::Query<LogSystemInfoReq>,
-    ) -> impl Responder {
+    pub async fn info(provider: Data<Provider>, params: Query<LogSystemInfoReq>) -> impl Responder {
         let log_system_service: LogSystemService = provider.provide();
         let resp = log_system_service.info(params.id).await;
         let result = match resp {
@@ -49,7 +46,7 @@ impl Controller {
     }
 
     /// 添加系统日志
-    pub async fn add(provider: web::Data<Provider>, data: web::Json<Model>) -> impl Responder {
+    pub async fn add(provider: Data<Provider>, data: Json<Model>) -> impl Responder {
         let data = data.into_inner();
         let log_system_service: LogSystemService = provider.provide();
         let resp = log_system_service.add(data).await;
@@ -63,8 +60,8 @@ impl Controller {
 
     /// 删除系统日志
     pub async fn delete(
-        provider: web::Data<Provider>,
-        params: web::Query<DeleteLogSystemReq>,
+        provider: Data<Provider>,
+        params: Query<DeleteLogSystemReq>,
     ) -> impl Responder {
         let log_system_service: LogSystemService = provider.provide();
         let resp = log_system_service.delete(params.id).await;
