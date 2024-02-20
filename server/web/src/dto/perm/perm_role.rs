@@ -4,7 +4,7 @@ use validator::Validate;
 
 /// 角色列表查询
 #[derive(Default, Deserialize)]
-pub struct GetRoleListReq {
+pub struct RoleListReq {
     /// 当前分页
     pub page: u64,
     /// 页面大小
@@ -13,7 +13,7 @@ pub struct GetRoleListReq {
 
 /// 通过 ID 查询角色详情信息
 #[derive(Default, Deserialize)]
-pub struct GetRoleInfoReq {
+pub struct RoleInfoReq {
     pub id: i32,
 }
 
@@ -29,4 +29,11 @@ pub struct AddRoleReq {
 #[derive(Default, Deserialize)]
 pub struct DeleteRoleReq {
     pub id: i32,
+}
+
+/// 通过用户ID获取角色列表
+#[derive(Default, Deserialize)]
+pub struct UserRoleListReq {
+    /// 用户ID
+    pub user_id: i32,
 }

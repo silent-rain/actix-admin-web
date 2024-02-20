@@ -12,4 +12,5 @@ pub fn register() -> Scope {
         .route("", web::get().to(Controller::info))
         .route("", web::post().to(Controller::add))
         .route("", web::delete().to(Controller::delete))
+        .route("/role_list", web::get().to(Controller::role_list))
 }

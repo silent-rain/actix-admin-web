@@ -1,6 +1,6 @@
 //! 角色管理
 use crate::dao::perm::perm_role::PermRoleDao;
-use crate::dto::perm::perm_role::{AddRoleReq, GetRoleListReq};
+use crate::dto::perm::perm_role::{AddRoleReq, RoleListReq, UserRoleListReq};
 
 use code::Error;
 use entity::perm_role;
@@ -26,7 +26,7 @@ impl<'a> PermRoleService<'a> {
     }
 
     /// 获取列表数据
-    pub async fn list(&self, req: GetRoleListReq) -> Result<(Vec<perm_role::Model>, u64), Error> {
+    pub async fn list(&self, req: RoleListReq) -> Result<(Vec<perm_role::Model>, u64), Error> {
         let (results, total) = self.role_dao.list(req).await.map_err(|err| {
             error!("查询数据失败, error: {err:#?}");
             Error::DbQueryError
@@ -63,5 +63,19 @@ impl<'a> PermRoleService<'a> {
             Error::DBDeleteError
         })?;
         Ok(result)
+    }
+}
+
+impl<'a> PermRoleService<'a> {
+    /// 通过用户ID获取角色列表
+    pub async fn role_list(
+        &self,
+        req: UserRoleListReq,
+    ) -> Result<(Vec<perm_role::Model>, u64), Error> {
+        let (results, total) = self.role_dao.role_list(req.user_id).await.map_err(|err| {
+            error!("查询数据失败, error: {err:#?}");
+            Error::DbQueryError
+        })?;
+        Ok((results, total))
     }
 }

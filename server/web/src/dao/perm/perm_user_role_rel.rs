@@ -5,8 +5,7 @@ use entity::perm_user_role_rel;
 use entity::prelude::PermUserRoleRel;
 
 use nject::injectable;
-use sea_orm::EntityTrait;
-use sea_orm::{ActiveModelTrait, ColumnTrait, DbErr, QueryFilter, Set};
+use sea_orm::{ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, QueryFilter, Set};
 
 #[injectable]
 pub struct PermUserRoleRelDao<'a> {
