@@ -2,7 +2,7 @@
 #![allow(unused)]
 
 use std::fs::read_to_string;
-use std::sync::Arc;
+use std::sync::OnceLock;
 
 pub mod environment;
 pub mod mysql;
@@ -13,11 +13,10 @@ use code::Error;
 pub use logger::config::Logger;
 
 use log::error;
-use once_cell::sync::OnceCell;
 use serde::{Deserialize, Serialize};
 
 /// 全局配置对象
-static GLOBAL_CONFIG: OnceCell<Arc<AppConfig>> = OnceCell::new();
+static GLOBAL_CONFIG: OnceLock<AppConfig> = OnceLock::new();
 
 /// 初始化, 解析配置文件
 /// # Examples
@@ -33,7 +32,7 @@ pub fn init(path: &str) -> Result<(), Error> {
         eprintln!("{:#?}", e);
         Error::ConfigParseError
     })?;
-    GLOBAL_CONFIG.get_or_init(|| Arc::new(config));
+    GLOBAL_CONFIG.get_or_init(|| config);
     Ok(())
 }
 
@@ -43,10 +42,10 @@ pub fn init(path: &str) -> Result<(), Error> {
 /// config = instance()
 /// assert!(config.is_ok());
 /// ```
-pub fn instance() -> Arc<AppConfig> {
+pub fn instance() -> &'static AppConfig {
     let config = GLOBAL_CONFIG.get();
     match config {
-        Some(config) => Arc::clone(config),
+        Some(config) => config,
         None => {
             log::error!("configuration not initialized!");
             panic!("configuration not initialized!")
