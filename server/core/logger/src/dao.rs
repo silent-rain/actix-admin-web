@@ -6,13 +6,13 @@ use entity::log::system;
 use sea_orm::ActiveValue::NotSet;
 use sea_orm::{ActiveModelTrait, DbErr};
 
-pub struct Dao<'a, DB: DBRepo> {
-    db: &'a DB,
+pub struct Dao<DB: DBRepo> {
+    db: DB,
 }
 
-impl<'a, DB: DBRepo> Dao<'a, DB> {
+impl<DB: DBRepo> Dao<DB> {
     /// 创建对象
-    pub fn new(db: &'a DB) -> Self {
+    pub fn new(db: DB) -> Self {
         Dao { db }
     }
 

@@ -89,8 +89,9 @@ impl<'a> LoggerLayer<'a> {
             return self;
         }
 
-        let layer = Box::new(layer::db::layer(&self.config.db));
+        let (layer, guard) = layer::db::layer(self.config.db.clone());
         self.layers.push(layer);
+        self.guards.push(guard);
         self
     }
 

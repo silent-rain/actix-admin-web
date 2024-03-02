@@ -1,11 +1,10 @@
 //! 数据库日志
-use std::collections::BTreeMap;
-use std::sync::Arc;
+use futures::executor::block_on;
+use std::{collections::BTreeMap, sync::Arc};
 
 use crate::config::DbOptions;
 use crate::dao::Dao;
 
-use database::DatabaseConnection;
 use database::Pool;
 use entity::log::system::Model;
 
@@ -15,18 +14,17 @@ use tokio::sync::{
     mpsc::{self, Receiver, Sender},
     Mutex,
 };
-use tracing::{metadata::LevelFilter, span, Event, Metadata, Subscriber};
+use tracing::{span, Event, Metadata, Subscriber};
+use tracing_appender::non_blocking;
+use tracing_appender::non_blocking::WorkerGuard;
 use tracing_error::SpanTraceStatus;
 use tracing_subscriber::{layer::Context, registry::LookupSpan, Layer};
 
 /// josn 解析器
-#[derive(Debug)]
 pub struct JsonLayer {
     name: String,
-    max_level: LevelFilter,
-    /// 通道发送者, 可以有多个发送者
-    tx: Sender<Model>,
-    rx: Arc<Mutex<Receiver<Model>>>,
+    config: DbOptions,
+    writer: Arc<DbWriter>,
 }
 
 impl<S> Layer<S> for JsonLayer
@@ -78,7 +76,7 @@ where
 
         let output = self.get_output_log(parent_id, span_id, metadata, &fields, "new_span");
 
-        self.send_data(output);
+        self.emit(output);
     }
 
     /// 事件用于处理每次记录 span 的值，也就是每次调用 record! 宏或其简写形式时触发的事件。
@@ -111,7 +109,7 @@ where
 
         let output = self.get_output_log(parent_id, span_id, metadata, fields, "record");
 
-        self.send_data(output);
+        self.emit(output);
     }
 
     /// 用于判断是否启用某个事件
@@ -136,7 +134,7 @@ where
 
         let output = self.get_output_log(parent_id, None, metadata, &fields, "event");
 
-        self.send_data(output);
+        self.emit(output);
     }
 
     /// 用于处理每次进入 span 的事件，也就是每次调用 span::Span::enter 方法
@@ -164,7 +162,7 @@ where
 
         let output = self.get_output_log(parent_id, span_id, metadata, fields, "enter");
 
-        self.send_data(output);
+        self.emit(output);
     }
 
     /// 用于处理每个关闭 span 的事件，也就是每次调用 span::Span::close 方法
@@ -196,7 +194,7 @@ where
         }
 
         let output = self.get_output_log(parent_id, span_id, metadata, fields, "exit");
-        self.send_data(output);
+        self.emit(output);
     }
 }
 
@@ -272,25 +270,18 @@ struct CustomFieldStorage(BTreeMap<String, serde_json::Value>);
 
 impl JsonLayer {
     /// 创建对象
-    pub fn new(name: String) -> Self {
-        let (tx, rx) = mpsc::channel::<Model>(1000);
+    pub fn new(config: DbOptions, writer: Arc<DbWriter>) -> Self {
         JsonLayer {
-            name,
-            max_level: tracing::Level::WARN.into(),
-            tx,
-            rx: Arc::new(Mutex::new(rx)),
+            name: "db_logger".to_owned(),
+            config,
+            writer,
         }
-    }
-
-    /// 最大输出日志
-    pub fn with_max_level(mut self, level: tracing::Level) -> Self {
-        self.max_level = level.into();
-        self
     }
 
     /// 过滤日志级别
     fn filter_level(&self, level: &tracing::Level) -> bool {
-        self.max_level.lt(level)
+        let max_level: tracing::Level = self.config.level.clone().into();
+        max_level.lt(level)
     }
     /// 过滤target日志数据
     fn filter_target(&self, target: &str) -> bool {
@@ -342,7 +333,7 @@ impl JsonLayer {
             // nickname: todo!(),
             parent_span_id: parent_span_id.map(|v| v as u32),
             span_id: span_id.map(|v| v as u32),
-            name: self.name.clone(),
+            name: self.name.to_owned(),
             module_path: metadata.module_path().map(|v| v.to_string()),
             target: metadata.target().to_string(),
             file: metadata.file().map(|v| v.to_string()),
@@ -377,15 +368,16 @@ impl JsonLayer {
     }
 
     /// 发送日志数据到通道
-    fn send_data(&self, output: Option<Model>) {
+    fn emit(&self, output: Option<Model>) {
         let output = match output {
             Some(v) => v,
             None => return,
         };
-        let tx = self.tx.clone();
-        if tx.is_closed() {
+        if self.writer.tx.is_closed() {
             return;
         }
+        let tx = self.writer.tx.clone();
+
         tokio::spawn(async move {
             if let Err(err) = tx.send(output).await {
                 println!("receiver closed, err: {:#?}", err);
@@ -394,22 +386,13 @@ impl JsonLayer {
     }
 
     /// 循环接收数据入库
-    pub fn loop_data(self, address: String) -> Self {
-        let rx = self.rx.clone();
-
+    pub fn loop_data(self) -> Self {
+        let rx = self.writer.rx.clone();
+        let dao = self.writer.clone();
         tokio::spawn(async move {
-            let wdb = Pool::connect(address).await.expect("初始化数据库失败");
-            let db = Pool {
-                rdb: DatabaseConnection::Disconnected,
-                wdb,
-            };
-            let dao = Dao::new(&db);
             let mut rx = rx.lock().await;
-
             while let Some(output) = rx.recv().await {
-                if let Err(err) = dao.add(output.clone()).await {
-                    println!("log add filed, data: {:?} \nerr: {:?}", output, err);
-                }
+                dao.add(output.clone()).await;
             }
         });
 
@@ -417,16 +400,75 @@ impl JsonLayer {
     }
 }
 
+pub struct DbWriter {
+    db: Pool,
+    dao: Arc<Dao<Pool>>,
+    /// 通道发送者, 可以有多个发送者
+    tx: Sender<Model>,
+    rx: Arc<Mutex<Receiver<Model>>>,
+}
+
+impl DbWriter {
+    pub async fn new(config: DbOptions) -> Self {
+        // 初始化数据库
+        let db = database::Pool::init(config.address.clone(), config.address.clone())
+            .await
+            .expect("初始化数据库失败");
+
+        let dao = Dao::new(db.clone());
+
+        let (tx, rx) = mpsc::channel::<Model>(1000);
+
+        DbWriter {
+            db,
+            dao: Arc::new(dao),
+            tx,
+            rx: Arc::new(Mutex::new(rx)),
+        }
+    }
+
+    pub async fn add(&self, data: Model) {
+        if let Err(err) = self.dao.add(data.clone()).await {
+            println!("log add filed, data: {:?} \nerr: {:?}", data, err);
+        }
+    }
+
+    pub fn close(&self) {
+        block_on(async move {
+            self.tx.closed().await;
+            _ = self.db.close().await;
+        });
+    }
+}
+
+struct ArcDbWriter(Arc<DbWriter>);
+
+impl std::io::Write for ArcDbWriter {
+    fn write(&mut self, _buf: &[u8]) -> std::io::Result<usize> {
+        Ok(0)
+    }
+
+    fn flush(&mut self) -> std::io::Result<()> {
+        self.0.close();
+        Ok(())
+    }
+}
+
 /// 输出到数据库中
-pub fn layer<S>(config: &DbOptions) -> Box<dyn Layer<S> + Send + Sync + 'static>
+pub fn layer<S>(config: DbOptions) -> (Box<dyn Layer<S> + Send + Sync + 'static>, WorkerGuard)
 where
     S: Subscriber,
-    for<'a> S: LookupSpan<'a>,
+    for<'lookup> S: LookupSpan<'lookup>,
 {
-    let layer = JsonLayer::new(config.log_name.clone())
-        .with_max_level(config.level.clone().into())
-        .loop_data(config.address.clone());
-    Box::new(layer)
+    // 非阻塞
+    let w: DbWriter = block_on(DbWriter::new(config.clone()));
+    let aw = Arc::new(w);
+
+    let layer = JsonLayer::new(config, aw.clone()).loop_data();
+
+    let w = ArcDbWriter(aw.clone());
+    let (_non_blocking, guard) = non_blocking(w);
+    (Box::new(layer), guard)
 }
 
 #[cfg(test)]
@@ -440,27 +482,28 @@ mod tests {
     use tracing::{debug, debug_span, error, event, info, info_span, trace, warn, Level};
     use tracing_subscriber::layer::SubscriberExt;
 
-    static INIT: Lazy<bool> = Lazy::new(|| {
+    static INIT: Lazy<Arc<WorkerGuard>> = Lazy::new(|| {
         let conf = DbOptions {
-            address: "sqlite://../../data.dat".to_string(),
+            // server/core/logger/data.dat
+            address: "sqlite://./data.dat?mode=rwc".to_string(),
             level: config::Level::Debug,
             enable: true,
             ..Default::default()
         };
 
-        let layer = layer(&conf);
+        let (layer, guard) = layer(conf);
         let subscriber = tracing_subscriber::registry().with(layer);
         tracing::subscriber::set_global_default(subscriber).expect("注册全局日志订阅器失败");
-        true
+        Arc::new(guard)
     });
 
-    fn setup() {
-        let _ = INIT;
+    fn setup() -> Arc<WorkerGuard> {
+        INIT.clone()
     }
 
     #[tokio::test]
     async fn test_log() {
-        setup();
+        let _guard = setup();
 
         trace!("this is trace");
         debug!("this is debug");
@@ -471,7 +514,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_event() {
-        setup();
+        let _guard = setup();
 
         let error = "a bad error";
         event!(Level::ERROR, %error, "Received error");
@@ -479,7 +522,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_outer_record() {
-        setup();
+        let _guard = setup();
 
         // info!("span outer example");
         let outer_span = info_span!(
@@ -503,7 +546,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_inner_record() {
-        setup();
+        let _guard = setup();
 
         {
             let inner_span = debug_span!("inner", level = 1, "xxxxxxxxxx");
@@ -524,7 +567,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_inner_record2() {
-        setup();
+        let _guard = setup();
 
         let inner_span = debug_span!("inner", level = 1);
         let _inner_entered = inner_span.enter();
@@ -547,7 +590,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_code_error() {
-        setup();
+        let _guard = setup();
 
         info!("second example");
         error!("{}", Error::UnknownError);
