@@ -1,5 +1,4 @@
 //! 数据库日志
-use futures::executor::block_on;
 use std::{collections::BTreeMap, sync::Arc};
 
 use crate::config::DbOptions;
@@ -378,6 +377,11 @@ impl JsonLayer {
         }
         let tx = self.writer.tx.clone();
 
+        // 尝试获取当前的 tokio 运行时的句柄。
+        // 如果能够获取到句柄，那么我们就可以认为当前是在 tokio 运行时的上下文中。
+        if tokio::runtime::Handle::try_current().is_err() {
+            return;
+        }
         tokio::spawn(async move {
             if let Err(err) = tx.send(output).await {
                 println!("receiver closed, err: {:#?}", err);
@@ -414,7 +418,6 @@ impl DbWriter {
         let db = database::Pool::init(config.address.clone(), config.address.clone())
             .await
             .expect("初始化数据库失败");
-
         let dao = Dao::new(db.clone());
 
         let (tx, rx) = mpsc::channel::<Model>(1000);
@@ -434,10 +437,17 @@ impl DbWriter {
     }
 
     pub fn close(&self) {
-        block_on(async move {
-            self.tx.closed().await;
-            _ = self.db.close().await;
-        });
+        let tx = self.tx.clone();
+        let db = self.db.clone();
+        std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async move {
+                tx.closed().await;
+                _ = db.close().await;
+            })
+        })
+        .join()
+        .unwrap();
     }
 }
 
@@ -460,8 +470,14 @@ where
     S: Subscriber,
     for<'lookup> S: LookupSpan<'lookup>,
 {
-    // 非阻塞
-    let w: DbWriter = block_on(DbWriter::new(config.clone()));
+    let config1 = config.clone();
+    let w = std::thread::spawn(move || {
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        rt.block_on(DbWriter::new(config1))
+    })
+    .join()
+    .unwrap();
+
     let aw = Arc::new(w);
 
     let layer = JsonLayer::new(config, aw.clone()).loop_data();
