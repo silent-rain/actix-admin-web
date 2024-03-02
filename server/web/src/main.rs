@@ -41,7 +41,7 @@ async fn main() -> std::io::Result<()> {
     println!("print config:\n{:#?}", cfg);
 
     // 初始化日志
-    let _guards = logger::init(cfg.logger.clone()).expect("初始化日志失败");
+    let _guards = logger::Logger::build(&cfg.logger).expect("初始化日志失败");
 
     // mysql dns
     let database_url = cfg.mysql.write.dns();

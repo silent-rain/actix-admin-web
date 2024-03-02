@@ -5,6 +5,9 @@ use serde::{Deserialize, Serialize};
 /// 日志配置
 #[derive(Debug, Default, Serialize, Deserialize, Clone)]
 pub struct Logger {
+    /// 彩色日志
+    #[serde(default)]
+    pub color_eyre: bool,
     /// 终端配置
     #[serde(default)]
     pub console: ConsoleOptions,

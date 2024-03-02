@@ -13,72 +13,159 @@ pub mod dao;
 mod layer;
 pub mod utils;
 
-use config::Logger;
-
-use color_eyre::Result;
+use tracing::subscriber::SetGlobalDefaultError;
 use tracing_appender::non_blocking::WorkerGuard;
 use tracing_error::ErrorLayer;
-use tracing_subscriber::{layer::SubscriberExt, Registry};
+use tracing_subscriber::{
+    layer::{Layered, SubscriberExt},
+    Layer, Registry,
+};
 
-/// 初始化默认日志
-pub fn init_default_logger() {
-    tracing_subscriber::fmt()
-        .with_max_level(tracing::Level::DEBUG)
-        .with_level(true)
-        .with_line_number(true)
-        .init();
+#[derive(Debug)]
+pub enum Error {
+    ColorEyreReport(color_eyre::Report),
+    SetGlobalDefaultError(SetGlobalDefaultError),
 }
 
-/// 初始化日志
-/// let _guards = init(conf)
-/// _guards 需要放在主线程，由 main 方法结束后回收
-pub fn init(config: Logger) -> Result<Vec<WorkerGuard>> {
-    // 日志过滤器
-    // let level_filter = EnvFilter::new(config.level);
-    // let level_filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info"));
+/// 日志 Layer
+type RegistryLayer = Box<dyn Layer<Layered<ErrorLayer<Registry>, Registry>> + Send + Sync>;
 
-    let mut layers = Vec::new();
-    let mut guards = Vec::new();
+/// 日志 Layers 构造器
+struct LoggerLayer<'a> {
+    layers: Vec<RegistryLayer>,
+    guards: Vec<WorkerGuard>,
+    config: &'a config::Logger,
+}
 
-    // 输出到控制台中
-    if config.console.enable {
-        let layer = layer::console::layer(&config.console);
-        layers.push(layer);
+impl<'a> LoggerLayer<'a> {
+    /// 从配置创建对象
+    fn form_config(config: &'a config::Logger) -> Self {
+        let layers = Vec::new();
+        let guards = Vec::new();
+        LoggerLayer {
+            layers,
+            guards,
+            config,
+        }
     }
 
-    // bunyan 日志输出到控制台中
-    if config.console_bunyan.enable {
-        let layer = layer::console_bunyan::layer(&config.console_bunyan);
-        layers.push(layer);
+    /// 输出到控制台中
+    fn set_console(&mut self) -> &mut Self {
+        if !self.config.console.enable {
+            return self;
+        }
+
+        let layer = layer::console::layer(&self.config.console);
+        self.layers.push(layer);
+        self
     }
 
-    // 输出到文件中
-    if config.file.enable {
-        let (file_layer, file_guard) = layer::file::non_blocking_layer(&config.file);
-        layers.push(file_layer);
-        guards.push(file_guard);
+    /// bunyan 日志输出到控制台中
+    fn set_console_bunyan(&mut self) -> &mut Self {
+        if !self.config.console_bunyan.enable {
+            return self;
+        }
+
+        let layer = layer::console_bunyan::layer(&self.config.console_bunyan);
+        self.layers.push(layer);
+        self
     }
 
-    // 输出到数据库
-    if config.db.enable {
-        layers.push(Box::new(layer::db::layer(&config.db)));
+    /// 输出到文件中
+    fn set_file(&mut self) -> &mut Self {
+        if !self.config.file.enable {
+            return self;
+        }
+
+        let (file_layer, file_guard) = layer::file::non_blocking_layer(&self.config.file);
+        self.layers.push(file_layer);
+        self.guards.push(file_guard);
+        self
     }
 
-    // 用于针对各种错误的彩色、一致且格式良好的错误报告。
-    // color_eyre::install()?;
+    /// 输出到数据库
+    fn set_db(&mut self) -> &mut Self {
+        if !self.config.db.enable {
+            return self;
+        }
 
-    // 日志订阅器
-    let subscriber = Registry::default()
-        // .with(level_filter)
-        // ErrorLayer 可以让 color-eyre 获取到 span 的信息
-        .with(ErrorLayer::default())
-        // .with(console_layer)
-        .with(layers);
+        let layer = Box::new(layer::db::layer(&self.config.db));
+        self.layers.push(layer);
+        self
+    }
 
-    // 注册全局日志订阅器
-    tracing::subscriber::set_global_default(subscriber)?;
+    /// 构建对象
+    pub fn build(config: &'a config::Logger) -> (Vec<RegistryLayer>, Vec<WorkerGuard>) {
+        let mut binding = Self::form_config(config);
+        let layer = binding
+            .set_console()
+            .set_console_bunyan()
+            .set_file()
+            .set_db();
 
-    Ok(guards)
+        (
+            std::mem::take(&mut layer.layers),
+            std::mem::take(&mut layer.guards),
+        )
+    }
+}
+
+/// 日志
+pub struct Logger<'a> {
+    config: &'a config::Logger,
+}
+
+impl<'a> Logger<'a> {
+    /// 从配置创建对象
+    fn form_config(config: &'a config::Logger) -> Self {
+        Logger { config }
+    }
+
+    /// 默认日志
+    pub fn set_default_logger() {
+        tracing_subscriber::fmt()
+            .with_max_level(tracing::Level::DEBUG)
+            .with_level(true)
+            .with_line_number(true)
+            .init();
+    }
+
+    /// 用于针对各种错误的彩色、一致且格式良好的错误报告。
+    fn set_color_eyre(&mut self) -> Result<&mut Self, Error> {
+        if !self.config.color_eyre {
+            return Ok(self);
+        }
+        color_eyre::install().map_err(Error::ColorEyreReport)?;
+        Ok(self)
+    }
+
+    fn set_global_default(&mut self, layers: Vec<RegistryLayer>) -> Result<(), Error> {
+        // 日志过滤器
+        // let level_filter = EnvFilter::new(config.level);
+        // let level_filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info"));
+
+        // 日志订阅器
+        let subscriber = Registry::default()
+            // .with(level_filter)
+            // ErrorLayer 可以让 color-eyre 获取到 span 的信息
+            .with(ErrorLayer::default())
+            // .with(console_layer)
+            .with(layers);
+
+        // 注册全局日志订阅器
+        tracing::subscriber::set_global_default(subscriber).map_err(Error::SetGlobalDefaultError)
+    }
+
+    /// 构建日志订阅器
+    pub fn build(config: &'a config::Logger) -> Result<Vec<WorkerGuard>, Error> {
+        let (layers, guards) = LoggerLayer::build(config);
+
+        Self::form_config(config)
+            .set_color_eyre()?
+            .set_global_default(layers)?;
+
+        Ok(guards)
+    }
 }
 
 #[cfg(test)]
@@ -114,7 +201,7 @@ mod tests {
 
     #[test]
     fn test_default_init() {
-        init_default_logger();
+        Logger::set_default_logger();
 
         call_return_err();
         demo1();
@@ -122,7 +209,8 @@ mod tests {
 
     #[test]
     fn test_init_subscriber() {
-        let conf = Logger {
+        let conf = config::Logger {
+            color_eyre: false,
             console: ConsoleOptions {
                 level: config::Level::Debug,
                 enable: true,
@@ -142,7 +230,7 @@ mod tests {
                 ..Default::default()
             },
         };
-        let _guards = init(conf).expect("日志初始化失败");
+        let _guards = Logger::build(&conf).expect("日志初始化失败");
 
         call_return_err();
         demo1();

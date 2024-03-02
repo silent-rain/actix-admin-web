@@ -47,6 +47,7 @@ timeout_seconds = 15           # 连接超时时间单位秒
 
 # 日志
 [logger]
+color_eyre = false # 彩色日志
 # 终端配置
 [logger.console]
 level = "info" # 日志级别, debug/info/warn/error/panic
