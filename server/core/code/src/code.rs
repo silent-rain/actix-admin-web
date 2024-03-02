@@ -2,7 +2,6 @@
 use std::io;
 
 use serde::{ser::Serializer, Serialize};
-use thiserror;
 
 /// 错误种类
 #[derive(Debug, thiserror::Error)]

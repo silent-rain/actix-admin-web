@@ -217,11 +217,11 @@ mod tests {
             },
             console_bunyan: ConsoleBunyanOptions {
                 level: config::Level::Debug,
-                enable: true,
+                enable: false,
             },
             file: FileOptions {
                 level: config::Level::Debug,
-                enable: true,
+                enable: false,
                 ..Default::default()
             },
             db: DbOptions {

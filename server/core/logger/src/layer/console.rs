@@ -19,14 +19,14 @@ where
 
     // Shared configuration regardless of where logs are output to.
     let layer = fmt::layer()
-        .pretty()
+        .compact()
         .with_ansi(true)
         .with_level(true)
         .with_line_number(true)
-        .with_target(false)
+        .with_target(true)
         .with_timer(timer)
         .with_thread_names(true)
-        .log_internal_errors(false)
+        .log_internal_errors(true)
         .with_writer(std::io::stderr.with_max_level(config.level.clone().into()));
     Box::new(layer)
 }
