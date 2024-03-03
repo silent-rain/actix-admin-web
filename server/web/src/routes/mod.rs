@@ -3,6 +3,7 @@ use crate::middleware;
 
 mod log;
 pub mod perm;
+pub mod prometheus;
 pub mod web_site;
 pub mod welcome;
 
@@ -15,6 +16,7 @@ use perm::perm_user_role_rel;
 use actix_request_identifier::RequestIdentifier;
 use actix_web::middleware::Logger;
 use actix_web::{dev::HttpServiceFactory, web};
+use actix_web_opentelemetry::{RequestMetrics, RequestTracing};
 use actix_web_requestid::RequestIDMiddleware;
 use tracing_actix_web::TracingLogger;
 
@@ -25,6 +27,8 @@ pub fn register_api() -> impl HttpServiceFactory {
         // >>> 中间件 >>>
         .wrap(Logger::default())
         .wrap(TracingLogger::default())
+        .wrap(RequestTracing::new())
+        .wrap(RequestMetrics::default())
         .wrap(middleware::cors::wrap_cors())
         // Request ID
         .wrap(RequestIDMiddleware::default())

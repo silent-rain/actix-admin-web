@@ -96,6 +96,8 @@ async fn server(
             .app_data(web::Data::new(provider.clone()))
             // API 服务
             .service(routes::register_api())
+            // Prometheus metrics
+            .service(routes::prometheus::register())
             // 静态资源
             .service(routes::web_site::register())
     })
