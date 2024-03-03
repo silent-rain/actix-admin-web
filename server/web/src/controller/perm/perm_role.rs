@@ -9,10 +9,8 @@ use crate::{
 use code::Error;
 use response::Response;
 
-use actix_web::{
-    web::{Data, Json, Query},
-    Responder,
-};
+use actix_web::{web::Data, Responder};
+use actix_web_validator::{Json, Query};
 use validator::Validate;
 
 /// 控制器
