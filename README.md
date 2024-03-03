@@ -27,7 +27,7 @@
   - [x] 终端日志
   - [x] 文件日志
   - [x] 数据库日志
-  - [ ] 全链路跟踪日志 Trace
+  - [ ] OpenTelemetry 日志
 - [x] 自定义业务状态码
 - [x] 数据库
   - [x] 自动迁移库表
@@ -61,6 +61,8 @@
 - [ ] 订阅
 - [ ] [cron] 定时任务，在后台可界面配置
 - [ ] [websocket]实时通讯
+- [ ] 插件
+  - [x] Actix Web OpenTelemetry
 
 ## 业务列表
 
@@ -90,6 +92,13 @@
 - [ ] 系统监控
 
 ## 待办事项
+
+- OpenTelemetry 日志
+- JWT
+  - https://crates.io/crates/jsonwebtoken
+  - https://crates.io/crates/goauth
+  - https://crates.io/crates/smpl_jwt
+  - https://crates.io/crates/jwt
 
 ## 开发文档
 
