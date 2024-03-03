@@ -42,7 +42,7 @@ impl<'a> PermRoleService<'a> {
                 return Error::DbQueryEmptyError;
             }
             error!("查询数据失败, error: {err:#?}");
-            Error::DbQueryEmptyError
+            Error::DbQueryError
         })?;
         Ok(result)
     }

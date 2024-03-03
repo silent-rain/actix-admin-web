@@ -1,4 +1,5 @@
 //! 用户管理
+use std::sync::Arc;
 
 use crate::{
     dto::perm::perm_user::{AddUserReq, DeleteUserReq, GetUserInfoReq, GetUserListReq},
@@ -20,7 +21,7 @@ pub struct Controller;
 
 impl Controller {
     /// 用户列表查询
-    pub async fn list(provider: Data<Provider>, req: Query<GetUserListReq>) -> impl Responder {
+    pub async fn list(provider: Data<Arc<Provider>>, req: Query<GetUserListReq>) -> impl Responder {
         let perm_user_service: PermUserService = provider.provide();
         let resp = perm_user_service.list(req.into_inner()).await;
         let (results, total) = match resp {
@@ -32,7 +33,10 @@ impl Controller {
     }
 
     /// 用户详情查询
-    pub async fn info(provider: Data<Provider>, params: Query<GetUserInfoReq>) -> impl Responder {
+    pub async fn info(
+        provider: Data<Arc<Provider>>,
+        params: Query<GetUserInfoReq>,
+    ) -> impl Responder {
         let perm_user_service: PermUserService = provider.provide();
         let resp = perm_user_service.info(params.id).await;
 
@@ -49,7 +53,7 @@ impl Controller {
     }
 
     /// 添加用户信息
-    pub async fn add(provider: Data<Provider>, data: Json<AddUserReq>) -> impl Responder {
+    pub async fn add(provider: Data<Arc<Provider>>, data: Json<AddUserReq>) -> impl Responder {
         let data = data.into_inner();
         if let Err(e) = data.validate() {
             return Response::build()
@@ -69,7 +73,10 @@ impl Controller {
     }
 
     /// 删除用户
-    pub async fn delete(provider: Data<Provider>, params: Query<DeleteUserReq>) -> impl Responder {
+    pub async fn delete(
+        provider: Data<Arc<Provider>>,
+        params: Query<DeleteUserReq>,
+    ) -> impl Responder {
         let perm_user_service: PermUserService = provider.provide();
         let resp = perm_user_service.delete(params.id).await;
         let _result = match resp {

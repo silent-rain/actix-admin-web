@@ -1,4 +1,5 @@
 //! 系统日志
+use std::sync::Arc;
 
 use crate::dto::log::log_system::{DeleteLogSystemReq, LogSystemInfoReq, LogSystemListReq};
 use crate::inject::Provider;
@@ -18,7 +19,10 @@ pub struct Controller;
 
 impl Controller {
     /// 系统日志列表查询
-    pub async fn list(provider: Data<Provider>, req: Query<LogSystemListReq>) -> impl Responder {
+    pub async fn list(
+        provider: Data<Arc<Provider>>,
+        req: Query<LogSystemListReq>,
+    ) -> impl Responder {
         let log_system_service: LogSystemService = provider.provide();
         let resp = log_system_service.list(req.into_inner()).await;
         let (results, total) = match resp {
@@ -30,7 +34,10 @@ impl Controller {
     }
 
     /// 系统日志详情查询
-    pub async fn info(provider: Data<Provider>, params: Query<LogSystemInfoReq>) -> impl Responder {
+    pub async fn info(
+        provider: Data<Arc<Provider>>,
+        params: Query<LogSystemInfoReq>,
+    ) -> impl Responder {
         let log_system_service: LogSystemService = provider.provide();
         let resp = log_system_service.info(params.id).await;
         let result = match resp {
@@ -46,7 +53,7 @@ impl Controller {
     }
 
     /// 添加系统日志
-    pub async fn add(provider: Data<Provider>, data: Json<Model>) -> impl Responder {
+    pub async fn add(provider: Data<Arc<Provider>>, data: Json<Model>) -> impl Responder {
         let data = data.into_inner();
         let log_system_service: LogSystemService = provider.provide();
         let resp = log_system_service.add(data).await;
@@ -60,7 +67,7 @@ impl Controller {
 
     /// 删除系统日志
     pub async fn delete(
-        provider: Data<Provider>,
+        provider: Data<Arc<Provider>>,
         params: Query<DeleteLogSystemReq>,
     ) -> impl Responder {
         let log_system_service: LogSystemService = provider.provide();
