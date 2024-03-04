@@ -1,9 +1,8 @@
 //! 角色管理
-use std::sync::Arc;
 
 use crate::{
     dto::perm::perm_role::{AddRoleReq, DeleteRoleReq, RoleInfoReq, RoleListReq, UserRoleListReq},
-    inject::Provider,
+    inject::AProvider,
     service::perm::perm_role::PermRoleService,
 };
 
@@ -19,7 +18,7 @@ pub struct Controller;
 
 impl Controller {
     /// 获取所有角色列表
-    pub async fn all(provider: Data<Arc<Provider>>) -> impl Responder {
+    pub async fn all(provider: Data<AProvider>) -> impl Responder {
         let perm_user_service: PermRoleService = provider.provide();
         let resp = perm_user_service.all().await;
         let (results, total) = match resp {
@@ -31,7 +30,7 @@ impl Controller {
     }
 
     /// 角色列表查询
-    pub async fn list(provider: Data<Arc<Provider>>, req: Query<RoleListReq>) -> impl Responder {
+    pub async fn list(provider: Data<AProvider>, req: Query<RoleListReq>) -> impl Responder {
         let perm_user_service: PermRoleService = provider.provide();
         let resp = perm_user_service.list(req.into_inner()).await;
         let (results, total) = match resp {
@@ -43,7 +42,7 @@ impl Controller {
     }
 
     /// 角色详情查询
-    pub async fn info(provider: Data<Arc<Provider>>, params: Query<RoleInfoReq>) -> impl Responder {
+    pub async fn info(provider: Data<AProvider>, params: Query<RoleInfoReq>) -> impl Responder {
         let perm_user_service: PermRoleService = provider.provide();
         let resp = perm_user_service.info(params.id).await;
 
@@ -60,7 +59,7 @@ impl Controller {
     }
 
     /// 添加角色信息
-    pub async fn add(provider: Data<Arc<Provider>>, data: Json<AddRoleReq>) -> impl Responder {
+    pub async fn add(provider: Data<AProvider>, data: Json<AddRoleReq>) -> impl Responder {
         let data = data.into_inner();
         if let Err(e) = data.validate() {
             return Response::build()
@@ -80,10 +79,7 @@ impl Controller {
     }
 
     /// 删除角色
-    pub async fn delete(
-        provider: Data<Arc<Provider>>,
-        params: Query<DeleteRoleReq>,
-    ) -> impl Responder {
+    pub async fn delete(provider: Data<AProvider>, params: Query<DeleteRoleReq>) -> impl Responder {
         let perm_user_service: PermRoleService = provider.provide();
         let resp = perm_user_service.delete(params.id).await;
         let _result = match resp {
@@ -98,7 +94,7 @@ impl Controller {
 impl Controller {
     /// 通过用户ID获取角色列表
     pub async fn role_list(
-        provider: Data<Arc<Provider>>,
+        provider: Data<AProvider>,
         req: Query<UserRoleListReq>,
     ) -> impl Responder {
         let perm_user_service: PermRoleService = provider.provide();

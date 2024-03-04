@@ -23,7 +23,7 @@ use dotenv::dotenv;
 use listenfd::ListenFd;
 use tracing::{error, warn};
 
-use crate::inject::Provider;
+use crate::inject::{AProvider, Provider};
 
 /// 程序入口
 #[actix_web::main]
@@ -64,7 +64,7 @@ async fn main() -> std::io::Result<()> {
     let app_state = state::AppState { db: db.clone() };
 
     // Using an Arc to share the provider across multiple threads.
-    let provider: Arc<Provider> = Arc::new(Provider::new(db.clone()));
+    let provider: AProvider = Arc::new(Provider::new(db.clone()));
 
     // 启动服务, 并阻塞
     let address = cfg.server.base.address();
@@ -82,7 +82,7 @@ async fn main() -> std::io::Result<()> {
 /// 启动服务
 async fn server(
     app_state: state::AppState,
-    provider: Arc<Provider>,
+    provider: AProvider,
     server_url: &str,
 ) -> std::io::Result<()> {
     let mut server = HttpServer::new(move || {

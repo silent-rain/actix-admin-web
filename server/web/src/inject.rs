@@ -1,4 +1,5 @@
 //! 依赖注入
+use std::sync::Arc;
 
 use database::{DBRepo, Pool};
 
@@ -22,3 +23,5 @@ impl Provider {
     //     InitProvider.provide::<Provider>()
     // }
 }
+
+pub type AProvider = Arc<Provider>;
