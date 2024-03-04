@@ -37,12 +37,11 @@
   - [x] 跨域
   - [x] Request ID
   - [x] Tracing Logger
-  - [ ] Actix Request Identifier Middleware
-  - [ ] 登陆验证：JWT 令牌
-    - [ ] 单点登录
+  - [x] Actix Request Identifier Middleware
   - [ ] 访问频率限制
   - [ ] 访问 IP 限制
   - [ ] 接口鉴权
+  - [ ] JWT 令牌
   - [ ] 对外 API 鉴权
 - [ ] API 文档
   - [ ] ApiPost 接口工具
@@ -61,13 +60,12 @@
 - [ ] 订阅
 - [ ] [cron] 定时任务，在后台可界面配置
 - [ ] [websocket]实时通讯
-- [ ] 插件
-  - [x] Actix Web OpenTelemetry
 
 ## 业务列表
 
 - [ ] 用户注册
 - [ ] 登陆
+  - [ ] 单点登录
 - [ ] 权限管理
   - [ ] 用户中心
   - [ ] 用户管理
