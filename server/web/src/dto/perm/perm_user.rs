@@ -4,7 +4,7 @@ use actix_validator::Validate;
 use serde::{Deserialize, Serialize};
 
 /// 用户列表查询
-#[derive(Default, Deserialize)]
+#[derive(Default, Deserialize, Validate)]
 pub struct GetUserListReq {
     /// 当前分页
     pub page: u64,
@@ -13,7 +13,7 @@ pub struct GetUserListReq {
 }
 
 /// 通过 ID 查询用户详情信息
-#[derive(Default, Deserialize)]
+#[derive(Default, Deserialize, Validate)]
 pub struct GetUserInfoReq {
     pub id: i32,
 }
@@ -39,7 +39,7 @@ pub struct AddUserReq {
 }
 
 /// 删除用户
-#[derive(Default, Deserialize)]
+#[derive(Default, Deserialize, Validate)]
 pub struct DeleteUserReq {
     pub id: i32,
 }
