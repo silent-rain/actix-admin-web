@@ -7,13 +7,13 @@
 ### 调试模式
 
 ```shell
-cargo run --package web
+cargo run
 ```
 
 ### 生产模式
 
 ```shell
-cargo build -r --package web
+cargo build
 ```
 
 ## 服务
@@ -21,26 +21,6 @@ cargo build -r --package web
 - [前端服务](http://127.0.0.1:8000/)
 - [后端服务](http://127.0.0.1:8000/api/v1/)
 - [swagger-ui](http://127.0.0.1:8000/swagger-ui/)
-
-## 自动重新加载开发服务器
-
-### 安装依赖
-
-```shell
-cargo install systemfd cargo-watch
-```
-
-### 热重启
-
-```shell
-cargo watch -d 2 -x clippy -x run --package web
-```
-
-### 以套接字的方式热重启
-
-```shell
-systemfd --no-pid -s http::3000 -- cargo watch -x run --package web
-```
 
 ## 参考文档
 
