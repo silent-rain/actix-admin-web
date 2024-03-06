@@ -25,8 +25,8 @@ pub enum Error {
     #[error("请求超时")]
     RequestTimeout = 10102,
     /// 请求参数解析错误
-    #[error("请求参数解析错误")]
-    RequestParameterParseError = 10103,
+    #[error("请求参数解析错误, err: {0}")]
+    RequestParameterParseError(String) = 10103,
     /// 无效请求参数
     #[error("无效请求参数")]
     InvalidParameterError = 10104,

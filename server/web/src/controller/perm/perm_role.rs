@@ -6,12 +6,12 @@ use crate::{
     service::perm::perm_role::PermRoleService,
 };
 
+use actix_validator::{Json, Query};
 use code::Error;
 use response::Response;
 
 use actix_web::{web::Data, Responder};
-use actix_web_validator::{Json, Query};
-use validator::Validate;
+// use validator::Validate;
 
 /// 控制器
 pub struct Controller;
@@ -60,15 +60,8 @@ impl Controller {
 
     /// 添加角色信息
     pub async fn add(provider: Data<AProvider>, data: Json<AddRoleReq>) -> impl Responder {
-        let data = data.into_inner();
-        if let Err(e) = data.validate() {
-            return Response::build()
-                .code(Error::InvalidParameterError)
-                .msg(&e.to_string());
-        }
-
         let perm_user_service: PermRoleService = provider.provide();
-        let resp = perm_user_service.add(data).await;
+        let resp = perm_user_service.add(data.into_inner()).await;
 
         let result = match resp {
             Ok(v) => v,

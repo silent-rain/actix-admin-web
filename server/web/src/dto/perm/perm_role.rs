@@ -1,6 +1,7 @@
 //! 角色管理
+use actix_validator::Validate;
+
 use serde::{Deserialize, Serialize};
-use validator::Validate;
 
 /// 角色列表查询
 #[derive(Default, Deserialize, Validate)]

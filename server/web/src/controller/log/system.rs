@@ -4,14 +4,12 @@ use crate::dto::log::log_system::{DeleteLogSystemReq, LogSystemInfoReq, LogSyste
 use crate::inject::AProvider;
 use crate::service::log::system::LogSystemService;
 
+use actix_validator::{Json, Query};
 use code::Error;
 use entity::log::system::Model;
 use response::Response;
 
-use actix_web::{
-    web::{Data, Json, Query},
-    Responder,
-};
+use actix_web::{web::Data, Responder};
 
 /// 控制器
 pub struct Controller;

@@ -1,0 +1,18 @@
+[package]
+name = "actix_validator"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+response = { path = "../response" }
+code = { path = "../code" }
+
+futures = "0.3"
+validator_derive = { version = "0.17" }
+validator = { version = "0.17" }
+actix-web = "4.5"
+serde = "1.0"
+serde_urlencoded = "0.7"
+
+
+[features]

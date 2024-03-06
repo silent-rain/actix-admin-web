@@ -8,5 +8,6 @@ members = [
     "logger",
     "migration",
     "response",
+    "actix_validator",
     "utils",
 ]

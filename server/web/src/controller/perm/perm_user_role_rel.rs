@@ -8,12 +8,10 @@ use crate::{
     service::perm::perm_user_role_rel::PermUserRoleRelService,
 };
 
+use actix_validator::{Json, Query};
 use response::Response;
 
-use actix_web::{
-    web::{Data, Json, Query},
-    Responder,
-};
+use actix_web::{web::Data, Responder};
 
 /// 控制器
 pub struct Controller;

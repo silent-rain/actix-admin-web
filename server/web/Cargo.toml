@@ -13,16 +13,17 @@ logger = { path = "../core/logger" }
 entity = { path = "../core/entity" }
 code = { path = "../core/code" }
 response = { path = "../core/response" }
+actix_validator = { path = "../core/actix_validator" }
 
 actix-web = "4.5"
 actix-cors = "0.7"
 actix-files = "0.6"
 actix-web-requestid = "2.1"
-actix-web-validator = "5.0"
+# actix-web-validator = "5.0"
 actix-request-identifier = "4.1"
 tracing-actix-web = "0.7"
 futures-util = "0.3"
-validator = { version = "0.16", features = ["derive"] }
+validator = { version = "0.17", features = ["derive"] }
 sea-orm = { version = "0.12" }
 sea-query = { version = "0.30" }
 tokio = { version = "1.36", features = [] }

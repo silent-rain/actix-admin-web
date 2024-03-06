@@ -6,14 +6,12 @@ use crate::{
     service::perm::perm_user::PermUserService,
 };
 
+use actix_validator::{Json, Query};
 use code::Error;
 use response::Response;
 
-use actix_web::{
-    web::{Data, Json, Query},
-    Responder,
-};
-use validator::Validate;
+use actix_web::{web::Data, Responder};
+// use validator::Validate;
 
 /// 控制器
 pub struct Controller;
@@ -50,15 +48,8 @@ impl Controller {
 
     /// 添加用户信息
     pub async fn add(provider: Data<AProvider>, data: Json<AddUserReq>) -> impl Responder {
-        let data = data.into_inner();
-        if let Err(e) = data.validate() {
-            return Response::build()
-                .code(Error::InvalidParameterError)
-                .msg(&e.to_string());
-        }
-
         let perm_user_service: PermUserService = provider.provide();
-        let resp = perm_user_service.add(data).await;
+        let resp = perm_user_service.add(data.into_inner()).await;
 
         let result = match resp {
             Ok(v) => v,

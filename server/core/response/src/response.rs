@@ -1,7 +1,11 @@
 //! 接口响应类型
 use code::Error;
 
-use actix_web::{body::BoxBody, http::header::ContentType, HttpRequest, HttpResponse, Responder};
+use actix_web::{
+    body::BoxBody,
+    http::{header::ContentType, StatusCode},
+    HttpRequest, HttpResponse, Responder, ResponseError,
+};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
@@ -61,6 +65,12 @@ impl Response {
     }
 }
 
+impl std::fmt::Display for Response {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "(status code: {}, msg: {})", self.code, self.msg)
+    }
+}
+
 /// 实现 actix_web 响应
 impl Responder for Response {
     type Body = BoxBody;
@@ -73,5 +83,18 @@ impl Responder for Response {
         HttpResponse::Ok()
             .content_type(ContentType::json())
             .body(body)
+    }
+}
+
+///  实现 actix_web 异常响应
+impl ResponseError for Response {
+    fn error_response(&self) -> HttpResponse {
+        HttpResponse::build(self.status_code())
+            .insert_header(ContentType::json())
+            .body(self.to_string())
+    }
+
+    fn status_code(&self) -> StatusCode {
+        StatusCode::OK
     }
 }
