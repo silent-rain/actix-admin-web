@@ -92,7 +92,6 @@
 
 ## 待办事项
 
-- OpenTelemetry 日志
 - JWT
   - https://crates.io/crates/jsonwebtoken
   - https://crates.io/crates/goauth
