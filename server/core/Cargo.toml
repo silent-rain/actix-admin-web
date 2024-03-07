@@ -10,4 +10,5 @@ members = [
     "response",
     "actix_validator",
     "utils",
+    "jwt",
 ]
