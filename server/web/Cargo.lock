@@ -3970,7 +3970,7 @@ dependencies = [
  "database",
  "dotenv",
  "entity",
- "futures-util",
+ "futures",
  "listenfd",
  "log",
  "logger",

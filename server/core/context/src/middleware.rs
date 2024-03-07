@@ -1,7 +1,7 @@
-//! 权限拦截器
+//! 初始化 Context
 use std::future::{ready, Ready};
 
-use crate::context::{self, Context};
+use crate::Context;
 
 use actix_web::{
     dev::{forward_ready, Service, ServiceRequest, ServiceResponse, Transform},
@@ -9,16 +9,10 @@ use actix_web::{
 };
 use futures::future::LocalBoxFuture;
 
-// There are two steps in middleware processing.
-// 1. Middleware initialization, middleware factory gets called with
-//    next service in chain as parameter.
-// 2. Middleware's call method gets called with normal request.
-pub struct Auth;
-
 // Middleware factory is `Transform` trait
 // `S` - type of the next service
 // `B` - type of response's body
-impl<S, B> Transform<S, ServiceRequest> for Auth
+impl<S, B> Transform<S, ServiceRequest> for Context
 where
     S: Service<ServiceRequest, Response = ServiceResponse<B>, Error = Error>,
     S::Future: 'static,
@@ -27,19 +21,19 @@ where
     type Response = ServiceResponse<B>;
     type Error = Error;
     type InitError = ();
-    type Transform = AuthMiddleware<S>;
+    type Transform = ContextMiddleware<S>;
     type Future = Ready<Result<Self::Transform, Self::InitError>>;
 
     fn new_transform(&self, service: S) -> Self::Future {
-        ready(Ok(AuthMiddleware { service }))
+        ready(Ok(ContextMiddleware { service }))
     }
 }
 
-pub struct AuthMiddleware<S> {
+pub struct ContextMiddleware<S> {
     service: S,
 }
 
-impl<S, B> Service<ServiceRequest> for AuthMiddleware<S>
+impl<S, B> Service<ServiceRequest> for ContextMiddleware<S>
 where
     S: Service<ServiceRequest, Response = ServiceResponse<B>, Error = Error>,
     S::Future: 'static,
@@ -52,19 +46,10 @@ where
     forward_ready!(service);
 
     fn call(&self, req: ServiceRequest) -> Self::Future {
-        println!("Hi from start. You requested: {}", req.path());
-        let mut context = Context {
+        let context = Context {
             ..Default::default()
         };
-
         req.extensions_mut().insert(context);
-
-        // if let Some(ctx) = req.extensions().get::<Context>() {
-        //     context = ctx.clone();
-        // }
-
-        // context.set_user_id(20);
-        // context.set_user_name("admin".to_string());
 
         // 响应
         let fut = self.service.call(req);
