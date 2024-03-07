@@ -4,7 +4,7 @@ use crate::middleware;
 mod log;
 pub mod perm;
 pub mod web_site;
-pub mod welcome;
+pub mod health;
 
 use log::system;
 
@@ -33,7 +33,7 @@ pub fn register_api() -> impl HttpServiceFactory {
         // .wrap(middleware::auth::SayHi)
         // <<< 中间件 <<<
         // 打招呼
-        .service(welcome::register())
+        .service(health::register())
         // 用户管理
         .service(perm_user::register())
         // 角色管理
