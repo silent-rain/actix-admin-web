@@ -1,11 +1,12 @@
 //! 路由层
 use crate::middleware;
 
+pub mod health;
 mod log;
 pub mod perm;
 pub mod web_site;
-pub mod health;
 
+use context::Context;
 use log::system;
 
 use perm::perm_role;
@@ -25,6 +26,7 @@ pub fn register_api() -> impl HttpServiceFactory {
         // >>> 中间件 >>>
         .wrap(Logger::default())
         .wrap(TracingLogger::default())
+        .wrap(Context::default())
         .wrap(middleware::cors::wrap_cors())
         // Request ID
         .wrap(RequestIDMiddleware::default())

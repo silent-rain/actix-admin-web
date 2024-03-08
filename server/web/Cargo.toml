@@ -13,6 +13,7 @@ logger = { path = "../core/logger" }
 entity = { path = "../core/entity" }
 code = { path = "../core/code" }
 response = { path = "../core/response" }
+context = { path = "../core/context" }
 actix_validator = { path = "../core/actix_validator" }
 
 actix-web = "4.5"

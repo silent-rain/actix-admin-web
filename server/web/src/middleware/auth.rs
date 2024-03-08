@@ -1,7 +1,7 @@
 //! 权限拦截器
 use std::future::{ready, Ready};
 
-use crate::context::{self, Context};
+use context::Context;
 
 use actix_web::{
     dev::{forward_ready, Service, ServiceRequest, ServiceResponse, Transform},
@@ -53,18 +53,11 @@ where
 
     fn call(&self, req: ServiceRequest) -> Self::Future {
         println!("Hi from start. You requested: {}", req.path());
-        let mut context = Context {
-            ..Default::default()
-        };
 
-        req.extensions_mut().insert(context);
-
-        // if let Some(ctx) = req.extensions().get::<Context>() {
-        //     context = ctx.clone();
-        // }
-
-        // context.set_user_id(20);
-        // context.set_user_name("admin".to_string());
+        if let Some(ctx) = req.extensions_mut().get_mut::<Context>() {
+            ctx.set_user_id(20);
+            ctx.set_user_name("admin".to_string());
+        }
 
         // 响应
         let fut = self.service.call(req);

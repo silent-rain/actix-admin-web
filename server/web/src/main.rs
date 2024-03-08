@@ -3,7 +3,6 @@ use std::sync::Arc;
 
 mod asset;
 mod config;
-mod context;
 mod middleware;
 mod server;
 mod state;
