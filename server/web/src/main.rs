@@ -34,9 +34,7 @@ async fn main() -> std::io::Result<()> {
         log::error!("配置文件加载失败, err: {e}");
         return Ok(());
     }
-
     let cfg = config::instance();
-    println!("print config:\n{:#?}", cfg);
 
     // 初始化日志
     let _guards = logger::Logger::build(&cfg.logger).expect("初始化日志失败");
