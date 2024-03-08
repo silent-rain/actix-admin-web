@@ -38,11 +38,11 @@
   - [x] Request ID
   - [x] Tracing Logger
   - [x] Actix Request Identifier Middleware
+  - [ ] JWT 令牌
   - [ ] 访问频率限制
   - [ ] 访问 IP 限制
-  - [ ] 接口鉴权
-  - [ ] JWT 令牌
-  - [ ] 对外 API 鉴权
+  - [ ] 内部接口鉴权
+  - [ ] Public API 鉴权
 - [ ] API 文档
   - [ ] ApiPost 接口工具
   - [ ] 内置接口文档
@@ -67,8 +67,8 @@
 - [ ] 用户注册
 - [ ] 登陆
   - [ ] 单点登录
+- [ ] 用户中心
 - [ ] 权限管理
-  - [ ] 用户中心
   - [ ] 用户管理
   - [ ] 角色管理
   - [ ] 菜单管理
@@ -92,11 +92,8 @@
 
 ## 待办事项
 
-- JWT
-  - https://crates.io/crates/jsonwebtoken
-  - https://crates.io/crates/goauth
-  - https://crates.io/crates/smpl_jwt
-  - https://crates.io/crates/jwt
+- 用户注册
+- 登陆
 
 ## 开发文档
 
