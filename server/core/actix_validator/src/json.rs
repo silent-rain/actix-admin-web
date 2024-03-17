@@ -64,7 +64,7 @@ where
 
             // 验证 body 数据
             inner_body.validate().map_err(|e| {
-                Response::build().code(code::Error::RequestParameterParseError(
+                Response::code(code::Error::RequestParameterParseError(
                     e.to_owned().to_string(),
                 ))
             })?;

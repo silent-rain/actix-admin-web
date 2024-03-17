@@ -11,7 +11,7 @@ use serde_json::{json, Value};
 
 /// 数据列表
 #[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct DataList<T: Serialize> {
+struct DataList<T: Serialize> {
     data_list: Vec<T>,
     total: u64,
 }
@@ -29,8 +29,8 @@ pub struct Response {
 
 #[allow(dead_code)]
 impl Response {
-    /// 构建对象, 默认返回成功
-    pub fn build() -> Self {
+    /// 返回成功
+    pub fn ok() -> Self {
         Self {
             code: Error::OK.code(),
             msg: Error::OK.msg(),
@@ -38,10 +38,12 @@ impl Response {
         }
     }
     /// 错误码
-    pub fn code(mut self, code: Error) -> Self {
-        self.code = code.code();
-        self.msg = code.msg();
-        self
+    pub fn code(code: Error) -> Self {
+        Self {
+            code: code.code(),
+            msg: code.msg(),
+            data: None,
+        }
     }
     /// 返回错误信息, 覆盖错误码信息
     pub fn msg(mut self, msg: &str) -> Self {
@@ -68,6 +70,13 @@ impl Response {
 impl std::fmt::Display for Response {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "(status code: {}, msg: {})", self.code, self.msg)
+    }
+}
+
+/// 错误码转换为响应体
+impl From<Error> for Response {
+    fn from(code: Error) -> Response {
+        Response::code(code)
     }
 }
 

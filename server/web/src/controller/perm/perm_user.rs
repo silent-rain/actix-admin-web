@@ -23,10 +23,10 @@ impl Controller {
         let resp = perm_user_service.list(req.into_inner()).await;
         let (results, total) = match resp {
             Ok(v) => v,
-            Err(e) => return Response::build().code(e),
+            Err(e) => return Response::code(e),
         };
 
-        Response::build().data_list(results, total)
+        Response::ok().data_list(results, total)
     }
 
     /// 用户详情查询
@@ -36,14 +36,14 @@ impl Controller {
 
         let result = match resp {
             Ok(v) => v,
-            Err(e) => return Response::build().code(e),
+            Err(e) => return Response::code(e),
         };
         let result = match result {
             Some(v) => v,
-            None => return Response::build().code(Error::DbQueryEmptyError),
+            None => return Response::code(Error::DbQueryEmptyError),
         };
 
-        Response::build().data(result)
+        Response::ok().data(result)
     }
 
     /// 添加用户信息
@@ -53,10 +53,10 @@ impl Controller {
 
         let result = match resp {
             Ok(v) => v,
-            Err(e) => return Response::build().code(e),
+            Err(e) => return Response::code(e),
         };
 
-        Response::build().data(result)
+        Response::ok().data(result)
     }
 
     /// 删除用户
@@ -65,9 +65,9 @@ impl Controller {
         let resp = perm_user_service.delete(params.id).await;
         let _result = match resp {
             Ok(v) => v,
-            Err(e) => return Response::build().code(e),
+            Err(e) => return Response::code(e),
         };
 
-        Response::build().msg("删除成功")
+        Response::ok().msg("删除成功")
     }
 }
