@@ -1,13 +1,19 @@
 //! 用户管理
 use crate::dto::pagination::Pagination;
-use crate::dto::perm::perm_user::{AddUserReq, GetUserListReq};
+use crate::dto::perm::perm_user::AddUserReq;
+use crate::dto::perm::perm_user::GetUserListReq;
 
 use database::DBRepo;
 use entity::perm_user;
+use entity::perm_user_role_rel;
 use entity::prelude::PermUser;
+use entity::prelude::PermUserRoleRel;
 
 use nject::injectable;
-use sea_orm::{ActiveModelTrait, ColumnTrait, DbErr, QueryFilter, Set};
+use sea_orm::Set;
+use sea_orm::{
+    ActiveModelTrait, ColumnTrait, DatabaseTransaction, DbErr, QueryFilter, TransactionTrait,
+};
 use sea_orm::{EntityTrait, PaginatorTrait, QueryOrder};
 
 #[injectable]
@@ -98,6 +104,120 @@ impl<'a> PermUserDao<'a> {
             .exec(self.db.wdb())
             .await?;
 
+        Ok(result.rows_affected)
+    }
+}
+
+impl<'a> PermUserDao<'a> {
+    /// 添加用户及对应用户的角色
+    pub async fn add_user(
+        &self,
+        data: perm_user::Model,
+        add_role_ids: Vec<i32>,
+    ) -> Result<perm_user::Model, DbErr> {
+        let txn = self.db.wdb().begin().await?;
+
+        // 添加用户
+        let user = self.txn_add_user(&txn, data).await?;
+        let user_id = user.id;
+
+        // 添加批量角色
+        let _ = self.txn_add_user_roles(&txn, user_id, add_role_ids).await?;
+
+        txn.commit().await?;
+        Ok(user)
+    }
+
+    /// 更新用户及对应用户的角色
+    pub async fn update_user(
+        &self,
+        data: perm_user::Model,
+        add_role_ids: Vec<i32>,
+        del_role_ids: Vec<i32>,
+    ) -> Result<(), DbErr> {
+        let user_id = data.id;
+        let txn = self.db.wdb().begin().await?;
+
+        // 更新用户
+        let _ = self.txn_update_user(&txn, data.clone()).await?;
+        // 添加批量角色
+        let _ = self.txn_add_user_roles(&txn, user_id, add_role_ids).await?;
+        // 删除批量角色
+        let _ = self.txn_del_user_roles(&txn, user_id, del_role_ids).await?;
+
+        txn.commit().await?;
+        Ok(())
+    }
+
+    /// 添加用户
+    async fn txn_add_user(
+        &self,
+        txn: &DatabaseTransaction,
+        data: perm_user::Model,
+    ) -> Result<perm_user::Model, DbErr> {
+        // Into ActiveModel
+        let pear: perm_user::ActiveModel = data.into();
+
+        pear.insert(txn).await
+    }
+
+    /// 更新用户
+    async fn txn_update_user(
+        &self,
+        txn: &DatabaseTransaction,
+        data: perm_user::Model,
+    ) -> Result<u64, DbErr> {
+        // Into ActiveModel
+        let pear: perm_user::ActiveModel = data.clone().into();
+
+        let result = PermUser::update_many()
+            .set(pear)
+            .filter(perm_user::Column::Id.eq(data.id))
+            .exec(txn)
+            .await?;
+        Ok(result.rows_affected)
+    }
+
+    /// 添加批量角色
+    async fn txn_add_user_roles(
+        &self,
+        txn: &DatabaseTransaction,
+        user_id: i32,
+        role_ids: Vec<i32>,
+    ) -> Result<i32, DbErr> {
+        if role_ids.is_empty() {
+            return Ok(0);
+        }
+        let mut user_ids = Vec::new();
+        for role_id in role_ids {
+            let model = perm_user_role_rel::ActiveModel {
+                user_id: Set(user_id),
+                role_id: Set(role_id),
+                ..Default::default()
+            };
+            user_ids.push(model)
+        }
+
+        let result = PermUserRoleRel::insert_many(user_ids).exec(txn).await?;
+        Ok(result.last_insert_id)
+    }
+
+    /// 删除批量角色
+    async fn txn_del_user_roles(
+        &self,
+        txn: &DatabaseTransaction,
+        user_id: i32,
+        role_ids: Vec<i32>,
+    ) -> Result<u64, DbErr> {
+        if role_ids.is_empty() {
+            return Ok(0);
+        }
+
+        let result = PermUserRoleRel::delete_many()
+            .filter(perm_user_role_rel::Column::UserId.eq(user_id))
+            .filter(perm_user_role_rel::Column::RoleId.is_in(role_ids))
+            .exec(txn)
+            .await?;
         Ok(result.rows_affected)
     }
 }

@@ -24,26 +24,20 @@ pub enum Error {
     /// 请求超时
     #[error("请求超时")]
     RequestTimeout = 10102,
-    /// 请求参数解析错误
-    #[error("请求参数解析错误, err: {0}")]
-    RequestParameterParseError(String) = 10103,
     /// 无效请求参数
-    #[error("无效请求参数")]
-    InvalidParameterError = 10104,
+    #[error("无效请求参数, err: {0}")]
+    InvalidParameterError(String) = 10103,
     /// 配置解析错误
     #[error("配置解析错误")]
     ConfigParseError = 10105,
 
     // 数据处理异常
-    /// 数据编码错误
-    #[error("数据编码错误")]
-    JsonDataEncodeError = 10150,
-    /// 数据解码错误
-    #[error("数据解码错误")]
-    JsonDataDecodeError = 10151,
-    /// 类型转换异常
-    #[error("类型转换异常")]
-    TypeConvertError = 10152,
+    /// Serialize the given data structure as a String of JSON.
+    #[error("结构序列化为JSON字符串错误, err: {0}")]
+    JsonSerialization(String) = 10150,
+    /// Deserialize an instance of type T from a string of JSON text.
+    #[error("从JSON文本字符串中反序列化错误, err: {0}")]
+    JsonDeserialization(String) = 10151,
     /// No data available
     #[error("No data available")]
     NoDataAvailable = 10153,

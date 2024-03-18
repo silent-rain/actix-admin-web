@@ -11,7 +11,6 @@ use code::Error;
 use response::Response;
 
 use actix_web::{web::Data, Responder};
-// use validator::Validate;
 
 /// 控制器
 pub struct Controller;
@@ -49,8 +48,8 @@ impl Controller {
     /// 添加用户信息
     pub async fn add(provider: Data<AProvider>, data: Json<AddUserReq>) -> impl Responder {
         let perm_user_service: PermUserService = provider.provide();
-        let resp = perm_user_service.add(data.into_inner()).await;
 
+        let resp = perm_user_service.add(data.into_inner()).await;
         let result = match resp {
             Ok(v) => v,
             Err(e) => return Response::code(e),

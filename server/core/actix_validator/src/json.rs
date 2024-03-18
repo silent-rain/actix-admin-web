@@ -64,9 +64,7 @@ where
 
             // 验证 body 数据
             inner_body.validate().map_err(|e| {
-                Response::code(code::Error::RequestParameterParseError(
-                    e.to_owned().to_string(),
-                ))
+                Response::code(code::Error::InvalidParameterError(e.to_owned().to_string()))
             })?;
             Ok(Json(inner_body))
         })

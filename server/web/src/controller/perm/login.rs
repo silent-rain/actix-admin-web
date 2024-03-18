@@ -1,12 +1,11 @@
 //! 登陆
 
 use crate::{
-    dto::perm::perm_user::{AddUserReq, DeleteUserReq, GetUserInfoReq, GetUserListReq},
-    inject::AProvider,
+    dto::perm::perm_user::GetUserInfoReq, inject::AProvider,
     service::perm::perm_user::PermUserService,
 };
 
-use actix_validator::{Json, Query};
+use actix_validator::Query;
 use code::Error;
 use response::Response;
 

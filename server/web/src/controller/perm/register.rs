@@ -1,13 +1,12 @@
 //! 注册
 
 use crate::{
-    dto::perm::perm_user::{AddUserReq, DeleteUserReq, GetUserInfoReq, GetUserListReq},
+    dto::perm::register::{EmailRegisterReq, PhoneRegisterReq},
     inject::AProvider,
-    service::perm::perm_user::PermUserService,
+    service::perm::register::RegisterService,
 };
 
-use actix_validator::{Json, Query};
-use code::Error;
+use actix_validator::Json;
 use response::Response;
 
 use actix_web::{web::Data, Responder};
@@ -16,10 +15,34 @@ use actix_web::{web::Data, Responder};
 pub struct Controller;
 
 impl Controller {
-    /// 注册用户
-    pub async fn register(provider: Data<AProvider>, data: Json<AddUserReq>) -> impl Responder {
-        let perm_user_service: PermUserService = provider.provide();
-        let resp = perm_user_service.add(data.into_inner()).await;
+    /// 注册手机用户
+    pub async fn phone_register(
+        provider: Data<AProvider>,
+        data: Json<PhoneRegisterReq>,
+    ) -> impl Responder {
+        let register_service: RegisterService = provider.provide();
+
+        let resp = register_service
+            .add_phone_user(data.into_inner())
+            .await
+            .map_err(Response::code);
+
+        let result = match resp {
+            Ok(v) => v,
+            Err(e) => return e,
+        };
+
+        Response::ok().data(result)
+    }
+
+    /// 注册邮件用户
+    pub async fn email_register(
+        provider: Data<AProvider>,
+        data: Json<EmailRegisterReq>,
+    ) -> impl Responder {
+        let register_service: RegisterService = provider.provide();
+
+        let resp = register_service.add_email_user(data.into_inner()).await;
 
         let result = match resp {
             Ok(v) => v,

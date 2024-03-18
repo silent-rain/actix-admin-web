@@ -58,16 +58,14 @@ where
         let inner_query = match query_info {
             Ok(v) => v,
             Err(e) => {
-                let resp = Response::code(code::Error::RequestParameterParseError(e.to_string()));
+                let resp = Response::code(code::Error::InvalidParameterError(e.to_string()));
                 return err(resp.into());
             }
         };
 
         // 验证字段
         if let Err(e) = inner_query.validate() {
-            let resp = Response::code(code::Error::RequestParameterParseError(
-                e.to_owned().to_string(),
-            ));
+            let resp = Response::code(code::Error::InvalidParameterError(e.to_owned().to_string()));
             return err(resp.into());
         }
         ok(Query(inner_query))
