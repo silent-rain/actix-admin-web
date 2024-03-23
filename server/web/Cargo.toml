@@ -15,6 +15,7 @@ code = { path = "../core/code" }
 response = { path = "../core/response" }
 context = { path = "../core/context" }
 actix_validator = { path = "../core/actix_validator" }
+utils = { path = "../core/utils" }
 
 actix-web = "4.5"
 actix-cors = "0.7"

@@ -3,17 +3,19 @@ use std::sync::Arc;
 
 mod asset;
 mod config;
+pub mod inject;
 mod middleware;
 mod server;
 mod state;
 
-pub mod controller;
-pub mod dao;
-pub mod dto;
-pub mod inject;
-pub mod routes;
-pub mod service;
-pub mod utils;
+// pub mod controller;
+// pub mod dao;
+// pub mod dto;
+// pub mod routes;
+// pub mod service;
+
+pub mod app;
+pub mod router;
 
 use database::DBRepo;
 use migration::{Migrator, MigratorTrait};
@@ -21,7 +23,7 @@ use migration::{Migrator, MigratorTrait};
 use dotenv::dotenv;
 use tracing::{error, warn};
 
-use crate::inject::{AProvider, Provider};
+use inject::{AProvider, Provider};
 
 /// 程序入口
 #[actix_web::main]

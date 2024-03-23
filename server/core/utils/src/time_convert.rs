@@ -2,11 +2,11 @@
 use chrono::{DateTime, Local, NaiveDateTime};
 use serde::{Deserialize, Deserializer};
 
-// 时间格式
+/// 时间格式
 pub const DATE_FORMAT: &str = "%Y-%m-%d %H:%M:%S.%3f";
 
 /// 将字符串转为 NaiveDateTime
-fn str_to_naive_date_time<'de, D>(deserializer: D) -> Result<NaiveDateTime, D::Error>
+pub fn str_to_naive_date_time<'de, D>(deserializer: D) -> Result<NaiveDateTime, D::Error>
 where
     D: Deserializer<'de>,
 {
@@ -16,6 +16,6 @@ where
 }
 
 /// 默认有效期为当前时间
-fn default_created() -> NaiveDateTime {
+pub fn default_created() -> NaiveDateTime {
     Local::now().naive_local()
 }

@@ -24,31 +24,31 @@ CREATE TABLE log_http (
 
 
 -- 系统日志表
-CREATE TABLE log_system (
-    `id` INT AUTO_INCREMENT COMMENT '自增ID',
-    `user_id` INT UNSIGNED NULL COMMENT '请求用户ID',
-    `nickname` VARCHAR(32) NULL COMMENT '昵称',
-    `name` VARCHAR(50) NOT NULL COMMENT '日志记录器名称',
-    `parent_span_id` INT(20) UNSIGNED NULL COMMENT 'Parent Span Id',
-    `span_id` INT(20) UNSIGNED NULL COMMENT 'Span Id',
-    `module_path` VARCHAR(100)  NULL COMMENT '模块路径',
-    `target` VARCHAR(100) NOT NULL COMMENT '描述发生此元数据所描述的跨度或事件的系统部分',
-    `file` VARCHAR(500)  NULL COMMENT '文件',
-    `line` INT(10) UNSIGNED  NULL COMMENT '报错行数',
-    `level` VARCHAR(10) NOT NULL COMMENT '日志级别',
-    `kind` VARCHAR(10) NOT NULL COMMENT '事件类型',
-    `is_event` TINYINT(1) NOT  NULL DEFAULT 0 COMMENT '是否为事件',
-    `is_span` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否为 span',
-    `fields` VARCHAR(500)  NULL COMMENT '日志字段名称列表',
-    `field_data` TEXT  NULL COMMENT 'fields 日志数据集',
-    `message` TEXT  NULL COMMENT '日志信息',
-    `code` INT(10) NULL COMMENT '业务误码',
-    `code_msg` VARCHAR(500)  NULL COMMENT '业务误码信息',
-    `stack` TEXT NULL COMMENT '堆栈信息',
-    `note` VARCHAR(255) NULL COMMENT '备注',
-    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '系统日志';
+CREATE TABLE `log_system` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  `user_id` int(20) DEFAULT NULL COMMENT '请求用户ID',
+  `nickname` varchar(32) DEFAULT NULL COMMENT '昵称',
+  `name` varchar(50) NOT NULL COMMENT '日志记录器名称',
+  `parent_span_id` int(20) unsigned DEFAULT NULL COMMENT 'Parent Span Id',
+  `span_id` int(20) unsigned DEFAULT NULL COMMENT 'Span Id',
+  `module_path` varchar(100) DEFAULT NULL COMMENT '模块路径',
+  `target` varchar(100) NOT NULL COMMENT '描述发生此元数据所描述的跨度或事件的系统部分',
+  `file` varchar(500) DEFAULT NULL COMMENT '文件',
+  `line` int(10) unsigned DEFAULT NULL COMMENT '报错行数',
+  `level` varchar(10) NOT NULL COMMENT '日志级别',
+  `kind` varchar(10) NOT NULL COMMENT '事件类型',
+  `is_event` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否为事件',
+  `is_span` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否为 span',
+  `fields` varchar(500) DEFAULT NULL COMMENT '日志字段名称列表',
+  `field_data` text DEFAULT NULL COMMENT 'fields 日志数据集',
+  `message` text DEFAULT NULL COMMENT '日志信息',
+  `code` int(10) DEFAULT NULL COMMENT '业务误码',
+  `code_msg` varchar(500) DEFAULT NULL COMMENT '业务误码信息',
+  `stack` text DEFAULT NULL COMMENT '堆栈信息',
+  `note` varchar(255) DEFAULT NULL COMMENT '备注',
+  `created_at` datetime NOT NULL DEFAULT current_timestamp() COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1485 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统日志';
 
 -- WEB日志表
 CREATE TABLE log_web (

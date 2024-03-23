@@ -1,6 +1,6 @@
 //! 服务
 
-use crate::{inject::AProvider, routes, state::AppState};
+use crate::{app::public::WebSiteRouter, inject::AProvider, router, state::AppState};
 
 use actix_web::{http::KeepAlive, web, App, HttpServer};
 use listenfd::ListenFd;
@@ -17,9 +17,9 @@ pub async fn start(
             .app_data(web::Data::new(app_state.clone()))
             .app_data(web::Data::new(provider.clone()))
             // API 服务
-            .service(routes::register_api())
+            .service(router::register())
             // 静态资源
-            .service(routes::web_site::register())
+            .service(WebSiteRouter::register())
     })
     // 保持连接打开状态以等待后续请求, 使用操作系统保持活动状态
     .keep_alive(KeepAlive::Os)
