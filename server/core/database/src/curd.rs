@@ -3,11 +3,10 @@
 use crate::{DbRepo, Pagination};
 
 use async_trait::async_trait;
-use sea_orm::ColumnTrait;
-use sea_orm::Iterable;
 use sea_orm::{
-    ActiveModelBehavior, ActiveModelTrait, DbErr, EntityTrait, FromQueryResult, IntoActiveModel,
-    PaginatorTrait, PrimaryKeyToColumn, PrimaryKeyTrait, QueryFilter, QuerySelect,
+    ActiveModelBehavior, ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, FromQueryResult,
+    IntoActiveModel, Iterable, PaginatorTrait, PrimaryKeyToColumn, PrimaryKeyTrait, QueryFilter,
+    QuerySelect,
 };
 
 #[async_trait]
