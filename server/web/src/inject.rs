@@ -1,13 +1,13 @@
 //! 依赖注入
 use std::sync::Arc;
 
-use database::{DBRepo, Pool};
+use database::{DbRepo, Pool};
 
 use nject::provider;
 
 #[provider]
 pub struct Provider {
-    #[provide(dyn DBRepo)]
+    #[provide(dyn DbRepo)]
     db: Pool,
 }
 

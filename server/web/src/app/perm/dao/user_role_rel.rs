@@ -1,6 +1,6 @@
 //! 用户角色关联关系管理
 
-use database::DBRepo;
+use database::DbRepo;
 use entity::perm_user_role_rel;
 use entity::prelude::PermUserRoleRel;
 
@@ -9,7 +9,7 @@ use sea_orm::{ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, QueryFilter, Se
 
 #[injectable]
 pub struct UserRoleRelDao<'a> {
-    db: &'a dyn DBRepo,
+    db: &'a dyn DbRepo,
 }
 
 impl<'a> UserRoleRelDao<'a> {

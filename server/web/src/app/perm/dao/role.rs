@@ -1,13 +1,12 @@
 //! 角色管理
 use crate::app::perm::dto::role::{AddRoleReq, RoleListReq};
 
-use database::DBRepo;
+use database::{DbRepo, Pagination};
 use entity::{
     perm_role, perm_user_role_rel,
     prelude::{PermRole, PermUserRoleRel},
 };
 use nject::injectable;
-use utils::pagination::Pagination;
 
 use sea_orm::{
     ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, PaginatorTrait, QueryFilter, QueryOrder, Set,
@@ -15,7 +14,7 @@ use sea_orm::{
 
 #[injectable]
 pub struct RoleDao<'a> {
-    db: &'a dyn DBRepo,
+    db: &'a dyn DbRepo,
 }
 
 impl<'a> RoleDao<'a> {

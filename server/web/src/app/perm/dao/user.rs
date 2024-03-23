@@ -1,12 +1,11 @@
 //! 用户管理
 use crate::app::perm::dto::user::{AddUserReq, GetUserListReq};
 
-use database::DBRepo;
+use database::{DbRepo, Pagination};
 use entity::perm_user;
 use entity::perm_user_role_rel;
 use entity::prelude::PermUser;
 use entity::prelude::PermUserRoleRel;
-use utils::pagination::Pagination;
 
 use nject::injectable;
 use sea_orm::Set;
@@ -17,7 +16,7 @@ use sea_orm::{EntityTrait, PaginatorTrait, QueryOrder};
 
 #[injectable]
 pub struct UserDao<'a> {
-    db: &'a dyn DBRepo,
+    db: &'a dyn DbRepo,
 }
 
 impl<'a> UserDao<'a> {

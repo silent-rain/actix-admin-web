@@ -2,9 +2,10 @@
 
 use crate::app::log::dto::system::LogSystemListReq;
 
-use database::{DbRepo, Pagination};
+use database::DbRepo;
 use entity::log::system;
 use entity::prelude::LogSystem;
+use utils::pagination::Pagination;
 
 use nject::injectable;
 use sea_orm::ActiveValue::NotSet;

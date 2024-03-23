@@ -17,7 +17,7 @@ mod state;
 pub mod app;
 pub mod router;
 
-use database::DBRepo;
+use database::DbRepo;
 use migration::{Migrator, MigratorTrait};
 
 use dotenv::dotenv;
