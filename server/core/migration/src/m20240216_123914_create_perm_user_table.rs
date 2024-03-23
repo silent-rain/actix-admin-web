@@ -26,6 +26,7 @@ impl MigrationTrait for Migration {
                             .not_null()
                             .comment("用户名称"),
                     )
+                    .col(ColumnDef::new(PermUser::Nickname).string().comment("昵称"))
                     .col(
                         ColumnDef::new(PermUser::Gender)
                             .tiny_integer()
@@ -118,6 +119,7 @@ enum PermUser {
     Table,
     Id,
     Username,
+    Nickname,
     Gender,
     Age,
     Birthday,

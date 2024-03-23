@@ -7,8 +7,8 @@ CREATE DATABASE `gin_admin` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_genera
 -- 用户表
 CREATE TABLE perm_user (
     `id` INT AUTO_INCREMENT COMMENT '用户ID',
-    `realname` VARCHAR(32) NULL COMMENT '真实姓名',
-    `nickname` VARCHAR(32) NOT NULL COMMENT '昵称',
+    `username` VARCHAR(32) NOT NULL COMMENT '用户名称',
+    `nickname` VARCHAR(32) NULL COMMENT '昵称',
     `gender` TINYINT(1) NULL COMMENT '0: 保密,1: 女,2: 男',
     `age` INT(11) NULL COMMENT '年龄',
     `birthday` VARCHAR(20) NULL COMMENT '出生日期',
@@ -18,7 +18,6 @@ CREATE TABLE perm_user (
     `intro` VARCHAR(200) NULL COMMENT '介绍',
     `note` VARCHAR(200) NULL COMMENT '备注',
     `password` VARCHAR(50) NOT NULL COMMENT '密码',
-    `sort` INT(11) NOT NULL DEFAULT 0 COMMENT '排序',
     `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '是否启用,0:禁用,1:启用',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
