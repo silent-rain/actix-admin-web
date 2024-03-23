@@ -1,16 +1,16 @@
 //! 系统日志
 
-use database::DBRepo;
+use database::DbRepo;
 use entity::log::system;
 
 use sea_orm::ActiveValue::NotSet;
 use sea_orm::{ActiveModelTrait, DbErr};
 
-pub struct Dao<DB: DBRepo> {
+pub struct Dao<DB: DbRepo> {
     db: DB,
 }
 
-impl<DB: DBRepo> Dao<DB> {
+impl<DB: DbRepo> Dao<DB> {
     /// 创建对象
     pub fn new(db: DB) -> Self {
         Dao { db }
