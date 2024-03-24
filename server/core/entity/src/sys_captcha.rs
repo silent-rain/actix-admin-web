@@ -1,8 +1,9 @@
 //! 验证码表
 
 use sea_orm::{
-    prelude::DateTime, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey, DeriveRelation,
-    EntityTrait, EnumIter, PrimaryKeyTrait,
+    prelude::{BlobSize, DateTime},
+    ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey, DeriveRelation, EntityTrait,
+    EnumIter, PrimaryKeyTrait,
 };
 use serde::{Deserialize, Serialize};
 
@@ -12,7 +13,8 @@ pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,
     pub captcha: String,
-    pub base_img: String,
+    #[sea_orm(column_type = "Binary(BlobSize::Long)")]
+    pub base_img: Vec<u8>,
     pub expire: i8,
     pub created_at: DateTime,
 }

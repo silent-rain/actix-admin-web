@@ -7,7 +7,7 @@ CREATE TABLE sys_captcha (
     `id` INT AUTO_INCREMENT COMMENT '自增ID',
     `captcha` VARCHAR(10) NOT NULL COMMENT '验证码',
     `base_img` LONGBLOB NOT NULL COMMENT 'Base64图片',
-    `expire` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '过期时间',
+    `expire` INT(4) NOT NULL DEFAULT 1 COMMENT '过期时间',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '验证码表';
