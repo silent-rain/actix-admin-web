@@ -69,6 +69,7 @@ cargo run --package migration -- up
 cd service/core
 
 # 指定数据库生成实体
+sea-orm-cli generate entity --database-url=mysql://one:pass@localhost/actix_admin_web -o entity/src
 sea-orm-cli generate entity -u sqlite://data.db -o entity/src
 ```
 
