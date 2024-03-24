@@ -60,6 +60,7 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(SysUserLogin::UpdatedAt)
                             .date_time()
                             .not_null()
+                            .default(Expr::current_timestamp())
                             .comment("更新时间"),
                     )
                     .to_owned(),

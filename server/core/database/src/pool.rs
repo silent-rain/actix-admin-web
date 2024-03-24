@@ -54,6 +54,11 @@ impl Pool {
         Ok(db)
     }
 
+    /// 从连接生成连接池
+    pub fn form_connect(rdb: DatabaseConnection, wdb: DatabaseConnection) -> Pool {
+        Pool { rdb, wdb }
+    }
+
     /// 关闭数据库
     pub async fn close(&self) -> Result<(), Error> {
         self.rdb
