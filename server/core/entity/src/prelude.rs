@@ -12,6 +12,7 @@ pub use super::perm_role_menu_rel::Entity as PermRoleMenuRel;
 pub use super::perm_user::Entity as PermUser;
 pub use super::perm_user_api_token::Entity as PermUserApiToken;
 pub use super::perm_user_role_rel::Entity as PermUserRoleRel;
+pub use super::sys_captcha::Entity as SysCaptcha;
 pub use super::sys_config::Entity as SysConfig;
 pub use super::sys_icon::Entity as SysIcon;
 pub use super::sys_user_login::Entity as SysUserLogin;
