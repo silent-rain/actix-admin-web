@@ -74,28 +74,24 @@ where
     }
 
     /// 插入数据
-    /// 插入一个模型并返回一个新的 Model .其值是从数据库中检索的，因此将填充任何自动生成的字段。
-    async fn _insert<A>(
+    /// 插入一个模型并返回一个新的 Model .其值是从数据库中检索的，因此将填充任何自动生成的字段;
+    /// 按值进行填充, 默认值可能会产生问题;
+    async fn insert2<M, A>(
         &self,
-        model: E,
+        model: M,
     ) -> Result<<<A as ActiveModelTrait>::Entity as EntityTrait>::Model, DbErr>
     where
-        A: ActiveModelTrait
-            + ActiveModelBehavior
-            + std::marker::Send
-            + Into<A>
-            + std::convert::From<E>,
-        <<A as sea_orm::ActiveModelTrait>::Entity as sea_orm::EntityTrait>::Model:
-            IntoActiveModel<A>,
+        M: Send,
+        A: ActiveModelBehavior + Send + From<M>,
+        <<A as ActiveModelTrait>::Entity as EntityTrait>::Model: IntoActiveModel<A>,
     {
         let active_model: A = model.into();
-        let x = active_model.insert(self.db().wdb()).await;
-        x
+        active_model.insert(self.db().wdb()).await
     }
 
     /// 插入数据
     /// 插入一个活动模型并返回一个新的 Model .其值是从数据库中检索的，因此将填充任何自动生成的字段。
-    async fn insert2<A>(
+    async fn insert<A>(
         &self,
         bean: A,
     ) -> Result<<<A as ActiveModelTrait>::Entity as EntityTrait>::Model, DbErr>
@@ -107,22 +103,24 @@ where
     }
 
     /// 更新数据
-    /// 接受一个模型并尝试更新数据库中的记录。
-    async fn update(
+    /// 接受一个模型并尝试更新数据库中的记录;
+    /// 按值进行填充，这是一个失败的更新示例;
+    async fn update2<M, A>(
         &self,
-        model: E,
-    ) -> Result<<<E as ActiveModelTrait>::Entity as EntityTrait>::Model, DbErr>
+        model: M,
+    ) -> Result<<<A as ActiveModelTrait>::Entity as EntityTrait>::Model, DbErr>
     where
-        <E::Entity as EntityTrait>::Model: IntoActiveModel<E>,
-        E: ActiveModelBehavior,
+        M: Send,
+        A: ActiveModelBehavior + Send + From<M>,
+        <<A as ActiveModelTrait>::Entity as EntityTrait>::Model: IntoActiveModel<A>,
     {
-        let pear = model.into_active_model();
-        pear.update(self.db().wdb()).await
+        let active_model: A = model.into();
+        active_model.update(self.db().wdb()).await
     }
 
     /// 更新数据
     /// 接受一个活动模型并尝试更新数据库中的记录。
-    async fn update2<A>(
+    async fn update<A>(
         &self,
         bean: A,
     ) -> Result<<<A as ActiveModelTrait>::Entity as EntityTrait>::Model, DbErr>

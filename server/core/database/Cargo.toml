@@ -19,3 +19,11 @@ async-trait = { version = "0.1" }
 
 [dev-dependencies]
 tokio = { version = "1.36", features = ["full"] }
+log = "0.4"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = [
+    "env-filter",
+    "time",
+    "local-time",
+    "tracing-log",
+] }

@@ -1,20 +1,15 @@
 use std::env;
 
 mod common;
-use common::schem::create_user_table;
-use common::user;
-use common::User;
+use common::{schem::create_user_table, user, User};
 
-use database::Curd;
-use database::DbRepo;
-use database::Pagination;
-use database::Pool;
+use database::{Curd, DbRepo, Pagination, Pool};
 
 use sea_orm::{DbErr, EntityTrait, Set};
 
 async fn testcase(db: &Pool) -> Result<(), DbErr> {
     let active_model = user::ActiveModel {
-        user_id: Set(2),
+        user_id: Set(1),
         status: Set(1),
         ..Default::default()
     };
@@ -71,42 +66,56 @@ async fn test_info(db: &Pool) -> Result<user::Model, DbErr> {
     Ok(result)
 }
 
-// async fn test_insert(db: &Pool) -> Result<user::Model, DbErr> {
-//     let dao = UserDao { db };
-//     let data = user::Model {
-//         user_id: 22,
-//         status: 1,
-//         ..Default::default()
-//     };
-//     let result = dao
-//         .insert::<user::ActiveModel>(data)
-//         .await
-//         .unwrap()
-//         .unwrap();
-//     println!("test_info ======= {:#?}", result);
-//     Ok(result)
-// }
-
-async fn test_insert2(db: &Pool) -> Result<user::Model, DbErr> {
+async fn test_insert(db: &Pool) -> Result<user::Model, DbErr> {
     let dao = UserDao { db };
     let data = user::ActiveModel {
-        user_id: Set(22),
+        user_id: Set(3),
         status: Set(1),
         ..Default::default()
     };
-    let result = dao.insert2(data).await.unwrap();
+    let result = dao.insert(data).await.unwrap();
+    println!("test_insert ======= {:#?}", result);
+    Ok(result)
+}
+
+async fn test_insert2(db: &Pool) -> Result<user::Model, DbErr> {
+    let dao = UserDao { db };
+    let data = user::Model {
+        user_id: 2,
+        status: 1,
+        ..Default::default()
+    };
+    let result = dao
+        .insert2::<user::Model, user::ActiveModel>(data)
+        .await
+        .unwrap();
     println!("test_insert2 ======= {:#?}", result);
+    Ok(result)
+}
+
+async fn test_update(db: &Pool) -> Result<user::Model, DbErr> {
+    let dao = UserDao { db };
+    let data = user::ActiveModel {
+        id: Set(2),
+        user_id: Set(222),
+        status: Set(0),
+    };
+    let result = dao.update(data).await.unwrap();
+    println!("test_update ======= {:#?}", result);
     Ok(result)
 }
 
 async fn test_update2(db: &Pool) -> Result<user::Model, DbErr> {
     let dao = UserDao { db };
-    let data = user::ActiveModel {
-        id: Set(1),
-        user_id: Set(111),
-        ..Default::default()
+    let data = user::Model {
+        id: 1,
+        user_id: 111,
+        status: 0,
     };
-    let result = dao.update2(data).await.unwrap();
+    let result = dao
+        .update2::<user::Model, user::ActiveModel>(data)
+        .await
+        .unwrap();
     println!("test_update2 ======= {:#?}", result);
     Ok(result)
 }
@@ -114,7 +123,7 @@ async fn test_update2(db: &Pool) -> Result<user::Model, DbErr> {
 async fn test_delete(db: &Pool) -> Result<u64, DbErr> {
     let dao = UserDao { db };
 
-    let result = dao.delete(1).await.unwrap();
+    let result = dao.delete(0).await.unwrap();
     println!("test_delete ======= {:#?}", result);
     Ok(result)
 }
@@ -132,6 +141,13 @@ async fn test_batch_delete(db: &Pool) -> Result<u64, DbErr> {
 async fn main() -> Result<(), DbErr> {
     env::set_var("RUST_BACKTRACE", "1");
 
+    tracing_subscriber::fmt()
+        .compact()
+        .with_max_level(tracing::Level::INFO)
+        .with_level(true)
+        .with_line_number(true)
+        .init();
+
     // Connecting SQLite
     let db_url = "sqlite::memory:".to_string();
     let db = Pool::connect(db_url).await.expect("db init failed");
@@ -142,17 +158,31 @@ async fn main() -> Result<(), DbErr> {
 
     // Performing tests
     testcase(&pool).await?;
+    test_info(&pool).await?;
+    println!("============");
+
+    test_insert(&pool).await?;
+    test_insert2(&pool).await?;
+
+    test_list(&pool).await?;
+    println!("============");
+
+    test_update(&pool).await?;
+    test_update2(&pool).await?;
+
+    test_list(&pool).await?;
+    println!("============");
+
+    test_delete(&pool).await?;
+
+    println!("============");
 
     test_all(&pool).await?;
-    test_list(&pool).await?;
-    test_info(&pool).await?;
-    // test_insert(&pool).await?;
-    test_insert2(&pool).await?;
-    test_update2(&pool).await?;
-    test_delete(&pool).await?;
+
     test_batch_delete(&pool).await?;
 
-    test_all(&pool).await?;
+    println!("============");
+    test_list(&pool).await?;
 
     Ok(())
 }
