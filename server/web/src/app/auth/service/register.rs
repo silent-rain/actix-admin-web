@@ -6,7 +6,7 @@ use crate::app::{
 
 use code::Error;
 use entity::perm_user;
-use utils::json_convert::struct_to_struct;
+use utils::json::struct_to_struct;
 
 use nject::injectable;
 use tracing::error;
