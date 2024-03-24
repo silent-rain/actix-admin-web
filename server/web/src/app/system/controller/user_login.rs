@@ -1,15 +1,15 @@
-//! 系统日志
+//! 登陆日志
 
 use crate::{
-    app::log::{
-        dto::system::{DeleteLogSystemReq, LogSystemInfoReq, LogSystemListReq},
-        service::system::LogSystemService,
+    app::system::{
+        dto::user_login::{DisableUserLoginReq, UserLoginInfoReq, UserLoginListReq},
+        service::user_login::UserLoginService,
     },
     inject::AProvider,
 };
 
 use code::Error;
-use entity::log::system::Model;
+use entity::sys_user_login;
 use response::Response;
 
 use actix_web::{
@@ -18,13 +18,13 @@ use actix_web::{
 };
 
 /// 控制器
-pub struct LogSystemController;
+pub struct UserLoginController;
 
-impl LogSystemController {
-    /// 系统日志列表查询
-    pub async fn list(provider: Data<AProvider>, req: Query<LogSystemListReq>) -> impl Responder {
-        let log_system_service: LogSystemService = provider.provide();
-        let resp = log_system_service.list(req.into_inner()).await;
+impl UserLoginController {
+    /// 查询登陆日志列表
+    pub async fn list(provider: Data<AProvider>, req: Query<UserLoginListReq>) -> impl Responder {
+        let user_login_service: UserLoginService = provider.provide();
+        let resp = user_login_service.list(req.into_inner()).await;
         let (results, total) = match resp {
             Ok(v) => v,
             Err(e) => return Response::code(e),
@@ -33,13 +33,10 @@ impl LogSystemController {
         Response::ok().data_list(results, total)
     }
 
-    /// 系统日志详情查询
-    pub async fn info(
-        provider: Data<AProvider>,
-        params: Query<LogSystemInfoReq>,
-    ) -> impl Responder {
-        let log_system_service: LogSystemService = provider.provide();
-        let resp = log_system_service.info(params.id).await;
+    /// 查询登陆日志详情
+    pub async fn info(provider: Data<AProvider>, req: Query<UserLoginInfoReq>) -> impl Responder {
+        let user_login_service: UserLoginService = provider.provide();
+        let resp = user_login_service.info(req.into_inner()).await;
         let result = match resp {
             Ok(v) => v,
             Err(e) => return Response::code(e),
@@ -52,11 +49,14 @@ impl LogSystemController {
         Response::ok().data(result)
     }
 
-    /// 添加系统日志
-    pub async fn add(provider: Data<AProvider>, data: Json<Model>) -> impl Responder {
+    /// 添加登陆日志
+    pub async fn add(
+        provider: Data<AProvider>,
+        data: Json<sys_user_login::Model>,
+    ) -> impl Responder {
         let data = data.into_inner();
-        let log_system_service: LogSystemService = provider.provide();
-        let resp = log_system_service.add(data).await;
+        let user_login_service: UserLoginService = provider.provide();
+        let resp = user_login_service.add(data).await;
         let result = match resp {
             Ok(v) => v,
             Err(e) => return Response::code(e),
@@ -65,13 +65,13 @@ impl LogSystemController {
         Response::ok().data(result)
     }
 
-    /// 删除系统日志
-    pub async fn delete(
+    /// 禁用登陆日志
+    pub async fn disbale_status(
         provider: Data<AProvider>,
-        params: Query<DeleteLogSystemReq>,
+        req: Query<DisableUserLoginReq>,
     ) -> impl Responder {
-        let log_system_service: LogSystemService = provider.provide();
-        let resp = log_system_service.delete(params.id).await;
+        let user_login_service: UserLoginService = provider.provide();
+        let resp = user_login_service.disbale_status(req.into_inner()).await;
         let _result = match resp {
             Ok(v) => v,
             Err(e) => return Response::code(e),

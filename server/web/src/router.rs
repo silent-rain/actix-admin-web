@@ -5,6 +5,7 @@ use crate::{
         log::SystemRouter,
         perm::{RoleRouter, UserRoleRelRouter, UserRouter},
         public::HealthRouter,
+        system::UserLoginRouter,
     },
     middleware,
 };
@@ -46,4 +47,6 @@ pub fn register() -> impl HttpServiceFactory {
         .service(UserRoleRelRouter::register())
         // 系统日志管理
         .service(SystemRouter::register())
+        // 登陆日志管理
+        .service(UserLoginRouter::register())
 }

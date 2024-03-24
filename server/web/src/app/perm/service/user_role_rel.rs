@@ -28,7 +28,7 @@ impl<'a> UserRoleRelService<'a> {
             .await
             .map_err(|err| {
                 error!("查询数据失败, error: {err:#?}");
-                Error::DbQueryError
+                Error::DbQueryError(err.to_string())
             })?;
         Ok((results, total))
     }

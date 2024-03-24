@@ -56,8 +56,8 @@ pub enum Error {
     DbConnectionAcquire(String) = 10202,
     #[error("数据库关闭失败")]
     DbCloseError = 10203,
-    #[error("查询数据失败")]
-    DbQueryError = 10204,
+    #[error("查询数据失败, err: {0}")]
+    DbQueryError(String) = 10204,
     #[error("未查找到数据")]
     DbQueryEmptyError = 10205,
     #[error("添加数据失败")]

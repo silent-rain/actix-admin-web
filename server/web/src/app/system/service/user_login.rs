@@ -1,8 +1,11 @@
 //! 系统日志
-use crate::app::log::{dao::system::LogSystemDao, dto::system::LogSystemListReq};
+use crate::app::system::{
+    dao::user_login::UserLoginDao,
+    dto::user_login::{DisableUserLoginReq, UserLoginInfoReq, UserLoginListReq},
+};
 
 use code::Error;
-use entity::log::system::Model;
+use entity::sys_user_login;
 
 use nject::injectable;
 use sea_orm::DbErr::RecordNotFound;
@@ -10,36 +13,42 @@ use tracing::error;
 
 /// 服务
 #[injectable]
-pub struct LogSystemService<'a> {
-    dao: LogSystemDao<'a>,
+pub struct UserLoginService<'a> {
+    user_login_dao: UserLoginDao<'a>,
 }
 
-impl<'a> LogSystemService<'a> {
+impl<'a> UserLoginService<'a> {
     /// 获取列表数据
-    pub async fn list(&self, req: LogSystemListReq) -> Result<(Vec<Model>, u64), Error> {
-        let results = self.dao.list(req).await.map_err(|err| {
+    pub async fn list(
+        &self,
+        req: UserLoginListReq,
+    ) -> Result<(Vec<sys_user_login::Model>, u64), Error> {
+        let results = self.user_login_dao.list(req).await.map_err(|err| {
             error!("查询数据失败, error: {err:#?}");
-            Error::DbQueryError
+            Error::DbQueryError(err.to_string())
         })?;
         Ok(results)
     }
 
     /// 获取详情数据
-    pub async fn info(&self, id: i32) -> Result<Option<Model>, Error> {
-        let result = self.dao.info(id).await.map_err(|err| {
+    pub async fn info(
+        &self,
+        req: UserLoginInfoReq,
+    ) -> Result<Option<sys_user_login::Model>, Error> {
+        let result = self.user_login_dao.info(req.id).await.map_err(|err| {
             if let RecordNotFound(err) = err {
                 error!("未查找到数据, error: {err:#?}");
                 return Error::DbQueryEmptyError;
             }
             error!("查询数据失败, error: {err:#?}");
-            Error::DbQueryError
+            Error::DbQueryError(err.to_string())
         })?;
         Ok(result)
     }
 
     /// 添加数据
-    pub async fn add(&self, data: Model) -> Result<Model, Error> {
-        let result = self.dao.add(data).await.map_err(|err| {
+    pub async fn add(&self, data: sys_user_login::Model) -> Result<sys_user_login::Model, Error> {
+        let result = self.user_login_dao.add(data).await.map_err(|err| {
             error!("添加数据失败, error: {err:#?}");
             Error::DBAddError
         })?;
@@ -47,11 +56,15 @@ impl<'a> LogSystemService<'a> {
     }
 
     /// 删除数据
-    pub async fn delete(&self, id: i32) -> Result<u64, Error> {
-        let result = self.dao.delete(id).await.map_err(|err| {
-            error!("删除数据失败, error: {err:#?}");
-            Error::DBDeleteError
-        })?;
+    pub async fn disbale_status(&self, req: DisableUserLoginReq) -> Result<(), Error> {
+        let result = self
+            .user_login_dao
+            .disbale_status(req.id)
+            .await
+            .map_err(|err| {
+                error!("禁用登陆失败, error: {err:#?}");
+                Error::DBDeleteError
+            })?;
         Ok(result)
     }
 }

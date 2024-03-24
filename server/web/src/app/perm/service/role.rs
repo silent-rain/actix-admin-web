@@ -22,7 +22,7 @@ impl<'a> RoleService<'a> {
     pub async fn all(&self) -> Result<(Vec<perm_role::Model>, u64), Error> {
         let (results, total) = self.role_dao.all().await.map_err(|err| {
             error!("查询数据失败, error: {err:#?}");
-            Error::DbQueryError
+            Error::DbQueryError(err.to_string())
         })?;
         Ok((results, total))
     }
@@ -31,7 +31,7 @@ impl<'a> RoleService<'a> {
     pub async fn list(&self, req: RoleListReq) -> Result<(Vec<perm_role::Model>, u64), Error> {
         let (results, total) = self.role_dao.list(req).await.map_err(|err| {
             error!("查询数据失败, error: {err:#?}");
-            Error::DbQueryError
+            Error::DbQueryError(err.to_string())
         })?;
         Ok((results, total))
     }
@@ -44,7 +44,7 @@ impl<'a> RoleService<'a> {
                 return Error::DbQueryEmptyError;
             }
             error!("查询数据失败, error: {err:#?}");
-            Error::DbQueryError
+            Error::DbQueryError(err.to_string())
         })?;
         Ok(result)
     }
@@ -76,7 +76,7 @@ impl<'a> RoleService<'a> {
     ) -> Result<(Vec<perm_role::Model>, u64), Error> {
         let (results, total) = self.role_dao.role_list(req.user_id).await.map_err(|err| {
             error!("查询数据失败, error: {err:#?}");
-            Error::DbQueryError
+            Error::DbQueryError(err.to_string())
         })?;
         Ok((results, total))
     }

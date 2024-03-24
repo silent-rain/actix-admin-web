@@ -19,7 +19,7 @@ impl<'a> LogSystemService<'a> {
     pub async fn list(&self, req: LogSystemListReq) -> Result<(Vec<Model>, u64), Error> {
         let results = self.dao.list(req).await.map_err(|err| {
             error!("查询数据失败, error: {err:#?}");
-            Error::DbQueryError
+            Error::DbQueryError(err.to_string())
         })?;
         Ok(results)
     }
@@ -32,7 +32,7 @@ impl<'a> LogSystemService<'a> {
                 return Error::DbQueryEmptyError;
             }
             error!("查询数据失败, error: {err:#?}");
-            Error::DbQueryError
+            Error::DbQueryError(err.to_string())
         })?;
         Ok(result)
     }

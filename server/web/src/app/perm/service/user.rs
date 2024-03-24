@@ -23,7 +23,7 @@ impl<'a> UserService<'a> {
     pub async fn list(&self, req: GetUserListReq) -> Result<(Vec<perm_user::Model>, u64), Error> {
         let (results, total) = self.user_dao.list(req).await.map_err(|err| {
             error!("查询数据失败, error: {err:#?}");
-            Error::DbQueryError
+            Error::DbQueryError(err.to_string())
         })?;
         Ok((results, total))
     }
@@ -36,7 +36,7 @@ impl<'a> UserService<'a> {
                 return Error::DbQueryEmptyError;
             }
             error!("查询数据失败, error: {err:#?}");
-            Error::DbQueryError
+            Error::DbQueryError(err.to_string())
         })?;
         Ok(result)
     }
@@ -83,7 +83,7 @@ impl<'a> UserService<'a> {
         // 获取原角色列表
         let (user_role_rels, _) = self.user_role_rel_dao.list(data.id).await.map_err(|err| {
             error!("查询数据失败, error: {err:#?}");
-            Error::DbQueryError
+            Error::DbQueryError(err.to_string())
         })?;
 
         // 获取待添加的角色列表
