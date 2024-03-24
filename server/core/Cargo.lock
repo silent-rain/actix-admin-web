@@ -1015,9 +1015,11 @@ dependencies = [
 name = "database"
 version = "0.1.0"
 dependencies = [
+ "async-trait",
  "code",
  "log",
  "sea-orm",
+ "serde",
  "tokio",
 ]
 
