@@ -72,7 +72,7 @@ impl UserLoginController {
     ) -> impl Responder {
         let user_login_service: UserLoginService = provider.provide();
         let resp = user_login_service.disbale_status(req.into_inner()).await;
-        let _result = match resp {
+        match resp {
             Ok(v) => v,
             Err(e) => return Response::code(e),
         };

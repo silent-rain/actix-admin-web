@@ -57,14 +57,13 @@ impl<'a> UserLoginService<'a> {
 
     /// 删除数据
     pub async fn disbale_status(&self, req: DisableUserLoginReq) -> Result<(), Error> {
-        let result = self
-            .user_login_dao
+        self.user_login_dao
             .disbale_status(req.id)
             .await
             .map_err(|err| {
                 error!("禁用登陆失败, error: {err:#?}");
                 Error::DBDeleteError
             })?;
-        Ok(result)
+        Ok(())
     }
 }
