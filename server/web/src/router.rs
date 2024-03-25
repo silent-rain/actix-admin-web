@@ -10,7 +10,7 @@ use crate::{
     middleware,
 };
 
-use context::Context;
+use context::ContextMiddleware;
 
 use actix_request_identifier::RequestIdentifier;
 use actix_web::middleware::Logger;
@@ -25,7 +25,7 @@ pub fn register() -> impl HttpServiceFactory {
         // >>> 中间件 >>>
         .wrap(Logger::default())
         .wrap(TracingLogger::default())
-        .wrap(Context::default())
+        .wrap(ContextMiddleware)
         .wrap(middleware::cors::wrap_cors())
         // Request ID
         .wrap(RequestIDMiddleware::default())
