@@ -1,3 +1,4 @@
+//! 公共服务
 pub mod dao;
 pub mod dto;
 pub mod service;

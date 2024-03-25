@@ -1,3 +1,4 @@
+//! 鉴权
 pub mod dao;
 pub mod dto;
 

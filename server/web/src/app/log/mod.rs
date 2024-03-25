@@ -1,3 +1,4 @@
+//! 日志管理
 pub mod dto;
 
 mod dao;
