@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,
-    pub username: String,
+    pub username: Option<String>,
     pub gender: i8,
     pub age: Option<i32>,
     pub birthday: Option<String>,

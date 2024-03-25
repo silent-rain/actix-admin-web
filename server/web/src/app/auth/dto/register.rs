@@ -4,6 +4,31 @@ use actix_validator::Validate;
 
 use serde::{Deserialize, Serialize};
 
+/// 注册类型
+#[derive(Serialize, Deserialize)]
+pub enum RegisterType {
+    #[serde(rename = "phone")]
+    Phone,
+    #[serde(rename = "email")]
+    Email,
+}
+
+/// 注册用户
+#[derive(Serialize, Deserialize, Validate)]
+pub struct RegisterReq {
+    pub phone: String,
+    pub email: Option<String>,
+    pub register_type: RegisterType,
+    pub username: String,
+    pub gender: i8,
+    pub age: i32,
+    pub birthday: Option<String>,
+    pub password: String,
+    pub avatar: Option<String>,
+    pub captcha_id: String,
+    pub captcha: String,
+}
+
 /// 注册手机用户
 #[derive(Serialize, Deserialize, Validate)]
 pub struct PhoneRegisterReq {

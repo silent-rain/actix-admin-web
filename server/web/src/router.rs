@@ -33,7 +33,7 @@ pub fn register() -> impl HttpServiceFactory {
         .wrap(RequestIdentifier::with_uuid())
         // .wrap(middleware::auth::SayHi)
         // <<< 中间件 <<<
-        // 打招呼
+        // 健康检查
         .service(HealthRouter::register())
         // 登陆
         .service(LoginRouter::register())

@@ -53,7 +53,7 @@ impl<'a> UserDao<'a> {
     /// 添加详情信息
     pub async fn add(&self, data: AddUserReq) -> Result<perm_user::Model, DbErr> {
         let pear = perm_user::ActiveModel {
-            username: Set(data.username),
+            username: Set(Some(data.username)),
             gender: Set(data.gender),
             age: Set(Some(data.age)),
             phone: Set(Some(data.phone)),

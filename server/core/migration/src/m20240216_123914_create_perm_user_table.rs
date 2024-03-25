@@ -23,7 +23,7 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(PermUser::Username)
                             .string()
-                            .not_null()
+                            .string_len(32)
                             .comment("用户名称"),
                     )
                     .col(ColumnDef::new(PermUser::Nickname).string().comment("昵称"))

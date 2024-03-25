@@ -13,7 +13,7 @@ CREATE TABLE perm_user (
     `age` INT(11) NULL COMMENT '年龄',
     `birthday` VARCHAR(20) NULL COMMENT '出生日期',
     `avatar` VARCHAR(100) NULL COMMENT '用户头像URL',
-    `phone` VARCHAR(20) NOT NULL COMMENT '手机号码',
+    `phone` VARCHAR(20) NULL COMMENT '手机号码',
     `email` VARCHAR(50) NULL COMMENT '邮件',
     `intro` VARCHAR(200) NULL COMMENT '介绍',
     `note` VARCHAR(200) NULL COMMENT '备注',
