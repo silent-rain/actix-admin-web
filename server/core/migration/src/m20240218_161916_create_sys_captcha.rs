@@ -31,9 +31,9 @@ impl MigrationTrait for Migration {
                             .comment("ID"),
                     )
                     .col(
-                        ColumnDef::new(Column::Captcha)
+                        ColumnDef::new(Column::Uuid)
                             .string()
-                            .string_len(64)
+                            .string_len(40)
                             .not_null()
                             .comment("验证码唯一标示符"),
                     )
