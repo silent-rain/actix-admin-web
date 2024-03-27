@@ -8,12 +8,6 @@ mod middleware;
 mod server;
 mod state;
 
-// pub mod controller;
-// pub mod dao;
-// pub mod dto;
-// pub mod routes;
-// pub mod service;
-
 pub mod app;
 pub mod router;
 
@@ -32,11 +26,12 @@ async fn main() -> std::io::Result<()> {
     dotenv().ok();
 
     // 加载配置文件
-    if let Err(e) = config::init("config.toml") {
-        log::error!("配置文件加载失败, err: {e}");
-        return Ok(());
-    }
-    let cfg = config::instance();
+    let cfg = match config::init("config.yaml") {
+        Ok(v) => v,
+        Err(err) => {
+            panic!("配置文件加载失败, err: {err}")
+        }
+    };
 
     // 初始化日志
     let _guards = logger::Logger::build(&cfg.logger).expect("初始化日志失败");
@@ -66,8 +61,8 @@ async fn main() -> std::io::Result<()> {
 
     // 启动服务, 并阻塞
     let address = cfg.server.base.address();
-    if let Err(e) = server::start(app_state.clone(), provider, &address).await {
-        error!("server start faild. err: {e}");
+    if let Err(e) = server::start(app_state.clone(), cfg, provider, &address).await {
+        panic!("server start faild. err: {e}");
     }
 
     // 关闭数据库

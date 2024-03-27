@@ -1,0 +1,64 @@
+# 系统环境
+environment:
+  env: "dev" # prod/test/dev
+
+# 系统服务
+server:
+  base: # 系统服务地址配置
+    address: "127.0.0.1" # 服务地址
+    port: 8000 # 服务端口
+  captcha: # 验证码
+    expire: 30 # 验证码过期时间/s, 0-255
+  upload: # 上传路径配置
+    filepath: "./upload" # 上传文件路径
+
+# mysql 数据库配置
+mysql:
+  migrator: false # 数据库自动迁移
+  options: # 参数配置
+    max_connections: 10 # 最大打开的连接数
+    max_lifetime: 60 # 设置最大连接超时(min)
+    enable_log: false # 是否开启 SQL 日志
+  read: # 只读数据库
+    key: "db" # db信息唯一标识
+    host: "127.0.0.1" # IP或域名
+    port: 3306 # 端口
+    username: "one" # 账号
+    password: "pass" # 密码
+    db_name: "actix_admin_web" # 数据库名称
+  # 读写数据库
+  write:
+    key: "db"
+    host: "127.0.0.1"
+    port: 3306
+    username: "one"
+    password: "pass"
+    db_name: "actix_admin_web"
+
+# sqlite3 数据库配置
+sqlite:
+  filepath: "data.dat?mode=rwc" # 数据库路径
+  pool_min_idle: 8 # 最小连接数
+  pool_max_open: 32 # 最大连接数
+  timeout_seconds: 15 # 连接超时时间单位秒
+
+# 日志
+logger:
+  color_eyre: false # 彩色日志
+  console: # 终端配置
+    level: "info" # 日志级别, debug/info/warn/error/panic
+    enable: true # 是否启用，默认不启用
+  console_bunyan: # bunyan 终端配置
+    level: "debug" # 日志级别, trace/debug/info/warn/error
+    enable: false # 是否启用，默认不启用
+  file: # 文件配置
+    filepath: "logs" # 日志路径
+    filename: "app.log" # 日志文件名称
+    level: "info" # 日志级别, trace/debug/info/warn/error
+    enable: true # 是否启用，默认不启用
+  db: # 数据库配置
+    address: "mysql://one:pass@localhost:3306/actix_admin_web"
+    # address: "sqlite://./data.dat?mode=rwc" # 数据库地址
+    log_name: "actix_admin_web" # 日志记录器名称
+    level: "info" # 日志级别, trace/debug/info/warn/error
+    enable: false # 是否启用，默认不启用

@@ -22,18 +22,18 @@ static GLOBAL_CONFIG: OnceLock<AppConfig> = OnceLock::new();
 /// # Examples
 ///
 /// ```
-/// let config = init("./config.toml");
+/// let config = init("./config.yaml");
 /// assert!(config.is_ok());
 /// ```
-pub fn init(path: &str) -> Result<(), Error> {
+pub fn init(path: &str) -> Result<AppConfig, Error> {
     let content = read_to_string(path)?;
-    let config: AppConfig = toml::from_str(&content).map_err(|e| {
+    let config: AppConfig = serde_yaml::from_str(&content).map_err(|e| {
         error!("{}, err: {e}", Error::ConfigParseError);
         eprintln!("{:#?}", e);
         Error::ConfigParseError
     })?;
-    GLOBAL_CONFIG.get_or_init(|| config);
-    Ok(())
+    GLOBAL_CONFIG.get_or_init(|| config.clone());
+    Ok(config)
 }
 
 /// 获取全局配置
@@ -79,14 +79,14 @@ mod tests {
 
     #[test]
     fn test_init() {
-        let path = "../../config.toml";
+        let path = "../../config.yaml";
         let config = init(path);
         assert!(config.is_ok())
     }
 
     #[test]
     fn test_include_str() {
-        let yaml_str = include_str!("../../config.toml");
+        let yaml_str = include_str!("../../config.yaml");
         assert_ne!(yaml_str, "");
     }
 }

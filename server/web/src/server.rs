@@ -1,6 +1,8 @@
 //! 服务
 
-use crate::{app::public::WebSiteRouter, inject::AProvider, router, state::AppState};
+use crate::{
+    app::public::WebSiteRouter, config::AppConfig, inject::AProvider, router, state::AppState,
+};
 
 use actix_web::{http::KeepAlive, web, App, HttpServer};
 use listenfd::ListenFd;
@@ -9,6 +11,7 @@ use tracing::{error, warn};
 /// 启动服务
 pub async fn start(
     app_state: AppState,
+    config: AppConfig,
     provider: AProvider,
     server_url: &str,
 ) -> std::io::Result<()> {
@@ -16,6 +19,7 @@ pub async fn start(
         App::new()
             .app_data(web::Data::new(app_state.clone()))
             .app_data(web::Data::new(provider.clone()))
+            .app_data(web::Data::new(config.clone()))
             // API 服务
             .service(router::register())
             // 静态资源
