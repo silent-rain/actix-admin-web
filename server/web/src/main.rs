@@ -26,7 +26,7 @@ async fn main() -> std::io::Result<()> {
     dotenv().ok();
 
     // 加载配置文件
-    let cfg = match config::init("config.yaml") {
+    let conf = match config::init("config.yaml") {
         Ok(v) => v,
         Err(err) => {
             panic!("配置文件加载失败, err: {err}")
@@ -34,19 +34,19 @@ async fn main() -> std::io::Result<()> {
     };
 
     // 初始化日志
-    let _guards = logger::Logger::build(&cfg.logger).expect("初始化日志失败");
+    let _guards = logger::Logger::build(&conf.logger).expect("初始化日志失败");
 
     // mysql dns
-    let database_url = cfg.mysql.write.dns();
+    let database_url = conf.mysql.write.dns();
     // sqlite dns
-    // let database_url = cfg.sqlite.dns();
+    // let database_url = conf.sqlite.dns();
 
     // 初始化数据库
     let db = database::Pool::init(database_url.clone(), database_url)
         .await
         .expect("初始化数据库失败");
 
-    if cfg.mysql.migrator {
+    if conf.mysql.migrator {
         // 库表迁移器
         if let Err(e) = Migrator::up(db.wdb(), None).await {
             error!("表迁移失败. err: {e}");
@@ -60,8 +60,8 @@ async fn main() -> std::io::Result<()> {
     let provider: AProvider = Arc::new(Provider::new(db.clone()));
 
     // 启动服务, 并阻塞
-    let address = cfg.server.base.address();
-    if let Err(e) = server::start(app_state.clone(), cfg, provider, &address).await {
+    let address = conf.server.base.address();
+    if let Err(e) = server::start(app_state.clone(), conf, provider, &address).await {
         panic!("server start faild. err: {e}");
     }
 
