@@ -26,6 +26,12 @@ pub struct DeleteCaptchaReq {
     pub id: i32,
 }
 
+/// 批量删除验证码
+#[derive(Default, Deserialize, Validate)]
+pub struct BatchDeleteCaptchaReq {
+    pub ids: Vec<i32>,
+}
+
 /// 添加验证码 响应体
 #[derive(Default, Deserialize, Serialize)]
 pub struct AddCaptchaResp {

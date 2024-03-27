@@ -55,4 +55,13 @@ impl<'a> CaptchaService<'a> {
         })?;
         Ok(result)
     }
+
+    /// 批量删除
+    pub async fn batch_delete(&self, ids: Vec<i32>) -> Result<u64, Error> {
+        let result = self.captcha_dao.batch_delete(ids).await.map_err(|err| {
+            error!("批量删除失败, error: {err:#?}");
+            Error::DBBatchDeleteError
+        })?;
+        Ok(result)
+    }
 }

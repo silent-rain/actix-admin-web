@@ -2,14 +2,16 @@
 
 use crate::{
     app::system::{
-        dto::captcha::{AddCaptchaResp, CaptchaInfoReq, CaptchaListReq, DeleteCaptchaReq},
+        dto::captcha::{
+            AddCaptchaResp, BatchDeleteCaptchaReq, CaptchaInfoReq, CaptchaListReq, DeleteCaptchaReq,
+        },
         service::captcha::CaptchaService,
     },
     config::AppConfig,
     inject::AProvider,
 };
 
-use actix_validator::Query;
+use actix_validator::{Json, Query};
 use code::Error;
 use entity::sys_captcha;
 use response::Response;
@@ -22,7 +24,7 @@ use uuid::Uuid;
 pub struct CaptchaController;
 
 impl CaptchaController {
-    /// 列表
+    /// 获取验证码列表
     pub async fn list(provider: Data<AProvider>, req: Query<CaptchaListReq>) -> impl Responder {
         let captcha_service: CaptchaService = provider.provide();
         let resp = captcha_service.list(req.into_inner()).await;
@@ -87,13 +89,25 @@ impl CaptchaController {
         Response::ok().data(result)
     }
 
-    /// 删除信息
-    pub async fn delete(
+    /// 删除验证码
+    pub async fn delete(provider: Data<AProvider>, data: Json<DeleteCaptchaReq>) -> impl Responder {
+        let captcha_service: CaptchaService = provider.provide();
+        let resp = captcha_service.delete(data.id).await;
+        let _result = match resp {
+            Ok(v) => v,
+            Err(e) => return Response::code(e),
+        };
+
+        Response::ok().msg("删除成功")
+    }
+
+    /// 批量删除验证码
+    pub async fn batch_delete(
         provider: Data<AProvider>,
-        params: Query<DeleteCaptchaReq>,
+        data: Json<BatchDeleteCaptchaReq>,
     ) -> impl Responder {
         let captcha_service: CaptchaService = provider.provide();
-        let resp = captcha_service.delete(params.id).await;
+        let resp = captcha_service.batch_delete(data.ids.clone()).await;
         let _result = match resp {
             Ok(v) => v,
             Err(e) => return Response::code(e),

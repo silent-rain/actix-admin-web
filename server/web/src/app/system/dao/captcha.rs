@@ -69,4 +69,13 @@ impl<'a> CaptchaDao<'a> {
         let result = SysCaptcha::delete_by_id(id).exec(self.db.wdb()).await?;
         Ok(result.rows_affected)
     }
+
+    /// 按主键批量删除
+    pub async fn batch_delete(&self, ids: Vec<i32>) -> Result<u64, DbErr> {
+        let result = SysCaptcha::delete_many()
+            .filter(sys_captcha::Column::Id.is_in(ids))
+            .exec(self.db.wdb())
+            .await?;
+        Ok(result.rows_affected)
+    }
 }
