@@ -35,8 +35,7 @@ pub struct BatchDeleteCaptchaReq {
 /// 添加验证码 响应体
 #[derive(Default, Deserialize, Serialize)]
 pub struct AddCaptchaResp {
-    pub uuid: String,
-    pub captcha: String,
+    pub captcha_id: String,
     pub base_img: String,
     pub expire: i8,
     pub created_at: DateTime,

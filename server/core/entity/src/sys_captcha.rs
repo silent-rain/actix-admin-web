@@ -12,7 +12,7 @@ use serde::{Deserialize, Serialize};
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,
-    pub uuid: String,
+    pub captcha_id: String,
     pub captcha: String,
     #[sea_orm(column_type = "Binary(BlobSize::Long)")]
     pub base_img: Vec<u8>,

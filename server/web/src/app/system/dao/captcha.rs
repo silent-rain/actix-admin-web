@@ -33,7 +33,7 @@ impl<'a> CaptchaDao<'a> {
     /// 获取详情信息
     pub async fn info(&self, uuid: String) -> Result<Option<sys_captcha::Model>, DbErr> {
         SysCaptcha::find()
-            .filter(sys_captcha::Column::Uuid.eq(uuid))
+            .filter(sys_captcha::Column::CaptchaId.eq(uuid))
             .one(self.db.rdb())
             .await
     }
@@ -41,7 +41,7 @@ impl<'a> CaptchaDao<'a> {
     /// 添加详情信息
     pub async fn add(&self, data: sys_captcha::Model) -> Result<sys_captcha::Model, DbErr> {
         let pear = sys_captcha::ActiveModel {
-            uuid: Set(data.uuid),
+            captcha_id: Set(data.captcha_id),
             captcha: Set(data.captcha),
             base_img: Set(data.base_img),
             expire: Set(data.expire),

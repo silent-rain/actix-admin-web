@@ -57,10 +57,10 @@ impl CaptchaController {
     pub async fn add(provider: Data<AProvider>, conf: Data<AppConfig>) -> impl Responder {
         // 生成验证码
         let (captcha, base_img) = generate_captcha();
-        let uuid = Uuid::new_v4().to_string();
+        let captcha_id = Uuid::new_v4().to_string();
         let expire = conf.server.captcha.expire;
         let data = sys_captcha::Model {
-            uuid,
+            captcha_id,
             captcha,
             base_img: base_img.into_bytes(),
             expire,
@@ -79,8 +79,7 @@ impl CaptchaController {
             Err(err) => return Response::code(code::Error::FromUtf8Error(err)),
         };
         let result = AddCaptchaResp {
-            uuid: result.uuid,
-            captcha: result.captcha,
+            captcha_id: result.captcha_id,
             base_img,
             expire: result.expire,
             created_at: result.created_at,
