@@ -1,5 +1,5 @@
 //! 验证码
-use crate::app::system::dto::captcha::{AddCaptchaReq, CaptchaListReq};
+use crate::app::system::dto::captcha::CaptchaListReq;
 
 use database::{DbRepo, Pagination};
 use entity::{prelude::SysCaptcha, sys_captcha};
@@ -31,12 +31,15 @@ impl<'a> CaptchaDao<'a> {
     }
 
     /// 获取详情信息
-    pub async fn info(&self, id: i32) -> Result<Option<sys_captcha::Model>, DbErr> {
-        SysCaptcha::find_by_id(id).one(self.db.rdb()).await
+    pub async fn info(&self, uuid: String) -> Result<Option<sys_captcha::Model>, DbErr> {
+        SysCaptcha::find()
+            .filter(sys_captcha::Column::Uuid.eq(uuid))
+            .one(self.db.rdb())
+            .await
     }
 
     /// 添加详情信息
-    pub async fn add(&self, data: AddCaptchaReq) -> Result<sys_captcha::Model, DbErr> {
+    pub async fn add(&self, data: sys_captcha::Model) -> Result<sys_captcha::Model, DbErr> {
         let pear = sys_captcha::ActiveModel {
             uuid: Set(data.uuid),
             captcha: Set(data.captcha),

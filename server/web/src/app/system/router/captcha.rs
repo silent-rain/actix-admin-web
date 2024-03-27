@@ -13,7 +13,7 @@ impl CaptchaRouter {
         web::scope("/captcha")
             .route("/list", web::get().to(CaptchaController::list))
             .route("", web::get().to(CaptchaController::info))
-            // .route("", web::post().to(CaptchaController::add))
+            .route("/code", web::get().to(CaptchaController::add))
             .route("", web::delete().to(CaptchaController::delete))
     }
 }

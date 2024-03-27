@@ -2,6 +2,7 @@
 
 use actix_validator::Validate;
 
+use sea_orm::prelude::DateTime;
 use serde::{Deserialize, Serialize};
 
 /// 角色列表查询
@@ -16,20 +17,21 @@ pub struct CaptchaListReq {
 /// 通过 ID 查询验证码详情信息
 #[derive(Default, Deserialize, Validate)]
 pub struct CaptchaInfoReq {
-    pub id: i32,
-}
-
-/// 添加验证码
-#[derive(Serialize, Deserialize, Validate)]
-pub struct AddCaptchaReq {
     pub uuid: String,
-    pub captcha: String,
-    pub base_img: Vec<u8>,
-    pub expire: i8,
 }
 
 /// 删除验证码
 #[derive(Default, Deserialize, Validate)]
 pub struct DeleteCaptchaReq {
     pub id: i32,
+}
+
+/// 添加验证码 响应体
+#[derive(Default, Deserialize, Serialize)]
+pub struct AddCaptchaResp {
+    pub uuid: String,
+    pub captcha: String,
+    pub base_img: String,
+    pub expire: i8,
+    pub created_at: DateTime,
 }

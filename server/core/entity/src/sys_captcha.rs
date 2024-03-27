@@ -7,7 +7,7 @@ use sea_orm::{
 };
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize, DeriveEntityModel)]
+#[derive(Clone, Debug, Default, PartialEq, Eq, Deserialize, Serialize, DeriveEntityModel)]
 #[sea_orm(table_name = "sys_captcha")]
 pub struct Model {
     #[sea_orm(primary_key)]

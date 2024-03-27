@@ -2,18 +2,21 @@
 
 use crate::{
     app::system::{
-        dto::captcha::{AddCaptchaReq, CaptchaInfoReq, CaptchaListReq, DeleteCaptchaReq},
+        dto::captcha::{AddCaptchaResp, CaptchaInfoReq, CaptchaListReq, DeleteCaptchaReq},
         service::captcha::CaptchaService,
     },
+    config::AppConfig,
     inject::AProvider,
 };
 
-use actix_validator::{Json, Query};
+use actix_validator::Query;
 use code::Error;
+use entity::sys_captcha;
 use response::Response;
 use utils::captcha::generate_captcha;
 
 use actix_web::{web::Data, Responder};
+use uuid::Uuid;
 
 /// 控制器
 pub struct CaptchaController;
@@ -31,13 +34,10 @@ impl CaptchaController {
         Response::ok().data_list(results, total)
     }
 
-    /// 获取验证
+    /// 获取验证码
     pub async fn info(provider: Data<AProvider>, params: Query<CaptchaInfoReq>) -> impl Responder {
-        // 生成验证码
-        generate_captcha();
-
         let captcha_service: CaptchaService = provider.provide();
-        let resp = captcha_service.info(params.id).await;
+        let resp = captcha_service.info(params.uuid.clone()).await;
 
         let result = match resp {
             Ok(v) => v,
@@ -51,14 +51,37 @@ impl CaptchaController {
         Response::ok().data(result)
     }
 
-    /// 添加信息
-    pub async fn add(provider: Data<AProvider>, data: Json<AddCaptchaReq>) -> impl Responder {
+    /// 添加验证码
+    pub async fn add(provider: Data<AProvider>, conf: Data<AppConfig>) -> impl Responder {
+        // 生成验证码
+        let (captcha, base_img) = generate_captcha();
+        let uuid = Uuid::new_v4().to_string();
+        let expire = conf.server.captcha.expire;
+        let data = sys_captcha::Model {
+            uuid,
+            captcha,
+            base_img: base_img.into_bytes(),
+            expire,
+            ..Default::default()
+        };
+
         let captcha_service: CaptchaService = provider.provide();
-        let resp = captcha_service.add(data.into_inner()).await;
+        let resp = captcha_service.add(data).await;
 
         let result = match resp {
             Ok(v) => v,
-            Err(e) => return Response::code(e),
+            Err(err) => return Response::code(err),
+        };
+        let base_img = match String::from_utf8(result.base_img) {
+            Ok(v) => v,
+            Err(err) => return Response::code(code::Error::FromUtf8Error(err)),
+        };
+        let result = AddCaptchaResp {
+            uuid: result.uuid,
+            captcha: result.captcha,
+            base_img,
+            expire: result.expire,
+            created_at: result.created_at,
         };
 
         Response::ok().data(result)
@@ -77,5 +100,16 @@ impl CaptchaController {
         };
 
         Response::ok().msg("删除成功")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_uuid() {
+        let uuid = Uuid::new_v4().to_string();
+        assert_eq!(uuid.len(), 36);
     }
 }

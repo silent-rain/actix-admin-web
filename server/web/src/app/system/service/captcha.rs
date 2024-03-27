@@ -1,9 +1,6 @@
 //! 验证码
 
-use crate::app::system::{
-    dao::captcha::CaptchaDao,
-    dto::captcha::{AddCaptchaReq, CaptchaListReq},
-};
+use crate::app::system::{dao::captcha::CaptchaDao, dto::captcha::CaptchaListReq};
 
 use code::Error;
 use entity::sys_captcha;
@@ -29,8 +26,8 @@ impl<'a> CaptchaService<'a> {
     }
 
     /// 获取详情数据
-    pub async fn info(&self, id: i32) -> Result<Option<sys_captcha::Model>, Error> {
-        let result = self.captcha_dao.info(id).await.map_err(|err| {
+    pub async fn info(&self, uuid: String) -> Result<Option<sys_captcha::Model>, Error> {
+        let result = self.captcha_dao.info(uuid).await.map_err(|err| {
             if let RecordNotFound(err) = err {
                 error!("未查找到数据, error: {err:#?}");
                 return Error::DbQueryEmptyError;
@@ -42,7 +39,7 @@ impl<'a> CaptchaService<'a> {
     }
 
     /// 添加数据
-    pub async fn add(&self, data: AddCaptchaReq) -> Result<sys_captcha::Model, Error> {
+    pub async fn add(&self, data: sys_captcha::Model) -> Result<sys_captcha::Model, Error> {
         let result = self.captcha_dao.add(data).await.map_err(|err| {
             error!("添加数据失败, error: {err:#?}");
             Error::DBAddError
