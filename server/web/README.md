@@ -27,3 +27,4 @@ cargo build
 - [sea-orm](https://www.sea-ql.org/SeaORM/docs/index/)
 - [actix-web](https://actix.rs/docs/handlers)
 - [validation](https://dev.to/chaudharypraveen98/form-validation-in-rust-404l)
+- [validator](https://lib.rs/crates/validator)

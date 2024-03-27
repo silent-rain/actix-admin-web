@@ -87,11 +87,7 @@ fn validate_phone(phone: &str) -> Result<(), ValidationError> {
 /// 注册邮件用户
 #[derive(Serialize, Deserialize, Validate)]
 pub struct EmailRegisterReq {
-    // TODO 需要支持更多邮箱
-    #[validate(
-        email,
-        contains(pattern = "mail", message = "Email must be valid email address")
-    )]
+    #[validate(email)]
     pub email: String,
     #[validate(length(min = 5, max = 20, message = "用户名必须在5到20个字符之间"))]
     pub username: String,

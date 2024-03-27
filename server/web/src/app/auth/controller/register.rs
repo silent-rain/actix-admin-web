@@ -62,8 +62,9 @@ impl RegisterController {
         let register_service: RegisterService = provider.provide();
 
         // TODO
+        // 验证码检测
         // 用户是否已注册检测
-        // 手机验证码验证
+        // 手机验证码检测
         // 密码加密
 
         let resp = register_service
@@ -87,6 +88,7 @@ impl RegisterController {
         let register_service: RegisterService = provider.provide();
 
         // TODO
+        // 验证码检测
         // 用户是否已注册检测
         // 邮箱验证, 发送链接点击后确认
         // 密码加密
