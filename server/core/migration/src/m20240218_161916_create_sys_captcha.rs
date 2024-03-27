@@ -33,6 +33,13 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(Column::Captcha)
                             .string()
+                            .string_len(64)
+                            .not_null()
+                            .comment("验证码唯一标示符"),
+                    )
+                    .col(
+                        ColumnDef::new(Column::Captcha)
+                            .string()
                             .not_null()
                             .comment("验证码"),
                     )

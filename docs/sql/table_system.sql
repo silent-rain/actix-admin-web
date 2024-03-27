@@ -5,6 +5,7 @@
 -- 验证码表
 CREATE TABLE sys_captcha (
     `id` INT AUTO_INCREMENT COMMENT '自增ID',
+    `uuid` VARCHAR(64) NOT NULL COMMENT '验证码唯一标示符',
     `captcha` VARCHAR(10) NOT NULL COMMENT '验证码',
     `base_img` LONGBLOB NOT NULL COMMENT 'Base64图片',
     `expire` INT(4) NOT NULL DEFAULT 1 COMMENT '过期时间',
