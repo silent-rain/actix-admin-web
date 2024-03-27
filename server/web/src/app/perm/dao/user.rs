@@ -110,7 +110,7 @@ impl<'a> UserDao<'a> {
     /// 添加用户及对应用户的角色
     pub async fn add_user(
         &self,
-        data: perm_user::Model,
+        data: perm_user::ActiveModel,
         add_role_ids: Vec<i32>,
     ) -> Result<perm_user::Model, DbErr> {
         let txn = self.db.wdb().begin().await?;
@@ -133,11 +133,11 @@ impl<'a> UserDao<'a> {
         add_role_ids: Vec<i32>,
         del_role_ids: Vec<i32>,
     ) -> Result<(), DbErr> {
-        let user_id = data.id;
+        let user_id: i32 = data.id;
         let txn = self.db.wdb().begin().await?;
 
         // 更新用户
-        let _ = self.txn_update_user(&txn, data.clone()).await?;
+        let _ = self.txn_update_user(&txn, data).await?;
         // 添加批量角色
         let _ = self.txn_add_user_roles(&txn, user_id, add_role_ids).await?;
         // 删除批量角色
@@ -151,12 +151,9 @@ impl<'a> UserDao<'a> {
     async fn txn_add_user(
         &self,
         txn: &DatabaseTransaction,
-        data: perm_user::Model,
+        data: perm_user::ActiveModel,
     ) -> Result<perm_user::Model, DbErr> {
-        // Into ActiveModel
-        let pear: perm_user::ActiveModel = data.into();
-
-        pear.insert(txn).await
+        data.insert(txn).await
     }
 
     /// 更新用户

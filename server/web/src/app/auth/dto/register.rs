@@ -4,7 +4,9 @@ use std::str::FromStr;
 
 use actix_validator::Validate;
 
+use regex::Regex;
 use serde::{Deserialize, Serialize};
+use validator::ValidationError;
 
 /// 注册类型
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
@@ -55,40 +57,51 @@ pub struct RegisterReq {
 /// 注册手机用户
 #[derive(Serialize, Deserialize, Validate)]
 pub struct PhoneRegisterReq {
-    #[validate(length(min = 3, message = "Name must be greater than 3 chars"))]
-    pub username: String,
-    pub gender: i8,
-    #[validate(range(min = 18, max = 22, message = "Age must be between 18 to 22"))]
-    pub age: i32,
-    pub birthday: Option<String>,
+    #[validate(custom(function = "validate_phone"))]
     pub phone: String,
-    #[validate(
-        email,
-        contains(pattern = "gmail", message = "Email must be valid gmail address")
-    )]
-    pub email: Option<String>,
+    #[validate(length(min = 5, max = 20, message = "用户名必须在5到20个字符之间"))]
+    pub username: String,
+    #[validate(length(min = 6, message = "密码至少需要6个字符"))]
     pub password: String,
+    #[validate(range(min = 1, max = 3, message = "性别;1:男,2:女,3:保密"))]
+    pub gender: i8,
+    #[validate(range(min = 18, max = 100, message = "年龄必须在18到100岁之间"))]
+    pub age: Option<i32>,
+    pub birthday: Option<String>,
     pub avatar: Option<String>,
     pub captcha_id: String,
     pub captcha: String,
 }
 
+// 自定义电话号码验证函数
+fn validate_phone(phone: &str) -> Result<(), ValidationError> {
+    let phone_regex =
+        Regex::new(r"^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$")
+            .map_err(|_err| ValidationError::new("invalid phone"))?;
+    if !phone_regex.is_match(phone) {
+        return Err(ValidationError::new("invalid phone"));
+    }
+    Ok(())
+}
+
 /// 注册邮件用户
 #[derive(Serialize, Deserialize, Validate)]
 pub struct EmailRegisterReq {
-    #[validate(length(min = 3, message = "Name must be greater than 3 chars"))]
-    pub username: String,
-    pub gender: i8,
-    #[validate(range(min = 18, max = 22, message = "Age must be between 18 to 22"))]
-    pub age: i32,
-    pub birthday: Option<String>,
-    pub phone: String,
+    // TODO 需要支持更多邮箱
     #[validate(
         email,
-        contains(pattern = "gmail", message = "Email must be valid gmail address")
+        contains(pattern = "mail", message = "Email must be valid email address")
     )]
-    pub email: Option<String>,
+    pub email: String,
+    #[validate(length(min = 5, max = 20, message = "用户名必须在5到20个字符之间"))]
+    pub username: String,
+    #[validate(length(min = 6, message = "密码至少需要6个字符"))]
     pub password: String,
+    #[validate(range(min = 1, max = 3, message = "性别;1:男,2:女,3:保密"))]
+    pub gender: i8,
+    #[validate(range(min = 18, max = 100, message = "年龄必须在18到100岁之间"))]
+    pub age: Option<i32>,
+    pub birthday: Option<String>,
     pub avatar: Option<String>,
     pub captcha_id: String,
     pub captcha: String,

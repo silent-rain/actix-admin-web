@@ -8,7 +8,7 @@ use code::Error;
 use entity::perm_user;
 
 use nject::injectable;
-use sea_orm::DbErr::RecordNotFound;
+use sea_orm::{DbErr::RecordNotFound, Set};
 use tracing::error;
 
 /// 服务
@@ -66,6 +66,19 @@ impl<'a> UserService<'a> {
         // 获取待添加的角色列表
         // TODO
         let add_role_ids: Vec<i32> = Vec::new();
+
+        let data = perm_user::ActiveModel {
+            username: Set(data.username),
+            gender: Set(data.gender),
+            age: Set(data.age),
+            birthday: Set(data.birthday),
+            avatar: Set(data.avatar),
+            phone: Set(data.phone),
+            email: Set(data.email),
+            password: Set(data.password),
+            status: Set(1),
+            ..Default::default()
+        };
 
         let result = self
             .user_dao
