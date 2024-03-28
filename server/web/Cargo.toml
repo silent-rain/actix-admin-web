@@ -37,6 +37,7 @@ nject = "0.4"
 toml = "0.8"
 base64 = "0.22"
 regex = "1.10"
+chrono = "0.4"
 uuid = { version = "1.7.0", features = ["v4"] }
 listenfd = "1.0"
 num_cpus = "1.16"

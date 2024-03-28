@@ -17,7 +17,7 @@ pub struct CaptchaListReq {
 /// 通过 ID 查询验证码详情信息
 #[derive(Default, Deserialize, Validate)]
 pub struct CaptchaInfoReq {
-    pub uuid: String,
+    pub captcha_id: String,
 }
 
 /// 删除验证码

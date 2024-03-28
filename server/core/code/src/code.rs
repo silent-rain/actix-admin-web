@@ -60,7 +60,7 @@ pub enum Error {
     DbCloseError = 10203,
     #[error("查询数据失败, err: {0}")]
     DbQueryError(String) = 10204,
-    #[error("未查找到数据")]
+    #[error("未查到数据")]
     DbQueryEmptyError = 10205,
     #[error("添加数据失败, err: {0}")]
     DBAddError(String) = 10206,
@@ -77,31 +77,31 @@ pub enum Error {
     #[error("数据已存在子项")]
     DBDataExistChildrenError = 10212,
 
+    // 鉴权
+    #[error("未知的验证码")]
+    CaptchaNotExist = 10251,
+    #[error("验证码已过期, 请刷新重试")]
+    CaptchaExpire = 10252,
+    #[error("验证码错误")]
+    CaptchaInvalid = 10253,
+
     // 文件或目录操作
-    /// 获取目录失败
     #[error("获取目录失败")]
     FsReadDirError = 10301,
-    /// 获取上级目录失败
     #[error("获取上级目录失败")]
     FsParentDirError = 10302,
-    /// 创建目录失败
     #[error("创建目录失败")]
     FsCreateDir = 10303,
-    /// 读取文件失败
     #[error("读取文件失败")]
     FsReadFileError(String) = 10304,
-    /// 创建文件失败
     #[error("创建文件失败")]
     FsCreateFileError(String) = 10305,
-    /// 写入文件失败
     #[error("写入文件失败")]
     FsWriterFileError(String) = 10306,
-    /// 内置资源读取失败
     #[error("内置资源读取失败")]
     AssetReadError = 10307,
 
     // 内部框架错误
-    /// 日志初始化失败
     #[error("日志初始化失败")]
     LoggerInitError(String) = 10351,
 

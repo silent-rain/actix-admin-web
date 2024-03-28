@@ -6,6 +6,7 @@ use crate::{
         RegisterService,
     },
     app::perm::UserService,
+    app::system::CaptchaService,
     inject::AProvider,
 };
 
@@ -16,6 +17,7 @@ use utils::crypto::make_md5;
 use utils::json::struct_to_struct;
 
 use actix_web::{web::Data, Responder};
+use chrono::Local;
 
 /// 控制器
 pub struct RegisterController;
@@ -63,10 +65,20 @@ impl RegisterController {
     ) -> impl Responder {
         let mut data = data.into_inner();
 
-        // TODO 验证码检测
-        // TODO 手机验证码检测
+        // 检测验证码
+        if let Err(err) = Self::check_captcha(
+            provider.clone(),
+            data.captcha_id.clone(),
+            data.captcha.clone(),
+        )
+        .await
+        {
+            return err;
+        }
 
-        // 用户是否已注册检测
+        // TODO 检测手机验证码, 待接入第三方服务
+
+        // 检测是否已注册用户
         let user_service: UserService = provider.provide();
         let user = user_service.info_by_phone(data.phone.clone()).await;
         let user = match user {
@@ -96,10 +108,18 @@ impl RegisterController {
     ) -> impl Responder {
         let mut data = data.into_inner();
 
-        // TODO
-        // 验证码检测
-        // 用户是否已注册检测
+        // 检测验证码
+        if let Err(err) = Self::check_captcha(
+            provider.clone(),
+            data.captcha_id.clone(),
+            data.captcha.clone(),
+        )
+        .await
+        {
+            return err;
+        }
 
+        // 检测是否已注册邮件
         let user_service: UserService = provider.provide();
         let user = user_service.info_by_email(data.email.clone()).await;
         let user = match user {
@@ -122,5 +142,34 @@ impl RegisterController {
         // TODO 邮箱验证, 发送链接点击后确认
 
         Response::ok().msg("注册成功, 请验证")
+    }
+
+    /// 检测验证码
+    async fn check_captcha(
+        provider: Data<AProvider>,
+        captcha_id: String,
+        captcha: String,
+    ) -> Result<(), Response> {
+        let captcha_service: CaptchaService = provider.provide();
+        let captcha_m = captcha_service.info(captcha_id).await;
+        let captcha_m = match captcha_m {
+            Ok(v) => v,
+            Err(err) => match err {
+                Error::DbQueryEmptyError => return Err(Response::code(Error::CaptchaNotExist)),
+                _ => return Err(Response::code(err).msg("验证服务请求失败")),
+            },
+        };
+
+        if captcha_m.captcha.to_uppercase() != captcha.to_uppercase() {
+            return Err(Response::code(Error::CaptchaInvalid));
+        }
+
+        let max_time = captcha_m.created_at.and_utc().timestamp() + captcha_m.expire as i64;
+        let now = Local::now().timestamp();
+        if now > max_time {
+            return Err(Response::code(Error::CaptchaExpire));
+        }
+
+        Ok(())
     }
 }

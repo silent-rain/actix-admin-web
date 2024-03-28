@@ -25,10 +25,10 @@ impl<'a> CaptchaService<'a> {
     }
 
     /// 获取详情数据
-    pub async fn info(&self, uuid: String) -> Result<sys_captcha::Model, Error> {
+    pub async fn info(&self, captcha_id: String) -> Result<sys_captcha::Model, Error> {
         let result = self
             .captcha_dao
-            .info(uuid)
+            .info(captcha_id)
             .await
             .map_err(|err| Error::DbQueryError(err.to_string()))?
             .ok_or(Error::DbQueryEmptyError)?;
