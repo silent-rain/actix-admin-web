@@ -25,44 +25,38 @@ pub struct RegisterController;
 impl RegisterController {
     /// 注册用户
     pub async fn register(provider: Data<AProvider>, data: Json<RegisterReq>) -> impl Responder {
-        let register_service: RegisterService = provider.provide();
         let data = data.into_inner();
-        let resp = match data.register_type {
+        match data.register_type {
             RegisterType::Phone => {
                 if data.phone.is_none() {
-                    return Error::InvalidParameterError("请输入手机号码".to_string()).into();
+                    return Response::code(Error::InvalidParameterError(
+                        "请输入手机号码".to_owned(),
+                    ));
                 }
                 let data: PhoneRegisterReq = match struct_to_struct(&data) {
                     Ok(v) => v,
                     Err(err) => return Response::code(err),
                 };
-                register_service.add_phone_user(data).await
+                Self::phone_register(provider, Json(data)).await
             }
             RegisterType::Email => {
                 if data.email.is_none() {
-                    return Error::InvalidParameterError("请输入邮箱".to_string()).into();
+                    return Response::code(Error::InvalidParameterError("请输入邮箱".to_owned()));
                 }
                 let data: EmailRegisterReq = match struct_to_struct(&data) {
                     Ok(v) => v,
                     Err(err) => return Response::code(err),
                 };
-                register_service.add_email_user(data).await
+                Self::email_register(provider, Json(data)).await
             }
-        };
-
-        let result = match resp {
-            Ok(v) => v,
-            Err(err) => return Response::code(err),
-        };
-
-        Response::ok().msg("注册成功")
+        }
     }
 
     /// 注册手机用户
     pub async fn phone_register(
         provider: Data<AProvider>,
         data: Json<PhoneRegisterReq>,
-    ) -> impl Responder {
+    ) -> Response {
         let mut data = data.into_inner();
 
         // 检测验证码
@@ -105,7 +99,7 @@ impl RegisterController {
     pub async fn email_register(
         provider: Data<AProvider>,
         data: Json<EmailRegisterReq>,
-    ) -> impl Responder {
+    ) -> Response {
         let mut data = data.into_inner();
 
         // 检测验证码
