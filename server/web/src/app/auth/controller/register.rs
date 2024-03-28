@@ -3,14 +3,16 @@
 use crate::{
     app::auth::{
         dto::register::{EmailRegisterReq, PhoneRegisterReq, RegisterReq, RegisterType},
-        service::register::RegisterService,
+        RegisterService,
     },
+    app::perm::UserService,
     inject::AProvider,
 };
 
 use actix_validator::Json;
 use code::Error;
 use response::Response;
+use utils::crypto::make_md5;
 use utils::json::struct_to_struct;
 
 use actix_web::{web::Data, Responder};
@@ -51,7 +53,7 @@ impl RegisterController {
             Err(err) => return Response::code(err),
         };
 
-        Response::ok().data(result)
+        Response::ok().msg("注册成功")
     }
 
     /// 注册手机用户
@@ -59,25 +61,32 @@ impl RegisterController {
         provider: Data<AProvider>,
         data: Json<PhoneRegisterReq>,
     ) -> impl Responder {
-        let register_service: RegisterService = provider.provide();
+        let mut data = data.into_inner();
 
-        // TODO
-        // 验证码检测
+        // TODO 验证码检测
+        // TODO 手机验证码检测
+
         // 用户是否已注册检测
-        // 手机验证码检测
-        // 密码加密
-
-        let resp = register_service
-            .add_phone_user(data.into_inner())
-            .await
-            .map_err(Response::code);
-
-        let result = match resp {
+        let user_service: UserService = provider.provide();
+        let user = user_service.info_by_phone(data.phone.clone()).await;
+        let user = match user {
             Ok(v) => v,
-            Err(e) => return e,
+            Err(err) => return Response::code(err),
         };
+        if user.is_some() {
+            return Response::code(code::Error::DBDataExistError).msg("该手机号码已注册");
+        }
 
-        Response::ok().data(result)
+        // 密码加密
+        data.password = make_md5(&data.password);
+
+        let register_service: RegisterService = provider.provide();
+        let resp = register_service.add_phone_user(data).await;
+        if let Err(err) = resp.map_err(Response::code) {
+            return err;
+        }
+
+        Response::ok().msg("注册成功")
     }
 
     /// 注册邮件用户
@@ -85,21 +94,33 @@ impl RegisterController {
         provider: Data<AProvider>,
         data: Json<EmailRegisterReq>,
     ) -> impl Responder {
-        let register_service: RegisterService = provider.provide();
+        let mut data = data.into_inner();
 
         // TODO
         // 验证码检测
         // 用户是否已注册检测
-        // 邮箱验证, 发送链接点击后确认
-        // 密码加密
 
-        let resp = register_service.add_email_user(data.into_inner()).await;
-
-        let result = match resp {
+        let user_service: UserService = provider.provide();
+        let user = user_service.info_by_email(data.email.clone()).await;
+        let user = match user {
             Ok(v) => v,
-            Err(e) => return Response::code(e),
+            Err(err) => return Response::code(err),
         };
+        if user.is_some() {
+            return Response::code(code::Error::DBDataExistError).msg("该邮箱已注册");
+        }
 
-        Response::ok().data(result)
+        // 密码加密
+        data.password = make_md5(&data.password);
+
+        let register_service: RegisterService = provider.provide();
+        let resp = register_service.add_email_user(data).await;
+        if let Err(err) = resp.map_err(Response::code) {
+            return err;
+        }
+
+        // TODO 邮箱验证, 发送链接点击后确认
+
+        Response::ok().msg("注册成功, 请验证")
     }
 }

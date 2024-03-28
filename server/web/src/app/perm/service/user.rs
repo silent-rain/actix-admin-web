@@ -29,10 +29,31 @@ impl<'a> UserService<'a> {
     }
 
     /// 获取详情数据
-    pub async fn info(&self, id: i32) -> Result<Option<perm_user::Model>, Error> {
+    pub async fn info(&self, id: i32) -> Result<perm_user::Model, Error> {
         let result = self
             .user_dao
             .info(id)
+            .await
+            .map_err(|err| Error::DbQueryError(err.to_string()))?
+            .ok_or(Error::DbQueryEmptyError)?;
+        Ok(result)
+    }
+
+    /// 获取详情数据
+    pub async fn info_by_phone(&self, phone: String) -> Result<Option<perm_user::Model>, Error> {
+        let result = self
+            .user_dao
+            .info_by_phone(phone)
+            .await
+            .map_err(|err| Error::DbQueryError(err.to_string()))?;
+        Ok(result)
+    }
+
+    /// 根据邮箱获取详情信息
+    pub async fn info_by_email(&self, email: String) -> Result<Option<perm_user::Model>, Error> {
+        let result = self
+            .user_dao
+            .info_by_email(email)
             .await
             .map_err(|err| Error::DbQueryError(err.to_string()))?;
         Ok(result)

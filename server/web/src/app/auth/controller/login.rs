@@ -6,7 +6,6 @@ use crate::{
 };
 
 use actix_validator::Query;
-use code::Error;
 use response::Response;
 
 use actix_web::{web::Data, Responder};
@@ -23,10 +22,6 @@ impl LoginController {
         let result = match resp {
             Ok(v) => v,
             Err(e) => return Response::code(e),
-        };
-        let result = match result {
-            Some(v) => v,
-            None => return Response::code(Error::DbQueryEmptyError),
         };
 
         Response::ok().data(result)
