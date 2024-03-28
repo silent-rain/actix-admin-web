@@ -1,4 +1,6 @@
 //! 应用服务
+pub mod template;
+
 pub mod auth;
 pub mod log;
 pub mod perm;

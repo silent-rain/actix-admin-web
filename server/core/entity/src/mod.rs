@@ -2,6 +2,8 @@
 
 pub mod prelude;
 
+pub mod app_template;
+
 pub mod api_http;
 pub mod api_role_http_rel;
 pub mod api_token;
