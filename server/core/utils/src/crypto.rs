@@ -10,6 +10,6 @@ pub fn make_md5(text: &str) -> String {
     // 将密码和盐连接起来
     let salted_text = format!("{}{}", text, SECRET);
     hasher.input_str(&salted_text);
-    let result = hasher.result_str();
-    result
+    
+    hasher.result_str()
 }
