@@ -8,8 +8,7 @@ use crate::{
     inject::AProvider,
 };
 
-use code::Error;
-use entity::log::system::Model;
+use entity::log::system;
 use response::Response;
 
 use actix_web::{
@@ -27,7 +26,7 @@ impl LogSystemController {
         let resp = log_system_service.list(req.into_inner()).await;
         let (results, total) = match resp {
             Ok(v) => v,
-            Err(e) => return Response::code(e),
+            Err(err) => return Response::code(err),
         };
 
         Response::ok().data_list(results, total)
@@ -42,24 +41,20 @@ impl LogSystemController {
         let resp = log_system_service.info(params.id).await;
         let result = match resp {
             Ok(v) => v,
-            Err(e) => return Response::code(e),
-        };
-        let result = match result {
-            Some(v) => v,
-            None => return Response::code(Error::DbQueryEmptyError),
+            Err(err) => return Response::code(err),
         };
 
         Response::ok().data(result)
     }
 
     /// 添加系统日志
-    pub async fn add(provider: Data<AProvider>, data: Json<Model>) -> impl Responder {
+    pub async fn add(provider: Data<AProvider>, data: Json<system::Model>) -> impl Responder {
         let data = data.into_inner();
         let log_system_service: LogSystemService = provider.provide();
         let resp = log_system_service.add(data).await;
         let result = match resp {
             Ok(v) => v,
-            Err(e) => return Response::code(e),
+            Err(err) => return Response::code(err),
         };
 
         Response::ok().data(result)
@@ -74,7 +69,7 @@ impl LogSystemController {
         let resp = log_system_service.delete(params.id).await;
         let _result = match resp {
             Ok(v) => v,
-            Err(e) => return Response::code(e),
+            Err(err) => return Response::code(err),
         };
 
         Response::ok().msg("删除成功")

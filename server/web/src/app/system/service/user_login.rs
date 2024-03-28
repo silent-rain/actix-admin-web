@@ -8,8 +8,6 @@ use code::Error;
 use entity::sys_user_login;
 
 use nject::injectable;
-use sea_orm::DbErr::RecordNotFound;
-use tracing::error;
 
 /// 服务
 #[injectable]
@@ -23,35 +21,32 @@ impl<'a> UserLoginService<'a> {
         &self,
         req: UserLoginListReq,
     ) -> Result<(Vec<sys_user_login::Model>, u64), Error> {
-        let results = self.user_login_dao.list(req).await.map_err(|err| {
-            error!("查询数据失败, error: {err:#?}");
-            Error::DbQueryError(err.to_string())
-        })?;
+        let results = self
+            .user_login_dao
+            .list(req)
+            .await
+            .map_err(|err| Error::DbQueryError(err.to_string()))?;
         Ok(results)
     }
 
     /// 获取详情数据
-    pub async fn info(
-        &self,
-        req: UserLoginInfoReq,
-    ) -> Result<Option<sys_user_login::Model>, Error> {
-        let result = self.user_login_dao.info(req.id).await.map_err(|err| {
-            if let RecordNotFound(err) = err {
-                error!("未查找到数据, error: {err:#?}");
-                return Error::DbQueryEmptyError;
-            }
-            error!("查询数据失败, error: {err:#?}");
-            Error::DbQueryError(err.to_string())
-        })?;
+    pub async fn info(&self, req: UserLoginInfoReq) -> Result<sys_user_login::Model, Error> {
+        let result = self
+            .user_login_dao
+            .info(req.id)
+            .await
+            .map_err(|err| Error::DbQueryError(err.to_string()))?
+            .ok_or(Error::DbQueryEmptyError)?;
         Ok(result)
     }
 
     /// 添加数据
     pub async fn add(&self, data: sys_user_login::Model) -> Result<sys_user_login::Model, Error> {
-        let result = self.user_login_dao.add(data).await.map_err(|err| {
-            error!("添加数据失败, error: {err:#?}");
-            Error::DBAddError
-        })?;
+        let result = self
+            .user_login_dao
+            .add(data)
+            .await
+            .map_err(|err| Error::DBAddError(err.to_string()))?;
         Ok(result)
     }
 
@@ -60,10 +55,7 @@ impl<'a> UserLoginService<'a> {
         self.user_login_dao
             .disbale_status(req.id)
             .await
-            .map_err(|err| {
-                error!("禁用登陆失败, error: {err:#?}");
-                Error::DBDeleteError
-            })?;
+            .map_err(|err| Error::DBDeleteError(err.to_string()))?;
         Ok(())
     }
 }

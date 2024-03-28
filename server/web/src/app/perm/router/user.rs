@@ -12,7 +12,7 @@ impl UserRouter {
     pub fn register() -> Scope {
         web::scope("/user")
             .route("/list", web::get().to(UserController::list))
-            .route("info", web::get().to(UserController::info))
+            .route("", web::get().to(UserController::info))
             .route("", web::post().to(UserController::add))
             .route("", web::delete().to(UserController::delete))
     }

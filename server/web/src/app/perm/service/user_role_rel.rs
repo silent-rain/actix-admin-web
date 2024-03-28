@@ -8,7 +8,6 @@ use code::Error;
 use entity::perm_user_role_rel;
 
 use nject::injectable;
-use tracing::error;
 
 /// 服务
 #[injectable]
@@ -26,10 +25,7 @@ impl<'a> UserRoleRelService<'a> {
             .user_role_rel_dao
             .list(req.user_id)
             .await
-            .map_err(|err| {
-                error!("查询数据失败, error: {err:#?}");
-                Error::DbQueryError(err.to_string())
-            })?;
+            .map_err(|err| Error::DbQueryError(err.to_string()))?;
         Ok((results, total))
     }
 
@@ -39,10 +35,7 @@ impl<'a> UserRoleRelService<'a> {
             .user_role_rel_dao
             .add(req.user_id, req.role_id)
             .await
-            .map_err(|err| {
-                error!("添加数据失败, error: {err:#?}");
-                Error::DBAddError
-            })?;
+            .map_err(|err| Error::DBAddError(err.to_string()))?;
         Ok(result)
     }
 
@@ -52,10 +45,7 @@ impl<'a> UserRoleRelService<'a> {
             .user_role_rel_dao
             .delete_by_user_id(req.user_id)
             .await
-            .map_err(|err| {
-                error!("删除数据失败, error: {err:#?}");
-                Error::DBDeleteError
-            })?;
+            .map_err(|err| Error::DBDeleteError(err.to_string()))?;
         Ok(result)
     }
 }

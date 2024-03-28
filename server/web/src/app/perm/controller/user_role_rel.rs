@@ -26,7 +26,7 @@ impl UserRoleRelController {
         let resp = perm_user_service.list(req.into_inner()).await;
         let (results, total) = match resp {
             Ok(v) => v,
-            Err(e) => return Response::code(e),
+            Err(err) => return Response::code(err),
         };
 
         Response::ok().data_list(results, total)
@@ -40,7 +40,7 @@ impl UserRoleRelController {
 
         let result = match resp {
             Ok(v) => v,
-            Err(e) => return Response::code(e),
+            Err(err) => return Response::code(err),
         };
 
         Response::ok().data(result)
@@ -55,7 +55,7 @@ impl UserRoleRelController {
         let resp = perm_user_service.delete(req.into_inner()).await;
         let _result = match resp {
             Ok(v) => v,
-            Err(e) => return Response::code(e),
+            Err(err) => return Response::code(err),
         };
 
         Response::ok().msg("删除成功")

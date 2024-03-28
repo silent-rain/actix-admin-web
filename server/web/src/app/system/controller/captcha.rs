@@ -12,7 +12,6 @@ use crate::{
 };
 
 use actix_validator::{Json, Query};
-use code::Error;
 use entity::sys_captcha;
 use response::Response;
 use utils::captcha::generate_captcha;
@@ -30,7 +29,7 @@ impl CaptchaController {
         let resp = captcha_service.list(req.into_inner()).await;
         let (results, total) = match resp {
             Ok(v) => v,
-            Err(e) => return Response::code(e),
+            Err(err) => return Response::code(err),
         };
 
         Response::ok().data_list(results, total)
@@ -43,11 +42,7 @@ impl CaptchaController {
 
         let result = match resp {
             Ok(v) => v,
-            Err(e) => return Response::code(e),
-        };
-        let result = match result {
-            Some(v) => v,
-            None => return Response::code(Error::DbQueryEmptyError),
+            Err(err) => return Response::code(err),
         };
 
         Response::ok().data(result)
@@ -94,7 +89,7 @@ impl CaptchaController {
         let resp = captcha_service.delete(data.id).await;
         let _result = match resp {
             Ok(v) => v,
-            Err(e) => return Response::code(e),
+            Err(err) => return Response::code(err),
         };
 
         Response::ok().msg("删除成功")
@@ -109,7 +104,7 @@ impl CaptchaController {
         let resp = captcha_service.batch_delete(data.ids.clone()).await;
         let _result = match resp {
             Ok(v) => v,
-            Err(e) => return Response::code(e),
+            Err(err) => return Response::code(err),
         };
 
         Response::ok().msg("删除成功")

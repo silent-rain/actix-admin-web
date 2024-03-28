@@ -62,14 +62,14 @@ pub enum Error {
     DbQueryError(String) = 10204,
     #[error("未查找到数据")]
     DbQueryEmptyError = 10205,
-    #[error("添加数据失败")]
-    DBAddError = 10206,
-    #[error("更新数据失败")]
-    DBUpdateError = 10207,
-    #[error("删除数据失败")]
-    DBDeleteError = 10208,
-    #[error("批量删除数据失败")]
-    DBBatchDeleteError = 10209,
+    #[error("添加数据失败, err: {0}")]
+    DBAddError(String) = 10206,
+    #[error("更新数据失败, err: {0}")]
+    DBUpdateError(String) = 10207,
+    #[error("删除数据失败, err: {0}")]
+    DBDeleteError(String) = 10208,
+    #[error("批量删除数据失败, err: {0}")]
+    DBBatchDeleteError(String) = 10209,
     #[error("更新数据状态失败")]
     DBUpdateStatusError = 10210,
     #[error("数据已存在")]

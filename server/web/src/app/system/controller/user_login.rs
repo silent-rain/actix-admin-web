@@ -8,7 +8,6 @@ use crate::{
     inject::AProvider,
 };
 
-use code::Error;
 use entity::sys_user_login;
 use response::Response;
 
@@ -27,7 +26,7 @@ impl UserLoginController {
         let resp = user_login_service.list(req.into_inner()).await;
         let (results, total) = match resp {
             Ok(v) => v,
-            Err(e) => return Response::code(e),
+            Err(err) => return Response::code(err),
         };
 
         Response::ok().data_list(results, total)
@@ -39,11 +38,7 @@ impl UserLoginController {
         let resp = user_login_service.info(req.into_inner()).await;
         let result = match resp {
             Ok(v) => v,
-            Err(e) => return Response::code(e),
-        };
-        let result = match result {
-            Some(v) => v,
-            None => return Response::code(Error::DbQueryEmptyError),
+            Err(err) => return Response::code(err),
         };
 
         Response::ok().data(result)
@@ -59,7 +54,7 @@ impl UserLoginController {
         let resp = user_login_service.add(data).await;
         let result = match resp {
             Ok(v) => v,
-            Err(e) => return Response::code(e),
+            Err(err) => return Response::code(err),
         };
 
         Response::ok().data(result)
@@ -74,7 +69,7 @@ impl UserLoginController {
         let resp = user_login_service.disbale_status(req.into_inner()).await;
         match resp {
             Ok(v) => v,
-            Err(e) => return Response::code(e),
+            Err(err) => return Response::code(err),
         };
 
         Response::ok().msg("删除成功")

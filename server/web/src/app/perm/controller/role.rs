@@ -9,11 +9,9 @@ use crate::{
 };
 
 use actix_validator::{Json, Query};
-use code::Error;
 use response::Response;
 
 use actix_web::{web::Data, Responder};
-// use validator::Validate;
 
 /// 控制器
 pub struct RoleController;
@@ -25,7 +23,7 @@ impl RoleController {
         let resp = perm_user_service.all().await;
         let (results, total) = match resp {
             Ok(v) => v,
-            Err(e) => return Response::code(e),
+            Err(err) => return Response::code(err),
         };
 
         Response::ok().data_list(results, total)
@@ -37,7 +35,7 @@ impl RoleController {
         let resp = perm_user_service.list(req.into_inner()).await;
         let (results, total) = match resp {
             Ok(v) => v,
-            Err(e) => return Response::code(e),
+            Err(err) => return Response::code(err),
         };
 
         Response::ok().data_list(results, total)
@@ -50,11 +48,7 @@ impl RoleController {
 
         let result = match resp {
             Ok(v) => v,
-            Err(e) => return Response::code(e),
-        };
-        let result = match result {
-            Some(v) => v,
-            None => return Response::code(Error::DbQueryEmptyError),
+            Err(err) => return Response::code(err),
         };
 
         Response::ok().data(result)
@@ -67,7 +61,7 @@ impl RoleController {
 
         let result = match resp {
             Ok(v) => v,
-            Err(e) => return Response::code(e),
+            Err(err) => return Response::code(err),
         };
 
         Response::ok().data(result)
@@ -79,7 +73,7 @@ impl RoleController {
         let resp = perm_user_service.delete(params.id).await;
         let _result = match resp {
             Ok(v) => v,
-            Err(e) => return Response::code(e),
+            Err(err) => return Response::code(err),
         };
 
         Response::ok().msg("删除成功")
@@ -96,7 +90,7 @@ impl RoleController {
         let resp = perm_user_service.role_list(req.into_inner()).await;
         let (results, total) = match resp {
             Ok(v) => v,
-            Err(e) => return Response::code(e),
+            Err(err) => return Response::code(err),
         };
 
         Response::ok().data_list(results, total)

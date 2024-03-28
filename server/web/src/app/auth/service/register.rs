@@ -9,7 +9,6 @@ use entity::perm_user;
 use sea_orm::Set;
 
 use nject::injectable;
-use tracing::error;
 
 /// 服务
 #[injectable]
@@ -32,10 +31,11 @@ impl<'a> RegisterService<'a> {
             ..Default::default()
         };
 
-        let result = self.user_dao.add_user(data, vec![]).await.map_err(|err| {
-            error!("添加数据失败, error: {err:#?}");
-            Error::DBAddError
-        })?;
+        let result = self
+            .user_dao
+            .add_user(data, vec![])
+            .await
+            .map_err(|err| Error::DBAddError(err.to_string()))?;
         Ok(result)
     }
 
@@ -53,10 +53,11 @@ impl<'a> RegisterService<'a> {
             ..Default::default()
         };
 
-        let result = self.user_dao.add_user(data, vec![]).await.map_err(|err| {
-            error!("添加数据失败, error: {err:#?}");
-            Error::DBAddError
-        })?;
+        let result = self
+            .user_dao
+            .add_user(data, vec![])
+            .await
+            .map_err(|err| Error::DBAddError(err.to_string()))?;
         Ok(result)
     }
 }

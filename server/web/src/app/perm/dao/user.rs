@@ -50,6 +50,22 @@ impl<'a> UserDao<'a> {
         PermUser::find_by_id(id).one(self.db.rdb()).await
     }
 
+    /// 根据手机号码获取详情信息
+    pub async fn info_by_phone(&self, phone: String) -> Result<Option<perm_user::Model>, DbErr> {
+        PermUser::find()
+            .filter(perm_user::Column::Phone.contains(phone))
+            .one(self.db.rdb())
+            .await
+    }
+
+    /// 根据邮箱获取详情信息
+    pub async fn info_by_email(&self, email: String) -> Result<Option<perm_user::Model>, DbErr> {
+        PermUser::find()
+            .filter(perm_user::Column::Email.contains(email))
+            .one(self.db.rdb())
+            .await
+    }
+
     /// 添加详情信息
     pub async fn add(&self, data: AddUserReq) -> Result<perm_user::Model, DbErr> {
         let pear = perm_user::ActiveModel {
