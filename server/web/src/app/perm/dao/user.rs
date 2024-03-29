@@ -8,6 +8,7 @@ use entity::prelude::PermUser;
 use entity::prelude::PermUserRoleRel;
 
 use nject::injectable;
+use sea_orm::Condition;
 use sea_orm::Set;
 use sea_orm::{
     ActiveModelTrait, ColumnTrait, DatabaseTransaction, DbErr, QueryFilter, TransactionTrait,
@@ -62,6 +63,21 @@ impl<'a> UserDao<'a> {
     pub async fn info_by_email(&self, email: String) -> Result<Option<perm_user::Model>, DbErr> {
         PermUser::find()
             .filter(perm_user::Column::Email.contains(email))
+            .one(self.db.rdb())
+            .await
+    }
+
+    /// 根据手机号/邮箱获取详情信息
+    pub async fn info_by_username(
+        &self,
+        username: String,
+    ) -> Result<Option<perm_user::Model>, DbErr> {
+        PermUser::find()
+            .filter(
+                Condition::any()
+                    .add(perm_user::Column::Phone.eq(username.clone()))
+                    .add(perm_user::Column::Email.eq(username)),
+            )
             .one(self.db.rdb())
             .await
     }

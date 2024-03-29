@@ -7,10 +7,7 @@ use entity::prelude::SysUserLogin;
 use entity::sys_user_login;
 
 use nject::injectable;
-use sea_orm::{
-    ActiveModelTrait, ActiveValue::NotSet, DbErr, EntityTrait, PaginatorTrait, QueryOrder,
-    QuerySelect, Set,
-};
+use sea_orm::{ActiveModelTrait, DbErr, EntityTrait, PaginatorTrait, QueryOrder, QuerySelect, Set};
 
 #[injectable]
 pub struct UserLoginDao<'a> {
@@ -46,9 +43,10 @@ impl<'a> UserLoginDao<'a> {
     }
 
     /// 添加详情信息
-    pub async fn add(&self, data: sys_user_login::Model) -> Result<sys_user_login::Model, DbErr> {
-        let mut active_model: sys_user_login::ActiveModel = data.into();
-        active_model.id = NotSet;
+    pub async fn add(
+        &self,
+        active_model: sys_user_login::ActiveModel,
+    ) -> Result<sys_user_login::Model, DbErr> {
         active_model.insert(self.db.wdb()).await
     }
 

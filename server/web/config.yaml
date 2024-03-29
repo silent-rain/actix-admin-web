@@ -8,7 +8,7 @@ server:
     address: "127.0.0.1" # 服务地址
     port: 8000 # 服务端口
   captcha: # 验证码
-    expire: 30 # 验证码过期时间/s, 0-255
+    expire: 120 # 验证码过期时间/s, 0-255
   upload: # 上传路径配置
     filepath: "./upload" # 上传文件路径
 

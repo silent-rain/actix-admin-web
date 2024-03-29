@@ -51,6 +51,7 @@ impl UserLoginController {
     ) -> impl Responder {
         let data = data.into_inner();
         let user_login_service: UserLoginService = provider.provide();
+        let data: sys_user_login::ActiveModel = data.into();
         let resp = user_login_service.add(data).await;
         let result = match resp {
             Ok(v) => v,

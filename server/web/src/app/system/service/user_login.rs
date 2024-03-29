@@ -41,7 +41,7 @@ impl<'a> UserLoginService<'a> {
     }
 
     /// 添加数据
-    pub async fn add(&self, data: sys_user_login::Model) -> Result<sys_user_login::Model, Error> {
+    pub async fn add(&self, data: sys_user_login::ActiveModel) -> Result<sys_user_login::Model, Error> {
         let result = self
             .user_login_dao
             .add(data)

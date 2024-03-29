@@ -16,7 +16,7 @@ impl UserLoginRouter {
                 web::scope("/user_login")
                     .route("/list", web::get().to(UserLoginController::list))
                     .route("", web::get().to(UserLoginController::info))
-                    .route("", web::post().to(UserLoginController::add))
+                    // .route("", web::post().to(UserLoginController::add))
                     .route(
                         "/disbale",
                         web::put().to(UserLoginController::disbale_status),

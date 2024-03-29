@@ -49,6 +49,19 @@ impl<'a> UserService<'a> {
         Ok(result)
     }
 
+    /// 根据手机号/邮箱获取详情信息
+    pub async fn info_by_username(
+        &self,
+        username: String,
+    ) -> Result<Option<perm_user::Model>, Error> {
+        let result = self
+            .user_dao
+            .info_by_username(username)
+            .await
+            .map_err(|err| Error::DbQueryError(err.to_string()))?;
+        Ok(result)
+    }
+
     /// 根据邮箱获取详情信息
     pub async fn info_by_email(&self, email: String) -> Result<Option<perm_user::Model>, Error> {
         let result = self
