@@ -18,6 +18,15 @@ pub struct Model {
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
-pub enum Relation {}
+pub enum Relation {
+    #[sea_orm(
+        belongs_to = "super::perm_user::Entity",
+        from = "Column::UserId",
+        to = "super::perm_user::Column::Id",
+        on_update = "Cascade",
+        on_delete = "Cascade"
+    )]
+    PermUser,
+}
 
 impl ActiveModelBehavior for ActiveModel {}
