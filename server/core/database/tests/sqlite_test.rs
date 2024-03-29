@@ -86,7 +86,7 @@ async fn test_insert2(db: &Pool) -> Result<user::Model, DbErr> {
         ..Default::default()
     };
     let result = dao
-        .insert2::<user::Model, user::ActiveModel>(data)
+        ._insert2::<user::Model, user::ActiveModel>(data)
         .await
         .unwrap();
     println!("test_insert2 ======= {:#?}", result);
@@ -113,7 +113,7 @@ async fn test_update2(db: &Pool) -> Result<user::Model, DbErr> {
         status: 0,
     };
     let result = dao
-        .update2::<user::Model, user::ActiveModel>(data)
+        ._update2::<user::Model, user::ActiveModel>(data)
         .await
         .unwrap();
     println!("test_update2 ======= {:#?}", result);
