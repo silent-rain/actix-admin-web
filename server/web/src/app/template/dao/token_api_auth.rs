@@ -4,6 +4,7 @@ use database::DbRepo;
 use entity::api_role_http_rel;
 use entity::app_template;
 use entity::prelude::{ApiRoleHttpRel, AppTemplate};
+use entity::sys_user_login;
 
 use nject::injectable;
 use sea_orm::{DbErr, EntityTrait, JoinType, QuerySelect, RelationTrait};
@@ -20,6 +21,7 @@ impl<'a> AppTemplateEtxDao<'a> {
     /// join 案例
     pub async fn get_join_list(&self) -> Result<Vec<api_role_http_rel::Model>, DbErr> {
         let results = ApiRoleHttpRel::find()
+            // reuse a `Relation` from existing Entity
             .join(
                 JoinType::LeftJoin,
                 api_role_http_rel::Relation::ApiHttp.def(),
@@ -35,6 +37,7 @@ impl<'a> AppTemplateEtxDao<'a> {
                             .into_condition()
                     }),
             )
+            // join with table alias and custom on condition
             .join(
                 JoinType::LeftJoin,
                 api_role_http_rel::Relation::ApiHttp
@@ -66,7 +69,16 @@ impl<'a> AppTemplateEtxDao<'a> {
     /// ```
     pub async fn get_join_list2(&self) -> Result<Vec<app_template::Model>, DbErr> {
         let results = AppTemplate::find()
+            // reuse a `Relation` from existing Entity
             .join(JoinType::LeftJoin, app_template::Relation::PermUser.def())
+            // construct `RelationDef` on the fly
+            .join_rev(
+                JoinType::InnerJoin,
+                sys_user_login::Entity::belongs_to(app_template::Entity)
+                    .from(sys_user_login::Column::UserId)
+                    .to(app_template::Column::UserId)
+                    .into(),
+            )
             .all(self.db.rdb())
             .await?;
         Ok(results)
