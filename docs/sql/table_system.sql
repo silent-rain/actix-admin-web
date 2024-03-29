@@ -16,10 +16,10 @@ CREATE TABLE sys_captcha (
 -- 用户登录表
 CREATE TABLE sys_user_login (
     `id` INT AUTO_INCREMENT COMMENT '自增ID',
-    `user_id` VARCHAR(10) NOT NULL COMMENT '用户ID',
+    `user_id` INT(11) NOT NULL COMMENT '用户ID',
     `username` VARCHAR(32) NOT NULL COMMENT '用户名称',
-    `remote_addr` VARCHAR(64) NOT NULL COMMENT '登录IP',
-    `user_agent` VARCHAR(256) NOT NULL COMMENT '用户代理',
+    `remote_addr` VARCHAR(64)  NULL COMMENT '登录IP',
+    `user_agent` VARCHAR(256)  NULL COMMENT '用户代理',
     `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '登录状态,0:禁用,1:启用',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',

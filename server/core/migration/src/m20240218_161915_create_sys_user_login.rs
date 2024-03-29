@@ -29,19 +29,20 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(SysUserLogin::Username)
                             .string()
+                            .string_len(32)
                             .not_null()
                             .comment("用户名称"),
                     )
                     .col(
                         ColumnDef::new(SysUserLogin::RemoteAddr)
                             .string()
-                            .not_null()
+                            .string_len(64)
                             .comment("登录IP"),
                     )
                     .col(
                         ColumnDef::new(SysUserLogin::UserAgent)
                             .string()
-                            .not_null()
+                            .string_len(256)
                             .comment("用户代理"),
                     )
                     .col(

@@ -84,6 +84,12 @@ pub enum Error {
     CaptchaExpire = 10252,
     #[error("验证码错误")]
     CaptchaInvalid = 10253,
+    #[error("账号或密码错误")]
+    LoginPasswordError = 10254,
+    #[error("获取密匙异常, err: {0}")]
+    TokenEncode(String) = 10255,
+    #[error("解析密匙异常, err: {0}")]
+    TokenDecode(String) = 10256,
 
     // 文件或目录操作
     #[error("获取目录失败")]
