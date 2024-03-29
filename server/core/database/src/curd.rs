@@ -76,7 +76,7 @@ where
     /// 插入数据
     /// 插入一个模型并返回一个新的 Model .其值是从数据库中检索的，因此将填充任何自动生成的字段;
     /// 按值进行填充, 默认值可能会产生问题;
-    async fn insert2<M, A>(
+    async fn _insert2<M, A>(
         &self,
         model: M,
     ) -> Result<<<A as ActiveModelTrait>::Entity as EntityTrait>::Model, DbErr>
@@ -105,7 +105,7 @@ where
     /// 更新数据
     /// 接受一个模型并尝试更新数据库中的记录;
     /// 按值进行填充，这是一个失败的更新示例;
-    async fn update2<M, A>(
+    async fn _update2<M, A>(
         &self,
         model: M,
     ) -> Result<<<A as ActiveModelTrait>::Entity as EntityTrait>::Model, DbErr>
