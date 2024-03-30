@@ -276,6 +276,48 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f26201604c87b1e01bd3d98f8d5d9a8fcbb815e8cedb41ffccbeb4bf593a35fe"
 
 [[package]]
+name = "admin"
+version = "0.1.0"
+dependencies = [
+ "actix-cors",
+ "actix-files",
+ "actix-request-identifier",
+ "actix-web",
+ "actix-web-requestid",
+ "actix_validator",
+ "base64 0.22.0",
+ "chrono",
+ "code",
+ "context",
+ "database",
+ "dotenv",
+ "entity",
+ "futures",
+ "jwt",
+ "listenfd",
+ "log",
+ "logger",
+ "migration",
+ "nject",
+ "num_cpus",
+ "regex",
+ "response",
+ "rust-embed",
+ "sea-orm",
+ "sea-query",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "tokio",
+ "toml",
+ "tracing",
+ "tracing-actix-web",
+ "utils",
+ "uuid",
+ "validator",
+]
+
+[[package]]
 name = "ahash"
 version = "0.7.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4452,48 +4494,6 @@ name = "wasm-bindgen-shared"
 version = "0.2.92"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "af190c94f2773fdb3729c55b007a722abb5384da03bc0986df4c289bf5567e96"
-
-[[package]]
-name = "web"
-version = "0.1.0"
-dependencies = [
- "actix-cors",
- "actix-files",
- "actix-request-identifier",
- "actix-web",
- "actix-web-requestid",
- "actix_validator",
- "base64 0.22.0",
- "chrono",
- "code",
- "context",
- "database",
- "dotenv",
- "entity",
- "futures",
- "jwt",
- "listenfd",
- "log",
- "logger",
- "migration",
- "nject",
- "num_cpus",
- "regex",
- "response",
- "rust-embed",
- "sea-orm",
- "sea-query",
- "serde",
- "serde_json",
- "serde_yaml",
- "tokio",
- "toml",
- "tracing",
- "tracing-actix-web",
- "utils",
- "uuid",
- "validator",
-]
 
 [[package]]
 name = "web-sys"

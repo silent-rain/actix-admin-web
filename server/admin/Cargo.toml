@@ -1,5 +1,5 @@
 [package]
-name = "web"
+name = "admin"
 version = "0.1.0"
 edition = "2021"
 
