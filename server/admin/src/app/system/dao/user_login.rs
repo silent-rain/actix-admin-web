@@ -7,7 +7,10 @@ use entity::prelude::SysUserLogin;
 use entity::sys_user_login;
 
 use nject::injectable;
-use sea_orm::{ActiveModelTrait, DbErr, EntityTrait, PaginatorTrait, QueryOrder, QuerySelect, Set};
+use sea_orm::{
+    ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, PaginatorTrait, QueryFilter, QueryOrder,
+    QuerySelect, Set,
+};
 
 #[injectable]
 pub struct UserLoginDao<'a> {
@@ -40,6 +43,18 @@ impl<'a> UserLoginDao<'a> {
     /// 获取详情信息
     pub async fn info(&self, id: i32) -> Result<Option<sys_user_login::Model>, DbErr> {
         SysUserLogin::find_by_id(id).one(self.db.rdb()).await
+    }
+
+    /// 根据用户ID获取详情信息
+    pub async fn info_by_user_id(
+        &self,
+        user_id: i32,
+    ) -> Result<Option<sys_user_login::Model>, DbErr> {
+        SysUserLogin::find()
+            .filter(sys_user_login::Column::UserId.eq(user_id))
+            .order_by_desc(sys_user_login::Column::Id)
+            .one(self.db.rdb())
+            .await
     }
 
     /// 添加详情信息

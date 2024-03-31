@@ -40,8 +40,22 @@ impl<'a> UserLoginService<'a> {
         Ok(result)
     }
 
+    /// 根据用户ID获取详情信息
+    pub async fn info_by_user_id(&self, user_id: i32) -> Result<sys_user_login::Model, Error> {
+        let result = self
+            .user_login_dao
+            .info_by_user_id(user_id)
+            .await
+            .map_err(|err| Error::DbQueryError(err.to_string()))?
+            .ok_or(Error::DbQueryEmptyError)?;
+        Ok(result)
+    }
+
     /// 添加数据
-    pub async fn add(&self, data: sys_user_login::ActiveModel) -> Result<sys_user_login::Model, Error> {
+    pub async fn add(
+        &self,
+        data: sys_user_login::ActiveModel,
+    ) -> Result<sys_user_login::Model, Error> {
         let result = self
             .user_login_dao
             .add(data)

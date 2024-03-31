@@ -22,8 +22,8 @@ pub enum Error {
 /// Our claims struct, it needs to derive `Serialize` and/or `Deserialize`
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct Claims {
-    user_id: i32,
-    username: String,
+    pub user_id: i32,
+    pub username: String,
 
     exp: usize, // Required (validate_exp defaults to true in validation). Expiration time (as UTC timestamp)
     // aud: String, // Optional. Audience

@@ -90,6 +90,14 @@ pub enum Error {
     TokenEncode(String) = 10255,
     #[error("解析密匙异常, err: {0}")]
     TokenDecode(String) = 10256,
+    #[error("非法请求")]
+    HeadersNotAuthorization = 10257,
+    #[error("非法请求")]
+    HeadersNotAuthorizationBearer = 10258,
+    #[error("获取服务实例失败")]
+    InjectAproviderObj = 10259,
+    #[error("当前登陆态已失效, 请重新登陆")]
+    LoginStatusDisabled = 10260,
 
     // 文件或目录操作
     #[error("获取目录失败")]

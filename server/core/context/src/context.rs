@@ -5,7 +5,7 @@ use std::cell::{Cell, RefCell};
 /// 上下文模型
 #[derive(Debug, Clone)]
 pub struct Context {
-    pub user_id: Cell<u64>,
+    pub user_id: Cell<i32>,
     pub user_name: RefCell<String>,
 }
 
@@ -21,11 +21,11 @@ impl Default for Context {
 /// 用户信息传递
 impl Context {
     /// 获取用户ID
-    pub fn get_user_id(&self) -> u64 {
+    pub fn get_user_id(&self) -> i32 {
         self.user_id.get()
     }
     /// 设置用户ID
-    pub fn set_user_id(&self, user_id: u64) {
+    pub fn set_user_id(&self, user_id: i32) {
         self.user_id.set(user_id)
     }
     /// 获取用户昵称

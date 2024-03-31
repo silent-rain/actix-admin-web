@@ -2,7 +2,7 @@
   "editor.formatOnSave": true, // 保存格式化
   // Rust
   "rust-analyzer.linkedProjects": [
-    "server/core/Cargo.toml",
+    // "server/core/Cargo.toml",
     "server/admin/Cargo.toml"
   ],
   "rust-analyzer.check.allTargets": true,
