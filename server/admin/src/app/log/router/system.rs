@@ -13,7 +13,7 @@ impl SystemRouter {
         web::scope("/log")
             // 系统日志管理
             .service(
-                web::scope("/system")
+                web::scope("/systems")
                     .route("", web::get().to(LogSystemController::list))
                     .route("/{id}", web::get().to(LogSystemController::info))
                     .route("", web::post().to(LogSystemController::add))
