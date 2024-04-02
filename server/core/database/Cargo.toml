@@ -8,20 +8,20 @@ edition = "2021"
 [dependencies]
 code = { path = "../code" }
 
-sea-orm = { version = "0.12", features = [
+sea-orm = { workspace = true, features = [
     "sqlx-mysql",
     "sqlx-sqlite",
     "runtime-tokio-rustls",
 ] }
-log = "0.4"
-serde = { version = "1.0", features = ["derive"] }
-async-trait = { version = "0.1" }
+log = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+async-trait = { workspace = true }
 
 [dev-dependencies]
-tokio = { version = "1.36", features = ["full"] }
-log = "0.4"
-tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = [
+tokio = { workspace = true, features = ["full"] }
+log = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true, features = [
     "env-filter",
     "time",
     "local-time",

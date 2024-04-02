@@ -7,12 +7,12 @@ edition = "2021"
 response = { path = "../response" }
 code = { path = "../code" }
 
-futures = "0.3"
-validator_derive = { version = "0.17" }
-validator = { version = "0.17" }
-actix-web = "4.5"
-serde = "1.0"
-serde_urlencoded = "0.7"
+futures = { workspace = true }
+validator_derive = { workspace = true }
+validator = { workspace = true }
+actix-web = { workspace = true }
+serde = { workspace = true }
+serde_urlencoded = { workspace = true }
 
 
 [features]

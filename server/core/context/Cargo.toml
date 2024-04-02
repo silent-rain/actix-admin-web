@@ -6,6 +6,6 @@ edition = "2021"
 [dependencies]
 code = { path = "../code" }
 
-actix-web = "4.5"
-futures = "0.3"
-serde = "1.0"
+actix-web = { workspace = true }
+futures = { workspace = true }
+serde = { workspace = true }
