@@ -35,7 +35,7 @@ impl CaptchaController {
         Response::ok().data_list(results, total)
     }
 
-    /// 获取验证码
+    /// 获取验证码信息
     pub async fn info(provider: Data<AProvider>, params: Query<CaptchaInfoReq>) -> impl Responder {
         let captcha_service: CaptchaService = provider.provide();
         let resp = captcha_service.info(params.captcha_id.clone()).await;

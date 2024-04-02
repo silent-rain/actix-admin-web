@@ -65,11 +65,11 @@ impl<'a> UserLoginDao<'a> {
         active_model.insert(self.db.wdb()).await
     }
 
-    /// 禁用登陆
-    pub async fn disbale_status(&self, id: i32) -> Result<(), DbErr> {
+    /// 更新状态
+    pub async fn status(&self, id: i32, status: i8) -> Result<(), DbErr> {
         let active_model = sys_user_login::ActiveModel {
             id: Set(id),
-            status: Set(0),
+            status: Set(status),
             ..Default::default()
         };
         let _ = active_model.update(self.db.wdb()).await?;

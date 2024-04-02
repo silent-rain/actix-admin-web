@@ -17,7 +17,7 @@ use actix_web::{web::Data, Responder};
 pub struct UserController;
 
 impl UserController {
-    /// 用户列表查询
+    /// 获取用户列表
     pub async fn list(provider: Data<AProvider>, req: Query<GetUserListReq>) -> impl Responder {
         let perm_user_service: UserService = provider.provide();
         let resp = perm_user_service.list(req.into_inner()).await;
@@ -29,7 +29,7 @@ impl UserController {
         Response::ok().data_list(results, total)
     }
 
-    /// 用户详情查询
+    /// 获取用户信息
     pub async fn info(provider: Data<AProvider>, params: Query<GetUserInfoReq>) -> impl Responder {
         let perm_user_service: UserService = provider.provide();
         let resp = perm_user_service.info(params.id).await;
@@ -42,7 +42,7 @@ impl UserController {
         Response::ok().data(result)
     }
 
-    /// 添加用户信息
+    /// 添加用户
     pub async fn add(provider: Data<AProvider>, data: Json<AddUserReq>) -> impl Responder {
         let perm_user_service: UserService = provider.provide();
 

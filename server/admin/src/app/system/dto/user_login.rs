@@ -17,8 +17,9 @@ pub struct UserLoginInfoReq {
     pub id: i32,
 }
 
-/// 禁用登陆日志
+/// 登陆状态
 #[derive(Default, Deserialize)]
-pub struct DisableUserLoginReq {
+pub struct UserLoginStatusReq {
     pub id: i32,
+    pub status: i8,
 }

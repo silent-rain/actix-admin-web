@@ -29,7 +29,7 @@ impl RoleController {
         Response::ok().data_list(results, total)
     }
 
-    /// 角色列表查询
+    /// 获取所有角色列表
     pub async fn list(provider: Data<AProvider>, req: Query<RoleListReq>) -> impl Responder {
         let perm_user_service: RoleService = provider.provide();
         let resp = perm_user_service.list(req.into_inner()).await;
@@ -41,7 +41,7 @@ impl RoleController {
         Response::ok().data_list(results, total)
     }
 
-    /// 角色详情查询
+    /// 获取角色信息
     pub async fn info(provider: Data<AProvider>, params: Query<RoleInfoReq>) -> impl Responder {
         let perm_user_service: RoleService = provider.provide();
         let resp = perm_user_service.info(params.id).await;
@@ -54,7 +54,7 @@ impl RoleController {
         Response::ok().data(result)
     }
 
-    /// 添加角色信息
+    /// 添加角色
     pub async fn add(provider: Data<AProvider>, data: Json<AddRoleReq>) -> impl Responder {
         let perm_user_service: RoleService = provider.provide();
         let resp = perm_user_service.add(data.into_inner()).await;

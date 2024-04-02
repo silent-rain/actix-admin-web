@@ -17,7 +17,7 @@ use actix_web::{web::Data, Responder};
 pub struct UserRoleRelController;
 
 impl UserRoleRelController {
-    /// 角色列表查询
+    /// 获取用户角色关联列表
     pub async fn list(
         provider: Data<AProvider>,
         req: Query<GetUserRoleRelListReq>,
@@ -32,7 +32,7 @@ impl UserRoleRelController {
         Response::ok().data_list(results, total)
     }
 
-    /// 添加角色信息
+    /// 创建用户角色关联
     pub async fn add(provider: Data<AProvider>, data: Json<AddUserRoleRelReq>) -> impl Responder {
         let data = data.into_inner();
         let perm_user_service: UserRoleRelService = provider.provide();
@@ -46,7 +46,7 @@ impl UserRoleRelController {
         Response::ok().data(result)
     }
 
-    /// 删除关联关系
+    /// 删除指定的用户角色关联
     pub async fn delete(
         provider: Data<AProvider>,
         req: Query<DeleteUserRoleRelReq>,

@@ -9,13 +9,13 @@ pub struct RoleRouter;
 
 impl RoleRouter {
     /// 注册角色管理路由
-    pub fn register() -> Scope {
-        web::scope("/role")
+    pub fn admin_register() -> Scope {
+        web::scope("/roles")
+            // TODO /roles?all=true
             .route("/all", web::get().to(RoleController::all))
-            .route("/list", web::get().to(RoleController::list))
-            .route("", web::get().to(RoleController::info))
+            .route("", web::get().to(RoleController::list))
+            .route("/{id}", web::get().to(RoleController::info))
             .route("", web::post().to(RoleController::add))
-            .route("", web::delete().to(RoleController::delete))
-            .route("/role_list", web::get().to(RoleController::role_list))
+            .route("/{id}", web::delete().to(RoleController::delete))
     }
 }

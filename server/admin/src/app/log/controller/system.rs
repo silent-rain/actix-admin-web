@@ -20,7 +20,7 @@ use actix_web::{
 pub struct LogSystemController;
 
 impl LogSystemController {
-    /// 系统日志列表查询
+    /// 获取系统日志列表
     pub async fn list(provider: Data<AProvider>, req: Query<LogSystemListReq>) -> impl Responder {
         let log_system_service: LogSystemService = provider.provide();
         let resp = log_system_service.list(req.into_inner()).await;
@@ -32,7 +32,7 @@ impl LogSystemController {
         Response::ok().data_list(results, total)
     }
 
-    /// 系统日志详情查询
+    /// 获取系统日志的详细信息
     pub async fn info(
         provider: Data<AProvider>,
         params: Query<LogSystemInfoReq>,
@@ -47,7 +47,7 @@ impl LogSystemController {
         Response::ok().data(result)
     }
 
-    /// 添加系统日志
+    /// 添加新的系统日志
     pub async fn add(provider: Data<AProvider>, data: Json<system::Model>) -> impl Responder {
         let data = data.into_inner();
         let log_system_service: LogSystemService = provider.provide();

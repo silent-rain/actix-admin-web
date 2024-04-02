@@ -1,6 +1,6 @@
 //! 用户管理
 
-use crate::app::perm::UserController;
+use crate::app::perm::{RoleController, UserController};
 
 use actix_web::{web, Scope};
 
@@ -9,11 +9,13 @@ pub struct UserRouter;
 
 impl UserRouter {
     /// 注册用户管理路由
-    pub fn register() -> Scope {
-        web::scope("/user")
-            .route("/list", web::get().to(UserController::list))
-            .route("", web::get().to(UserController::info))
+    pub fn admin_register() -> Scope {
+        web::scope("/users")
+            .route("", web::get().to(UserController::list))
+            .route("/{id}", web::get().to(UserController::info))
+            // .route("/profile", web::get().to(UserController::profile)) // 获取用户个人信息
             .route("", web::post().to(UserController::add))
-            .route("", web::delete().to(UserController::delete))
+            .route("/{id}", web::delete().to(UserController::delete))
+            .route("/{id}/roles", web::get().to(RoleController::role_list))
     }
 }

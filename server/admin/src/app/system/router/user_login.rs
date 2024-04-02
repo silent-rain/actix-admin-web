@@ -8,19 +8,11 @@ use actix_web::{web, Scope};
 pub struct UserLoginRouter;
 
 impl UserLoginRouter {
-    /// 注册登陆日志管理路由
-    pub fn register() -> Scope {
-        web::scope("/system")
-            // 登陆日志管理
-            .service(
-                web::scope("/user_login")
-                    .route("/list", web::get().to(UserLoginController::list))
-                    .route("", web::get().to(UserLoginController::info))
-                    // .route("", web::post().to(UserLoginController::add))
-                    .route(
-                        "/disbale",
-                        web::put().to(UserLoginController::disbale_status),
-                    ),
-            )
+    /// 注册`登陆日志管理`路由
+    pub fn admin_register() -> Scope {
+        web::scope("/user-logins")
+            .route("", web::get().to(UserLoginController::list))
+            .route("/{id}", web::get().to(UserLoginController::info))
+            .route("/{id}/status", web::put().to(UserLoginController::status))
     }
 }

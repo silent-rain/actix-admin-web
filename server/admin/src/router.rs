@@ -39,16 +39,20 @@ pub fn register() -> impl HttpServiceFactory {
         .service(LoginRouter::register())
         // 注册用户
         .service(RegisterRouter::register())
-        // 用户管理
-        .service(UserRouter::register())
-        // 角色管理
-        .service(RoleRouter::register())
-        // 用户角色关联关系管理
-        .service(UserRoleRelRouter::register())
-        // 验证码管理
-        .service(CaptchaRouter::register())
-        // 系统日志管理
-        .service(SystemRouter::register())
-        // 登陆日志管理
-        .service(UserLoginRouter::register())
+        // 后台管理接口
+        .service(
+            web::scope("/admin")
+                // 用户管理
+                .service(UserRouter::admin_register())
+                // 角色管理
+                .service(RoleRouter::admin_register())
+                // 用户角色关联关系管理
+                .service(UserRoleRelRouter::admin_register())
+                // 验证码管理
+                .service(CaptchaRouter::admin_register())
+                // 系统日志管理
+                .service(SystemRouter::admin_register())
+                // 登陆日志管理
+                .service(UserLoginRouter::admin_register()),
+        )
 }

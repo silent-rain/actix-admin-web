@@ -1,7 +1,7 @@
 //! 系统日志
 use crate::app::system::{
     dao::user_login::UserLoginDao,
-    dto::user_login::{DisableUserLoginReq, UserLoginInfoReq, UserLoginListReq},
+    dto::user_login::{UserLoginInfoReq, UserLoginListReq, UserLoginStatusReq},
 };
 
 use code::Error;
@@ -64,10 +64,10 @@ impl<'a> UserLoginService<'a> {
         Ok(result)
     }
 
-    /// 删除数据
-    pub async fn disbale_status(&self, req: DisableUserLoginReq) -> Result<(), Error> {
+    /// 更新登录日志状态
+    pub async fn status(&self, req: UserLoginStatusReq) -> Result<(), Error> {
         self.user_login_dao
-            .disbale_status(req.id)
+            .status(req.id, req.status)
             .await
             .map_err(|err| Error::DBDeleteError(err.to_string()))?;
         Ok(())
