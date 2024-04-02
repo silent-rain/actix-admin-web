@@ -7,7 +7,7 @@ use entity::{app_template, prelude::AppTemplate};
 
 use nject::injectable;
 use sea_orm::{
-    ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, PaginatorTrait, QueryFilter, QueryOrder,
+    ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, PaginatorTrait, QueryFilter, QueryOrder, Set,
 };
 
 #[injectable]
@@ -68,6 +68,17 @@ impl<'a> AppTemplateDao<'a> {
             .await?;
 
         Ok(result.rows_affected)
+    }
+
+    /// 更新状态
+    pub async fn status(&self, id: i32, status: i8) -> Result<(), DbErr> {
+        let active_model = app_template::ActiveModel {
+            id: Set(id),
+            status: Set(status),
+            ..Default::default()
+        };
+        let _ = active_model.update(self.db.wdb()).await?;
+        Ok(())
     }
 
     /// 删除数据

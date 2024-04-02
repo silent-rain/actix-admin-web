@@ -4,7 +4,8 @@ use crate::{
     app::template::{
         dto::template::{
             AddAppTemplateStatusReq, AppTemplateInfoReq, AppTemplateListReq,
-            BatchDeleteAppTemplateReq, DeleteAppTemplateReq, UpdateAppTemplateStatusReq,
+            BatchDeleteAppTemplateReq, DeleteAppTemplateReq, UpdateAppTemplateReq,
+            UpdateAppTemplateStatusReq,
         },
         service::template::AppTemplateService,
     },
@@ -22,7 +23,7 @@ use actix_web::{
 pub struct AppTemplateController;
 
 impl AppTemplateController {
-    /// 获取所有{{InterfaceName}}数据
+    /// 获取所有{{InterfaceName}}
     pub async fn all(provider: Data<AProvider>) -> impl Responder {
         let perm_user_service: AppTemplateService = provider.provide();
         let resp = perm_user_service.all().await;
@@ -34,7 +35,7 @@ impl AppTemplateController {
         Response::ok().data_list(results, total)
     }
 
-    /// 查询{{InterfaceName}}列表
+    /// 获取所有{{InterfaceName}}
     pub async fn list(provider: Data<AProvider>, req: Query<AppTemplateListReq>) -> impl Responder {
         let app_template_service: AppTemplateService = provider.provide();
         let resp = app_template_service.list(req.into_inner()).await;
@@ -46,7 +47,7 @@ impl AppTemplateController {
         Response::ok().data_list(results, total)
     }
 
-    /// 查询{{InterfaceName}}详情
+    /// 获取单个{{InterfaceName}}信息
     pub async fn info(
         provider: Data<AProvider>,
         params: Query<AppTemplateInfoReq>,
@@ -77,20 +78,31 @@ impl AppTemplateController {
         Response::ok().data(result)
     }
 
-    /// 更新{{InterfaceName}}状态
-    pub async fn update_status(
+    /// 更新{{InterfaceName}}
+    pub async fn update(
         provider: Data<AProvider>,
-        data: Json<UpdateAppTemplateStatusReq>,
+        data: Json<UpdateAppTemplateReq>,
     ) -> impl Responder {
         let app_template_service: AppTemplateService = provider.provide();
-        let resp = app_template_service
-            .update_status(data.id, data.status)
-            .await;
+        let resp = app_template_service.update(data.id, data.status).await;
         let _result = match resp {
             Ok(v) => v,
             Err(err) => return Response::code(err),
         };
 
+        Response::ok().msg("删除成功")
+    }
+
+    /// 更新{{InterfaceName}}状态
+    pub async fn status(
+        provider: Data<AProvider>,
+        data: Json<UpdateAppTemplateStatusReq>,
+    ) -> impl Responder {
+        let app_template_service: AppTemplateService = provider.provide();
+        let resp = app_template_service.status(data.id, data.status).await;
+        if let Err(err) = resp {
+            return Response::code(err);
+        }
         Response::ok().msg("删除成功")
     }
 

@@ -67,8 +67,8 @@ impl<'a> AppTemplateService<'a> {
         Ok(result)
     }
 
-    /// 更新{{InterfaceName}}状态
-    pub async fn update_status(&self, id: i32, status: i8) -> Result<u64, Error> {
+    /// 更新{{InterfaceName}}
+    pub async fn update(&self, id: i32, status: i8) -> Result<u64, Error> {
         let data = app_template::ActiveModel {
             id: Set(id),
             status: Set(status),
@@ -81,6 +81,15 @@ impl<'a> AppTemplateService<'a> {
             .await
             .map_err(|err| Error::DBUpdateError(err.to_string()))?;
         Ok(result)
+    }
+
+    /// 更新{{InterfaceName}}状态
+    pub async fn status(&self, id: i32, status: i8) -> Result<(), Error> {
+        self.app_template_dao
+            .status(id, status)
+            .await
+            .map_err(|err| Error::DBUpdateError(err.to_string()))?;
+        Ok(())
     }
 
     /// 删除{{InterfaceName}}

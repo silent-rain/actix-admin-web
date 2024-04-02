@@ -26,6 +26,13 @@ pub struct AddAppTemplateStatusReq {
     pub status: i8,
 }
 
+/// 更新数据 请求体
+#[derive(Default, Deserialize)]
+pub struct UpdateAppTemplateReq {
+    pub id: i32,
+    pub status: i8,
+}
+
 /// 更新数据状态 请求体
 #[derive(Default, Deserialize)]
 pub struct UpdateAppTemplateStatusReq {
