@@ -24,8 +24,8 @@ const WHITE_LIST: [&str; 5] = [
     "/api/v1/health",
     "/api/v1/login",
     "/api/v1/register",
-    "/api/v1/register/phone",
-    "/api/v1/register/email",
+    "/api/v1/register/by-phone",
+    "/api/v1/register/by-email",
 ];
 
 // There are two steps in middleware processing.
