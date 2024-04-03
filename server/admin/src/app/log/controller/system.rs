@@ -1,10 +1,7 @@
 //! 系统日志
 
 use crate::{
-    app::log::{
-        dto::system::{DeleteLogSystemReq, LogSystemInfoReq, LogSystemListReq},
-        service::system::LogSystemService,
-    },
+    app::log::{dto::system::LogSystemListReq, service::system::LogSystemService},
     inject::AProvider,
 };
 
@@ -12,7 +9,7 @@ use entity::log::system;
 use response::Response;
 
 use actix_web::{
-    web::{Data, Json, Query},
+    web::{Data, Json, Path, Query},
     Responder,
 };
 
@@ -33,12 +30,9 @@ impl LogSystemController {
     }
 
     /// 获取系统日志的详细信息
-    pub async fn info(
-        provider: Data<AProvider>,
-        params: Query<LogSystemInfoReq>,
-    ) -> impl Responder {
+    pub async fn info(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
         let log_system_service: LogSystemService = provider.provide();
-        let resp = log_system_service.info(params.id).await;
+        let resp = log_system_service.info(*id).await;
         let result = match resp {
             Ok(v) => v,
             Err(err) => return Response::code(err),
@@ -61,12 +55,9 @@ impl LogSystemController {
     }
 
     /// 删除系统日志
-    pub async fn delete(
-        provider: Data<AProvider>,
-        params: Query<DeleteLogSystemReq>,
-    ) -> impl Responder {
+    pub async fn delete(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
         let log_system_service: LogSystemService = provider.provide();
-        let resp = log_system_service.delete(params.id).await;
+        let resp = log_system_service.delete(*id).await;
         let _result = match resp {
             Ok(v) => v,
             Err(err) => return Response::code(err),

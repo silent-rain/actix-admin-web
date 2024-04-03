@@ -1,6 +1,6 @@
 //! 用户管理
 
-use crate::app::perm::{RoleController, UserController};
+use crate::app::perm::UserController;
 
 use actix_web::{web, Scope};
 
@@ -16,6 +16,6 @@ impl UserRouter {
             // .route("/profile", web::get().to(UserController::profile)) // 获取用户个人信息
             .route("", web::post().to(UserController::add))
             .route("/{id}", web::delete().to(UserController::delete))
-            .route("/{id}/roles", web::get().to(RoleController::role_list))
+            .route("/{id}/roles", web::get().to(UserController::roles))
     }
 }

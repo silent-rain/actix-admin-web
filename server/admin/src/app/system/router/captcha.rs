@@ -12,9 +12,9 @@ impl CaptchaRouter {
     pub fn admin_register() -> Scope {
         web::scope("/captchas")
             .route("", web::get().to(CaptchaController::list))
-            .route("/{captcha_id}", web::get().to(CaptchaController::info))
+            .route("/{id}", web::get().to(CaptchaController::info))
             .route("", web::get().to(CaptchaController::add))
-            .route("/{captcha_id}", web::delete().to(CaptchaController::delete))
+            .route("/{id}", web::delete().to(CaptchaController::delete))
             .route("/batch", web::delete().to(CaptchaController::batch_delete))
     }
 }

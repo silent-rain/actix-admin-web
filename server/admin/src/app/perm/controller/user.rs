@@ -2,7 +2,7 @@
 
 use crate::{
     app::perm::{
-        dto::user::{AddUserReq, DeleteUserReq, GetUserInfoReq, GetUserListReq},
+        dto::user::{AddUserReq, GetUserListReq},
         service::user::UserService,
     },
     inject::AProvider,
@@ -11,7 +11,10 @@ use crate::{
 use actix_validator::{Json, Query};
 use response::Response;
 
-use actix_web::{web::Data, Responder};
+use actix_web::{
+    web::{Data, Path},
+    Responder,
+};
 
 /// 控制器
 pub struct UserController;
@@ -30,9 +33,9 @@ impl UserController {
     }
 
     /// 获取用户信息
-    pub async fn info(provider: Data<AProvider>, params: Query<GetUserInfoReq>) -> impl Responder {
+    pub async fn info(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
         let perm_user_service: UserService = provider.provide();
-        let resp = perm_user_service.info(params.id).await;
+        let resp = perm_user_service.info(*id).await;
 
         let result = match resp {
             Ok(v) => v,
@@ -56,14 +59,28 @@ impl UserController {
     }
 
     /// 删除用户
-    pub async fn delete(provider: Data<AProvider>, params: Query<DeleteUserReq>) -> impl Responder {
+    pub async fn delete(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
         let perm_user_service: UserService = provider.provide();
-        let resp = perm_user_service.delete(params.id).await;
+        let resp = perm_user_service.delete(*id).await;
         let _result = match resp {
             Ok(v) => v,
             Err(err) => return Response::code(err),
         };
 
         Response::ok().msg("删除成功")
+    }
+}
+
+impl UserController {
+    /// 通过用户ID获取角色列表
+    pub async fn roles(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
+        let perm_user_service: UserService = provider.provide();
+        let resp = perm_user_service.roles(*id).await;
+        let (results, total) = match resp {
+            Ok(v) => v,
+            Err(err) => return Response::code(err),
+        };
+
+        Response::ok().data_list(results, total)
     }
 }

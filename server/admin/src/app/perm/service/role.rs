@@ -1,7 +1,7 @@
 //! 角色管理
 use crate::app::perm::{
     dao::role::RoleDao,
-    dto::role::{AddRoleReq, RoleListReq, UserRoleListReq},
+    dto::role::{AddRoleReq, RoleListReq},
 };
 
 use code::Error;
@@ -65,20 +65,5 @@ impl<'a> RoleService<'a> {
             .await
             .map_err(|err| Error::DBDeleteError(err.to_string()))?;
         Ok(result)
-    }
-}
-
-impl<'a> RoleService<'a> {
-    /// 通过用户ID获取角色列表
-    pub async fn role_list(
-        &self,
-        req: UserRoleListReq,
-    ) -> Result<(Vec<perm_role::Model>, u64), Error> {
-        let (results, total) = self
-            .role_dao
-            .role_list(req.user_id)
-            .await
-            .map_err(|err| Error::DbQueryError(err.to_string()))?;
-        Ok((results, total))
     }
 }

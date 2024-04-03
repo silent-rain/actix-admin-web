@@ -2,10 +2,7 @@
 use crate::app::perm::dto::role::{AddRoleReq, RoleListReq};
 
 use database::{DbRepo, Pagination};
-use entity::{
-    perm_role, perm_user_role_rel,
-    prelude::{PermRole, PermUserRoleRel},
-};
+use entity::{perm_role, prelude::PermRole};
 use nject::injectable;
 
 use sea_orm::{
@@ -79,43 +76,5 @@ impl<'a> RoleDao<'a> {
     pub async fn delete(&self, id: i32) -> Result<u64, DbErr> {
         let result = PermRole::delete_by_id(id).exec(self.db.wdb()).await?;
         Ok(result.rows_affected)
-    }
-}
-
-impl<'a> RoleDao<'a> {
-    /// 通过用户ID获取角色列表
-    pub async fn role_list(&self, user_id: i32) -> Result<(Vec<perm_role::Model>, u64), DbErr> {
-        let results = PermRole::find()
-            .left_join(PermUserRoleRel)
-            .filter(perm_user_role_rel::Column::UserId.eq(user_id))
-            .order_by_asc(perm_role::Column::Id)
-            .all(self.db.rdb())
-            .await?;
-        let total = results.len() as u64;
-
-        Ok((results, total))
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use sea_orm::{DbBackend, QuerySelect, QueryTrait};
-
-    use super::*;
-
-    #[test]
-    fn test_role_list() {
-        let result = PermRole::find()
-            .select_only()
-            .columns([perm_role::Column::Id])
-            .left_join(PermUserRoleRel)
-            .filter(perm_user_role_rel::Column::UserId.eq(10))
-            .order_by_asc(perm_role::Column::Id)
-            .build(DbBackend::Postgres)
-            .to_string();
-
-        let sql = r#"SELECT "perm_role"."id" FROM "perm_role" LEFT JOIN "perm_user_role_rel" ON "perm_role"."id" = "perm_user_role_rel"."role_id" WHERE "perm_user_role_rel"."user_id" = 10 ORDER BY "perm_role"."id" ASC"#;
-
-        assert_eq!(result, sql);
     }
 }

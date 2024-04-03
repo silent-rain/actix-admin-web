@@ -13,6 +13,9 @@ impl UserRoleRelRouter {
         web::scope("/user-role-rels")
             .route("/", web::get().to(UserRoleRelController::list))
             .route("", web::post().to(UserRoleRelController::add))
-            .route("/{id}", web::delete().to(UserRoleRelController::delete))
+            .route(
+                "/{user_id}",
+                web::delete().to(UserRoleRelController::delete),
+            )
     }
 }

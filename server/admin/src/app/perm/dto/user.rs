@@ -12,12 +12,6 @@ pub struct GetUserListReq {
     pub page_size: u64,
 }
 
-/// 通过 ID 查询用户详情信息
-#[derive(Default, Deserialize, Validate)]
-pub struct GetUserInfoReq {
-    pub id: i32,
-}
-
 /// 添加用户
 #[derive(Serialize, Deserialize, Validate)]
 pub struct AddUserReq {
@@ -36,10 +30,4 @@ pub struct AddUserReq {
     pub password: String,
     pub password2: String,
     pub avatar: Option<String>,
-}
-
-/// 删除用户
-#[derive(Default, Deserialize, Validate)]
-pub struct DeleteUserReq {
-    pub id: i32,
 }

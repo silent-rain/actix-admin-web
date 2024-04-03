@@ -1,7 +1,7 @@
 //! 用户角色关联关系管理
 use crate::app::perm::{
     dao::user_role_rel::UserRoleRelDao,
-    dto::user_role_rel::{AddUserRoleRelReq, DeleteUserRoleRelReq, GetUserRoleRelListReq},
+    dto::user_role_rel::{AddUserRoleRelReq, GetUserRoleRelListReq},
 };
 
 use code::Error;
@@ -40,10 +40,10 @@ impl<'a> UserRoleRelService<'a> {
     }
 
     /// 删除数据
-    pub async fn delete(&self, req: DeleteUserRoleRelReq) -> Result<u64, Error> {
+    pub async fn delete(&self, user_id: i32) -> Result<u64, Error> {
         let result = self
             .user_role_rel_dao
-            .delete_by_user_id(req.user_id)
+            .delete_by_user_id(user_id)
             .await
             .map_err(|err| Error::DBDeleteError(err.to_string()))?;
         Ok(result)

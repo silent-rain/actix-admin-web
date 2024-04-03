@@ -145,7 +145,7 @@ impl RegisterController {
         captcha: String,
     ) -> Result<(), Response> {
         let captcha_service: CaptchaService = provider.provide();
-        let captcha_m = captcha_service.info(captcha_id).await;
+        let captcha_m = captcha_service.info_by_captcha_id(captcha_id).await;
         let captcha_m = match captcha_m {
             Ok(v) => v,
             Err(err) => match err {

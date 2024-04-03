@@ -4,8 +4,7 @@ use crate::{
     app::template::{
         dto::template::{
             AddAppTemplateStatusReq, AppTemplateInfoReq, AppTemplateListReq,
-            BatchDeleteAppTemplateReq, DeleteAppTemplateReq, UpdateAppTemplateReq,
-            UpdateAppTemplateStatusReq,
+            BatchDeleteAppTemplateReq, UpdateAppTemplateReq, UpdateAppTemplateStatusReq,
         },
         service::template::AppTemplateService,
     },
@@ -15,7 +14,7 @@ use crate::{
 use response::Response;
 
 use actix_web::{
-    web::{Data, Json, Query},
+    web::{Data, Json, Path, Query},
     Responder,
 };
 
@@ -107,12 +106,9 @@ impl AppTemplateController {
     }
 
     /// 删除{{InterfaceName}}
-    pub async fn delete(
-        provider: Data<AProvider>,
-        params: Query<DeleteAppTemplateReq>,
-    ) -> impl Responder {
+    pub async fn delete(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
         let app_template_service: AppTemplateService = provider.provide();
-        let resp = app_template_service.delete(params.id).await;
+        let resp = app_template_service.delete(*id).await;
         let _result = match resp {
             Ok(v) => v,
             Err(err) => return Response::code(err),

@@ -5,7 +5,7 @@ use crate::app::perm::{
 };
 
 use code::Error;
-use entity::perm_user;
+use entity::{perm_role, perm_user};
 
 use nject::injectable;
 use sea_orm::Set;
@@ -142,5 +142,17 @@ impl<'a> UserService<'a> {
             .map_err(|err| Error::DBUpdateError(err.to_string()))?;
 
         Ok(())
+    }
+}
+
+impl<'a> UserService<'a> {
+    /// 通过用户ID获取角色列表
+    pub async fn roles(&self, user_id: i32) -> Result<(Vec<perm_role::Model>, u64), Error> {
+        let (results, total) = self
+            .user_dao
+            .roles(user_id)
+            .await
+            .map_err(|err| Error::DbQueryError(err.to_string()))?;
+        Ok((results, total))
     }
 }

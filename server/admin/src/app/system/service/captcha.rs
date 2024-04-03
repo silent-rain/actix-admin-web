@@ -25,10 +25,24 @@ impl<'a> CaptchaService<'a> {
     }
 
     /// 获取详情数据
-    pub async fn info(&self, captcha_id: String) -> Result<sys_captcha::Model, Error> {
+    pub async fn info(&self, id: i32) -> Result<sys_captcha::Model, Error> {
         let result = self
             .captcha_dao
-            .info(captcha_id)
+            .info(id)
+            .await
+            .map_err(|err| Error::DbQueryError(err.to_string()))?
+            .ok_or(Error::DbQueryEmptyError)?;
+        Ok(result)
+    }
+
+    /// 通过captcha_id获取详情信息
+    pub async fn info_by_captcha_id(
+        &self,
+        captcha_id: String,
+    ) -> Result<sys_captcha::Model, Error> {
+        let result = self
+            .captcha_dao
+            .info_by_captcha_id(captcha_id)
             .await
             .map_err(|err| Error::DbQueryError(err.to_string()))?
             .ok_or(Error::DbQueryEmptyError)?;

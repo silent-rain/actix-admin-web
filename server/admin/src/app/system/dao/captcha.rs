@@ -31,7 +31,18 @@ impl<'a> CaptchaDao<'a> {
     }
 
     /// 获取详情信息
-    pub async fn info(&self, captcha_id: String) -> Result<Option<sys_captcha::Model>, DbErr> {
+    pub async fn info(&self, id: i32) -> Result<Option<sys_captcha::Model>, DbErr> {
+        SysCaptcha::find()
+            .filter(sys_captcha::Column::Id.eq(id))
+            .one(self.db.rdb())
+            .await
+    }
+
+    /// 通过captcha_id获取详情信息
+    pub async fn info_by_captcha_id(
+        &self,
+        captcha_id: String,
+    ) -> Result<Option<sys_captcha::Model>, DbErr> {
         SysCaptcha::find()
             .filter(sys_captcha::Column::CaptchaId.eq(captcha_id))
             .one(self.db.rdb())

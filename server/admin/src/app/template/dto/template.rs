@@ -40,12 +40,6 @@ pub struct UpdateAppTemplateStatusReq {
     pub status: i8,
 }
 
-/// 删除数据 请求体
-#[derive(Default, Deserialize)]
-pub struct DeleteAppTemplateReq {
-    pub id: i32,
-}
-
 /// 批量删除数据 请求体
 #[derive(Default, Deserialize, Validate)]
 pub struct BatchDeleteAppTemplateReq {

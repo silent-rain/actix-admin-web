@@ -23,9 +23,3 @@ pub struct AddUserRoleRelReq {
     pub user_id: i32,
     pub role_id: i32,
 }
-
-/// 删除用户与角色关联关系请求体
-#[derive(Default, Deserialize, Validate)]
-pub struct DeleteUserRoleRelReq {
-    pub user_id: i32,
-}

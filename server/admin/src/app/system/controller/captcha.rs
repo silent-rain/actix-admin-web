@@ -2,9 +2,7 @@
 
 use crate::{
     app::system::{
-        dto::captcha::{
-            AddCaptchaResp, BatchDeleteCaptchaReq, CaptchaInfoReq, CaptchaListReq, DeleteCaptchaReq,
-        },
+        dto::captcha::{AddCaptchaResp, BatchDeleteCaptchaReq, CaptchaListReq},
         service::captcha::CaptchaService,
     },
     config::AppConfig,
@@ -12,6 +10,7 @@ use crate::{
 };
 
 use actix_validator::{Json, Query};
+use actix_web::web::Path;
 use entity::sys_captcha;
 use response::Response;
 use utils::captcha::generate_captcha;
@@ -36,9 +35,27 @@ impl CaptchaController {
     }
 
     /// 获取验证码信息
-    pub async fn info(provider: Data<AProvider>, params: Query<CaptchaInfoReq>) -> impl Responder {
+    pub async fn info(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
         let captcha_service: CaptchaService = provider.provide();
-        let resp = captcha_service.info(params.captcha_id.clone()).await;
+        let resp = captcha_service.info(*id).await;
+
+        let result = match resp {
+            Ok(v) => v,
+            Err(err) => return Response::code(err),
+        };
+
+        Response::ok().data(result)
+    }
+
+    /// 获取验证码信息
+    pub async fn info_by_captcha_id(
+        provider: Data<AProvider>,
+        captcha_id: Path<String>,
+    ) -> impl Responder {
+        let captcha_service: CaptchaService = provider.provide();
+        let resp = captcha_service
+            .info_by_captcha_id(captcha_id.to_string())
+            .await;
 
         let result = match resp {
             Ok(v) => v,
@@ -84,9 +101,9 @@ impl CaptchaController {
     }
 
     /// 删除验证码
-    pub async fn delete(provider: Data<AProvider>, data: Json<DeleteCaptchaReq>) -> impl Responder {
+    pub async fn delete(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
         let captcha_service: CaptchaService = provider.provide();
-        let resp = captcha_service.delete(data.id).await;
+        let resp = captcha_service.delete(*id).await;
         let _result = match resp {
             Ok(v) => v,
             Err(err) => return Response::code(err),

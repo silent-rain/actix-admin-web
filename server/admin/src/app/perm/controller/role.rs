@@ -2,7 +2,7 @@
 
 use crate::{
     app::perm::{
-        dto::role::{AddRoleReq, DeleteRoleReq, RoleInfoReq, RoleListReq, UserRoleListReq},
+        dto::role::{AddRoleReq, RoleListReq},
         service::role::RoleService,
     },
     inject::AProvider,
@@ -11,7 +11,10 @@ use crate::{
 use actix_validator::{Json, Query};
 use response::Response;
 
-use actix_web::{web::Data, Responder};
+use actix_web::{
+    web::{Data, Path},
+    Responder,
+};
 
 /// 控制器
 pub struct RoleController;
@@ -42,9 +45,9 @@ impl RoleController {
     }
 
     /// 获取角色信息
-    pub async fn info(provider: Data<AProvider>, params: Query<RoleInfoReq>) -> impl Responder {
+    pub async fn info(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
         let perm_user_service: RoleService = provider.provide();
-        let resp = perm_user_service.info(params.id).await;
+        let resp = perm_user_service.info(*id).await;
 
         let result = match resp {
             Ok(v) => v,
@@ -68,31 +71,14 @@ impl RoleController {
     }
 
     /// 删除角色
-    pub async fn delete(provider: Data<AProvider>, params: Query<DeleteRoleReq>) -> impl Responder {
+    pub async fn delete(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
         let perm_user_service: RoleService = provider.provide();
-        let resp = perm_user_service.delete(params.id).await;
+        let resp = perm_user_service.delete(*id).await;
         let _result = match resp {
             Ok(v) => v,
             Err(err) => return Response::code(err),
         };
 
         Response::ok().msg("删除成功")
-    }
-}
-
-impl RoleController {
-    /// 通过用户ID获取角色列表
-    pub async fn role_list(
-        provider: Data<AProvider>,
-        req: Query<UserRoleListReq>,
-    ) -> impl Responder {
-        let perm_user_service: RoleService = provider.provide();
-        let resp = perm_user_service.role_list(req.into_inner()).await;
-        let (results, total) = match resp {
-            Ok(v) => v,
-            Err(err) => return Response::code(err),
-        };
-
-        Response::ok().data_list(results, total)
     }
 }
