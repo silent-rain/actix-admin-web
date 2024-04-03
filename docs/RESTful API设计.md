@@ -32,3 +32,41 @@
 - 查（Read）：通常使用 get、fetch、find 或 query 作为前缀，如 GetUser、FetchUserDetails、FindUsers 或 QueryUserPermissions。
   - 结合 RESTful API 设计和 Rust 的命名规范，对于表示获取资源列表的请求，您可以使用复数形式，如 GetUsersReq 或 UsersReq，这样既符合 RESTful 的习惯，也清晰地传达了这是一个获取多个用户的请求。
   - 如果您的项目中通常使用 List 来表示集合，那么 GetUserListReq 可能更合适；如果您倾向于使用复数形式来表示集合，那么 GetUsersReq 可能是更好的选择。
+
+## 常用命名参考
+
+### 获取验证码
+
+- 路由命名
+  - 通过 ID 获取验证码： GET /captchas/{id}
+  - 通过 Captcha ID 获取验证码： GET /captchas/by-captcha-id/{captcha_id}
+- 接口命名
+  - 通过 ID 获取验证码： info
+  - 通过 Captcha ID 获取验证码：get_captcha_by_captcha_id
+- 请求参数结构体定义
+  - 通过 ID 获取验证码： 路径匹配
+  - 通过 Captcha ID 获取验证码：路径匹配
+
+### 获取用户详情
+
+- 路由命名
+  - 通过 ID 获取用户详情： GET /users/{id}
+  - 通过 ID 获取用户手机号码： GET /users/{id}/phone
+  - 获取用户列表： GET /users?all=true
+  - 添加用户： POST /users
+  - 删除用户： DELETE /users/{id}
+  - 更新用户： PUT /users
+- 接口命名
+  - 通过 ID 获取用户详情： info
+  - 通过 ID 获取用户手机号码： get_phone/get_user_phone
+  - 获取用户列表：list
+  - 添加用户： add_user
+  - 删除用户： delete_user/del_user
+  - 更新用户： update_user
+- 请求参数结构体定义
+  - 通过 ID 获取用户详情： 路径匹配请求参数
+  - 通过 ID 获取用户手机号码：路径匹配请求参数 -> GetUserPhoneRsp
+  - 获取用户列表：GetUsersReq/GetUserListReq -> GetUsersRsp/GetUserListRsp
+  - 添加用户： AddUserReq
+  - 删除用户：路径匹配请求参数
+  - 更新用户：UpdateUserReq
