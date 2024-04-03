@@ -12,7 +12,7 @@ impl RoleRouter {
     pub fn admin_register() -> Scope {
         web::scope("/roles")
             // TODO /roles?all=true
-            .route("/all", web::get().to(RoleController::all))
+            // .route("/all", web::get().to(RoleController::all))
             .route("", web::get().to(RoleController::list))
             .route("/{id}", web::get().to(RoleController::info))
             .route("", web::post().to(RoleController::add))

@@ -20,7 +20,7 @@ impl AppTemplateRouter {
             .route("/{id}/status", web::put().to(AppTemplateController::status))
             .route("/{id}", web::delete().to(AppTemplateController::delete))
             .route(
-                "/{id}/batch",
+                "/batch",
                 web::delete().to(AppTemplateController::batch_delete),
             )
     }
