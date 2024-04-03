@@ -4,11 +4,11 @@ use std::sync::Arc;
 mod asset;
 mod config;
 mod constant;
-pub mod inject;
 mod middleware;
 mod server;
 mod state;
 
+mod inject;
 pub mod app;
 pub mod router;
 
