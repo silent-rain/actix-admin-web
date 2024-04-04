@@ -3,8 +3,8 @@
 use crate::{
     app::template::{
         dto::template::{
-            AddAppTemplateStatusReq, AppTemplateInfoReq, AppTemplateListReq,
-            BatchDeleteAppTemplateReq, UpdateAppTemplateReq, UpdateAppTemplateStatusReq,
+            AddAppTemplateReq, AppTemplateInfoReq, AppTemplateListReq, BatchDeleteAppTemplateReq,
+            UpdateAppTemplateReq, UpdateAppTemplateStatusReq,
         },
         service::template::AppTemplateService,
     },
@@ -56,10 +56,7 @@ impl AppTemplateController {
     }
 
     /// 添加{{InterfaceName}}
-    pub async fn add(
-        provider: Data<AProvider>,
-        data: Json<AddAppTemplateStatusReq>,
-    ) -> impl Responder {
+    pub async fn add(provider: Data<AProvider>, data: Json<AddAppTemplateReq>) -> impl Responder {
         let data = data.into_inner();
         let app_template_service: AppTemplateService = provider.provide();
         let resp = app_template_service.add(data).await;
