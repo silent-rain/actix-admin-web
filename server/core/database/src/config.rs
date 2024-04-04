@@ -25,12 +25,12 @@ pub struct DbOptions {
 impl Default for DbOptions {
     fn default() -> Self {
         Self {
-            max_connections: 20,
-            min_connections: 10,
-            connect_timeout: 60,
-            acquire_timeout: 60,
-            idle_timeout: 60,
-            max_lifetime: 60,
+            max_connections: 8,
+            min_connections: 5,
+            connect_timeout: 10,
+            acquire_timeout: 10,
+            idle_timeout: 10,
+            max_lifetime: 10,
             logging_enable: true,
             logging_level: Level::Info,
         }

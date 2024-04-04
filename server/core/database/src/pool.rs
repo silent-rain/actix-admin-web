@@ -55,7 +55,7 @@ impl Pool {
             .map_err(|err| Error::DbConnectionAcquire(err.to_string()))?;
 
         // 设置 Time Zone
-        // Self::set_time_zone(&db).await?;
+        Self::set_time_zone(&db).await?;
 
         Ok(db)
     }
