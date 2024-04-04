@@ -15,6 +15,7 @@ impl UserRouter {
             .route("/{id}", web::get().to(UserController::info))
             // .route("/profile", web::get().to(UserController::profile)) // 获取用户个人信息
             .route("", web::post().to(UserController::add))
+            .route("/{id}", web::put().to(UserController::update))
             .route("/{id}", web::delete().to(UserController::delete))
             .route("/{id}/roles", web::get().to(UserController::roles))
     }

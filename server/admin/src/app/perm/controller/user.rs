@@ -2,7 +2,7 @@
 
 use crate::{
     app::perm::{
-        dto::user::{AddUserReq, GetUserListReq},
+        dto::user::{AddUserReq, GetUserListReq, UpdateUserReq},
         service::user::UserService,
     },
     inject::AProvider,
@@ -45,6 +45,21 @@ impl UserController {
         let perm_user_service: UserService = provider.provide();
 
         let resp = perm_user_service.add(data.into_inner()).await;
+        match resp {
+            Ok(_v) => Response::ok(),
+            Err(err) => Response::code(err),
+        }
+    }
+
+    /// 更新用户
+    pub async fn update(
+        provider: Data<AProvider>,
+        id: Path<i32>,
+        data: Json<UpdateUserReq>,
+    ) -> impl Responder {
+        let perm_user_service: UserService = provider.provide();
+
+        let resp = perm_user_service.update(*id, data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::code(err),

@@ -16,7 +16,7 @@ impl AppTemplateRouter {
             .route("", web::get().to(AppTemplateController::list))
             .route("/{id}", web::get().to(AppTemplateController::info))
             .route("", web::post().to(AppTemplateController::add))
-            .route("", web::put().to(AppTemplateController::update))
+            .route("/{id}", web::put().to(AppTemplateController::update))
             .route("/{id}/status", web::put().to(AppTemplateController::status))
             .route("/{id}", web::delete().to(AppTemplateController::delete))
             .route(

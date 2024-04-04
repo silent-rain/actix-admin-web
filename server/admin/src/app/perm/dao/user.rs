@@ -150,15 +150,15 @@ impl<'a> UserDao<'a> {
     /// 更新用户及对应用户的角色
     pub async fn update_user(
         &self,
-        data: perm_user::Model,
+        active_model: perm_user::ActiveModel,
         add_role_ids: Vec<i32>,
         del_role_ids: Vec<i32>,
     ) -> Result<(), DbErr> {
-        let user_id: i32 = data.id;
+        let user_id: i32 = *(active_model.id.clone().as_ref());
         let txn = self.db.wdb().begin().await?;
 
         // 更新用户
-        let _ = self.txn_update_user(&txn, data).await?;
+        let _ = self.txn_update_user(&txn, active_model).await?;
         // 添加批量角色
         let _ = self.txn_add_user_roles(&txn, user_id, add_role_ids).await?;
         // 删除批量角色
@@ -178,18 +178,15 @@ impl<'a> UserDao<'a> {
     }
 
     /// 更新用户
-    /// TODO
     async fn txn_update_user(
         &self,
         txn: &DatabaseTransaction,
-        data: perm_user::Model,
+        active_model: perm_user::ActiveModel,
     ) -> Result<u64, DbErr> {
-        // Into ActiveModel
-        let pear: perm_user::ActiveModel = data.clone().into();
-
+        let id: i32 = *(active_model.id.clone().as_ref());
         let result = PermUser::update_many()
-            .set(pear)
-            .filter(perm_user::Column::Id.eq(data.id))
+            .set(active_model)
+            .filter(perm_user::Column::Id.eq(id))
             .exec(txn)
             .await?;
         Ok(result.rows_affected)
