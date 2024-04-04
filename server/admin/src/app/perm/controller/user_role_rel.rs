@@ -27,12 +27,10 @@ impl UserRoleRelController {
     ) -> impl Responder {
         let perm_user_service: UserRoleRelService = provider.provide();
         let resp = perm_user_service.list(req.into_inner()).await;
-        let (results, total) = match resp {
-            Ok(v) => v,
-            Err(err) => return Response::code(err),
-        };
-
-        Response::ok().data_list(results, total)
+        match resp {
+            Ok((results, total)) => Response::ok().data_list(results, total),
+            Err(err) => Response::code(err),
+        }
     }
 
     /// 创建用户角色关联
@@ -40,24 +38,19 @@ impl UserRoleRelController {
         let data = data.into_inner();
         let perm_user_service: UserRoleRelService = provider.provide();
         let resp = perm_user_service.add(data).await;
-
-        let result = match resp {
-            Ok(v) => v,
-            Err(err) => return Response::code(err),
-        };
-
-        Response::ok().data(result)
+        match resp {
+            Ok(v) => Response::ok().data(v),
+            Err(err) => Response::code(err),
+        }
     }
 
     /// 删除指定的用户角色关联关系
     pub async fn delete(provider: Data<AProvider>, user_id: Path<i32>) -> impl Responder {
         let perm_user_service: UserRoleRelService = provider.provide();
         let resp = perm_user_service.delete(*user_id).await;
-        let _result = match resp {
-            Ok(v) => v,
-            Err(err) => return Response::code(err),
-        };
-
-        Response::ok().msg("删除成功")
+        match resp {
+            Ok(_v) => Response::ok(),
+            Err(err) => Response::code(err),
+        }
     }
 }

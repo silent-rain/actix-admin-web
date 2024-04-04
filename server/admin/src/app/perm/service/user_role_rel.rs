@@ -8,6 +8,8 @@ use code::Error;
 use entity::perm_user_role_rel;
 
 use nject::injectable;
+use sea_orm::Set;
+use tracing::error;
 
 /// 服务
 #[injectable]
@@ -25,17 +27,27 @@ impl<'a> UserRoleRelService<'a> {
             .user_role_rel_dao
             .list(req.user_id)
             .await
-            .map_err(|err| Error::DbQueryError(err.to_string()))?;
+            .map_err(|err| {
+                error!("查询用户与角色关联关系列表失败, err: {:#?}", err);
+                Error::DbQueryError
+            })?;
+
         Ok((results, total))
     }
 
     /// 添加数据
     pub async fn add(&self, req: AddUserRoleRelReq) -> Result<perm_user_role_rel::Model, Error> {
-        let result = self
-            .user_role_rel_dao
-            .add(req.user_id, req.role_id)
-            .await
-            .map_err(|err| Error::DBAddError(err.to_string()))?;
+        let model = perm_user_role_rel::ActiveModel {
+            user_id: Set(req.user_id),
+            role_id: Set(req.role_id),
+            ..Default::default()
+        };
+
+        let result = self.user_role_rel_dao.add(model).await.map_err(|err| {
+            error!("添加用户与角色关联关系列表失败, err: {:#?}", err);
+            Error::DbAddError
+        })?;
+
         Ok(result)
     }
 
@@ -45,7 +57,11 @@ impl<'a> UserRoleRelService<'a> {
             .user_role_rel_dao
             .delete_by_user_id(user_id)
             .await
-            .map_err(|err| Error::DBDeleteError(err.to_string()))?;
+            .map_err(|err| {
+                error!("删除用户与角色关联关系列表失败, err: {:#?}", err);
+                Error::DbDeleteError
+            })?;
+
         Ok(result)
     }
 }

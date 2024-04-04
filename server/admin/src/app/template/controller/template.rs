@@ -26,24 +26,20 @@ impl AppTemplateController {
     pub async fn all(provider: Data<AProvider>) -> impl Responder {
         let perm_user_service: AppTemplateService = provider.provide();
         let resp = perm_user_service.all().await;
-        let (results, total) = match resp {
-            Ok(v) => v,
-            Err(err) => return Response::code(err),
-        };
-
-        Response::ok().data_list(results, total)
+        match resp {
+            Ok((results, total)) => Response::ok().data_list(results, total),
+            Err(err) => Response::code(err),
+        }
     }
 
     /// 获取所有{{InterfaceName}}
     pub async fn list(provider: Data<AProvider>, req: Query<AppTemplateListReq>) -> impl Responder {
         let app_template_service: AppTemplateService = provider.provide();
         let resp = app_template_service.list(req.into_inner()).await;
-        let (results, total) = match resp {
-            Ok(v) => v,
-            Err(err) => return Response::code(err),
-        };
-
-        Response::ok().data_list(results, total)
+        match resp {
+            Ok((results, total)) => Response::ok().data_list(results, total),
+            Err(err) => Response::code(err),
+        }
     }
 
     /// 获取单个{{InterfaceName}}信息
@@ -53,12 +49,10 @@ impl AppTemplateController {
     ) -> impl Responder {
         let app_template_service: AppTemplateService = provider.provide();
         let resp = app_template_service.info(params.id).await;
-        let result = match resp {
-            Ok(v) => v,
-            Err(err) => return Response::code(err),
-        };
-
-        Response::ok().data(result)
+        match resp {
+            Ok(v) => Response::ok().data(v),
+            Err(err) => Response::code(err),
+        }
     }
 
     /// 添加{{InterfaceName}}
@@ -69,12 +63,10 @@ impl AppTemplateController {
         let data = data.into_inner();
         let app_template_service: AppTemplateService = provider.provide();
         let resp = app_template_service.add(data).await;
-        let result = match resp {
-            Ok(v) => v,
-            Err(err) => return Response::code(err),
-        };
-
-        Response::ok().data(result)
+        match resp {
+            Ok(_v) => Response::ok(),
+            Err(err) => Response::code(err),
+        }
     }
 
     /// 更新{{InterfaceName}}
@@ -84,12 +76,10 @@ impl AppTemplateController {
     ) -> impl Responder {
         let app_template_service: AppTemplateService = provider.provide();
         let resp = app_template_service.update(data.id, data.status).await;
-        let _result = match resp {
-            Ok(v) => v,
-            Err(err) => return Response::code(err),
-        };
-
-        Response::ok().msg("删除成功")
+        match resp {
+            Ok(_v) => Response::ok(),
+            Err(err) => Response::code(err),
+        }
     }
 
     /// 更新{{InterfaceName}}状态
@@ -99,22 +89,20 @@ impl AppTemplateController {
     ) -> impl Responder {
         let app_template_service: AppTemplateService = provider.provide();
         let resp = app_template_service.status(data.id, data.status).await;
-        if let Err(err) = resp {
-            return Response::code(err);
+        match resp {
+            Ok(_v) => Response::ok(),
+            Err(err) => Response::code(err),
         }
-        Response::ok().msg("删除成功")
     }
 
     /// 删除{{InterfaceName}}
     pub async fn delete(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
         let app_template_service: AppTemplateService = provider.provide();
         let resp = app_template_service.delete(*id).await;
-        let _result = match resp {
-            Ok(v) => v,
-            Err(err) => return Response::code(err),
-        };
-
-        Response::ok().msg("删除成功")
+        match resp {
+            Ok(_v) => Response::ok(),
+            Err(err) => Response::code(err),
+        }
     }
 
     /// 批量删除{{InterfaceName}}
@@ -124,11 +112,9 @@ impl AppTemplateController {
     ) -> impl Responder {
         let app_template_service: AppTemplateService = provider.provide();
         let resp = app_template_service.batch_delete(data.ids.clone()).await;
-        let _result = match resp {
-            Ok(v) => v,
-            Err(err) => return Response::code(err),
-        };
-
-        Response::ok().msg("删除成功")
+        match resp {
+            Ok(_v) => Response::ok(),
+            Err(err) => Response::code(err),
+        }
     }
 }

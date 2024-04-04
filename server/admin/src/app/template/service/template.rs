@@ -9,6 +9,7 @@ use entity::app_template;
 
 use nject::injectable;
 use sea_orm::Set;
+use tracing::error;
 
 /// 服务
 #[injectable]
@@ -19,11 +20,11 @@ pub struct AppTemplateService<'a> {
 impl<'a> AppTemplateService<'a> {
     /// 获取所有{{InterfaceName}}数据
     pub async fn all(&self) -> Result<(Vec<app_template::Model>, u64), Error> {
-        let (results, total) = self
-            .app_template_dao
-            .all()
-            .await
-            .map_err(|err| Error::DbQueryError(err.to_string()))?;
+        let (results, total) = self.app_template_dao.all().await.map_err(|err| {
+            error!("查询{{InterfaceName}}列表失败, err: {:#?}", err);
+            Error::DbQueryError
+        })?;
+
         Ok((results, total))
     }
 
@@ -32,12 +33,12 @@ impl<'a> AppTemplateService<'a> {
         &self,
         req: AppTemplateListReq,
     ) -> Result<(Vec<app_template::Model>, u64), Error> {
-        let results = self
-            .app_template_dao
-            .list(req)
-            .await
-            .map_err(|err| Error::DbQueryError(err.to_string()))?;
-        Ok(results)
+        let (results, total) = self.app_template_dao.list(req).await.map_err(|err| {
+            error!("查询{{InterfaceName}}列表失败, err: {:#?}", err);
+            Error::DbQueryError
+        })?;
+
+        Ok((results, total))
     }
 
     /// 获取{{InterfaceName}}详情
@@ -46,8 +47,15 @@ impl<'a> AppTemplateService<'a> {
             .app_template_dao
             .info(id)
             .await
-            .map_err(|err| Error::DbQueryError(err.to_string()))?
-            .ok_or(Error::DbQueryEmptyError)?;
+            .map_err(|err| {
+                error!("查询{{InterfaceName}}信息失败, err: {:#?}", err);
+                Error::DbQueryError
+            })?
+            .ok_or_else(|| {
+                error!("{{InterfaceName}}不存在");
+                Error::DbQueryEmptyError
+            })?;
+
         Ok(result)
     }
 
@@ -59,11 +67,11 @@ impl<'a> AppTemplateService<'a> {
             ..Default::default()
         };
 
-        let result = self
-            .app_template_dao
-            .add(data)
-            .await
-            .map_err(|err| Error::DBAddError(err.to_string()))?;
+        let result = self.app_template_dao.add(data).await.map_err(|err| {
+            error!("添加{{InterfaceName}}失败, err: {:#?}", err);
+            Error::DbAddError
+        })?;
+
         Ok(result)
     }
 
@@ -75,11 +83,11 @@ impl<'a> AppTemplateService<'a> {
             ..Default::default()
         };
 
-        let result = self
-            .app_template_dao
-            .update(data)
-            .await
-            .map_err(|err| Error::DBUpdateError(err.to_string()))?;
+        let result = self.app_template_dao.update(data).await.map_err(|err| {
+            error!("更新{{InterfaceName}}失败, err: {:#?}", err);
+            Error::DbUpdateError
+        })?;
+
         Ok(result)
     }
 
@@ -88,17 +96,21 @@ impl<'a> AppTemplateService<'a> {
         self.app_template_dao
             .status(id, status)
             .await
-            .map_err(|err| Error::DBUpdateError(err.to_string()))?;
+            .map_err(|err| {
+                error!("更新{{InterfaceName}}状态失败, err: {:#?}", err);
+                Error::DbUpdateError
+            })?;
+
         Ok(())
     }
 
     /// 删除{{InterfaceName}}
     pub async fn delete(&self, id: i32) -> Result<u64, Error> {
-        let result = self
-            .app_template_dao
-            .delete(id)
-            .await
-            .map_err(|err| Error::DBDeleteError(err.to_string()))?;
+        let result = self.app_template_dao.delete(id).await.map_err(|err| {
+            error!("删除{{InterfaceName}}失败, err: {:#?}", err);
+            Error::DbDeleteError
+        })?;
+
         Ok(result)
     }
 
@@ -108,7 +120,11 @@ impl<'a> AppTemplateService<'a> {
             .app_template_dao
             .batch_delete(ids)
             .await
-            .map_err(|err| Error::DBBatchDeleteError(err.to_string()))?;
+            .map_err(|err| {
+                error!("批量删除{{InterfaceName}}失败, err: {:#?}", err);
+                Error::DbBatchDeleteError
+            })?;
+
         Ok(result)
     }
 }

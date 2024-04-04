@@ -1,5 +1,5 @@
 //! 用户管理
-use crate::app::perm::dto::user::{AddUserReq, GetUserListReq};
+use crate::app::perm::dto::user::GetUserListReq;
 
 use database::{DbRepo, Pagination};
 use entity::{
@@ -8,12 +8,10 @@ use entity::{
 };
 
 use nject::injectable;
-use sea_orm::Condition;
-use sea_orm::Set;
 use sea_orm::{
-    ActiveModelTrait, ColumnTrait, DatabaseTransaction, DbErr, QueryFilter, TransactionTrait,
+    ActiveModelTrait, ColumnTrait, Condition, DatabaseTransaction, DbErr, EntityTrait,
+    PaginatorTrait, QueryFilter, QueryOrder, Set, TransactionTrait,
 };
-use sea_orm::{EntityTrait, PaginatorTrait, QueryOrder};
 
 #[injectable]
 pub struct UserDao<'a> {
@@ -83,22 +81,15 @@ impl<'a> UserDao<'a> {
     }
 
     /// 添加详情信息
-    pub async fn add(&self, data: AddUserReq) -> Result<perm_user::Model, DbErr> {
-        let pear = perm_user::ActiveModel {
-            username: Set(Some(data.username)),
-            gender: Set(data.gender),
-            age: Set(Some(data.age)),
-            phone: Set(Some(data.phone)),
-            password: Set(data.password),
-            status: Set(1),
-            ..Default::default() // all other attributes are `NotSet`
-        };
-
-        pear.insert(self.db.wdb()).await
+    pub async fn add(
+        &self,
+        active_model: perm_user::ActiveModel,
+    ) -> Result<perm_user::Model, DbErr> {
+        active_model.insert(self.db.wdb()).await
     }
 
     /// 更新信息
-    pub async fn update(&self, data: perm_user::Model) -> Result<u64, DbErr> {
+    pub async fn update(&self, active_model: perm_user::ActiveModel) -> Result<u64, DbErr> {
         // let pear = perm_user::ActiveModel {
         //     nickname: Set(data.nickname),
         //     gender: Set(data.gender),
@@ -109,12 +100,10 @@ impl<'a> UserDao<'a> {
         //     ..Default::default()
         // };
 
-        // Into ActiveModel
-        let pear: perm_user::ActiveModel = data.clone().into();
-
+        let id: i32 = *(active_model.id.clone().as_ref());
         let result = PermUser::update_many()
-            .set(pear)
-            .filter(perm_user::Column::Id.eq(data.id))
+            .set(active_model)
+            .filter(perm_user::Column::Id.eq(id))
             .exec(self.db.wdb())
             .await?;
 
@@ -189,6 +178,7 @@ impl<'a> UserDao<'a> {
     }
 
     /// 更新用户
+    /// TODO
     async fn txn_update_user(
         &self,
         txn: &DatabaseTransaction,

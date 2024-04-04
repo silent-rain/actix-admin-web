@@ -1,11 +1,21 @@
 //! 验证码
 
-use crate::app::system::{dao::captcha::CaptchaDao, dto::captcha::CaptchaListReq};
+use crate::{
+    app::system::{
+        dao::captcha::CaptchaDao,
+        dto::captcha::{AddCaptchaResp, CaptchaListReq},
+    },
+    config::server::Captcha as CaptchaConfig,
+};
 
 use code::Error;
 use entity::sys_captcha;
+use utils::captcha::generate_captcha;
 
 use nject::injectable;
+use sea_orm::Set;
+use tracing::error;
+use uuid::Uuid;
 
 /// 服务
 #[injectable]
@@ -16,11 +26,11 @@ pub struct CaptchaService<'a> {
 impl<'a> CaptchaService<'a> {
     /// 获取列表数据
     pub async fn list(&self, req: CaptchaListReq) -> Result<(Vec<sys_captcha::Model>, u64), Error> {
-        let (results, total) = self
-            .captcha_dao
-            .list(req)
-            .await
-            .map_err(|err| Error::DbQueryError(err.to_string()))?;
+        let (results, total) = self.captcha_dao.list(req).await.map_err(|err| {
+            error!("查询验证码列表失败, err: {:#?}", err);
+            Error::DbQueryError
+        })?;
+
         Ok((results, total))
     }
 
@@ -30,8 +40,15 @@ impl<'a> CaptchaService<'a> {
             .captcha_dao
             .info(id)
             .await
-            .map_err(|err| Error::DbQueryError(err.to_string()))?
-            .ok_or(Error::DbQueryEmptyError)?;
+            .map_err(|err| {
+                error!("查询验证码信息失败, err: {:#?}", err);
+                Error::DbQueryError
+            })?
+            .ok_or_else(|| {
+                error!("验证码不存在");
+                Error::DbQueryEmptyError
+            })?;
+
         Ok(result)
     }
 
@@ -44,38 +61,64 @@ impl<'a> CaptchaService<'a> {
             .captcha_dao
             .info_by_captcha_id(captcha_id)
             .await
-            .map_err(|err| Error::DbQueryError(err.to_string()))?
-            .ok_or(Error::DbQueryEmptyError)?;
+            .map_err(|err| {
+                error!("查询验证码信息失败, err: {:#?}", err);
+                Error::DbQueryError
+            })?
+            .ok_or_else(|| {
+                error!("验证码不存在");
+                Error::DbQueryEmptyError
+            })?;
+
         Ok(result)
     }
 
     /// 添加数据
-    pub async fn add(&self, data: sys_captcha::Model) -> Result<sys_captcha::Model, Error> {
-        let result = self
-            .captcha_dao
-            .add(data)
-            .await
-            .map_err(|err| Error::DBAddError(err.to_string()))?;
+    pub async fn add(&self, conf: CaptchaConfig) -> Result<AddCaptchaResp, Error> {
+        // 生成验证码
+        let (captcha, base_img) = generate_captcha();
+        let captcha_id = Uuid::new_v4().to_string();
+        let expire = conf.expire;
+
+        let model = sys_captcha::ActiveModel {
+            captcha_id: Set(captcha_id),
+            captcha: Set(captcha),
+            base_img: Set(base_img.clone().into_bytes()),
+            expire: Set(expire),
+            ..Default::default()
+        };
+        let result = self.captcha_dao.add(model).await.map_err(|err| {
+            error!("添加验证码信息失败, err: {:#?}", err);
+            Error::DbAddError
+        })?;
+
+        let result = AddCaptchaResp {
+            captcha_id: result.captcha_id,
+            base_img,
+            expire: result.expire,
+            created_at: result.created_at,
+        };
+
         Ok(result)
     }
 
     /// 删除数据
     pub async fn delete(&self, id: i32) -> Result<u64, Error> {
-        let result = self
-            .captcha_dao
-            .delete(id)
-            .await
-            .map_err(|err| Error::DBDeleteError(err.to_string()))?;
+        let result = self.captcha_dao.delete(id).await.map_err(|err| {
+            error!("删除验证码信息失败, err: {:#?}", err);
+            Error::DbDeleteError
+        })?;
+
         Ok(result)
     }
 
     /// 批量删除
     pub async fn batch_delete(&self, ids: Vec<i32>) -> Result<u64, Error> {
-        let result = self
-            .captcha_dao
-            .batch_delete(ids)
-            .await
-            .map_err(|err| Error::DBBatchDeleteError(err.to_string()))?;
+        let result = self.captcha_dao.batch_delete(ids).await.map_err(|err| {
+            error!("批量删除验证码信息失败, err: {:#?}", err);
+            Error::DbBatchDeleteError
+        })?;
+
         Ok(result)
     }
 }

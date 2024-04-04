@@ -58,24 +58,24 @@ pub enum Error {
     DbConnectionAcquire(String) = 10202,
     #[error("数据库关闭失败")]
     DbCloseError = 10203,
-    #[error("查询数据失败, err: {0}")]
-    DbQueryError(String) = 10204,
+    #[error("查询数据失败")]
+    DbQueryError = 10204,
     #[error("未查到数据")]
     DbQueryEmptyError = 10205,
-    #[error("添加数据失败, err: {0}")]
-    DBAddError(String) = 10206,
-    #[error("更新数据失败, err: {0}")]
-    DBUpdateError(String) = 10207,
-    #[error("删除数据失败, err: {0}")]
-    DBDeleteError(String) = 10208,
-    #[error("批量删除数据失败, err: {0}")]
-    DBBatchDeleteError(String) = 10209,
+    #[error("添加数据失败")]
+    DbAddError = 10206,
+    #[error("更新数据失败")]
+    DbUpdateError = 10207,
+    #[error("删除数据失败")]
+    DbDeleteError = 10208,
+    #[error("批量删除数据失败")]
+    DbBatchDeleteError = 10209,
     #[error("更新数据状态失败")]
-    DBUpdateStatusError = 10210,
+    DbUpdateStatusError = 10210,
     #[error("数据已存在")]
-    DBDataExistError = 10211,
+    DbDataExistError = 10211,
     #[error("数据已存在子项")]
-    DBDataExistChildrenError = 10212,
+    DbDataExistChildrenError = 10212,
 
     // 鉴权
     #[error("未知的验证码")]
@@ -86,8 +86,8 @@ pub enum Error {
     CaptchaInvalid = 10253,
     #[error("账号或密码错误")]
     LoginPasswordError = 10254,
-    #[error("获取密匙异常, err: {0}")]
-    TokenEncode(String) = 10255,
+    #[error("获取密匙异常")]
+    TokenEncode = 10255,
     #[error("解析密匙异常, err: {0}")]
     TokenDecode(String) = 10256,
     #[error("非法请求")]
@@ -176,6 +176,8 @@ mod tests {
     fn test_error_msg() {
         let err = Error::AssetReadError;
         println!("== {}", err);
+        println!("== {:?}", err);
+        println!("== {:#?}", err);
         assert!(err.to_string() == "内置资源读取失败");
         assert!(err.msg() == "内置资源读取失败");
     }

@@ -6,7 +6,7 @@ use entity::{prelude::SysCaptcha, sys_captcha};
 use nject::injectable;
 
 use sea_orm::{
-    ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, PaginatorTrait, QueryFilter, QueryOrder, Set,
+    ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, PaginatorTrait, QueryFilter, QueryOrder,
 };
 
 #[injectable]
@@ -50,15 +50,11 @@ impl<'a> CaptchaDao<'a> {
     }
 
     /// 添加详情信息
-    pub async fn add(&self, data: sys_captcha::Model) -> Result<sys_captcha::Model, DbErr> {
-        let pear = sys_captcha::ActiveModel {
-            captcha_id: Set(data.captcha_id),
-            captcha: Set(data.captcha),
-            base_img: Set(data.base_img),
-            expire: Set(data.expire),
-            ..Default::default() // all other attributes are `NotSet`
-        };
-        pear.insert(self.db.wdb()).await
+    pub async fn add(
+        &self,
+        active_model: sys_captcha::ActiveModel,
+    ) -> Result<sys_captcha::Model, DbErr> {
+        active_model.insert(self.db.wdb()).await
     }
 
     /// 更新信息

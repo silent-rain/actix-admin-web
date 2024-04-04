@@ -5,7 +5,7 @@ use entity::perm_user_role_rel;
 use entity::prelude::PermUserRoleRel;
 
 use nject::injectable;
-use sea_orm::{ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, QueryFilter, Set};
+use sea_orm::{ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, QueryFilter};
 
 #[injectable]
 pub struct UserRoleRelDao<'a> {
@@ -26,16 +26,9 @@ impl<'a> UserRoleRelDao<'a> {
     /// 添加关联关系
     pub async fn add(
         &self,
-        user_id: i32,
-        role_id: i32,
+        active_model: perm_user_role_rel::ActiveModel,
     ) -> Result<perm_user_role_rel::Model, DbErr> {
-        let pear = perm_user_role_rel::ActiveModel {
-            user_id: Set(user_id),
-            role_id: Set(role_id),
-            ..Default::default() // all other attributes are `NotSet`
-        };
-
-        pear.insert(self.db.wdb()).await
+        active_model.insert(self.db.wdb()).await
     }
 
     /// 通过用户ID删除关联关系

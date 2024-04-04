@@ -1,9 +1,10 @@
 //! 鉴权
+pub mod common;
 pub mod dao;
 pub mod dto;
 
 mod service;
-pub use service::register::RegisterService;
+pub use service::{login::LoginService, register::RegisterService};
 
 mod controller;
 pub use controller::{login::LoginController, register::RegisterController};

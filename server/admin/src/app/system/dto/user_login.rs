@@ -17,6 +17,15 @@ pub struct UserLoginInfoReq {
     pub id: i32,
 }
 
+/// 添加登陆日志信息
+pub struct AddUserLoginInfoReq {
+    pub user_id: i32,
+    pub username: String,
+    pub remote_addr: String,
+    pub user_agent: String,
+    pub status: i8,
+}
+
 /// 登陆状态
 #[derive(Default, Deserialize)]
 pub struct UserLoginStatusReq {

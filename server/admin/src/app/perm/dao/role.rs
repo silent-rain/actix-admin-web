@@ -1,12 +1,12 @@
 //! 角色管理
-use crate::app::perm::dto::role::{AddRoleReq, RoleListReq};
+use crate::app::perm::dto::role::RoleListReq;
 
 use database::{DbRepo, Pagination};
 use entity::{perm_role, prelude::PermRole};
 use nject::injectable;
 
 use sea_orm::{
-    ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, PaginatorTrait, QueryFilter, QueryOrder, Set,
+    ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, PaginatorTrait, QueryFilter, QueryOrder,
 };
 
 #[injectable]
@@ -46,16 +46,11 @@ impl<'a> RoleDao<'a> {
     }
 
     /// 添加详情信息
-    pub async fn add(&self, data: AddRoleReq) -> Result<perm_role::Model, DbErr> {
-        let pear = perm_role::ActiveModel {
-            name: Set(data.name),
-            note: Set(data.note),
-            status: Set(1_i8),
-            sort: Set(1_i32),
-            ..Default::default() // all other attributes are `NotSet`
-        };
-
-        pear.insert(self.db.wdb()).await
+    pub async fn add(
+        &self,
+        active_model: perm_role::ActiveModel,
+    ) -> Result<perm_role::Model, DbErr> {
+        active_model.insert(self.db.wdb()).await
     }
 
     /// 更新信息

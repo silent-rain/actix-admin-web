@@ -24,25 +24,20 @@ impl UserController {
     pub async fn list(provider: Data<AProvider>, req: Query<GetUserListReq>) -> impl Responder {
         let perm_user_service: UserService = provider.provide();
         let resp = perm_user_service.list(req.into_inner()).await;
-        let (results, total) = match resp {
-            Ok(v) => v,
-            Err(err) => return Response::code(err),
-        };
-
-        Response::ok().data_list(results, total)
+        match resp {
+            Ok((results, total)) => Response::ok().data_list(results, total),
+            Err(err) => Response::code(err),
+        }
     }
 
     /// 获取用户信息
     pub async fn info(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
         let perm_user_service: UserService = provider.provide();
         let resp = perm_user_service.info(*id).await;
-
-        let result = match resp {
-            Ok(v) => v,
-            Err(err) => return Response::code(err),
-        };
-
-        Response::ok().data(result)
+        match resp {
+            Ok(v) => Response::ok().data(v),
+            Err(err) => Response::code(err),
+        }
     }
 
     /// 添加用户
@@ -50,24 +45,20 @@ impl UserController {
         let perm_user_service: UserService = provider.provide();
 
         let resp = perm_user_service.add(data.into_inner()).await;
-        let result = match resp {
-            Ok(v) => v,
-            Err(err) => return Response::code(err),
-        };
-
-        Response::ok().data(result)
+        match resp {
+            Ok(_v) => Response::ok(),
+            Err(err) => Response::code(err),
+        }
     }
 
     /// 删除用户
     pub async fn delete(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
         let perm_user_service: UserService = provider.provide();
         let resp = perm_user_service.delete(*id).await;
-        let _result = match resp {
-            Ok(v) => v,
-            Err(err) => return Response::code(err),
-        };
-
-        Response::ok().msg("删除成功")
+        match resp {
+            Ok(_v) => Response::ok(),
+            Err(err) => Response::code(err),
+        }
     }
 }
 
@@ -76,11 +67,9 @@ impl UserController {
     pub async fn roles(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
         let perm_user_service: UserService = provider.provide();
         let resp = perm_user_service.roles(*id).await;
-        let (results, total) = match resp {
-            Ok(v) => v,
-            Err(err) => return Response::code(err),
-        };
-
-        Response::ok().data_list(results, total)
+        match resp {
+            Ok((results, total)) => Response::ok().data_list(results, total),
+            Err(err) => Response::code(err),
+        }
     }
 }

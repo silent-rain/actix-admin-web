@@ -21,24 +21,20 @@ impl LogSystemController {
     pub async fn list(provider: Data<AProvider>, req: Query<LogSystemListReq>) -> impl Responder {
         let log_system_service: LogSystemService = provider.provide();
         let resp = log_system_service.list(req.into_inner()).await;
-        let (results, total) = match resp {
-            Ok(v) => v,
-            Err(err) => return Response::code(err),
-        };
-
-        Response::ok().data_list(results, total)
+        match resp {
+            Ok((results, total)) => Response::ok().data_list(results, total),
+            Err(err) => Response::code(err),
+        }
     }
 
     /// 获取系统日志的详细信息
     pub async fn info(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
         let log_system_service: LogSystemService = provider.provide();
         let resp = log_system_service.info(*id).await;
-        let result = match resp {
-            Ok(v) => v,
-            Err(err) => return Response::code(err),
-        };
-
-        Response::ok().data(result)
+        match resp {
+            Ok(v) => Response::ok().data(v),
+            Err(err) => Response::code(err),
+        }
     }
 
     /// 添加新的系统日志
@@ -46,23 +42,19 @@ impl LogSystemController {
         let data = data.into_inner();
         let log_system_service: LogSystemService = provider.provide();
         let resp = log_system_service.add(data).await;
-        let result = match resp {
-            Ok(v) => v,
-            Err(err) => return Response::code(err),
-        };
-
-        Response::ok().data(result)
+        match resp {
+            Ok(_v) => Response::ok(),
+            Err(err) => Response::code(err),
+        }
     }
 
     /// 删除系统日志
     pub async fn delete(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
         let log_system_service: LogSystemService = provider.provide();
         let resp = log_system_service.delete(*id).await;
-        let _result = match resp {
-            Ok(v) => v,
-            Err(err) => return Response::code(err),
-        };
-
-        Response::ok().msg("删除成功")
+        match resp {
+            Ok(_v) => Response::ok(),
+            Err(err) => Response::code(err),
+        }
     }
 }

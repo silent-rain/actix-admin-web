@@ -2,13 +2,14 @@
 
 use crate::{
     app::system::{
-        dto::user_login::{UserLoginInfoReq, UserLoginListReq, UserLoginStatusReq},
+        dto::user_login::{
+            AddUserLoginInfoReq, UserLoginInfoReq, UserLoginListReq, UserLoginStatusReq,
+        },
         service::user_login::UserLoginService,
     },
     inject::AProvider,
 };
 
-use entity::sys_user_login;
 use response::Response;
 
 use actix_web::{
@@ -24,41 +25,30 @@ impl UserLoginController {
     pub async fn list(provider: Data<AProvider>, req: Query<UserLoginListReq>) -> impl Responder {
         let user_login_service: UserLoginService = provider.provide();
         let resp = user_login_service.list(req.into_inner()).await;
-        let (results, total) = match resp {
-            Ok(v) => v,
-            Err(err) => return Response::code(err),
-        };
-
-        Response::ok().data_list(results, total)
+        match resp {
+            Ok((results, total)) => Response::ok().data_list(results, total),
+            Err(err) => Response::code(err),
+        }
     }
 
     /// 获取登录日志信息
     pub async fn info(provider: Data<AProvider>, req: Query<UserLoginInfoReq>) -> impl Responder {
         let user_login_service: UserLoginService = provider.provide();
         let resp = user_login_service.info(req.into_inner()).await;
-        let result = match resp {
-            Ok(v) => v,
-            Err(err) => return Response::code(err),
-        };
-
-        Response::ok().data(result)
+        match resp {
+            Ok(v) => Response::ok().data(v),
+            Err(err) => Response::code(err),
+        }
     }
 
     /// 添加登陆日志
-    pub async fn add(
-        provider: Data<AProvider>,
-        data: Json<sys_user_login::Model>,
-    ) -> impl Responder {
-        let data = data.into_inner();
+    pub async fn add(provider: Data<AProvider>, data: Json<AddUserLoginInfoReq>) -> impl Responder {
         let user_login_service: UserLoginService = provider.provide();
-        let data: sys_user_login::ActiveModel = data.into();
-        let resp = user_login_service.add(data).await;
-        let result = match resp {
-            Ok(v) => v,
-            Err(err) => return Response::code(err),
-        };
-
-        Response::ok().data(result)
+        let resp = user_login_service.add(data.into_inner()).await;
+        match resp {
+            Ok(_v) => Response::ok(),
+            Err(err) => Response::code(err),
+        }
     }
 
     /// 更新登录日志状态
@@ -67,12 +57,10 @@ impl UserLoginController {
         req: Query<UserLoginStatusReq>,
     ) -> impl Responder {
         let user_login_service: UserLoginService = provider.provide();
-        let resp = user_login_service.status(req.into_inner()).await;
+        let resp = user_login_service.status(req.id, req.status).await;
         match resp {
-            Ok(v) => v,
-            Err(err) => return Response::code(err),
-        };
-
-        Response::ok().msg("删除成功")
+            Ok(_v) => Response::ok(),
+            Err(err) => Response::code(err),
+        }
     }
 }
