@@ -58,6 +58,17 @@ impl<'a> AppTemplateDao<'a> {
         active_model.insert(self.db.wdb()).await
     }
 
+    /// 批量添加数据
+    pub async fn batch_add(
+        &self,
+        active_models: Vec<app_template::ActiveModel>,
+    ) -> Result<i32, DbErr> {
+        let result = AppTemplate::insert_many(active_models)
+            .exec(self.db.wdb())
+            .await?;
+        Ok(result.last_insert_id)
+    }
+
     /// 更新数据
     pub async fn update(&self, active_model: app_template::ActiveModel) -> Result<u64, DbErr> {
         let id: i32 = *(active_model.id.clone().as_ref());
@@ -94,5 +105,139 @@ impl<'a> AppTemplateDao<'a> {
             .exec(self.db.wdb())
             .await?;
         Ok(result.rows_affected)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use sea_orm::{DbBackend, QueryTrait};
+
+    use super::*;
+
+    #[test]
+    fn test_all() {
+        let result = AppTemplate::find()
+            .order_by_asc(app_template::Column::Id)
+            .build(DbBackend::MySql)
+            .to_string();
+
+        let sql = r#"SELECT `app_template`.`id`, `app_template`.`user_id`, `app_template`.`status`, `app_template`.`created_at`, `app_template`.`updated_at` FROM `app_template` ORDER BY `app_template`.`id` ASC"#;
+
+        assert_eq!(result, sql);
+    }
+
+    #[test]
+    fn test_list() {}
+
+    #[test]
+    fn test_info() {
+        let result = AppTemplate::find_by_id(1)
+            .build(DbBackend::MySql)
+            .to_string();
+
+        let sql = r#"SELECT `app_template`.`id`, `app_template`.`user_id`, `app_template`.`status`, `app_template`.`created_at`, `app_template`.`updated_at` FROM `app_template` WHERE `app_template`.`id` = 1"#;
+
+        assert_eq!(result, sql);
+    }
+
+    #[test]
+    fn test_add() {
+        let active_model = app_template::ActiveModel {
+            id: Set(1),
+            user_id: Set(11),
+            status: Set(1),
+            ..Default::default()
+        };
+        let result = AppTemplate::insert(active_model)
+            .build(DbBackend::MySql)
+            .to_string();
+
+        let sql = r#"INSERT INTO `app_template` (`id`, `user_id`, `status`) VALUES (1, 11, 1)"#;
+
+        assert_eq!(result, sql);
+    }
+
+    #[test]
+    fn test_batch_add() {
+        let active_model1 = app_template::ActiveModel {
+            id: Set(1),
+            user_id: Set(11),
+            status: Set(1),
+            ..Default::default()
+        };
+        let active_model2 = app_template::ActiveModel {
+            id: Set(2),
+            user_id: Set(22),
+            status: Set(0),
+            ..Default::default()
+        };
+        let models = [active_model1, active_model2];
+        let result = AppTemplate::insert_many(models)
+            .build(DbBackend::MySql)
+            .to_string();
+
+        let sql = r#"INSERT INTO `app_template` (`id`, `user_id`, `status`) VALUES (1, 11, 1), (2, 22, 0)"#;
+
+        assert_eq!(result, sql);
+    }
+
+    #[test]
+    fn test_update() {
+        let active_model = app_template::ActiveModel {
+            id: Set(1),
+            user_id: Set(11),
+            status: Set(1),
+            ..Default::default()
+        };
+        let id: i32 = *(active_model.id.clone().as_ref());
+        let result = AppTemplate::update_many()
+            .set(active_model)
+            .filter(app_template::Column::Id.eq(id))
+            .build(DbBackend::MySql)
+            .to_string();
+
+        let sql = r#"UPDATE `app_template` SET `id` = 1, `user_id` = 11, `status` = 1 WHERE `app_template`.`id` = 1"#;
+
+        assert_eq!(result, sql);
+    }
+
+    #[test]
+    fn test_status() {
+        let active_model = app_template::ActiveModel {
+            id: Set(1),
+            status: Set(0),
+            ..Default::default()
+        };
+        let result = AppTemplate::update(active_model)
+            .build(DbBackend::MySql)
+            .to_string();
+
+        let sql = r#"UPDATE `app_template` SET `status` = 0 WHERE `app_template`.`id` = 1"#;
+
+        assert_eq!(result, sql);
+    }
+
+    #[test]
+    fn test_delete() {
+        let result = AppTemplate::delete_by_id(1)
+            .build(DbBackend::MySql)
+            .to_string();
+
+        let sql = r#"DELETE FROM `app_template` WHERE `app_template`.`id` = 1"#;
+
+        assert_eq!(result, sql);
+    }
+
+    #[test]
+    fn test_batch_delete() {
+        let ids = vec![1, 2, 3, 4];
+        let result = AppTemplate::delete_many()
+            .filter(app_template::Column::Id.is_in(ids))
+            .build(DbBackend::MySql)
+            .to_string();
+
+        let sql = r#"DELETE FROM `app_template` WHERE `app_template`.`id` IN (1, 2, 3, 4)"#;
+
+        assert_eq!(result, sql);
     }
 }

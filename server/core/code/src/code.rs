@@ -64,18 +64,20 @@ pub enum Error {
     DbQueryEmptyError = 10205,
     #[error("添加数据失败")]
     DbAddError = 10206,
+    #[error("批量添加数据失败")]
+    DbBatchAddError = 10207,
     #[error("更新数据失败")]
-    DbUpdateError = 10207,
+    DbUpdateError = 10208,
     #[error("删除数据失败")]
-    DbDeleteError = 10208,
+    DbDeleteError = 10209,
     #[error("批量删除数据失败")]
-    DbBatchDeleteError = 10209,
+    DbBatchDeleteError = 10210,
     #[error("更新数据状态失败")]
-    DbUpdateStatusError = 10210,
+    DbUpdateStatusError = 10211,
     #[error("数据已存在")]
-    DbDataExistError = 10211,
+    DbDataExistError = 10212,
     #[error("数据已存在子项")]
-    DbDataExistChildrenError = 10212,
+    DbDataExistChildrenError = 10213,
 
     // 鉴权
     #[error("未知的验证码")]

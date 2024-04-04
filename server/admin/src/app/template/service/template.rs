@@ -1,7 +1,7 @@
 //! 模板管理
 use crate::app::template::{
     dao::template::AppTemplateDao,
-    dto::template::{AddAppTemplateStatusReq, AppTemplateListReq},
+    dto::template::{AddAppTemplateReq, AppTemplateListReq, BatchAddAppTemplateReq},
 };
 
 use code::Error;
@@ -60,14 +60,14 @@ impl<'a> AppTemplateService<'a> {
     }
 
     /// 添加{{InterfaceName}}
-    pub async fn add(&self, data: AddAppTemplateStatusReq) -> Result<app_template::Model, Error> {
-        let data = app_template::ActiveModel {
+    pub async fn add(&self, data: AddAppTemplateReq) -> Result<app_template::Model, Error> {
+        let model = app_template::ActiveModel {
             user_id: Set(data.user_id),
             status: Set(data.status),
             ..Default::default()
         };
 
-        let result = self.app_template_dao.add(data).await.map_err(|err| {
+        let result = self.app_template_dao.add(model).await.map_err(|err| {
             error!("添加{{InterfaceName}}失败, err: {:#?}", err);
             Error::DbAddError
         })?;
@@ -75,15 +75,39 @@ impl<'a> AppTemplateService<'a> {
         Ok(result)
     }
 
+    /// 批量添加{{InterfaceName}}
+    pub async fn batch_add(&self, data: BatchAddAppTemplateReq) -> Result<i32, Error> {
+        let mut models = Vec::new();
+        for item in data.data {
+            let model = app_template::ActiveModel {
+                user_id: Set(item.user_id),
+                status: Set(item.status),
+                ..Default::default()
+            };
+            models.push(model);
+        }
+
+        let result = self
+            .app_template_dao
+            .batch_add(models)
+            .await
+            .map_err(|err| {
+                error!("批量添加{{InterfaceName}}失败, err: {:#?}", err);
+                Error::DbBatchAddError
+            })?;
+
+        Ok(result)
+    }
+
     /// 更新{{InterfaceName}}
     pub async fn update(&self, id: i32, status: i8) -> Result<u64, Error> {
-        let data = app_template::ActiveModel {
+        let model = app_template::ActiveModel {
             id: Set(id),
             status: Set(status),
             ..Default::default()
         };
 
-        let result = self.app_template_dao.update(data).await.map_err(|err| {
+        let result = self.app_template_dao.update(model).await.map_err(|err| {
             error!("更新{{InterfaceName}}失败, err: {:#?}", err);
             Error::DbUpdateError
         })?;
