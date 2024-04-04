@@ -1,7 +1,7 @@
 //! 输出到文件
 #![allow(unused)]
 
-use crate::config::FileOptions;
+use crate::config::FileConfig;
 use crate::utils::time::local_time;
 
 use tracing::Subscriber;
@@ -14,7 +14,7 @@ use tracing_subscriber::Layer;
 
 /// 同步输出到文件中
 /// 每天时轮换的文件追加器
-pub fn blocking_layer<S>(config: &FileOptions) -> Box<dyn Layer<S> + Send + Sync + 'static>
+pub fn blocking_layer<S>(config: &FileConfig) -> Box<dyn Layer<S> + Send + Sync + 'static>
 where
     S: Subscriber,
     S: for<'a> LookupSpan<'a>,
@@ -38,7 +38,7 @@ where
 /// 非阻塞日志输出到文件中
 /// 每天时轮换的文件追加器
 pub fn non_blocking_layer<S>(
-    config: &FileOptions,
+    config: &FileConfig,
 ) -> (Box<dyn Layer<S> + Send + Sync + 'static>, WorkerGuard)
 where
     S: Subscriber,
@@ -76,10 +76,10 @@ mod tests {
 
     #[test]
     fn test_blocking_layer() {
-        let conf = FileOptions {
+        let conf = FileConfig {
             level: config::Level::Debug,
             enable: true,
-            ..FileOptions::default()
+            ..FileConfig::default()
         };
 
         let layer = blocking_layer(&conf);
@@ -95,10 +95,10 @@ mod tests {
 
     #[test]
     fn test_non_blocking_layer() {
-        let conf = FileOptions {
+        let conf = FileConfig {
             level: config::Level::Debug,
             enable: true,
-            ..FileOptions::default()
+            ..FileConfig::default()
         };
 
         let (layer, _guard) = non_blocking_layer(&conf);

@@ -27,8 +27,8 @@ pub struct Model {
     pub status: i8,
     pub create_user_id: Option<i32>,
     pub update_user_id: Option<i32>,
-    pub created_at: DateTime,
-    pub updated_at: DateTime,
+    pub created_at: DateTimeLocal,
+    pub updated_at: DateTimeLocal,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

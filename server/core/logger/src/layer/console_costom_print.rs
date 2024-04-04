@@ -1,5 +1,5 @@
 //! 自定义打印输出日志
-use crate::config::ConsoleOptions;
+use crate::config::ConsoleConfig;
 use crate::utils::time::local_time;
 
 use tracing::Subscriber;
@@ -30,7 +30,7 @@ impl std::io::Write for CustomWriter {
 /// 非阻塞日志自定义输出
 #[allow(unused)]
 pub fn non_blocking_layer<S>(
-    config: &ConsoleOptions,
+    config: &ConsoleConfig,
 ) -> (Box<dyn Layer<S> + Send + Sync + 'static>, WorkerGuard)
 where
     S: Subscriber,
@@ -65,7 +65,7 @@ mod tests {
 
     #[test]
     fn test_non_blocking_layer() {
-        let conf = ConsoleOptions {
+        let conf = ConsoleConfig {
             level: config::Level::Debug,
             enable: true,
         };

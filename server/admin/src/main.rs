@@ -8,8 +8,8 @@ mod middleware;
 mod server;
 mod state;
 
-mod inject;
 pub mod app;
+mod inject;
 pub mod router;
 
 use database::DbRepo;
@@ -43,9 +43,13 @@ async fn main() -> std::io::Result<()> {
     // let database_url = conf.sqlite.dns();
 
     // 初始化数据库
-    let db = database::Pool::init(database_url.clone(), database_url)
-        .await
-        .expect("初始化数据库失败");
+    let db = database::Pool::init(
+        database_url.clone(),
+        database_url,
+        conf.mysql.options.clone(),
+    )
+    .await
+    .expect("初始化数据库失败");
 
     if conf.mysql.migrator {
         // 库表迁移器

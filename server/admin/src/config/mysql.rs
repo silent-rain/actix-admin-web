@@ -1,4 +1,6 @@
 //! Mysql 数据库配置
+use database::DbOptions;
+
 use serde::{Deserialize, Serialize};
 
 /// Mysql 数据库配置
@@ -7,19 +9,11 @@ pub struct Mysql {
     /// 数据库自动迁移
     pub migrator: bool,
     /// 数据库参数
-    pub options: Options,
+    pub options: DbOptions,
     /// 只读数据库账号配置
     pub read: MysqlAuth,
     /// 读写数据库账号配置
     pub write: MysqlAuth,
-}
-
-/// 参数配置
-#[derive(Debug, Default, Serialize, Deserialize, Clone)]
-pub struct Options {
-    pub max_connections: i32, // 最大打开的连接数
-    pub max_lifetime: i32,    // 设置最大连接超时(min)
-    pub enable_log: bool,     // 是否开启 SQL 日志
 }
 
 /// 权限配置
@@ -36,6 +30,8 @@ pub struct MysqlAuth {
 impl MysqlAuth {
     /// 数据库地址
     pub fn dns(&self) -> String {
+        // 这些参数会导致连接失败: ?charset=utf8mb4&parseTime=false&loc=Asia%2FShanghai
+        // loc=Local
         format!(
             "mysql://{}:{}@{}:{}/{}",
             self.username, self.password, self.host, self.port, self.db_name,

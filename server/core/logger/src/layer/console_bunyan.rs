@@ -1,7 +1,7 @@
 //! 输出到控制台
 //! 该层专门涉及使用Bunyan格式格式化信息。
 //! 它依赖于上游的JsonStorageLayer来访问连接到每个跨度的字段。
-use crate::config::ConsoleBunyanOptions;
+use crate::config::ConsoleBunyanConfig;
 
 use tracing_bunyan_formatter::BunyanFormattingLayer;
 use tracing_subscriber::{
@@ -11,7 +11,7 @@ use tracing_subscriber::{
 #[allow(unused)]
 
 /// 输出到控制台中
-pub fn layer<S>(config: &ConsoleBunyanOptions) -> Box<dyn Layer<S> + Send + Sync + 'static>
+pub fn layer<S>(config: &ConsoleBunyanConfig) -> Box<dyn Layer<S> + Send + Sync + 'static>
 where
     S: SubscriberExt,
     S: for<'a> LookupSpan<'a>,
@@ -33,7 +33,7 @@ mod tests {
     use tracing::{debug, debug_span, error, event, info, info_span, trace, warn, Level};
 
     fn setup() {
-        let conf = ConsoleBunyanOptions {
+        let conf = ConsoleBunyanConfig {
             level: config::Level::Debug,
             enable: true,
         };

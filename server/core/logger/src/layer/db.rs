@@ -1,10 +1,10 @@
 //! 数据库日志
 use std::{collections::BTreeMap, sync::Arc};
 
-use crate::config::DbOptions;
+use crate::config::DbConfig;
 use crate::dao::Dao;
 
-use database::Pool;
+use database::{DbOptions as DbPoolDbOptions, Pool};
 use entity::log::system::Model;
 
 use chrono::Local;
@@ -22,7 +22,7 @@ use tracing_subscriber::{layer::Context, registry::LookupSpan, Layer};
 /// josn 解析器
 pub struct JsonLayer {
     name: String,
-    config: DbOptions,
+    config: DbConfig,
     writer: Arc<DbWriter>,
 }
 
@@ -269,7 +269,7 @@ struct CustomFieldStorage(BTreeMap<String, serde_json::Value>);
 
 impl JsonLayer {
     /// 创建对象
-    pub fn new(config: DbOptions, writer: Arc<DbWriter>) -> Self {
+    pub fn new(config: DbConfig, writer: Arc<DbWriter>) -> Self {
         JsonLayer {
             name: "db_logger".to_owned(),
             config,
@@ -347,7 +347,7 @@ impl JsonLayer {
             stack,
             // code: todo!(),
             // code_msg: todo!(),
-            created_at: Some(Local::now().naive_local()),
+            // created_at: Some(Local::now()),
             ..Default::default()
         };
 
@@ -413,11 +413,15 @@ pub struct DbWriter {
 }
 
 impl DbWriter {
-    pub async fn new(config: DbOptions) -> Self {
+    pub async fn new(config: DbConfig) -> Self {
         // 初始化数据库
-        let db = database::Pool::init(config.address.clone(), config.address.clone())
-            .await
-            .expect("初始化数据库失败");
+        let db = database::Pool::init(
+            config.address.clone(),
+            config.address.clone(),
+            DbPoolDbOptions::default(),
+        )
+        .await
+        .expect("初始化数据库失败");
         let dao = Dao::new(db.clone());
 
         let (tx, rx) = mpsc::channel::<Model>(1000);
@@ -465,7 +469,7 @@ impl std::io::Write for ArcDbWriter {
 }
 
 /// 输出到数据库中
-pub fn layer<S>(config: DbOptions) -> (Box<dyn Layer<S> + Send + Sync + 'static>, WorkerGuard)
+pub fn layer<S>(config: DbConfig) -> (Box<dyn Layer<S> + Send + Sync + 'static>, WorkerGuard)
 where
     S: Subscriber,
     for<'lookup> S: LookupSpan<'lookup>,
@@ -499,7 +503,7 @@ mod tests {
     use tracing_subscriber::layer::SubscriberExt;
 
     static INIT: Lazy<Arc<WorkerGuard>> = Lazy::new(|| {
-        let conf = DbOptions {
+        let conf = DbConfig {
             // server/core/logger/data.dat
             address: "sqlite://./data.dat?mode=rwc".to_string(),
             level: config::Level::Debug,
