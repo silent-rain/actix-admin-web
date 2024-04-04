@@ -174,7 +174,7 @@ mod tests {
     use super::*;
 
     use color_eyre::{eyre::eyre, Result};
-    use config::{ConsoleBunyanOptions, ConsoleOptions, DbOptions, FileOptions};
+    use config::{ConsoleBunyanConfig, ConsoleConfig, DbConfig, FileConfig};
     use tracing::{debug, error, info, instrument, span, trace, warn, Level};
 
     #[instrument]
@@ -212,20 +212,20 @@ mod tests {
     fn test_init_subscriber() {
         let conf = config::Logger {
             color_eyre: false,
-            console: ConsoleOptions {
+            console: ConsoleConfig {
                 level: config::Level::Debug,
                 enable: true,
             },
-            console_bunyan: ConsoleBunyanOptions {
+            console_bunyan: ConsoleBunyanConfig {
                 level: config::Level::Debug,
                 enable: false,
             },
-            file: FileOptions {
+            file: FileConfig {
                 level: config::Level::Debug,
                 enable: false,
                 ..Default::default()
             },
-            db: DbOptions {
+            db: DbConfig {
                 level: config::Level::Debug,
                 enable: false,
                 ..Default::default()

@@ -50,34 +50,36 @@ pub enum Error {
     #[error("A possible error value when converting a String from a UTF-8 byte vector.")]
     FromUtf8Error(std::string::FromUtf8Error) = 10155,
 
-    #[error("数据库初始化失败")]
+    #[error("数据库初始化失败, {0}")]
     DbInitError(String) = 10200,
-    #[error("数据库连接失败")]
-    DbConnectionError(String) = 10201,
-    #[error("数据库ping失败")]
-    DbConnectionAcquire(String) = 10202,
+    #[error("数据库连接失败, {0}")]
+    DbConnectionError(String) = 10202,
+    #[error("设置 Time Zone 失败, {0}")]
+    DbTimeZoneError(String) = 10203,
+    #[error("数据库ping失败, {0}")]
+    DbConnectionAcquire(String) = 10204,
     #[error("数据库关闭失败")]
-    DbCloseError = 10203,
+    DbCloseError = 10205,
     #[error("查询数据失败")]
-    DbQueryError = 10204,
+    DbQueryError = 10206,
     #[error("未查到数据")]
-    DbQueryEmptyError = 10205,
+    DbQueryEmptyError = 10207,
     #[error("添加数据失败")]
-    DbAddError = 10206,
+    DbAddError = 10208,
     #[error("批量添加数据失败")]
-    DbBatchAddError = 10207,
+    DbBatchAddError = 10209,
     #[error("更新数据失败")]
-    DbUpdateError = 10208,
+    DbUpdateError = 10210,
     #[error("删除数据失败")]
-    DbDeleteError = 10209,
+    DbDeleteError = 10211,
     #[error("批量删除数据失败")]
-    DbBatchDeleteError = 10210,
+    DbBatchDeleteError = 10212,
     #[error("更新数据状态失败")]
-    DbUpdateStatusError = 10211,
+    DbUpdateStatusError = 10213,
     #[error("数据已存在")]
-    DbDataExistError = 10212,
+    DbDataExistError = 10214,
     #[error("数据已存在子项")]
-    DbDataExistChildrenError = 10213,
+    DbDataExistChildrenError = 10215,
 
     // 鉴权
     #[error("未知的验证码")]

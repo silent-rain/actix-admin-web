@@ -1,5 +1,7 @@
 //! 配置
 
+use database::DbOptions;
+
 use serde::{Deserialize, Serialize};
 
 /// 日志配置
@@ -10,26 +12,27 @@ pub struct Logger {
     pub color_eyre: bool,
     /// 终端配置
     #[serde(default)]
-    pub console: ConsoleOptions,
-    pub console_bunyan: ConsoleBunyanOptions,
+    pub console: ConsoleConfig,
+    /// Bunyan 终端配置
+    pub console_bunyan: ConsoleBunyanConfig,
     /// 文件配置
     #[serde(default)]
-    pub file: FileOptions,
+    pub file: FileConfig,
     /// 数据库配置
     #[serde(default)]
-    pub db: DbOptions,
+    pub db: DbConfig,
 }
 
 /// 终端配置参数
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
-pub struct ConsoleOptions {
+pub struct ConsoleConfig {
     /// 日志级别, trace/debug/info/warn/error
     pub level: Level,
     /// 是否启用，默认不启用
     pub enable: bool,
 }
 
-impl Default for ConsoleOptions {
+impl Default for ConsoleConfig {
     fn default() -> Self {
         Self {
             level: Level::Warn,
@@ -40,14 +43,14 @@ impl Default for ConsoleOptions {
 
 /// Bunyan 终端配置参数
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
-pub struct ConsoleBunyanOptions {
+pub struct ConsoleBunyanConfig {
     /// 日志级别, trace/debug/info/warn/error
     pub level: Level,
     /// 是否启用，默认不启用
     pub enable: bool,
 }
 
-impl Default for ConsoleBunyanOptions {
+impl Default for ConsoleBunyanConfig {
     fn default() -> Self {
         Self {
             level: Level::Warn,
@@ -58,7 +61,7 @@ impl Default for ConsoleBunyanOptions {
 
 /// 文件配置参数
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
-pub struct FileOptions {
+pub struct FileConfig {
     /// 文件路径
     #[serde(default)]
     pub filepath: String,
@@ -70,7 +73,7 @@ pub struct FileOptions {
     pub enable: bool,
 }
 
-impl Default for FileOptions {
+impl Default for FileConfig {
     fn default() -> Self {
         Self {
             filepath: "logs".to_owned(),
@@ -82,8 +85,8 @@ impl Default for FileOptions {
 }
 
 /// 数据库配置参数
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
-pub struct DbOptions {
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct DbConfig {
     /// 数据库地址
     pub address: String,
     /// 日志记录器名称
@@ -92,15 +95,18 @@ pub struct DbOptions {
     pub level: Level,
     /// 是否启用，默认不启用
     pub enable: bool,
+    /// 数据库配置
+    pub options: DbOptions,
 }
 
-impl Default for DbOptions {
+impl Default for DbConfig {
     fn default() -> Self {
         Self {
             address: "".to_owned(),
             log_name: "db_layer".to_owned(),
             level: Level::Warn,
             enable: false,
+            options: DbOptions::default(),
         }
     }
 }
@@ -165,9 +171,9 @@ mod tests {
             "enable": true
         }
         "#;
-        let options = serde_json::from_str::<FileOptions>(text).unwrap();
+        let options = serde_json::from_str::<FileConfig>(text).unwrap();
         println!("{:#?}", options);
-        let ac = FileOptions {
+        let ac = FileConfig {
             filepath: "logs".to_owned(),
             level: Level::Warn,
             enable: true,

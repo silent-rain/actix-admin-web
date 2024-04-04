@@ -3,7 +3,7 @@ use std::env;
 mod common;
 use common::{schem::create_user_table, user, User};
 
-use database::{Curd, DbRepo, Pagination, Pool};
+use database::{Curd, DbOptions, DbRepo, Pagination, Pool};
 
 use sea_orm::{DbErr, EntityTrait, Set};
 
@@ -150,7 +150,9 @@ async fn main() -> Result<(), DbErr> {
 
     // Connecting SQLite
     let db_url = "sqlite::memory:".to_string();
-    let db = Pool::connect(db_url).await.expect("db init failed");
+    let db = Pool::connect(db_url, DbOptions::default())
+        .await
+        .expect("db init failed");
     let pool = Pool::form_connect(db.clone(), db);
 
     // Setup database schema

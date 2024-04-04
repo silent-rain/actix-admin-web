@@ -1,5 +1,5 @@
 //!输出到控制台
-use crate::config::ConsoleOptions;
+use crate::config::ConsoleConfig;
 use crate::utils::time::local_time;
 
 use tracing_subscriber::{
@@ -9,7 +9,7 @@ use tracing_subscriber::{
 };
 
 /// 输出到控制台中
-pub fn layer<S>(config: &ConsoleOptions) -> Box<dyn Layer<S> + Send + Sync + 'static>
+pub fn layer<S>(config: &ConsoleConfig) -> Box<dyn Layer<S> + Send + Sync + 'static>
 where
     S: SubscriberExt,
     S: for<'a> LookupSpan<'a>,
@@ -41,7 +41,7 @@ mod tests {
 
     #[test]
     fn test_layer() {
-        let conf = ConsoleOptions {
+        let conf = ConsoleConfig {
             level: config::Level::Debug,
             enable: true,
         };
