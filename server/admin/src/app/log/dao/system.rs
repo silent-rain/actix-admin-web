@@ -17,19 +17,9 @@ pub struct LogSystemDao<'a> {
 }
 
 impl<'a> LogSystemDao<'a> {
-    /// 获取所有数据
-    pub async fn all(&self) -> Result<Vec<system::Model>, DbErr> {
-        let result = LogSystem::find()
-            .order_by_desc(system::Column::Id)
-            .all(self.db.rdb())
-            .await?;
-        Ok(result)
-    }
-
     /// 获取数据列表
     pub async fn list(&self, req: LogSystemListReq) -> Result<(Vec<system::Model>, u64), DbErr> {
         let page = Pagination::new(req.page, req.page_size);
-
         let paginator = LogSystem::find()
             .order_by_desc(system::Column::Id)
             .paginate(self.db.rdb(), page.page_size());
