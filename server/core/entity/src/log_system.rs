@@ -68,7 +68,7 @@ pub struct Model {
     /// 备注
     pub note: Option<String>,
     /// 创建时间
-    pub created_at: Option<DateTime>,
+    pub created_at: Option<DateTimeLocal>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

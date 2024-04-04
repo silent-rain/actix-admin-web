@@ -4,7 +4,7 @@ use std::{collections::BTreeMap, sync::Arc};
 use crate::config::DbConfig;
 use crate::dao::Dao;
 
-use database::{DbOptions as DbPoolDbOptions, Pool};
+use database::Pool;
 use entity::log::system::Model;
 
 use chrono::Local;
@@ -347,7 +347,7 @@ impl JsonLayer {
             stack,
             // code: todo!(),
             // code_msg: todo!(),
-            // created_at: Some(Local::now()),
+            created_at: Some(Local::now()),
             ..Default::default()
         };
 
@@ -418,7 +418,7 @@ impl DbWriter {
         let db = database::Pool::init(
             config.address.clone(),
             config.address.clone(),
-            DbPoolDbOptions::default(),
+            config.options.clone(),
         )
         .await
         .expect("初始化数据库失败");
