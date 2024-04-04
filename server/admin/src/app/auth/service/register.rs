@@ -8,7 +8,7 @@ use crate::app::{
 
 use code::Error;
 use entity::perm_user;
-use utils::{crypto::make_md5, json::struct_to_struct};
+use utils::{crypto::sha2_256, json::struct_to_struct};
 
 use nject::injectable;
 use sea_orm::Set;
@@ -67,7 +67,7 @@ impl<'a> RegisterService<'a> {
         }
 
         // 密码加密
-        data.password = make_md5(&data.password);
+        data.password = sha2_256(&data.password);
 
         // 添加手机用户
         self.add_phone_user(data).await
@@ -102,7 +102,7 @@ impl<'a> RegisterService<'a> {
         }
 
         // 密码加密
-        data.password = make_md5(&data.password);
+        data.password = sha2_256(&data.password);
 
         // 添加邮箱用户
         let result = self.add_email_user(data).await?;
