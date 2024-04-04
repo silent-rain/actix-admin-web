@@ -5,7 +5,7 @@ use crate::config::DbConfig;
 use crate::dao::Dao;
 
 use database::Pool;
-use entity::log::system::Model;
+use entity::log_system::Model;
 
 use chrono::Local;
 use serde_json::Value;

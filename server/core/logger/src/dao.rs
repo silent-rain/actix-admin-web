@@ -1,7 +1,7 @@
 //! 系统日志
 
 use database::DbRepo;
-use entity::log::system;
+use entity::log_system;
 
 use sea_orm::ActiveValue::NotSet;
 use sea_orm::{ActiveModelTrait, DbErr};
@@ -17,8 +17,8 @@ impl<DB: DbRepo> Dao<DB> {
     }
 
     /// 添加详情信息
-    pub async fn add(&self, data: system::Model) -> Result<system::Model, DbErr> {
-        let mut active_model: system::ActiveModel = data.into();
+    pub async fn add(&self, data: log_system::Model) -> Result<log_system::Model, DbErr> {
+        let mut active_model: log_system::ActiveModel = data.into();
         active_model.id = NotSet;
         active_model.insert(self.db.wdb()).await
     }

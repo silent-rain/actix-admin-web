@@ -5,7 +5,7 @@ use crate::{
     inject::AProvider,
 };
 
-use entity::log::system;
+use entity::log_system;
 use response::Response;
 
 use actix_web::{
@@ -38,7 +38,7 @@ impl LogSystemController {
     }
 
     /// 添加新的系统日志
-    pub async fn add(provider: Data<AProvider>, data: Json<system::Model>) -> impl Responder {
+    pub async fn add(provider: Data<AProvider>, data: Json<log_system::Model>) -> impl Responder {
         let data = data.into_inner();
         let log_system_service: LogSystemService = provider.provide();
         let resp = log_system_service.add(data).await;
