@@ -20,8 +20,8 @@ pub struct Model {
     pub note: Option<String>,
     pub password: String,
     pub status: i8,
-    pub created_at: DateTime,
-    pub updated_at: DateTime,
+    pub created_at: DateTimeLocal,
+    pub updated_at: DateTimeLocal,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

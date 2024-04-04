@@ -20,7 +20,7 @@ pub struct Model {
     #[sea_orm(column_type = "Text", nullable)]
     pub stack: Option<String>,
     pub note: Option<String>,
-    pub created_at: DateTime,
+    pub created_at: DateTimeLocal,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

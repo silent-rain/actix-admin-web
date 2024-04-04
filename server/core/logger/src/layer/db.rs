@@ -347,8 +347,7 @@ impl JsonLayer {
             stack,
             // code: todo!(),
             // code_msg: todo!(),
-            // created_at: Some(Local::now()),
-            created_at: Some(Local::now().naive_local()),
+            created_at: Some(Local::now()),
             ..Default::default()
         };
 

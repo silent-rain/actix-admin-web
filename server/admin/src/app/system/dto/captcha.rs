@@ -2,7 +2,7 @@
 
 use actix_validator::Validate;
 
-use sea_orm::prelude::DateTime;
+use chrono::{DateTime, Local};
 use serde::{Deserialize, Serialize};
 
 /// 角色列表查询
@@ -26,5 +26,5 @@ pub struct AddCaptchaResp {
     pub captcha_id: String,
     pub base_img: String,
     pub expire: i8,
-    pub created_at: DateTime,
+    pub created_at: DateTime<Local>,
 }

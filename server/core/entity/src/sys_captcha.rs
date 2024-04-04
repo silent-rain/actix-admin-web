@@ -1,7 +1,7 @@
 //! 验证码表
 
 use sea_orm::{
-    prelude::{BlobSize, DateTime},
+    prelude::{BlobSize, DateTimeLocal},
     ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey, DeriveRelation, EntityTrait,
     EnumIter, PrimaryKeyTrait,
 };
@@ -17,7 +17,7 @@ pub struct Model {
     #[sea_orm(column_type = "Binary(BlobSize::Long)")]
     pub base_img: Vec<u8>,
     pub expire: i8,
-    pub created_at: DateTime,
+    pub created_at: DateTimeLocal,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

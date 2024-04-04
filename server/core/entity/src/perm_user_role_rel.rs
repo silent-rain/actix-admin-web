@@ -10,8 +10,8 @@ pub struct Model {
     pub id: i32,
     pub user_id: i32,
     pub role_id: i32,
-    pub created_at: DateTime,
-    pub updated_at: DateTime,
+    pub created_at: DateTimeLocal,
+    pub updated_at: DateTimeLocal,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
