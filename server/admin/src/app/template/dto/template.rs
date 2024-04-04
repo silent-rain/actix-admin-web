@@ -21,9 +21,22 @@ pub struct AppTemplateInfoReq {
 
 /// 添加数据 请求体
 #[derive(Default, Deserialize)]
-pub struct AddAppTemplateStatusReq {
-    pub user_id: String,
+pub struct AddAppTemplateReq {
+    pub user_id: i32,
     pub status: i8,
+}
+
+/// 数据
+#[derive(Default, Deserialize)]
+pub struct AppTemplate {
+    pub user_id: i32,
+    pub status: i8,
+}
+
+/// 批量添加数据 请求体
+#[derive(Default, Deserialize)]
+pub struct BatchAddAppTemplateReq {
+    pub data: Vec<AppTemplate>,
 }
 
 /// 更新数据 请求体
