@@ -18,16 +18,6 @@ pub struct RoleService<'a> {
 }
 
 impl<'a> RoleService<'a> {
-    /// 获取所有列表数据
-    pub async fn all(&self) -> Result<(Vec<perm_role::Model>, u64), Error> {
-        let (results, total) = self.role_dao.all().await.map_err(|err| {
-            error!("查询角色列表失败, err: {:#?}", err);
-            Error::DbQueryError
-        })?;
-
-        Ok((results, total))
-    }
-
     /// 获取列表数据
     pub async fn list(&self, req: RoleListReq) -> Result<(Vec<perm_role::Model>, u64), Error> {
         // 获取所有数据

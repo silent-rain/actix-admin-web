@@ -11,8 +11,6 @@ impl AppTemplateRouter {
     /// 注册路由
     pub fn register() -> Scope {
         web::scope("/app-templates")
-            // TODO all=True?
-            // .route("/all", web::get().to(AppTemplateController::all))
             .route("", web::get().to(AppTemplateController::list))
             .route("/{id}", web::get().to(AppTemplateController::info))
             .route("", web::post().to(AppTemplateController::add))

@@ -21,16 +21,6 @@ pub struct RoleController;
 
 impl RoleController {
     /// 获取所有角色列表
-    pub async fn all(provider: Data<AProvider>) -> impl Responder {
-        let perm_user_service: RoleService = provider.provide();
-        let resp = perm_user_service.all().await;
-        match resp {
-            Ok((results, total)) => Response::ok().data_list(results, total),
-            Err(err) => Response::code(err),
-        }
-    }
-
-    /// 获取所有角色列表
     pub async fn list(provider: Data<AProvider>, req: Query<RoleListReq>) -> impl Responder {
         let perm_user_service: RoleService = provider.provide();
         let resp = perm_user_service.list(req.into_inner()).await;
