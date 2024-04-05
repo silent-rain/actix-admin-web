@@ -5,9 +5,9 @@ use actix_validator::Validate;
 use chrono::{DateTime, Local};
 use serde::{Deserialize, Serialize};
 
-/// 角色列表查询
+/// 获取验证码列表
 #[derive(Default, Deserialize, Validate)]
-pub struct CaptchaListReq {
+pub struct GetCaptchaListReq {
     /// 当前分页
     pub page: u64,
     /// 页面大小

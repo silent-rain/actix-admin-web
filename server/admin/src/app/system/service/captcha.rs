@@ -3,7 +3,7 @@
 use crate::{
     app::system::{
         dao::captcha::CaptchaDao,
-        dto::captcha::{AddCaptchaResp, CaptchaListReq},
+        dto::captcha::{AddCaptchaResp, GetCaptchaListReq},
     },
     config::server::Captcha as CaptchaConfig,
 };
@@ -25,7 +25,10 @@ pub struct CaptchaService<'a> {
 
 impl<'a> CaptchaService<'a> {
     /// 获取列表数据
-    pub async fn list(&self, req: CaptchaListReq) -> Result<(Vec<sys_captcha::Model>, u64), Error> {
+    pub async fn list(
+        &self,
+        req: GetCaptchaListReq,
+    ) -> Result<(Vec<sys_captcha::Model>, u64), Error> {
         let (results, total) = self.captcha_dao.list(req).await.map_err(|err| {
             error!("查询验证码列表失败, err: {:#?}", err);
             Error::DbQueryError

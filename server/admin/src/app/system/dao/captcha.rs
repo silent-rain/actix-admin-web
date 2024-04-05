@@ -1,5 +1,5 @@
 //! 验证码
-use crate::app::system::dto::captcha::CaptchaListReq;
+use crate::app::system::dto::captcha::GetCaptchaListReq;
 
 use database::{DbRepo, Pagination};
 use entity::{prelude::SysCaptcha, sys_captcha};
@@ -17,7 +17,10 @@ pub struct CaptchaDao<'a> {
 
 impl<'a> CaptchaDao<'a> {
     /// 获取数据列表
-    pub async fn list(&self, req: CaptchaListReq) -> Result<(Vec<sys_captcha::Model>, u64), DbErr> {
+    pub async fn list(
+        &self,
+        req: GetCaptchaListReq,
+    ) -> Result<(Vec<sys_captcha::Model>, u64), DbErr> {
         let page = Pagination::new(req.page, req.page_size);
 
         let states = SysCaptcha::find()

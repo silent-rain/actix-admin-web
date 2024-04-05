@@ -2,7 +2,7 @@
 
 use crate::{
     app::system::{
-        dto::captcha::{BatchDeleteCaptchaReq, CaptchaListReq},
+        dto::captcha::{BatchDeleteCaptchaReq, GetCaptchaListReq},
         service::captcha::CaptchaService,
     },
     config::AppConfig,
@@ -22,7 +22,7 @@ pub struct CaptchaController;
 
 impl CaptchaController {
     /// 获取验证码列表
-    pub async fn list(provider: Data<AProvider>, req: Query<CaptchaListReq>) -> impl Responder {
+    pub async fn list(provider: Data<AProvider>, req: Query<GetCaptchaListReq>) -> impl Responder {
         let captcha_service: CaptchaService = provider.provide();
         let resp = captcha_service.list(req.into_inner()).await;
         match resp {
