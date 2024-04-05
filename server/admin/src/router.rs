@@ -1,7 +1,7 @@
 //! 应用服务
 use crate::{
     app::{
-        auth::{LoginRouter, RegisterRouter},
+        auth::{GenCaptchaRouter, LoginRouter, RegisterRouter},
         log::LogRouter,
         perm::{RoleRouter, UserRoleRelRouter, UserRouter},
         public::HealthRouter,
@@ -35,6 +35,8 @@ pub fn register() -> impl HttpServiceFactory {
         // <<< 中间件 <<<
         // 健康检查
         .service(HealthRouter::register())
+        // 生成验证码
+        .service(GenCaptchaRouter::register())
         // 登陆
         .service(LoginRouter::register())
         // 注册用户
@@ -46,7 +48,7 @@ pub fn register() -> impl HttpServiceFactory {
                 .service(UserRouter::admin_register())
                 // 角色管理
                 .service(RoleRouter::admin_register())
-                // 用户角色关联关系管理
+                // 用户角色关系管理
                 .service(UserRoleRelRouter::admin_register())
                 // 验证码管理
                 .service(CaptchaRouter::admin_register())

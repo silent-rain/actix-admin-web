@@ -14,7 +14,7 @@ impl CaptchaRouter {
             .route("/batch", web::delete().to(CaptchaController::batch_delete))
             .route("", web::get().to(CaptchaController::list))
             .route("/{id}", web::get().to(CaptchaController::info))
-            .route("", web::get().to(CaptchaController::add))
+            // .route("", web::get().to(CaptchaController::add))
             .route("/{id}", web::delete().to(CaptchaController::delete))
     }
 }
