@@ -10,7 +10,7 @@ use entity::{
 use nject::injectable;
 use sea_orm::{
     ActiveModelTrait, ColumnTrait, Condition, DatabaseTransaction, DbErr, EntityTrait,
-    PaginatorTrait, QueryFilter, QueryOrder, Set, TransactionTrait,
+    PaginatorTrait, QueryFilter, QueryOrder, QuerySelect, QueryTrait, Set, TransactionTrait,
 };
 
 #[injectable]
@@ -33,17 +33,25 @@ impl<'a> UserDao<'a> {
     pub async fn list(&self, req: GetUserListReq) -> Result<(Vec<perm_user::Model>, u64), DbErr> {
         let page = Pagination::new(req.page, req.page_size);
 
-        let paginator = PermUser::find()
-            .order_by_asc(perm_user::Column::Id)
-            .paginate(self.db.rdb(), page.page_size());
+        let states = PermUser::find()
+            .apply_if(req.start_time, |query, v| {
+                query.filter(perm_user::Column::CreatedAt.gte(v))
+            })
+            .apply_if(req.end_time, |query, v| {
+                query.filter(perm_user::Column::CreatedAt.lt(v))
+            });
 
-        let num_pages = paginator.num_items().await?;
+        let total = states.clone().count(self.db.rdb()).await?;
 
-        let results = paginator.fetch_page(page.page()).await?;
+        let results = states
+            .order_by_desc(perm_user::Column::Id)
+            .offset(page.offset())
+            .limit(page.page_size())
+            .all(self.db.rdb())
+            .await?;
 
-        Ok((results, num_pages))
+        Ok((results, total))
     }
-
     /// 获取详情信息
     pub async fn info(&self, id: i32) -> Result<Option<perm_user::Model>, DbErr> {
         PermUser::find_by_id(id).one(self.db.rdb()).await
@@ -242,7 +250,7 @@ impl<'a> UserDao<'a> {
         let results = PermRole::find()
             .left_join(PermUserRoleRel)
             .filter(perm_user_role_rel::Column::UserId.eq(user_id))
-            .order_by_asc(perm_role::Column::Id)
+            .order_by_asc(perm_user::Column::Id)
             .all(self.db.rdb())
             .await?;
         let total = results.len() as u64;
@@ -253,7 +261,7 @@ impl<'a> UserDao<'a> {
 
 #[cfg(test)]
 mod tests {
-    use sea_orm::{DbBackend, QuerySelect, QueryTrait};
+    use sea_orm::DbBackend;
 
     use super::*;
 
@@ -261,14 +269,14 @@ mod tests {
     fn test_role_list() {
         let result = PermRole::find()
             .select_only()
-            .columns([perm_role::Column::Id])
+            .columns([perm_user::Column::Id])
             .left_join(PermUserRoleRel)
             .filter(perm_user_role_rel::Column::UserId.eq(10))
-            .order_by_asc(perm_role::Column::Id)
+            .order_by_asc(perm_user::Column::Id)
             .build(DbBackend::Postgres)
             .to_string();
 
-        let sql = r#"SELECT "perm_role"."id" FROM "perm_role" LEFT JOIN "perm_user_role_rel" ON "perm_role"."id" = "perm_user_role_rel"."role_id" WHERE "perm_user_role_rel"."user_id" = 10 ORDER BY "perm_role"."id" ASC"#;
+        let sql = r#"SELECT "perm_user"."id" FROM "perm_user" LEFT JOIN "perm_user_role_rel" ON "perm_user"."id" = "perm_user_role_rel"."role_id" WHERE "perm_user_role_rel"."user_id" = 10 ORDER BY "perm_user"."id" ASC"#;
 
         assert_eq!(result, sql);
     }

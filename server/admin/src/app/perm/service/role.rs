@@ -30,6 +30,14 @@ impl<'a> RoleService<'a> {
 
     /// 获取列表数据
     pub async fn list(&self, req: RoleListReq) -> Result<(Vec<perm_role::Model>, u64), Error> {
+        // 获取所有数据
+        if let Some(true) = req.all {
+            return self.role_dao.all().await.map_err(|err| {
+                error!("查询角色列表失败, err: {:#?}", err);
+                Error::DbQueryError
+            });
+        }
+
         let (results, total) = self.role_dao.list(req).await.map_err(|err| {
             error!("查询角色列表失败, err: {:#?}", err);
             Error::DbQueryError
@@ -81,5 +89,19 @@ impl<'a> RoleService<'a> {
         })?;
 
         Ok(result)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+
+    #[test]
+    fn test_if_option() {
+        let some_option = Some(true);
+        if let Some(true) = some_option {
+            println!("The option is true!");
+        } else {
+            println!("The option is not true!");
+        }
     }
 }

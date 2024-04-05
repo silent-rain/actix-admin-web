@@ -11,6 +11,12 @@ pub struct AppTemplateListReq {
     pub page: u64,
     /// 页面大小
     pub page_size: u64,
+    /// 开始时间
+    pub start_time: Option<String>,
+    /// 结束时间
+    pub end_time: Option<String>,
+    /// 排序字段
+    pub order_by: Option<String>,
 }
 
 /// 详情数据 请求体

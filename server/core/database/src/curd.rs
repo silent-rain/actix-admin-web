@@ -6,7 +6,6 @@ use async_trait::async_trait;
 use sea_orm::{
     ActiveModelBehavior, ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, FromQueryResult,
     IntoActiveModel, Iterable, PaginatorTrait, PrimaryKeyToColumn, PrimaryKeyTrait, QueryFilter,
-    QuerySelect,
 };
 
 #[async_trait]
@@ -27,21 +26,13 @@ where
         Ok((result, total))
     }
 
-    /// 获取数据列表
-    async fn list(&self, page: Pagination) -> Result<(Vec<E::Model>, u64), DbErr>
+    /*
+    /// 获取数据列表, 仅供参考的写法
+    async fn _list(&self, page: Pagination) -> Result<(Vec<E::Model>, u64), DbErr>
     where
-        E::Model: FromQueryResult,
+        E::Model: FromQueryResult + Sized + Send + Sync,
     {
-        // 获取总页数
-        // let pages: u64 = E::find()
-        //     .paginate(self.db().rdb(), page.page_size())
-        //     .num_items()
-        //     .await?;
-
-        // 获取总数
-        // let total: u64 = E::find().paginate(self.db().rdb(), 1).num_items().await?;
-        let total: u64 = E::find().all(self.db().rdb()).await?.len() as u64;
-
+        let total: u64 = E::find().paginate(self.db().rdb(), 1).num_items().await?;
         let results = E::find()
             .offset(page.offset())
             .limit(page.page_size())
@@ -49,20 +40,21 @@ where
             .await?;
         Ok((results, total))
     }
+     */
 
-    /// 获取数据列表，对选择操作的结果进行分页
-    async fn _list_pages(&self, page: Pagination) -> Result<(Vec<E::Model>, u64), DbErr>
+    /// 获取数据列表
+    async fn list(&self, page: Pagination) -> Result<(Vec<E::Model>, u64), DbErr>
     where
-        E::Model: FromQueryResult,
-        E: EntityTrait<Model = E>,
+        E::Model: FromQueryResult + Sized + Send + Sync,
     {
         let paginator = E::find().paginate(self.db().rdb(), page.page_size());
-        let total_pages = paginator.num_items().await?;
+
+        let total = paginator.num_items().await?;
 
         paginator
             .fetch_page(page.page())
             .await
-            .map(|results| (results, total_pages))
+            .map(|results| (results, total))
     }
 
     /// 根据主键获取详情信息

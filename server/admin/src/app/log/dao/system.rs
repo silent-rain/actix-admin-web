@@ -8,7 +8,8 @@ use entity::prelude::LogSystem;
 
 use nject::injectable;
 use sea_orm::{
-    ActiveModelTrait, ActiveValue::NotSet, DbErr, EntityTrait, PaginatorTrait, QueryOrder,
+    ActiveModelTrait, ActiveValue::NotSet, ColumnTrait, DbErr, EntityTrait, PaginatorTrait,
+    QueryFilter, QueryOrder, QuerySelect, QueryTrait,
 };
 
 #[injectable]
@@ -23,16 +24,25 @@ impl<'a> LogSystemDao<'a> {
         req: LogSystemListReq,
     ) -> Result<(Vec<log_system::Model>, u64), DbErr> {
         let page = Pagination::new(req.page, req.page_size);
-        let paginator = LogSystem::find()
+
+        let states = LogSystem::find()
+            .apply_if(req.start_time, |query, v| {
+                query.filter(log_system::Column::CreatedAt.gte(v))
+            })
+            .apply_if(req.end_time, |query, v| {
+                query.filter(log_system::Column::CreatedAt.lt(v))
+            });
+
+        let total = states.clone().count(self.db.rdb()).await?;
+
+        let results = states
             .order_by_desc(log_system::Column::Id)
-            .paginate(self.db.rdb(), page.page_size());
+            .offset(page.offset())
+            .limit(page.page_size())
+            .all(self.db.rdb())
+            .await?;
 
-        let num_pages = paginator.num_items().await?;
-
-        paginator
-            .fetch_page(page.page())
-            .await
-            .map(|results| (results, num_pages))
+        Ok((results, total))
     }
 
     /// 获取详情信息

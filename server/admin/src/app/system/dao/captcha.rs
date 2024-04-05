@@ -7,6 +7,7 @@ use nject::injectable;
 
 use sea_orm::{
     ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, PaginatorTrait, QueryFilter, QueryOrder,
+    QuerySelect, QueryTrait,
 };
 
 #[injectable]
@@ -19,17 +20,25 @@ impl<'a> CaptchaDao<'a> {
     pub async fn list(&self, req: CaptchaListReq) -> Result<(Vec<sys_captcha::Model>, u64), DbErr> {
         let page = Pagination::new(req.page, req.page_size);
 
-        let paginator = SysCaptcha::find()
-            .order_by_asc(sys_captcha::Column::Id)
-            .paginate(self.db.rdb(), page.page_size());
+        let states = SysCaptcha::find()
+            .apply_if(req.start_time, |query, v| {
+                query.filter(sys_captcha::Column::CreatedAt.gte(v))
+            })
+            .apply_if(req.end_time, |query, v| {
+                query.filter(sys_captcha::Column::CreatedAt.lt(v))
+            });
 
-        let num_pages = paginator.num_items().await?;
+        let total = states.clone().count(self.db.rdb()).await?;
 
-        let results = paginator.fetch_page(page.page()).await?;
+        let results = states
+            .order_by_desc(sys_captcha::Column::Id)
+            .offset(page.offset())
+            .limit(page.page_size())
+            .all(self.db.rdb())
+            .await?;
 
-        Ok((results, num_pages))
+        Ok((results, total))
     }
-
     /// 获取详情信息
     pub async fn info(&self, id: i32) -> Result<Option<sys_captcha::Model>, DbErr> {
         SysCaptcha::find()

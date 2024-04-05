@@ -158,9 +158,9 @@ impl<'a> AppTemplateEtxDao<'a> {
             .into_json()
             .paginate(self.db.rdb(), page_size);
 
-        let num_pages = paginator.num_items().await?;
+        let total = paginator.num_items().await?;
 
-        paginator.fetch_page(page).await.map(|p| (p, num_pages))
+        paginator.fetch_page(page).await.map(|p| (p, total))
     }
 }
 
@@ -227,9 +227,9 @@ impl<'a> AppTemplateEtxDao<'a> {
             ))
             .paginate(self.db.rdb(), page_size);
 
-        let num_pages = paginator.num_items().await?;
+        let total = paginator.num_items().await?;
 
-        paginator.fetch_page(page).await.map(|p| (p, num_pages))
+        paginator.fetch_page(page).await.map(|p| (p, total))
     }
 
     /// 获取原始查询 SQL

@@ -6,7 +6,7 @@ use entity::{perm_role, prelude::PermRole};
 use nject::injectable;
 
 use sea_orm::{
-    ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, PaginatorTrait, QueryFilter, QueryOrder,
+    ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, PaginatorTrait, QueryFilter, QueryOrder, QuerySelect, QueryTrait
 };
 
 #[injectable]
@@ -29,15 +29,24 @@ impl<'a> RoleDao<'a> {
     pub async fn list(&self, req: RoleListReq) -> Result<(Vec<perm_role::Model>, u64), DbErr> {
         let page = Pagination::new(req.page, req.page_size);
 
-        let paginator = PermRole::find()
-            .order_by_asc(perm_role::Column::Id)
-            .paginate(self.db.rdb(), page.page_size());
+        let states = PermRole::find()
+            .apply_if(req.start_time, |query, v| {
+                query.filter(perm_role::Column::CreatedAt.gte(v))
+            })
+            .apply_if(req.end_time, |query, v| {
+                query.filter(perm_role::Column::CreatedAt.lt(v))
+            });
 
-        let num_pages = paginator.num_items().await?;
+        let total = states.clone().count(self.db.rdb()).await?;
 
-        let results = paginator.fetch_page(page.page()).await?;
+        let results = states
+            .order_by_desc(perm_role::Column::Id)
+            .offset(page.offset())
+            .limit(page.page_size())
+            .all(self.db.rdb())
+            .await?;
 
-        Ok((results, num_pages))
+        Ok((results, total))
     }
 
     /// 获取详情信息

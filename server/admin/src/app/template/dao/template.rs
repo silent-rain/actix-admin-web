@@ -1,5 +1,7 @@
 //! 模板管理
 
+use std::str::FromStr;
+
 use crate::app::template::dto::template::AppTemplateListReq;
 
 use database::{DbRepo, Pagination};
@@ -7,7 +9,8 @@ use entity::{app_template, prelude::AppTemplate};
 
 use nject::injectable;
 use sea_orm::{
-    ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, PaginatorTrait, QueryFilter, QueryOrder, Set,
+    ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, PaginatorTrait, QueryFilter, QueryOrder,
+    QuerySelect, QueryTrait, Set,
 };
 
 #[injectable]
@@ -26,8 +29,39 @@ impl<'a> AppTemplateDao<'a> {
         Ok((results, total))
     }
 
-    /// 获取列表数据
     pub async fn list(
+        &self,
+        req: AppTemplateListReq,
+    ) -> Result<(Vec<app_template::Model>, u64), DbErr> {
+        let page = Pagination::new(req.page, req.page_size);
+
+        let states = AppTemplate::find()
+            .apply_if(req.start_time, |query, v| {
+                query.filter(app_template::Column::CreatedAt.gte(v))
+            })
+            .apply_if(req.end_time, |query, v| {
+                query.filter(app_template::Column::CreatedAt.lt(v))
+            });
+
+        let total = states.clone().count(self.db.rdb()).await?;
+
+        let order_by_col = match req.order_by {
+            Some(v) => app_template::Column::from_str(&v).map_or(app_template::Column::Id, |v| v),
+            None => app_template::Column::Id,
+        };
+
+        let results = states
+            .order_by_desc(order_by_col)
+            .offset(page.offset())
+            .limit(page.page_size())
+            .all(self.db.rdb())
+            .await?;
+
+        Ok((results, total))
+    }
+
+    /// 获取列表数据
+    pub async fn list2(
         &self,
         req: AppTemplateListReq,
     ) -> Result<(Vec<app_template::Model>, u64), DbErr> {
@@ -37,12 +71,12 @@ impl<'a> AppTemplateDao<'a> {
             .order_by_desc(app_template::Column::Id)
             .paginate(self.db.rdb(), page.page_size());
 
-        let num_pages = paginator.num_items().await?;
+        let total = paginator.num_items().await?;
 
         paginator
             .fetch_page(page.page())
             .await
-            .map(|results| (results, num_pages))
+            .map(|results| (results, total))
     }
 
     /// 获取详情数据
@@ -110,7 +144,7 @@ impl<'a> AppTemplateDao<'a> {
 
 #[cfg(test)]
 mod tests {
-    use sea_orm::{DbBackend, QueryTrait};
+    use sea_orm::DbBackend;
 
     use super::*;
 

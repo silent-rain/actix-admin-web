@@ -1,8 +1,7 @@
 //! 用户角色关联关系管理
 
 use database::DbRepo;
-use entity::perm_user_role_rel;
-use entity::prelude::PermUserRoleRel;
+use entity::{perm_user_role_rel, prelude::PermUserRoleRel};
 
 use nject::injectable;
 use sea_orm::{ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, QueryFilter};
@@ -19,7 +18,9 @@ impl<'a> UserRoleRelDao<'a> {
             .filter(perm_user_role_rel::Column::UserId.eq(user_id))
             .all(self.db.rdb())
             .await?;
+
         let total = results.len() as u64;
+
         Ok((results, total))
     }
 

@@ -8,8 +8,7 @@ use entity::sys_user_login;
 
 use nject::injectable;
 use sea_orm::{
-    ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, PaginatorTrait, QueryFilter, QueryOrder,
-    QuerySelect, Set,
+    ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, PaginatorTrait, QueryFilter, QueryOrder, QuerySelect, QueryTrait, Set
 };
 
 #[injectable]
@@ -25,21 +24,25 @@ impl<'a> UserLoginDao<'a> {
     ) -> Result<(Vec<sys_user_login::Model>, u64), DbErr> {
         let page = Pagination::new(req.page, req.page_size);
 
-        let total: u64 = SysUserLogin::find()
-            .paginate(self.db.rdb(), 1)
-            .num_items()
-            .await?;
+        let states = SysUserLogin::find()
+            .apply_if(req.start_time, |query, v| {
+                query.filter(sys_user_login::Column::CreatedAt.gte(v))
+            })
+            .apply_if(req.end_time, |query, v| {
+                query.filter(sys_user_login::Column::CreatedAt.lt(v))
+            });
 
-        let results = SysUserLogin::find()
+        let total = states.clone().count(self.db.rdb()).await?;
+
+        let results = states
+            .order_by_desc(sys_user_login::Column::Id)
             .offset(page.offset())
             .limit(page.page_size())
-            .order_by_desc(sys_user_login::Column::Id)
             .all(self.db.rdb())
             .await?;
 
         Ok((results, total))
     }
-
     /// 获取详情信息
     pub async fn info(&self, id: i32) -> Result<Option<sys_user_login::Model>, DbErr> {
         SysUserLogin::find_by_id(id).one(self.db.rdb()).await
