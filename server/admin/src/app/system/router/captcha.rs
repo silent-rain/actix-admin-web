@@ -8,7 +8,7 @@ use actix_web::{web, Scope};
 pub struct CaptchaRouter;
 
 impl CaptchaRouter {
-    /// 注册验证码管理路由
+    /// 注册`验证码管理`路由
     pub fn admin_register() -> Scope {
         web::scope("/captchas")
             .route("/batch", web::delete().to(CaptchaController::batch_delete))
