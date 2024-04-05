@@ -24,7 +24,7 @@ impl LoginController {
         let result = login_service.login(req, data.into_inner()).await;
         match result {
             Ok(v) => Response::ok().data(v),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 }
