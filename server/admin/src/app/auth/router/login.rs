@@ -8,7 +8,7 @@ use actix_web::{web, Scope};
 pub struct LoginRouter;
 
 impl LoginRouter {
-    /// 注册登陆路由
+    /// 注册`用户登陆`路由
     pub fn register() -> Scope {
         web::scope("/login").route("", web::post().to(LoginController::login))
     }

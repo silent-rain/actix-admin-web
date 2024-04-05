@@ -8,7 +8,7 @@ use actix_web::{web, Scope};
 pub struct RoleRouter;
 
 impl RoleRouter {
-    /// 注册角色管理路由
+    /// 注册`角色管理`路由
     pub fn admin_register() -> Scope {
         web::scope("/roles")
             .route("", web::get().to(RoleController::list))

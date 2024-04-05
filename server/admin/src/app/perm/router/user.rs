@@ -8,7 +8,7 @@ use actix_web::{web, Scope};
 pub struct UserRouter;
 
 impl UserRouter {
-    /// 注册用户管理路由
+    /// 注册`用户管理`路由
     pub fn admin_register() -> Scope {
         web::scope("/users")
             .route("", web::get().to(UserController::list))
