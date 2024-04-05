@@ -7,7 +7,7 @@ use sea_orm::{
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "sys_user_login")]
+#[sea_orm(table_name = "log_user_login")]
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,

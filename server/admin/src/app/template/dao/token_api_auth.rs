@@ -3,8 +3,8 @@
 use database::DbRepo;
 use entity::api_role_http_rel;
 use entity::app_template;
+use entity::log_user_login;
 use entity::prelude::{ApiRoleHttpRel, AppTemplate};
-use entity::sys_user_login;
 
 use nject::injectable;
 use sea_orm::{DbErr, EntityTrait, JoinType, QuerySelect, RelationTrait};
@@ -74,8 +74,8 @@ impl<'a> AppTemplateEtxDao<'a> {
             // construct `RelationDef` on the fly
             .join_rev(
                 JoinType::InnerJoin,
-                sys_user_login::Entity::belongs_to(app_template::Entity)
-                    .from(sys_user_login::Column::UserId)
+                log_user_login::Entity::belongs_to(app_template::Entity)
+                    .from(log_user_login::Column::UserId)
                     .to(app_template::Column::UserId)
                     .into(),
             )

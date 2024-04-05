@@ -4,7 +4,7 @@ mod m20230617_084425_create_log_system;
 mod m20240216_123914_create_perm_user;
 mod m20240218_145452_create_perm_role;
 mod m20240218_161914_create_perm_user_role_rel;
-mod m20240218_161915_create_sys_user_login;
+mod m20240218_161915_create_log_user_login;
 mod m20240218_161916_create_sys_captcha;
 
 pub struct Migrator;
@@ -17,7 +17,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20230617_084425_create_log_system::Migration),
             Box::new(m20240218_145452_create_perm_role::Migration),
             Box::new(m20240218_161914_create_perm_user_role_rel::Migration),
-            Box::new(m20240218_161915_create_sys_user_login::Migration),
+            Box::new(m20240218_161915_create_log_user_login::Migration),
             Box::new(m20240218_161916_create_sys_captcha::Migration),
         ]
     }

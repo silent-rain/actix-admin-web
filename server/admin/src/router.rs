@@ -2,10 +2,10 @@
 use crate::{
     app::{
         auth::{LoginRouter, RegisterRouter},
-        log::SystemRouter,
+        log::LogRouter,
         perm::{RoleRouter, UserRoleRelRouter, UserRouter},
         public::HealthRouter,
-        system::{CaptchaRouter, UserLoginRouter},
+        system::CaptchaRouter,
     },
     middleware,
 };
@@ -50,9 +50,7 @@ pub fn register() -> impl HttpServiceFactory {
                 .service(UserRoleRelRouter::admin_register())
                 // 验证码管理
                 .service(CaptchaRouter::admin_register())
-                // 系统日志管理
-                .service(SystemRouter::admin_register())
-                // 登陆日志管理
-                .service(UserLoginRouter::admin_register()),
+                // 日志管理
+                .service(LogRouter::admin_register()),
         )
 }

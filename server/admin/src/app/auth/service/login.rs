@@ -5,13 +5,14 @@ use crate::app::{
         common::captcha::check_captcha,
         dto::login::{LoginReq, LoginRsp},
     },
+    log::UserLoginDao,
     perm::UserDao,
-    system::{CaptchaDao, UserLoginDao},
+    system::CaptchaDao,
 };
 
 use actix_web::HttpRequest;
 use code::Error;
-use entity::{perm_user, sys_user_login};
+use entity::{log_user_login, perm_user};
 use jwt::encode_token;
 
 use nject::injectable;
@@ -85,7 +86,7 @@ impl<'a> LoginService<'a> {
         &self,
         req: HttpRequest,
         user: perm_user::Model,
-    ) -> Result<sys_user_login::Model, Error> {
+    ) -> Result<log_user_login::Model, Error> {
         let username = user.username.map_or("".to_owned(), |v| v);
         // Get the remote address from the request
         // let remote_addr = req
@@ -101,7 +102,7 @@ impl<'a> LoginService<'a> {
             .get("User-Agent")
             .map_or("".to_owned(), |ua| ua.to_str().unwrap_or("").to_owned());
 
-        let data = sys_user_login::ActiveModel {
+        let data = log_user_login::ActiveModel {
             user_id: Set(user.id),
             username: Set(username),
             remote_addr: Set(remote_addr),

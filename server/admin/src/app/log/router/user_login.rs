@@ -1,6 +1,6 @@
 //! 登陆日志
 
-use crate::app::system::UserLoginController;
+use crate::app::log::UserLoginController;
 
 use actix_web::{web, Scope};
 

@@ -19,4 +19,4 @@ pub mod perm_user_role_rel;
 pub mod sys_captcha;
 pub mod sys_config;
 pub mod sys_icon;
-pub mod sys_user_login;
+pub mod log_user_login;

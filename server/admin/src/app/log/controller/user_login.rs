@@ -1,10 +1,8 @@
 //! 登陆日志
 
 use crate::{
-    app::system::{
-        dto::user_login::{
-            AddUserLoginInfoReq, UserLoginInfoReq, UserLoginListReq, UserLoginStatusReq,
-        },
+    app::log::{
+        dto::user_login::{AddUserLoginInfoReq, GetUserLoginListReq, UpdateUserLoginStatusReq},
         service::user_login::UserLoginService,
     },
     inject::AProvider,
@@ -13,7 +11,7 @@ use crate::{
 use response::Response;
 
 use actix_web::{
-    web::{Data, Json, Query},
+    web::{Data, Json, Path, Query},
     Responder,
 };
 
@@ -22,7 +20,10 @@ pub struct UserLoginController;
 
 impl UserLoginController {
     /// 获取登录日志列表
-    pub async fn list(provider: Data<AProvider>, req: Query<UserLoginListReq>) -> impl Responder {
+    pub async fn list(
+        provider: Data<AProvider>,
+        req: Query<GetUserLoginListReq>,
+    ) -> impl Responder {
         let user_login_service: UserLoginService = provider.provide();
         let resp = user_login_service.list(req.into_inner()).await;
         match resp {
@@ -32,9 +33,9 @@ impl UserLoginController {
     }
 
     /// 获取登录日志信息
-    pub async fn info(provider: Data<AProvider>, req: Query<UserLoginInfoReq>) -> impl Responder {
+    pub async fn info(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
         let user_login_service: UserLoginService = provider.provide();
-        let resp = user_login_service.info(req.into_inner()).await;
+        let resp = user_login_service.info(*id).await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::code(err),
@@ -54,7 +55,7 @@ impl UserLoginController {
     /// 更新登录日志状态
     pub async fn status(
         provider: Data<AProvider>,
-        req: Query<UserLoginStatusReq>,
+        req: Json<UpdateUserLoginStatusReq>,
     ) -> impl Responder {
         let user_login_service: UserLoginService = provider.provide();
         let resp = user_login_service.status(req.id, req.status).await;

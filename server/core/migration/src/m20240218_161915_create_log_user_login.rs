@@ -10,10 +10,10 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(SysUserLogin::Table)
+                    .table(LogUserLogin::Table)
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(SysUserLogin::Id)
+                        ColumnDef::new(LogUserLogin::Id)
                             .integer()
                             .not_null()
                             .auto_increment()
@@ -21,44 +21,44 @@ impl MigrationTrait for Migration {
                             .comment("ID"),
                     )
                     .col(
-                        ColumnDef::new(SysUserLogin::UserId)
+                        ColumnDef::new(LogUserLogin::UserId)
                             .integer()
                             .not_null()
                             .comment("用户ID"),
                     )
                     .col(
-                        ColumnDef::new(SysUserLogin::Username)
+                        ColumnDef::new(LogUserLogin::Username)
                             .string()
                             .string_len(32)
                             .not_null()
                             .comment("用户名称"),
                     )
                     .col(
-                        ColumnDef::new(SysUserLogin::RemoteAddr)
+                        ColumnDef::new(LogUserLogin::RemoteAddr)
                             .string()
                             .string_len(64)
                             .comment("登录IP"),
                     )
                     .col(
-                        ColumnDef::new(SysUserLogin::UserAgent)
+                        ColumnDef::new(LogUserLogin::UserAgent)
                             .string()
                             .string_len(256)
                             .comment("用户代理"),
                     )
                     .col(
-                        ColumnDef::new(SysUserLogin::Status)
+                        ColumnDef::new(LogUserLogin::Status)
                             .tiny_integer()
                             .not_null()
                             .comment("登录状态,0:禁用,1:启用"),
                     )
                     .col(
-                        ColumnDef::new(SysUserLogin::CreatedAt)
+                        ColumnDef::new(LogUserLogin::CreatedAt)
                             .date_time()
                             .not_null()
                             .comment("创建时间"),
                     )
                     .col(
-                        ColumnDef::new(SysUserLogin::UpdatedAt)
+                        ColumnDef::new(LogUserLogin::UpdatedAt)
                             .date_time()
                             .not_null()
                             .default(Expr::current_timestamp())
@@ -72,15 +72,15 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
         manager
-            .drop_table(Table::drop().table(SysUserLogin::Table).to_owned())
+            .drop_table(Table::drop().table(LogUserLogin::Table).to_owned())
             .await
     }
 }
 
 /// Learn more at https://docs.rs/sea-query#iden
 #[derive(Iden)]
-enum SysUserLogin {
-    #[iden = "sys_user_login"]
+enum LogUserLogin {
+    #[iden = "log_user_login"]
     Table,
     Id,
     UserId,

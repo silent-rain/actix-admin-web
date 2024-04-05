@@ -2,7 +2,7 @@
 use std::future::{ready, Ready};
 
 use crate::{
-    app::system::UserLoginService,
+    app::log::UserLoginService,
     constant::{
         HEADERS_AUTHORIZATION, HEADERS_AUTHORIZATION_BEARER, HEADERS_OPEN_API_AUTHORIZATION,
     },

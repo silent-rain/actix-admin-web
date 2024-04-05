@@ -8,16 +8,12 @@ use actix_web::{web, Scope};
 pub struct SystemRouter;
 
 impl SystemRouter {
-    /// 注册系统日志管理路由
+    /// 注册`系统日志管理`路由
     pub fn admin_register() -> Scope {
-        web::scope("/log")
-            // 系统日志管理
-            .service(
-                web::scope("/systems")
-                    .route("", web::get().to(LogSystemController::list))
-                    .route("/{id}", web::get().to(LogSystemController::info))
-                    .route("", web::post().to(LogSystemController::add))
-                    .route("/{id}", web::delete().to(LogSystemController::delete)),
-            )
+        web::scope("/systems")
+            .route("", web::get().to(LogSystemController::list))
+            .route("/{id}", web::get().to(LogSystemController::info))
+            .route("", web::post().to(LogSystemController::add))
+            .route("/{id}", web::delete().to(LogSystemController::delete))
     }
 }

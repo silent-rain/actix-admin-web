@@ -2,13 +2,13 @@
 pub mod dto;
 
 mod dao;
-pub use dao::{captcha::CaptchaDao, user_login::UserLoginDao};
+pub use dao::captcha::CaptchaDao;
 
 mod service;
-pub use service::{captcha::CaptchaService, user_login::UserLoginService};
+pub use service::captcha::CaptchaService;
 
 mod controller;
-pub use controller::{captcha::CaptchaController, user_login::UserLoginController};
+pub use controller::captcha::CaptchaController;
 
 mod router;
-pub use router::{captcha::CaptchaRouter, user_login::UserLoginRouter};
+pub use router::captcha::CaptchaRouter;
