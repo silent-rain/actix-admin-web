@@ -13,7 +13,7 @@ impl SystemRouter {
         web::scope("/systems")
             .route("", web::get().to(LogSystemController::list))
             .route("/{id}", web::get().to(LogSystemController::info))
-            .route("", web::post().to(LogSystemController::add))
-            .route("/{id}", web::delete().to(LogSystemController::delete))
+        // .route("", web::post().to(LogSystemController::add))
+        // .route("/{id}", web::delete().to(LogSystemController::delete))
     }
 }
