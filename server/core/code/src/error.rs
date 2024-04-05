@@ -25,7 +25,7 @@ pub enum Error {
     #[error("请求超时")]
     RequestTimeout = 10102,
     /// 无效请求参数
-    #[error("无效请求参数, err: {0}")]
+    #[error("无效请求参数, {0}")]
     InvalidParameterError(String) = 10103,
     /// 配置解析错误
     #[error("配置解析错误")]
@@ -33,21 +33,21 @@ pub enum Error {
 
     // 数据处理异常
     /// Serialize the given data structure as a String of JSON.
-    #[error("结构序列化为JSON字符串错误, err: {0}")]
+    #[error("结构序列化为JSON字符串错误, {0}")]
     JsonSerialization(String) = 10150,
     /// Deserialize an instance of type T from a string of JSON text.
-    #[error("从JSON文本字符串中反序列化错误, err: {0}")]
+    #[error("从JSON文本字符串中反序列化错误, {0}")]
     JsonDeserialization(String) = 10151,
-    #[error("JSON转换错误, err: {0}")]
+    #[error("JSON转换错误, {0}")]
     JsonConvert(String) = 10152,
     /// No data available
     #[error("No data available")]
     NoDataAvailable = 10153,
     /// An input/output error
-    #[error("An input/output error {0}")]
+    #[error("An input/output error, {0}")]
     IoError(io::Error) = 10154,
     /// A possible error value when converting a String from a UTF-8 byte vector.
-    #[error("A possible error value when converting a String from a UTF-8 byte vector.")]
+    #[error("A possible error value when converting a String from a UTF-8 byte vector, {0}")]
     FromUtf8Error(std::string::FromUtf8Error) = 10155,
 
     #[error("数据库初始化失败, {0}")]
@@ -92,7 +92,7 @@ pub enum Error {
     LoginPasswordError = 10254,
     #[error("获取密匙异常")]
     TokenEncode = 10255,
-    #[error("解析密匙异常, err: {0}")]
+    #[error("解析密匙异常, {0}")]
     TokenDecode(String) = 10256,
     #[error("非法请求")]
     HeadersNotAuthorization = 10257,
@@ -110,17 +110,17 @@ pub enum Error {
     FsParentDirError = 10302,
     #[error("创建目录失败")]
     FsCreateDir = 10303,
-    #[error("读取文件失败")]
+    #[error("读取文件失败, {0}")]
     FsReadFileError(String) = 10304,
-    #[error("创建文件失败")]
+    #[error("创建文件失败, {0}")]
     FsCreateFileError(String) = 10305,
-    #[error("写入文件失败")]
+    #[error("写入文件失败, {0}")]
     FsWriterFileError(String) = 10306,
     #[error("内置资源读取失败")]
     AssetReadError = 10307,
 
     // 内部框架错误
-    #[error("日志初始化失败")]
+    #[error("日志初始化失败, {0}")]
     LoggerInitError(String) = 10351,
 
     /// 自定义错误
@@ -128,16 +128,6 @@ pub enum Error {
     CustomError = 65535,
     // Other error from higher-level crate, for downcasting
     // Other(Box<dyn std::error::Error + Send + Sync + 'static>),
-}
-
-/// 业务码序列化
-impl Serialize for Error {
-    fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        serializer.serialize_str(self.to_string().as_ref())
-    }
 }
 
 impl Error {
@@ -151,6 +141,16 @@ impl Error {
     /// 返回错误码信息
     pub fn msg(&self) -> String {
         self.to_string()
+    }
+}
+
+/// 业务码序列化
+impl Serialize for Error {
+    fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        serializer.serialize_str(self.to_string().as_ref())
     }
 }
 
@@ -190,14 +190,14 @@ mod tests {
     fn test_error_code() {
         let mut err = Error::LoggerInitError("0".to_string());
         println!("== {}", err);
-        assert!(err.to_string() == "LoggerInitError(0)");
+        assert!(err.to_string() == "日志初始化失败, 0");
         let code = unsafe {
             let mul_err = &mut err;
             let ptr: *const u16 = mul_err as *mut Error as *const u16;
             ptr.read_volatile()
         };
         println!("== {}", code);
-        assert!(code == 200);
+        assert!(code == 10351);
     }
 
     #[test]
@@ -205,7 +205,7 @@ mod tests {
         let err = Error::LoggerInitError("0".to_string());
         let code = err.code();
         println!("== {}", code);
-        assert!(code == 200);
+        assert!(code == 10351);
     }
 
     #[derive(CodeMessage)]

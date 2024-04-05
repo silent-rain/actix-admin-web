@@ -1,4 +1,6 @@
 //! 业务码
-pub mod code;
+pub mod error;
+pub mod error_msg;
 
-pub use code::Error;
+pub use error::Error;
+pub use error_msg::ErrorMsg;

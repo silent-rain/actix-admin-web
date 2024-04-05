@@ -1,5 +1,5 @@
 //! 接口响应类型
-use code::Error;
+use code::{Error, ErrorMsg};
 
 use actix_web::{
     body::BoxBody,
@@ -45,13 +45,21 @@ impl Response {
             data: None,
         }
     }
-    /// 返回错误信息, 覆盖错误码信息
-    pub fn msg(mut self, msg: &str) -> Self {
+    /// 通过错误码消息体创建响应体
+    pub fn err(err: ErrorMsg) -> Self {
+        Self {
+            code: err.code(),
+            msg: err.msg().to_owned(),
+            data: None,
+        }
+    }
+    /// 返回响应信息, 覆盖原响应信息
+    pub fn with_msg(mut self, msg: &str) -> Self {
         self.msg = msg.to_string();
         self
     }
-    /// 追加错误信息, 在错误码信息的基础上添加新的信息
-    pub fn with_msg(mut self, msg: &str) -> Self {
+    /// 追加响应信息, 在原响应信息的基础上添加新的信息
+    pub fn append_msg(mut self, msg: &str) -> Self {
         self.msg = format!("{}, {}", self.msg, msg);
         self
     }
@@ -67,6 +75,7 @@ impl Response {
     }
 }
 
+/// 打印 Response
 impl std::fmt::Display for Response {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "(status code: {}, msg: {})", self.code, self.msg)
@@ -77,6 +86,11 @@ impl std::fmt::Display for Response {
 impl From<Error> for Response {
     fn from(code: Error) -> Response {
         Response::code(code)
+    }
+}
+impl From<ErrorMsg> for Response {
+    fn from(err: ErrorMsg) -> Response {
+        Response::err(err)
     }
 }
 
