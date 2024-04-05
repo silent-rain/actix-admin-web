@@ -62,7 +62,7 @@ impl CaptchaController {
         let captcha = conf.server.captcha.clone();
         let resp = captcha_service.add(captcha).await;
         match resp {
-            Ok(_v) => Response::ok(),
+            Ok(v) => Response::ok().data(v),
             Err(err) => Response::code(err),
         }
     }

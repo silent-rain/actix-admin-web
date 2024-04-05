@@ -10,11 +10,11 @@ use crate::app::{
     system::CaptchaDao,
 };
 
-use actix_web::HttpRequest;
-use code::Error;
+use code::{Error, ErrorMsg};
 use entity::{log_user_login, perm_user};
 use jwt::encode_token;
 
+use actix_web::HttpRequest;
 use nject::injectable;
 use sea_orm::Set;
 use tracing::error;
@@ -29,7 +29,7 @@ pub struct LoginService<'a> {
 
 impl<'a> LoginService<'a> {
     /// 登陆
-    pub async fn login(&self, req: HttpRequest, data: LoginReq) -> Result<LoginRsp, Error> {
+    pub async fn login(&self, req: HttpRequest, data: LoginReq) -> Result<LoginRsp, ErrorMsg> {
         // 检测验证码
         check_captcha(
             &self.captcha_dao,
@@ -43,14 +43,16 @@ impl<'a> LoginService<'a> {
         // 检测密码
         if user.password != data.password {
             error!("账号或密码错误");
-            return Err(Error::LoginPasswordError);
+            return Err(Error::LoginPasswordError
+                .into_msg()
+                .with_msg("账号或密码错误"));
         }
 
         // 生成Token
         let token = encode_token(user.id, user.username.clone().map_or("".to_owned(), |v| v))
             .map_err(|err| {
-                error!("获取密匙异常, err: {}", err);
-                Error::TokenEncode
+                error!("生成密匙失败, err: {}", err);
+                Error::TokenEncode.into_msg().with_msg("生成密匙失败")
             })?;
 
         // 添加登陆日志
@@ -64,18 +66,18 @@ impl<'a> LoginService<'a> {
     }
 
     /// 获取用户信息
-    async fn get_username(&self, data: LoginReq) -> Result<perm_user::Model, Error> {
+    async fn get_username(&self, data: LoginReq) -> Result<perm_user::Model, ErrorMsg> {
         let result = self
             .user_dao
             .info_by_username(data.username.clone())
             .await
             .map_err(|err| {
                 error!("查询用户信息失败, err: {:#?}", err);
-                Error::DbQueryError
+                Error::DbQueryError.into_msg().with_msg("查询用户信息失败")
             })?
             .ok_or_else(|| {
                 error!("该用户不存在");
-                Error::DbQueryEmptyError
+                Error::DbQueryEmptyError.into_msg().with_msg("该用户不存在")
             })?;
 
         Ok(result)
@@ -86,7 +88,7 @@ impl<'a> LoginService<'a> {
         &self,
         req: HttpRequest,
         user: perm_user::Model,
-    ) -> Result<log_user_login::Model, Error> {
+    ) -> Result<log_user_login::Model, ErrorMsg> {
         let username = user.username.map_or("".to_owned(), |v| v);
         // Get the remote address from the request
         // let remote_addr = req
@@ -114,6 +116,8 @@ impl<'a> LoginService<'a> {
         let result = self.user_login_dao.add(data).await.map_err(|err| {
             error!("添加登陆日志失败, err: {:#?}", err);
             code::Error::DbAddError
+                .into_msg()
+                .with_msg("添加登陆日志失败")
         })?;
 
         Ok(result)

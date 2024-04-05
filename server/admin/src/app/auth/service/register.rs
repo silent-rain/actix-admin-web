@@ -6,7 +6,7 @@ use crate::app::{
     system::CaptchaDao,
 };
 
-use code::Error;
+use code::{Error, ErrorMsg};
 use entity::perm_user;
 use utils::{crypto::sha2_256, json::struct_to_struct};
 
@@ -23,7 +23,7 @@ pub struct RegisterService<'a> {
 
 impl<'a> RegisterService<'a> {
     /// 根据不同的注册类型进行注册用户
-    pub async fn register(&self, data: RegisterReq) -> Result<perm_user::Model, Error> {
+    pub async fn register(&self, data: RegisterReq) -> Result<perm_user::Model, ErrorMsg> {
         match data.register_type {
             RegisterType::Phone => {
                 let data: PhoneRegisterReq = struct_to_struct(&data)?;
@@ -37,7 +37,7 @@ impl<'a> RegisterService<'a> {
     }
 
     /// 注册手机用户
-    async fn register_phone(&self, data: PhoneRegisterReq) -> Result<perm_user::Model, Error> {
+    async fn register_phone(&self, data: PhoneRegisterReq) -> Result<perm_user::Model, ErrorMsg> {
         let mut data = data;
 
         // 检测验证码
@@ -57,12 +57,14 @@ impl<'a> RegisterService<'a> {
             .await
             .map_err(|err| {
                 error!("查询用户信息失败, err: {:#?}", err);
-                Error::DbQueryError
+                Error::DbQueryError.into_msg().with_msg("查询用户信息失败")
             })?;
         if user.is_some() {
             {
                 error!("该手机号码已注册");
-                code::Error::DbDataExistError
+                return Err(code::Error::DbDataExistError
+                    .into_msg()
+                    .with_msg("该手机号码已注册"));
             };
         }
 
@@ -74,7 +76,7 @@ impl<'a> RegisterService<'a> {
     }
 
     /// 注册邮件用户
-    async fn register_email(&self, data: EmailRegisterReq) -> Result<perm_user::Model, Error> {
+    async fn register_email(&self, data: EmailRegisterReq) -> Result<perm_user::Model, ErrorMsg> {
         let mut data = data;
 
         // 检测验证码
@@ -92,12 +94,14 @@ impl<'a> RegisterService<'a> {
             .await
             .map_err(|err| {
                 error!("查询用户信息失败, err: {:#?}", err);
-                Error::DbQueryError
+                Error::DbQueryError.into_msg().with_msg("查询用户信息失败")
             })?;
         if user.is_some() {
             {
                 error!("该邮箱已注册");
-                code::Error::DbDataExistError
+                return Err(code::Error::DbDataExistError
+                    .into_msg()
+                    .with_msg("该邮箱已注册"));
             };
         }
 
@@ -113,7 +117,7 @@ impl<'a> RegisterService<'a> {
     }
 
     /// 添加手机用户
-    async fn add_phone_user(&self, data: PhoneRegisterReq) -> Result<perm_user::Model, Error> {
+    async fn add_phone_user(&self, data: PhoneRegisterReq) -> Result<perm_user::Model, ErrorMsg> {
         let data = perm_user::ActiveModel {
             username: Set(Some(data.username)),
             gender: Set(data.gender),
@@ -128,13 +132,13 @@ impl<'a> RegisterService<'a> {
 
         let result = self.user_dao.add_user(data, vec![]).await.map_err(|err| {
             error!("注册手机用户失败, err: {:#?}", err);
-            Error::DbAddError
+            Error::DbAddError.into_msg().with_msg("注册手机用户失败")
         })?;
         Ok(result)
     }
 
     /// 添加邮箱用户
-    async fn add_email_user(&self, data: EmailRegisterReq) -> Result<perm_user::Model, Error> {
+    async fn add_email_user(&self, data: EmailRegisterReq) -> Result<perm_user::Model, ErrorMsg> {
         let data = perm_user::ActiveModel {
             username: Set(Some(data.username)),
             gender: Set(data.gender),
@@ -149,7 +153,7 @@ impl<'a> RegisterService<'a> {
 
         let result = self.user_dao.add_user(data, vec![]).await.map_err(|err| {
             error!("注册邮箱用户失败, err: {:#?}", err);
-            Error::DbAddError
+            Error::DbAddError.into_msg().with_msg("注册邮箱用户失败")
         })?;
         Ok(result)
     }

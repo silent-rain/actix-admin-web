@@ -39,8 +39,8 @@ impl RegisterController {
         let register_service: RegisterService = provider.provide();
         let result = register_service.register(data).await;
         match result {
-            Ok(_v) => Response::ok().msg("注册成功"),
-            Err(err) => Response::code(err),
+            Ok(_v) => Response::ok().with_msg("注册成功"),
+            Err(err) => Response::err(err),
         }
     }
 }
