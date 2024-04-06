@@ -1,7 +1,14 @@
 //! 服务
 
 use crate::{
-    app::public::WebSiteRouter, config::AppConfig, inject::AProvider, router, state::AppState,
+    config::AppConfig,
+    router::{self, admin_web_site::AdminWebSiteRouter},
+    state::AppState,
+};
+
+use service_hub::{
+    inject::AProvider,
+    // public::WebSiteRouter
 };
 
 use actix_web::{http::KeepAlive, web, App, HttpServer};
@@ -22,8 +29,8 @@ pub async fn start(
             .app_data(web::Data::new(config_s.clone()))
             // API 服务
             .service(router::register())
-            // 静态资源
-            .service(WebSiteRouter::register())
+            // 后台管理 WEB 服务
+            .service(AdminWebSiteRouter::register())
     })
     // 保持连接打开状态以等待后续请求, 使用操作系统保持活动状态
     .keep_alive(KeepAlive::Os)

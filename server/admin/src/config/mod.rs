@@ -12,8 +12,8 @@ pub mod sqlite;
 use code::Error;
 pub use logger::config::Logger;
 
-use log::error;
 use serde::{Deserialize, Serialize};
+use tracing::error;
 
 /// 全局配置对象
 static GLOBAL_CONFIG: OnceLock<AppConfig> = OnceLock::new();
@@ -47,7 +47,6 @@ pub fn instance() -> &'static AppConfig {
     match config {
         Some(config) => config,
         None => {
-            log::error!("configuration not initialized!");
             panic!("configuration not initialized!")
         }
     }

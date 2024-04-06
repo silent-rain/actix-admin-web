@@ -3,22 +3,17 @@ use std::sync::Arc;
 
 mod asset;
 mod config;
-mod constant;
-mod middleware;
 mod server;
 mod state;
 
-pub mod app;
-mod inject;
 pub mod router;
 
-use database::DbRepo;
-use migration::{Migrator, MigratorTrait};
+// use migration::{Migrator, MigratorTrait};
 
 use dotenv::dotenv;
-use tracing::{error, warn};
+use tracing::warn;
 
-use inject::{AProvider, Provider};
+use service_hub::inject::{AProvider, Provider};
 
 /// 程序入口
 #[actix_web::main]
@@ -51,15 +46,15 @@ async fn main() -> std::io::Result<()> {
     .await
     .expect("初始化数据库失败");
 
-    if conf.mysql.migrator {
-        // 库表迁移器
-        if let Err(e) = Migrator::up(db.wdb(), None).await {
-            error!("表迁移失败. err: {e}");
-        }
-    }
+    // if conf.mysql.migrator {
+    //     // 库表迁移器
+    //     if let Err(e) = Migrator::up(db.wdb(), None).await {
+    //         error!("表迁移失败. err: {e}");
+    //     }
+    // }
 
     // 共享状态
-    let app_state = state::AppState { db: db.clone() };
+    let app_state = state::AppState {};
 
     // Using an Arc to share the provider across multiple threads.
     let provider: AProvider = Arc::new(Provider::new(db.clone()));

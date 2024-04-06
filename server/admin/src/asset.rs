@@ -1,4 +1,5 @@
 //! 静态资源文件
+#![allow(unused)]
 
 use rust_embed::RustEmbed;
 

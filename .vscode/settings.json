@@ -2,8 +2,8 @@
   "editor.formatOnSave": true, // 保存格式化
   // Rust
   "rust-analyzer.linkedProjects": [
-    "server/core/Cargo.toml",
-    "server/admin/Cargo.toml"
+    // "server/crates/Cargo.toml",
+    "server/admin/Cargo.toml",
   ],
   "rust-analyzer.check.allTargets": true,
   "rust-analyzer.check.command": "clippy", // Rust 代码检查工具

@@ -1,0 +1,22 @@
+[package]
+name = "middleware"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "middleware"
+path = "src/lib.rs"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[dependencies]
+code = { path = "../core/code" }
+response = { path = "../core/response" }
+context = { path = "../core/context" }
+jwt = { path = "../core/jwt" }
+service_hub = { path = "../service_hub" }
+
+actix-web = { workspace = true }
+actix-cors = { workspace = true }
+
+tracing = { workspace = true }
+futures = { workspace = true }
