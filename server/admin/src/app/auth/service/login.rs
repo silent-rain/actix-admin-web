@@ -4,6 +4,7 @@ use crate::app::{
     auth::{
         common::captcha::check_captcha,
         dto::login::{LoginReq, LoginRsp},
+        enums::UserStatus,
     },
     log::UserLoginDao,
     perm::UserDao,
@@ -40,6 +41,13 @@ impl<'a> LoginService<'a> {
 
         // 检测手机号码或邮件用户是否存在
         let user = self.get_username(data.clone()).await?;
+        // 检查用户是否被禁用
+        if user.status == UserStatus::Disabled as i8 {
+            error!("用户已被禁用");
+            return Err(Error::LoginUserDisableError
+                .into_msg()
+                .with_msg("用户已被禁用"));
+        }
         // 检测密码
         if user.password != data.password {
             error!("账号或密码错误");
