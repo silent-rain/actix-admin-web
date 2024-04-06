@@ -4,12 +4,13 @@ use crate::perm::{
     dto::user::{AddUserReq, GetUserListReq, ProfileRsp, UpdateUserReq},
 };
 
-use code::Error;
+use code::{Error, ErrorMsg};
 use entity::{perm_role, perm_user, perm_user_role_rel};
 
 use nject::injectable;
 use sea_orm::Set;
 use tracing::error;
+use utils::crypto::sha2_256;
 
 /// 服务层
 #[injectable]
@@ -140,16 +141,51 @@ impl<'a> UserService<'a> {
 
 impl<'a> UserService<'a> {
     /// 添加用户及对应用户的角色
-    pub async fn add(&self, data: AddUserReq) -> Result<perm_user::Model, Error> {
+    pub async fn add(&self, data: AddUserReq) -> Result<perm_user::Model, ErrorMsg> {
+        // 检测是否已注册用户
+        if let Some(phone) = data.phone.clone() {
+            let user = self.user_dao.info_by_phone(phone).await.map_err(|err| {
+                error!("查询用户信息失败, err: {:#?}", err);
+                Error::DbQueryError.into_msg().with_msg("查询用户信息失败")
+            })?;
+            if user.is_some() {
+                {
+                    error!("该手机号码已注册");
+                    return Err(code::Error::DbDataExistError
+                        .into_msg()
+                        .with_msg("该手机号码已注册"));
+                };
+            }
+        }
+
+        // 检测是否已注册邮件
+        if let Some(email) = data.email.clone() {
+            let user = self.user_dao.info_by_email(email).await.map_err(|err| {
+                error!("查询用户信息失败, err: {:#?}", err);
+                Error::DbQueryError.into_msg().with_msg("查询用户信息失败")
+            })?;
+            if user.is_some() {
+                {
+                    error!("该邮箱已注册");
+                    return Err(code::Error::DbDataExistError
+                        .into_msg()
+                        .with_msg("该邮箱已注册"));
+                };
+            }
+        }
+
+        // 密码加密
+        let password = sha2_256(&data.password);
+
         let model = perm_user::ActiveModel {
             username: Set(Some(data.username)),
             gender: Set(data.gender),
             age: Set(Some(data.age)),
             birthday: Set(data.birthday),
             avatar: Set(data.avatar),
-            phone: Set(Some(data.phone)),
+            phone: Set(data.phone),
             email: Set(data.email),
-            password: Set(data.password),
+            password: Set(password),
             status: Set(1),
             ..Default::default()
         };
@@ -160,17 +196,17 @@ impl<'a> UserService<'a> {
             .await
             .map_err(|err| {
                 error!("添加用户失败, err: {:#?}", err);
-                Error::DbAddError
+                Error::DbAddError.into_msg().with_msg("添加用户失败")
             })?;
         Ok(result)
     }
 
     /// 更新用户及对应用户的角色
-    pub async fn update(&self, user_id: i32, data: UpdateUserReq) -> Result<(), Error> {
+    pub async fn update(&self, data: UpdateUserReq) -> Result<(), Error> {
         // 获取原角色列表
         let (user_role_rels, _) = self
             .user_role_rel_dao
-            .list_by_user_id(user_id)
+            .list_by_user_id(data.id)
             .await
             .map_err(|err| {
                 error!("查询用户与角色关系列表失败, err: {:#?}", err);
@@ -181,12 +217,13 @@ impl<'a> UserService<'a> {
         let (add_role_ids, del_role_ids) = self.diff_role_ids(data.role_ids, user_role_rels);
 
         let model = perm_user::ActiveModel {
+            id: Set(data.id),
             username: Set(Some(data.username)),
             gender: Set(data.gender),
             age: Set(Some(data.age)),
             birthday: Set(data.birthday),
             avatar: Set(data.avatar),
-            phone: Set(Some(data.phone)),
+            phone: Set(data.phone),
             email: Set(data.email),
             password: Set(data.password),
             intro: Set(data.intro),

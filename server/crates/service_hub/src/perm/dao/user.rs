@@ -246,6 +246,7 @@ impl<'a> UserDao<'a> {
 }
 
 impl<'a> UserDao<'a> {
+    // TODO 关联关系待修复
     /// 通过用户ID获取角色列表
     pub async fn roles(&self, user_id: i32) -> Result<(Vec<perm_role::Model>, u64), DbErr> {
         let results = PermRole::find()

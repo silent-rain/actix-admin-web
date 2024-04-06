@@ -23,7 +23,7 @@ pub struct AddUserReq {
     pub gender: i8,
     pub age: i32,
     pub birthday: Option<String>,
-    pub phone: String,
+    pub phone: Option<String>,
     pub email: Option<String>,
     pub password: String,
     pub avatar: Option<String>,
@@ -33,11 +33,12 @@ pub struct AddUserReq {
 /// 更新用户
 #[derive(Serialize, Deserialize, Validate)]
 pub struct UpdateUserReq {
+    pub id: i32,
     pub username: String,
     pub gender: i8,
     pub age: i32,
     pub birthday: Option<String>,
-    pub phone: String,
+    pub phone: Option<String>,
     pub email: Option<String>,
     pub password: String,
     pub avatar: Option<String>,

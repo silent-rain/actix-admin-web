@@ -104,6 +104,8 @@ pub enum Error {
     InjectAproviderObj = 10260,
     #[error("当前登陆态已失效, 请重新登陆")]
     LoginStatusDisabled = 10261,
+    #[error("用户添加失败")]
+    UserAddError = 10262,
 
     // 文件或目录操作
     #[error("获取目录失败")]

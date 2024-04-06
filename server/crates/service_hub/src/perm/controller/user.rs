@@ -9,6 +9,7 @@ use crate::{
 };
 
 use actix_validator::{Json, Query};
+use code::Error;
 use context::Context;
 use response::Response;
 
@@ -44,24 +45,26 @@ impl UserController {
 
     /// 添加用户
     pub async fn add(provider: Data<AProvider>, data: Json<AddUserReq>) -> impl Responder {
+        let data = data.into_inner();
+        // 检查用户
+        if data.phone.is_none() && data.email.is_none() {
+            return Response::code(Error::UserAddError);
+        }
+
         let perm_user_service: UserService = provider.provide();
 
-        let resp = perm_user_service.add(data.into_inner()).await;
+        let resp = perm_user_service.add(data).await;
         match resp {
             Ok(_v) => Response::ok(),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 
     /// 更新用户
-    pub async fn update(
-        provider: Data<AProvider>,
-        id: Path<i32>,
-        data: Json<UpdateUserReq>,
-    ) -> impl Responder {
+    pub async fn update(provider: Data<AProvider>, data: Json<UpdateUserReq>) -> impl Responder {
         let perm_user_service: UserService = provider.provide();
 
-        let resp = perm_user_service.update(*id, data.into_inner()).await;
+        let resp = perm_user_service.update(data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::code(err),
