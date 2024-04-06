@@ -14,6 +14,7 @@ use sea_orm::{
 };
 use serde_json::json;
 
+/// 数据访问
 #[injectable]
 pub struct AppTemplateEtxDao<'a> {
     db: &'a dyn DbRepo,

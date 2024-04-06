@@ -4,7 +4,7 @@ use crate::{
     inject::AProvider,
     template::{
         dto::template::{
-            AddAppTemplateReq, AppTemplateInfoReq, AppTemplateListReq, BatchDeleteAppTemplateReq,
+            AddAppTemplateReq, BatchDeleteAppTemplateReq, GetAppTemplateListReq,
             UpdateAppTemplateReq, UpdateAppTemplateStatusReq,
         },
         service::template::AppTemplateService,
@@ -33,7 +33,10 @@ impl AppTemplateController {
     }
 
     /// 获取所有{{InterfaceName}}
-    pub async fn list(provider: Data<AProvider>, req: Query<AppTemplateListReq>) -> impl Responder {
+    pub async fn list(
+        provider: Data<AProvider>,
+        req: Query<GetAppTemplateListReq>,
+    ) -> impl Responder {
         let app_template_service: AppTemplateService = provider.provide();
         let resp = app_template_service.list(req.into_inner()).await;
         match resp {
@@ -43,12 +46,9 @@ impl AppTemplateController {
     }
 
     /// 获取单个{{InterfaceName}}信息
-    pub async fn info(
-        provider: Data<AProvider>,
-        params: Query<AppTemplateInfoReq>,
-    ) -> impl Responder {
+    pub async fn info(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
         let app_template_service: AppTemplateService = provider.provide();
-        let resp = app_template_service.info(params.id).await;
+        let resp = app_template_service.info(*id).await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::code(err),

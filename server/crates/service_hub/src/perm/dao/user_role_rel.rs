@@ -1,5 +1,7 @@
 //! 用户角色关联关系管理
 
+use crate::perm::dto::user_role_rel::GetUserRoleRelListReq;
+
 use database::{DbRepo, Pagination};
 use entity::{perm_user_role_rel, prelude::PermUserRoleRel};
 
@@ -9,8 +11,7 @@ use sea_orm::{
     QuerySelect, QueryTrait,
 };
 
-use crate::perm::dto::user_role_rel::GetUserRoleRelListReq;
-
+/// 数据访问
 #[injectable]
 pub struct UserRoleRelDao<'a> {
     db: &'a dyn DbRepo,

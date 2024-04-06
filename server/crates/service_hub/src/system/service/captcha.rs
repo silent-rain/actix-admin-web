@@ -17,7 +17,7 @@ use sea_orm::Set;
 use tracing::{error, warn};
 use uuid::Uuid;
 
-/// 服务
+/// 服务层
 #[injectable]
 pub struct CaptchaService<'a> {
     captcha_dao: CaptchaDao<'a>,

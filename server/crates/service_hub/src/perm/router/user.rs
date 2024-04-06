@@ -4,7 +4,7 @@ use crate::perm::UserController;
 
 use actix_web::{web, Scope};
 
-/// 路由
+/// 路由器
 pub struct UserRouter;
 
 impl UserRouter {

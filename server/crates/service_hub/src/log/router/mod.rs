@@ -5,7 +5,7 @@ pub mod user_login;
 
 use actix_web::{web, Scope};
 
-/// 路由
+/// 路由器
 pub struct LogRouter;
 
 impl LogRouter {

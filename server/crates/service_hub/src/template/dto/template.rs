@@ -6,7 +6,7 @@ use serde::Deserialize;
 
 /// 查询列表数据 请求体
 #[derive(Default, Deserialize)]
-pub struct AppTemplateListReq {
+pub struct GetAppTemplateListReq {
     /// 当前分页
     pub page: u64,
     /// 页面大小
@@ -19,12 +19,6 @@ pub struct AppTemplateListReq {
     pub order_by: Option<String>,
 }
 
-/// 详情数据 请求体
-#[derive(Default, Deserialize)]
-pub struct AppTemplateInfoReq {
-    pub id: i32,
-}
-
 /// 添加数据 请求体
 #[derive(Default, Deserialize)]
 pub struct AddAppTemplateReq {
@@ -32,9 +26,9 @@ pub struct AddAppTemplateReq {
     pub status: i8,
 }
 
-/// 数据
+/// 批量添加数据结点
 #[derive(Default, Deserialize)]
-pub struct AppTemplate {
+pub struct BatchAddAppTemplateNode {
     pub user_id: i32,
     pub status: i8,
 }
@@ -42,7 +36,7 @@ pub struct AppTemplate {
 /// 批量添加数据 请求体
 #[derive(Default, Deserialize)]
 pub struct BatchAddAppTemplateReq {
-    pub data: Vec<AppTemplate>,
+    pub data: Vec<BatchAddAppTemplateNode>,
 }
 
 /// 更新数据 请求体

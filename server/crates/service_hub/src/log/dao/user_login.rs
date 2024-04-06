@@ -12,6 +12,7 @@ use sea_orm::{
     QuerySelect, QueryTrait, Set,
 };
 
+/// 数据访问
 #[injectable]
 pub struct UserLoginDao<'a> {
     db: &'a dyn DbRepo,

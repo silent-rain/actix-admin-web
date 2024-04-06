@@ -4,7 +4,7 @@ use crate::system::CaptchaController;
 
 use actix_web::{web, Scope};
 
-/// 路由
+/// 路由器
 pub struct GenCaptchaRouter;
 
 impl GenCaptchaRouter {

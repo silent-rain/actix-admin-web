@@ -12,12 +12,13 @@ use sea_orm::{
     QueryFilter, QueryOrder, QuerySelect, QueryTrait,
 };
 
+/// 数据访问
 #[injectable]
-pub struct LogSystemDao<'a> {
+pub struct SystemDao<'a> {
     db: &'a dyn DbRepo,
 }
 
-impl<'a> LogSystemDao<'a> {
+impl<'a> SystemDao<'a> {
     /// 获取数据列表
     pub async fn list(
         &self,

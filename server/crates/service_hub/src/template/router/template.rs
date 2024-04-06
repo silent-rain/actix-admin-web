@@ -4,7 +4,7 @@ use crate::template::AppTemplateController;
 
 use actix_web::{web, Scope};
 
-/// 路由
+/// 路由器
 pub struct AppTemplateRouter;
 
 impl AppTemplateRouter {

@@ -14,7 +14,7 @@ use nject::injectable;
 use sea_orm::Set;
 use tracing::error;
 
-/// 服务
+/// 服务层
 #[injectable]
 pub struct RegisterService<'a> {
     user_dao: UserDao<'a>,

@@ -13,6 +13,7 @@ use sea_orm::{
     PaginatorTrait, QueryFilter, QueryOrder, QuerySelect, QueryTrait, Set, TransactionTrait,
 };
 
+/// 数据访问
 #[injectable]
 pub struct UserDao<'a> {
     db: &'a dyn DbRepo,

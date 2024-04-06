@@ -3,10 +3,9 @@ use std::sync::Arc;
 
 mod asset;
 mod config;
+mod router;
 mod server;
 mod state;
-
-pub mod router;
 
 // use migration::{Migrator, MigratorTrait};
 

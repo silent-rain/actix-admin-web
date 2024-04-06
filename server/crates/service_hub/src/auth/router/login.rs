@@ -4,7 +4,7 @@ use crate::auth::LoginController;
 
 use actix_web::{web, Scope};
 
-/// 路由
+/// 路由器
 pub struct LoginRouter;
 
 impl LoginRouter {

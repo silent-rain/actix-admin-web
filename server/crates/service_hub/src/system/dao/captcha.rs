@@ -10,6 +10,7 @@ use sea_orm::{
     QuerySelect, QueryTrait,
 };
 
+/// 数据访问
 #[injectable]
 pub struct CaptchaDao<'a> {
     db: &'a dyn DbRepo,

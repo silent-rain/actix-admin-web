@@ -10,6 +10,7 @@ use nject::injectable;
 use sea_orm::{DbErr, EntityTrait, JoinType, QuerySelect, RelationTrait};
 use sea_query::{Expr, IntoCondition};
 
+/// 数据访问
 #[injectable]
 pub struct AppTemplateEtxDao<'a> {
     db: &'a dyn DbRepo,

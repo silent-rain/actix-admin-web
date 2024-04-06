@@ -11,7 +11,7 @@ use nject::injectable;
 use sea_orm::Set;
 use tracing::error;
 
-/// 服务
+/// 服务层
 #[injectable]
 pub struct UserRoleRelService<'a> {
     user_role_rel_dao: UserRoleRelDao<'a>,

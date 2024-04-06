@@ -2,7 +2,7 @@
 
 use std::str::FromStr;
 
-use crate::template::dto::template::AppTemplateListReq;
+use crate::template::dto::template::GetAppTemplateListReq;
 
 use database::{DbRepo, Pagination};
 use entity::{app_template, prelude::AppTemplate};
@@ -13,6 +13,7 @@ use sea_orm::{
     QuerySelect, QueryTrait, Set,
 };
 
+/// 数据访问
 #[injectable]
 pub struct AppTemplateDao<'a> {
     db: &'a dyn DbRepo,
@@ -32,7 +33,7 @@ impl<'a> AppTemplateDao<'a> {
     /// 获取列表数据
     pub async fn list(
         &self,
-        req: AppTemplateListReq,
+        req: GetAppTemplateListReq,
     ) -> Result<(Vec<app_template::Model>, u64), DbErr> {
         let page = Pagination::new(req.page, req.page_size);
 

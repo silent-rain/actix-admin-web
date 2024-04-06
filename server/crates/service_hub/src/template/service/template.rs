@@ -1,7 +1,7 @@
 //! 模板管理
 use crate::template::{
     dao::template::AppTemplateDao,
-    dto::template::{AddAppTemplateReq, AppTemplateListReq, BatchAddAppTemplateReq},
+    dto::template::{AddAppTemplateReq, BatchAddAppTemplateReq, GetAppTemplateListReq},
 };
 
 use code::Error;
@@ -11,7 +11,7 @@ use nject::injectable;
 use sea_orm::Set;
 use tracing::error;
 
-/// 服务
+/// 服务层
 #[injectable]
 pub struct AppTemplateService<'a> {
     app_template_dao: AppTemplateDao<'a>,
@@ -31,7 +31,7 @@ impl<'a> AppTemplateService<'a> {
     /// 获取{{InterfaceName}}列表
     pub async fn list(
         &self,
-        req: AppTemplateListReq,
+        req: GetAppTemplateListReq,
     ) -> Result<(Vec<app_template::Model>, u64), Error> {
         let (results, total) = self.app_template_dao.list(req).await.map_err(|err| {
             error!("查询{{InterfaceName}}列表失败, err: {:#?}", err);
