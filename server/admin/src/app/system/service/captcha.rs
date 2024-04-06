@@ -14,7 +14,7 @@ use utils::captcha::generate_captcha;
 
 use nject::injectable;
 use sea_orm::Set;
-use tracing::error;
+use tracing::{error, warn};
 use uuid::Uuid;
 
 /// 服务
@@ -85,7 +85,7 @@ impl<'a> CaptchaService<'a> {
 
         let model = sys_captcha::ActiveModel {
             captcha_id: Set(captcha_id),
-            captcha: Set(captcha),
+            captcha: Set(captcha.clone()),
             base_img: Set(base_img.clone().into_bytes()),
             expire: Set(expire),
             ..Default::default()
@@ -101,7 +101,11 @@ impl<'a> CaptchaService<'a> {
             expire: result.expire,
             created_at: result.created_at,
         };
-
+        // TODO 后期调整日志级别
+        warn!(
+            "Generate verification code, captcha_id: {} captcha: {}",
+            result.captcha_id, captcha
+        );
         Ok(result)
     }
 
