@@ -20,6 +20,25 @@ pub struct AppTemplateEtxDao<'a> {
 }
 
 impl<'a> AppTemplateEtxDao<'a> {
+    /// 获取列表数据
+    pub async fn list2(
+        &self,
+        req: AppTemplateListReq,
+    ) -> Result<(Vec<app_template::Model>, u64), DbErr> {
+        let page = Pagination::new(req.page, req.page_size);
+
+        let paginator = AppTemplate::find()
+            .order_by_desc(app_template::Column::Id)
+            .paginate(self.db.rdb(), page.page_size());
+
+        let total = paginator.num_items().await?;
+
+        paginator
+            .fetch_page(page.page())
+            .await
+            .map(|results| (results, total))
+    }
+
     /// 返回 json 类型数据
     pub async fn info(&self, id: i32) -> Result<Option<serde_json::Value>, DbErr> {
         let result: Option<serde_json::Value> = AppTemplate::find_by_id(id)
