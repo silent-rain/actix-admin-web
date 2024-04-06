@@ -90,18 +90,20 @@ pub enum Error {
     CaptchaInvalid = 10253,
     #[error("账号或密码错误")]
     LoginPasswordError = 10254,
+    #[error("用户已被禁用")]
+    LoginUserDisableError = 10255,
     #[error("获取密匙异常")]
-    TokenEncode = 10255,
+    TokenEncode = 10256,
     #[error("解析密匙异常, {0}")]
-    TokenDecode(String) = 10256,
+    TokenDecode(String) = 10257,
     #[error("非法请求")]
-    HeadersNotAuthorization = 10257,
+    HeadersNotAuthorization = 10258,
     #[error("非法请求")]
-    HeadersNotAuthorizationBearer = 10258,
+    HeadersNotAuthorizationBearer = 10259,
     #[error("获取服务实例失败")]
-    InjectAproviderObj = 10259,
+    InjectAproviderObj = 10260,
     #[error("当前登陆态已失效, 请重新登陆")]
-    LoginStatusDisabled = 10260,
+    LoginStatusDisabled = 10261,
 
     // 文件或目录操作
     #[error("获取目录失败")]

@@ -8,6 +8,8 @@ const SECRET: &str = "secret";
 const ISS: &str = "silent-rain";
 const KID: &str = "silent-rain";
 const NBF: usize = 1000 * 60 * 60 * 24; // 1 day
+/// Token 过期时间
+const EXPIRE: i64 = 1000 * 60 * 60 * 24; // 1 Day
 
 #[derive(Debug, PartialEq)]
 pub enum Error {
@@ -32,7 +34,6 @@ pub struct Claims {
     // sub: String, // Optional. Subject (whom token refers to)
     iss: String, // Optional. Issuer
 }
-// exp: OffsetDateTime::now_utc().unix_timestamp() + 10000,
 
 impl Claims {
     fn check_iss(&self) -> Result<&Self, Error> {
@@ -64,7 +65,7 @@ impl Claims {
 
 /// 编码
 pub fn encode_token(user_id: i32, username: String) -> Result<String, errors::Error> {
-    let exp = Local::now().timestamp_millis() + 10000;
+    let exp = Local::now().timestamp_millis() + EXPIRE;
     let claims = Claims {
         user_id,
         username,

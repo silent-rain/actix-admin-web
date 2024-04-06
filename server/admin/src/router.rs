@@ -25,13 +25,15 @@ pub fn register() -> impl HttpServiceFactory {
         // >>> 中间件 >>>
         .wrap(Logger::default())
         .wrap(TracingLogger::default())
-        .wrap(ContextMiddleware)
         .wrap(middleware::cors::wrap_cors())
         // Request ID
         .wrap(RequestIDMiddleware::default())
         // Actix Request Identifier
         .wrap(RequestIdentifier::with_uuid())
-        // .wrap(middleware::auth::SayHi)
+        // 接口鉴权
+        .wrap(middleware::auth::Auth)
+        // 上下文中间件
+        .wrap(ContextMiddleware)
         // <<< 中间件 <<<
         // 健康检查
         .service(HealthRouter::register())

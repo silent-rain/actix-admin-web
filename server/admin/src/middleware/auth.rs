@@ -2,7 +2,7 @@
 use std::future::{ready, Ready};
 
 use crate::{
-    app::log::UserLoginService,
+    app::{auth::enums::UserStatus, log::UserLoginService},
     constant::{
         HEADERS_AUTHORIZATION, HEADERS_AUTHORIZATION_BEARER, HEADERS_OPEN_API_AUTHORIZATION,
     },
@@ -15,23 +15,26 @@ use response::Response;
 
 use actix_web::{
     dev::{forward_ready, Service, ServiceRequest, ServiceResponse, Transform},
+    web::Data,
     Error, HttpMessage, HttpRequest,
 };
 use futures::future::LocalBoxFuture;
+use tracing::{error, info};
 
 /// 白名单
-const WHITE_LIST: [&str; 5] = [
+const WHITE_LIST: [&str; 4] = [
     "/api/v1/health",
+    "/api/v1/captcha",
     "/api/v1/login",
     "/api/v1/register",
-    "/api/v1/register/by-phone",
-    "/api/v1/register/by-email",
 ];
 
 // There are two steps in middleware processing.
 // 1. Middleware initialization, middleware factory gets called with
 //    next service in chain as parameter.
 // 2. Middleware's call method gets called with normal request.
+
+/// 接口鉴权
 pub struct Auth;
 
 // Middleware factory is `Transform` trait
@@ -98,23 +101,35 @@ where
         // 获取系统鉴权标识Token
         let system_token = match Self::get_system_token(inner_req.clone()) {
             Ok(v) => v,
-            Err(err) => return Box::pin(async move { Err(Response::code(err).into()) }),
+            Err(err) => {
+                return Box::pin(async move {
+                    error!("获取系统鉴权标识 Token 失败");
+                    Err(Response::code(err).into())
+                })
+            }
         };
         // 检查系统鉴权
         let (user_id, user_name) = match Self::check_system_auth(system_token) {
             Ok(v) => v,
-            Err(err) => return Box::pin(async move { Err(Response::code(err).into()) }),
+            Err(err) => {
+                return Box::pin(async move {
+                    error!("检查系统鉴权异常");
+                    Err(Response::code(err).into())
+                })
+            }
         };
         // 添加上下文
         if let Some(ctx) = req.extensions_mut().get_mut::<Context>() {
             ctx.set_user_id(user_id);
-            ctx.set_user_name(user_name);
+            ctx.set_user_name(user_name.clone());
         }
+        info!("user req, user_id: {user_id}, user_name: {user_name}");
 
-        let provider = match req.app_data::<AProvider>() {
-            Some(v) => v.clone(),
+        let provider = match req.app_data::<Data<AProvider>>() {
+            Some(v) => v.as_ref().clone(),
             None => {
                 return Box::pin(async move {
+                    error!("获取服务实例失败");
                     Err(Response::code(code::Error::InjectAproviderObj).into())
                 })
             }
@@ -152,9 +167,13 @@ impl<S> AuthMiddleware<S> {
             .map_or("", |v| v.to_str().map_or("", |v| v));
 
         if authorization.is_empty() {
+            error!("用户请求标识未空, 非法请求");
             return Err(code::Error::HeadersNotAuthorization);
         }
-        if authorization.starts_with(HEADERS_AUTHORIZATION_BEARER) {
+        if !authorization.starts_with(HEADERS_AUTHORIZATION_BEARER) {
+            error!(
+                "用户请求参数缺失 {HEADERS_AUTHORIZATION_BEARER}, 非法请求, authorization: {authorization}"
+            );
             return Err(code::Error::HeadersNotAuthorizationBearer);
         }
 
@@ -168,7 +187,8 @@ impl<S> AuthMiddleware<S> {
         let perm_user_service: UserLoginService = provider.provide();
 
         let user = perm_user_service.info_by_user_id(user_id).await?;
-        if user.status == 0 {
+        if user.status == UserStatus::Disabled as i8 {
+            error!("user_id: {}, 用户已被禁用", user.id);
             return Err(code::Error::LoginStatusDisabled);
         }
         Ok(())

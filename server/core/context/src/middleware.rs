@@ -10,6 +10,7 @@ use actix_web::{
 };
 use futures::future::LocalBoxFuture;
 
+/// 上下文中间件
 pub struct ContextMiddleware;
 
 // Middleware factory is `Transform` trait
