@@ -1,4 +1,4 @@
-//! 应用服务
+//! 路由集散处, 将各个模块的路由在此处进行注册。
 use context::ContextMiddleware;
 use service_hub::{
     auth::{GenCaptchaRouter, LoginRouter, RegisterRouter},
@@ -15,8 +15,8 @@ use actix_web::{dev::HttpServiceFactory, middleware::Logger, web};
 use actix_web_requestid::RequestIDMiddleware;
 use tracing_actix_web::TracingLogger;
 
-/// API 服务
 /// 注册路由
+/// Service Hub Module: [`service_hub`]
 pub fn register() -> impl HttpServiceFactory {
     web::scope("/api/v1")
         // >>> 中间件 >>>
