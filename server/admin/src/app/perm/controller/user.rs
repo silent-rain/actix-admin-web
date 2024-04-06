@@ -9,12 +9,14 @@ use crate::{
 };
 
 use actix_validator::{Json, Query};
+use context::Context;
 use response::Response;
 
 use actix_web::{
     web::{Data, Path},
     Responder,
 };
+use tracing::warn;
 
 /// 控制器
 pub struct UserController;
@@ -78,6 +80,18 @@ impl UserController {
 }
 
 impl UserController {
+    /// 获取用户个人信息
+    pub async fn profile(ctx: Context, provider: Data<AProvider>) -> impl Responder {
+        let user_id = ctx.get_user_id();
+        warn!("profile context user_id: {user_id}");
+        let perm_user_service: UserService = provider.provide();
+        let resp = perm_user_service.profile(user_id).await;
+        match resp {
+            Ok(v) => Response::ok().data(v),
+            Err(err) => Response::code(err),
+        }
+    }
+
     /// 通过用户ID获取角色列表
     pub async fn roles(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
         let perm_user_service: UserService = provider.provide();

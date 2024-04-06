@@ -1,7 +1,7 @@
 //! 用户管理
 use crate::app::perm::{
     dao::{user::UserDao, user_role_rel::UserRoleRelDao},
-    dto::user::{AddUserReq, GetUserListReq, UpdateUserReq},
+    dto::user::{AddUserReq, GetUserListReq, ProfileRsp, UpdateUserReq},
 };
 
 use code::Error;
@@ -44,6 +44,32 @@ impl<'a> UserService<'a> {
                 Error::DbQueryEmptyError
             })?;
 
+        Ok(result)
+    }
+
+    /// 获取用户个人信息
+    pub async fn profile(&self, id: i32) -> Result<ProfileRsp, Error> {
+        let user = self
+            .user_dao
+            .info(id)
+            .await
+            .map_err(|err| {
+                error!("查询用户信息失败, err: {:#?}", err);
+                Error::DbQueryError
+            })?
+            .ok_or_else(|| {
+                error!("用户不存在");
+                Error::DbQueryEmptyError
+            })?;
+
+        let result = ProfileRsp {
+            id,
+            username: user.username,
+            gender: user.gender,
+            age: user.age,
+            birthday: user.birthday,
+            avatar: user.avatar,
+        };
         Ok(result)
     }
 

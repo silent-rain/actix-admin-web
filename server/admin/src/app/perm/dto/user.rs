@@ -46,3 +46,14 @@ pub struct UpdateUserReq {
     pub status: i8,
     pub role_ids: Vec<i32>,
 }
+
+/// 获取用户个人信息
+#[derive(Serialize, Deserialize)]
+pub struct ProfileRsp {
+    pub id: i32,
+    pub username: Option<String>,
+    pub gender: i8,
+    pub age: Option<i32>,
+    pub birthday: Option<String>,
+    pub avatar: Option<String>,
+}
