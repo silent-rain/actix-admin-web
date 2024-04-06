@@ -63,14 +63,12 @@ impl<'a> RoleDao<'a> {
         active_model.insert(self.db.wdb()).await
     }
 
-    /// 更新信息
-    pub async fn update(&self, data: perm_role::Model) -> Result<u64, DbErr> {
-        // Into ActiveModel
-        let pear: perm_role::ActiveModel = data.clone().into();
-
+    /// 更新数据
+    pub async fn update(&self, active_model: perm_role::ActiveModel) -> Result<u64, DbErr> {
+        let id: i32 = *(active_model.id.clone().as_ref());
         let result = PermRole::update_many()
-            .set(pear)
-            .filter(perm_role::Column::Id.eq(data.id))
+            .set(active_model)
+            .filter(perm_role::Column::Id.eq(id))
             .exec(self.db.wdb())
             .await?;
 

@@ -21,7 +21,19 @@ pub struct GetRoleListReq {
 /// 添加角色
 #[derive(Serialize, Deserialize, Validate)]
 pub struct AddRoleReq {
-    #[validate(length(min = 3, message = "Name must be greater than 3 chars"))]
+    #[validate(length(min = 2, message = "至少输入两个字符"))]
+    pub name: String,
+    pub sort: i32,
+    pub note: Option<String>,
+    pub status: i8,
+}
+
+/// 更新数据 请求体
+#[derive(Default, Serialize, Deserialize, Validate)]
+pub struct UpdateRoleReq {
+    pub id: i32,
+    pub status: i8,
     pub name: String,
     pub note: Option<String>,
+    pub sort: i32,
 }

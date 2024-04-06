@@ -14,6 +14,7 @@ impl RoleRouter {
             .route("", web::get().to(RoleController::list))
             .route("/{id}", web::get().to(RoleController::info))
             .route("", web::post().to(RoleController::add))
+            .route("/{id}", web::put().to(RoleController::update))
             .route("/{id}", web::delete().to(RoleController::delete))
     }
 }

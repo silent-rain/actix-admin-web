@@ -3,7 +3,7 @@
 use crate::{
     inject::AProvider,
     perm::{
-        dto::role::{AddRoleReq, GetRoleListReq},
+        dto::role::{AddRoleReq, GetRoleListReq, UpdateRoleReq},
         service::role::RoleService,
     },
 };
@@ -20,10 +20,10 @@ use actix_web::{
 pub struct RoleController;
 
 impl RoleController {
-    /// 获取所有角色列表
+    /// 获取角色列表
     pub async fn list(provider: Data<AProvider>, req: Query<GetRoleListReq>) -> impl Responder {
-        let perm_user_service: RoleService = provider.provide();
-        let resp = perm_user_service.list(req.into_inner()).await;
+        let role_service: RoleService = provider.provide();
+        let resp = role_service.list(req.into_inner()).await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::code(err),
@@ -32,8 +32,8 @@ impl RoleController {
 
     /// 获取角色信息
     pub async fn info(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
-        let perm_user_service: RoleService = provider.provide();
-        let resp = perm_user_service.info(*id).await;
+        let role_service: RoleService = provider.provide();
+        let resp = role_service.info(*id).await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::code(err),
@@ -42,8 +42,18 @@ impl RoleController {
 
     /// 添加角色
     pub async fn add(provider: Data<AProvider>, data: Json<AddRoleReq>) -> impl Responder {
-        let perm_user_service: RoleService = provider.provide();
-        let resp = perm_user_service.add(data.into_inner()).await;
+        let role_service: RoleService = provider.provide();
+        let resp = role_service.add(data.into_inner()).await;
+        match resp {
+            Ok(_v) => Response::ok(),
+            Err(err) => Response::code(err),
+        }
+    }
+
+    /// 更新角色
+    pub async fn update(provider: Data<AProvider>, data: Json<UpdateRoleReq>) -> impl Responder {
+        let role_service: RoleService = provider.provide();
+        let resp = role_service.update(data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::code(err),
@@ -52,8 +62,8 @@ impl RoleController {
 
     /// 删除角色
     pub async fn delete(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
-        let perm_user_service: RoleService = provider.provide();
-        let resp = perm_user_service.delete(*id).await;
+        let role_service: RoleService = provider.provide();
+        let resp = role_service.delete(*id).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::code(err),

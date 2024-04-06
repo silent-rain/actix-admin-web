@@ -1,7 +1,7 @@
 //! 角色管理
 use crate::perm::{
     dao::role::RoleDao,
-    dto::role::{AddRoleReq, GetRoleListReq},
+    dto::role::{AddRoleReq, GetRoleListReq, UpdateRoleReq},
 };
 
 use code::Error;
@@ -55,17 +55,36 @@ impl<'a> RoleService<'a> {
     }
 
     /// 添加数据
-    pub async fn add(&self, data: AddRoleReq) -> Result<perm_role::Model, Error> {
+    pub async fn add(&self, req: AddRoleReq) -> Result<perm_role::Model, Error> {
         let model = perm_role::ActiveModel {
-            name: Set(data.name),
-            note: Set(data.note),
-            status: Set(1_i8),
-            sort: Set(1_i32),
+            name: Set(req.name),
+            sort: Set(req.sort),
+            note: Set(req.note),
+            status: Set(req.status),
             ..Default::default()
         };
         let result = self.role_dao.add(model).await.map_err(|err| {
             error!("添加角色信息失败, err: {:#?}", err);
             Error::DbAddError
+        })?;
+
+        Ok(result)
+    }
+
+    /// 更新角色
+    pub async fn update(&self, req: UpdateRoleReq) -> Result<u64, Error> {
+        let model = perm_role::ActiveModel {
+            id: Set(req.id),
+            name: Set(req.name),
+            sort: Set(req.sort),
+            note: Set(req.note),
+            status: Set(req.status),
+            ..Default::default()
+        };
+
+        let result = self.role_dao.update(model).await.map_err(|err| {
+            error!("更新{{InterfaceName}}失败, err: {:#?}", err);
+            Error::DbUpdateError
         })?;
 
         Ok(result)
