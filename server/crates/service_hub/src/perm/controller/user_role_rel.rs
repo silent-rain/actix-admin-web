@@ -3,7 +3,9 @@
 use crate::{
     inject::AProvider,
     perm::{
-        dto::user_role_rel::{AddUserRoleRelReq, GetUserRoleRelListReq},
+        dto::user_role_rel::{
+            BatchAddUserRoleRelReq, BatchDeleteUserRoleRelReq, GetUserRoleRelListReq,
+        },
         service::user_role_rel::UserRoleRelService,
     },
 };
@@ -11,10 +13,7 @@ use crate::{
 use actix_validator::{Json, Query};
 use response::Response;
 
-use actix_web::{
-    web::{Data, Path},
-    Responder,
-};
+use actix_web::{web::Data, Responder};
 
 /// 控制器
 pub struct UserRoleRelController;
@@ -33,21 +32,28 @@ impl UserRoleRelController {
         }
     }
 
-    /// 创建用户角色关联
-    pub async fn add(provider: Data<AProvider>, data: Json<AddUserRoleRelReq>) -> impl Responder {
+    /// 批量创建用户角色关联
+    pub async fn batch_add(
+        provider: Data<AProvider>,
+        data: Json<BatchAddUserRoleRelReq>,
+    ) -> impl Responder {
         let data = data.into_inner();
         let perm_user_service: UserRoleRelService = provider.provide();
-        let resp = perm_user_service.add(data).await;
+        let resp = perm_user_service.batch_add(data).await;
         match resp {
-            Ok(v) => Response::ok().data(v),
+            Ok(_v) => Response::ok(),
             Err(err) => Response::code(err),
         }
     }
 
-    /// 删除指定的用户角色关联关系
-    pub async fn delete(provider: Data<AProvider>, user_id: Path<i32>) -> impl Responder {
+    /// 批量删除指定的用户角色关联关系
+    pub async fn batch_delete(
+        provider: Data<AProvider>,
+        data: Json<BatchDeleteUserRoleRelReq>,
+    ) -> impl Responder {
+        let data = data.into_inner();
         let perm_user_service: UserRoleRelService = provider.provide();
-        let resp = perm_user_service.delete(*user_id).await;
+        let resp = perm_user_service.batch_delete(data.ids).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::code(err),

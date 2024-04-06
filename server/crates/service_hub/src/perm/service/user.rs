@@ -168,10 +168,14 @@ impl<'a> UserService<'a> {
     /// 更新用户及对应用户的角色
     pub async fn update(&self, user_id: i32, data: UpdateUserReq) -> Result<(), Error> {
         // 获取原角色列表
-        let (user_role_rels, _) = self.user_role_rel_dao.list(user_id).await.map_err(|err| {
-            error!("查询用户与角色关系列表失败, err: {:#?}", err);
-            Error::DbQueryError
-        })?;
+        let (user_role_rels, _) = self
+            .user_role_rel_dao
+            .list_by_user_id(user_id)
+            .await
+            .map_err(|err| {
+                error!("查询用户与角色关系列表失败, err: {:#?}", err);
+                Error::DbQueryError
+            })?;
 
         // 获取角色ID的差异列表
         let (add_role_ids, del_role_ids) = self.diff_role_ids(data.role_ids, user_role_rels);
