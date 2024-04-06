@@ -65,8 +65,7 @@ async fn main() -> std::io::Result<()> {
     let provider: AProvider = Arc::new(Provider::new(db.clone()));
 
     // 启动服务, 并阻塞
-    let address = conf.server.base.address();
-    if let Err(e) = server::start(app_state.clone(), conf, provider, &address).await {
+    if let Err(e) = server::start(app_state.clone(), provider, conf).await {
         panic!("server start faild. err: {e}");
     }
 
