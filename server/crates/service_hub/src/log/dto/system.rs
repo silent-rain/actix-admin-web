@@ -4,7 +4,7 @@ use serde::Deserialize;
 
 /// 系统日志列表查询
 #[derive(Default, Deserialize)]
-pub struct LogSystemListReq {
+pub struct GetSystemListReq {
     /// 当前分页
     pub page: u64,
     /// 页面大小
@@ -12,5 +12,5 @@ pub struct LogSystemListReq {
     /// 开始时间
     pub start_time: Option<String>,
     /// 结束时间
-    pub end_time:  Option<String>,
+    pub end_time: Option<String>,
 }

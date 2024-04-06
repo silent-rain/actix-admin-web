@@ -1,6 +1,6 @@
 //! 系统日志
 
-use crate::log::dto::system::LogSystemListReq;
+use crate::log::dto::system::GetSystemListReq;
 
 use database::{DbRepo, Pagination};
 use entity::log_system;
@@ -21,7 +21,7 @@ impl<'a> LogSystemDao<'a> {
     /// 获取数据列表
     pub async fn list(
         &self,
-        req: LogSystemListReq,
+        req: GetSystemListReq,
     ) -> Result<(Vec<log_system::Model>, u64), DbErr> {
         let page = Pagination::new(req.page, req.page_size);
 

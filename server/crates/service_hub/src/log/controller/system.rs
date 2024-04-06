@@ -2,7 +2,7 @@
 
 use crate::{
     inject::AProvider,
-    log::{dto::system::LogSystemListReq, service::system::LogSystemService},
+    log::{dto::system::GetSystemListReq, service::system::LogSystemService},
 };
 
 use entity::log_system;
@@ -18,7 +18,7 @@ pub struct LogSystemController;
 
 impl LogSystemController {
     /// 获取系统日志列表
-    pub async fn list(provider: Data<AProvider>, req: Query<LogSystemListReq>) -> impl Responder {
+    pub async fn list(provider: Data<AProvider>, req: Query<GetSystemListReq>) -> impl Responder {
         let log_system_service: LogSystemService = provider.provide();
         let resp = log_system_service.list(req.into_inner()).await;
         match resp {

@@ -3,7 +3,7 @@
 use crate::{
     inject::AProvider,
     perm::{
-        dto::role::{AddRoleReq, RoleListReq},
+        dto::role::{AddRoleReq, GetRoleListReq},
         service::role::RoleService,
     },
 };
@@ -21,7 +21,7 @@ pub struct RoleController;
 
 impl RoleController {
     /// 获取所有角色列表
-    pub async fn list(provider: Data<AProvider>, req: Query<RoleListReq>) -> impl Responder {
+    pub async fn list(provider: Data<AProvider>, req: Query<GetRoleListReq>) -> impl Responder {
         let perm_user_service: RoleService = provider.provide();
         let resp = perm_user_service.list(req.into_inner()).await;
         match resp {

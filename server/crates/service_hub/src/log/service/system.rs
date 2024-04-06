@@ -1,5 +1,5 @@
 //! 系统日志
-use crate::log::{dao::system::LogSystemDao, dto::system::LogSystemListReq};
+use crate::log::{dao::system::LogSystemDao, dto::system::GetSystemListReq};
 
 use code::Error;
 use entity::log_system;
@@ -17,7 +17,7 @@ impl<'a> LogSystemService<'a> {
     /// 获取列表数据
     pub async fn list(
         &self,
-        req: LogSystemListReq,
+        req: GetSystemListReq,
     ) -> Result<(Vec<log_system::Model>, u64), Error> {
         let (results, total) = self.log_system_dao.list(req).await.map_err(|err| {
             error!("查询系统日志列表失败, err: {:#?}", err);

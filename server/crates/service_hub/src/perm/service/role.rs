@@ -1,7 +1,7 @@
 //! 角色管理
 use crate::perm::{
     dao::role::RoleDao,
-    dto::role::{AddRoleReq, RoleListReq},
+    dto::role::{AddRoleReq, GetRoleListReq},
 };
 
 use code::Error;
@@ -19,7 +19,7 @@ pub struct RoleService<'a> {
 
 impl<'a> RoleService<'a> {
     /// 获取列表数据
-    pub async fn list(&self, req: RoleListReq) -> Result<(Vec<perm_role::Model>, u64), Error> {
+    pub async fn list(&self, req: GetRoleListReq) -> Result<(Vec<perm_role::Model>, u64), Error> {
         // 获取所有数据
         if let Some(true) = req.all {
             return self.role_dao.all().await.map_err(|err| {

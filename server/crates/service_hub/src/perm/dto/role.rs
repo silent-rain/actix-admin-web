@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 
 /// 角色列表查询
 #[derive(Default, Deserialize, Validate)]
-pub struct RoleListReq {
+pub struct GetRoleListReq {
     /// 当前分页
     pub page: u64,
     /// 页面大小

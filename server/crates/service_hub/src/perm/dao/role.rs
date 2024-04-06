@@ -1,5 +1,5 @@
 //! 角色管理
-use crate::perm::dto::role::RoleListReq;
+use crate::perm::dto::role::GetRoleListReq;
 
 use database::{DbRepo, Pagination};
 use entity::{perm_role, prelude::PermRole};
@@ -27,7 +27,7 @@ impl<'a> RoleDao<'a> {
     }
 
     /// 获取数据列表
-    pub async fn list(&self, req: RoleListReq) -> Result<(Vec<perm_role::Model>, u64), DbErr> {
+    pub async fn list(&self, req: GetRoleListReq) -> Result<(Vec<perm_role::Model>, u64), DbErr> {
         let page = Pagination::new(req.page, req.page_size);
 
         let states = PermRole::find()
