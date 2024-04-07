@@ -1,29 +1,28 @@
-[package]
-name = "core"
-version = "0.1.0"
-edition = "2021"
-
 [workspace]
+resolver = "2"
 members = [
     # 核心组件
-    "core/code",
-    "core/code_msg_derive",
-    "core/database",
-    "core/entity",
-    "core/logger",
-    "core/migration",
-    "core/response",
-    "core/context",
-    "core/actix_validator",
-    "core/utils",
-    "core/jwt",
+    "crates/core/code",
+    "crates/core/code_msg_derive",
+    "crates/core/database",
+    "crates/core/entity",
+    "crates/core/logger",
+    "crates/core/migration",
+    "crates/core/response",
+    "crates/core/context",
+    "crates/core/actix_validator",
+    "crates/core/utils",
+    "crates/core/jwt",
 
     # 中间件
-    "middleware",
-    "plugins",
-
+    "crates/middleware",
+    # 插件
+    "crates/plugins",
     # 服务集
-    "service_hub",
+    "crates/service_hub",
+
+    # 应用服务
+    "admin",
 ]
 
 [workspace.dependencies]
@@ -52,11 +51,16 @@ actix-web = "4.5"
 validator_derive = "0.17"
 validator = "0.17"
 actix-cors = "0.7"
+actix-web-requestid = "2.1"
+actix-request-identifier = "4.1"
+tracing-actix-web = "0.7"
+listenfd = "1.0"
 
 # 序列化
 serde = "1.0"
 serde_urlencoded = "0.7"
 serde_json = "1.0"
+serde_yaml = "0.9"
 
 # 工具
 jsonwebtoken = "9.2"
@@ -66,6 +70,11 @@ sha2 = { version = "0.10" }
 regex = "1.10"
 uuid = { version = "1.7.0", features = ["v4"] }
 time = "0.3"
+rust-embed = { version = "8.3", features = [
+    # "debug-embed",
+    "include-exclude",
+    "mime-guess",
+] }
 
 # 其他
 futures = "0.3"
@@ -75,3 +84,5 @@ async-std = "1.12"
 tokio = "1.37"
 once_cell = "1.19"
 nject = "0.4"
+dotenv = "0.15"
+num_cpus = "1.16"

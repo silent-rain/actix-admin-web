@@ -4,16 +4,28 @@
 
 ## 编译与调试
 
+### 代码检查
+
+```shell
+cargo clippy
+# or
+cargo clippy -p admin
+```
+
 ### 调试模式
 
 ```shell
-cargo run
+cd server/admin
+
+cargo run -p admin
 ```
 
 ### 生产模式
 
 ```shell
-cargo build
+cd server/admin
+
+cargo build -p admin
 ```
 
 ## 服务

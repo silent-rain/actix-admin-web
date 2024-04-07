@@ -1,5 +1,5 @@
 -- 创建数据库 
-CREATE DATABASE `gin_admin` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE DATABASE `actix_admin_web` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 /*
  权限相关的表
@@ -8,20 +8,24 @@ CREATE DATABASE `gin_admin` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_genera
 CREATE TABLE perm_user (
     `id` INT AUTO_INCREMENT COMMENT '用户ID',
     `username` VARCHAR(32) NOT NULL COMMENT '用户名称',
-    `nickname` VARCHAR(32) NULL COMMENT '昵称',
-    `gender` TINYINT(1) NULL COMMENT '0: 保密,1: 女,2: 男',
+    `real_name` VARCHAR(32) NULL COMMENT '真实姓名',
+    `gender` TINYINT(1) NULL COMMENT '性别, 0:男,1:女,2:保密',
     `age` INT(11) NULL COMMENT '年龄',
     `birthday` VARCHAR(20) NULL COMMENT '出生日期',
-    `avatar` VARCHAR(100) NULL COMMENT '用户头像URL',
+    `avatar` VARCHAR(200) NULL COMMENT '头像URL',
     `phone` VARCHAR(20) NULL COMMENT '手机号码',
-    `email` VARCHAR(50) NULL COMMENT '邮件',
+    `email` VARCHAR(100) NULL COMMENT '邮件',
     `intro` VARCHAR(200) NULL COMMENT '介绍',
     `note` VARCHAR(200) NULL COMMENT '备注',
     `password` VARCHAR(50) NOT NULL COMMENT '密码',
-    `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '是否启用,0:禁用,1:启用',
+    `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:停用,1:正常',
+    `dept_id` bigint DEFAULT NULL COMMENT '部门ID',
+    `creator` bigint DEFAULT NULL COMMENT '创建者',
+    `updater` bigint DEFAULT NULL COMMENT '更新者',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    NIQUE KEY `uk_username` (`username`) USING BTREE
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户';
 
 -- 角色表
@@ -30,24 +34,27 @@ CREATE TABLE perm_role (
     `name` VARCHAR(20) UNIQUE NOT NULL COMMENT '角色名称',
     `sort` INT(11) NOT NULL DEFAULT 0 COMMENT '排序',
     `note` VARCHAR(200) NULL COMMENT '备注',
-    `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '角色状态,0:停用,1:启用',
+    `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:停用,1:正常',
+    `creator` bigint DEFAULT NULL COMMENT '创建者',
+    `updater` bigint DEFAULT NULL COMMENT '更新者',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '角色表';
 
--- 用户角色关联表
-CREATE TABLE perm_user_role_rel (
+-- 角色用户关联表
+CREATE TABLE perm_role_user_rel (
     `id` INT AUTO_INCREMENT COMMENT '自增ID',
     `user_id` INT(10) NOT NULL COMMENT '用户ID',
     `role_id` INT(10) NOT NULL COMMENT '角色ID',
+    `creator` bigint DEFAULT NULL COMMENT '创建者',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`),
     UNIQUE KEY `uni_user_id_role_id` (`user_id`,`role_id`),
     CONSTRAINT `perm_user_role_rel_user_id` FOREIGN KEY (`user_id`) REFERENCES `perm_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `perm_user_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户角色关联表';
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '角色用户关联表';
 
 -- 菜单表
 CREATE TABLE perm_menu (
@@ -70,8 +77,8 @@ CREATE TABLE perm_menu (
     `sort` INT(11) NOT NULL DEFAULT 0 COMMENT '排序',
     `note` VARCHAR(200) NULL COMMENT '备注',
     `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:停用,1:启用',
-    `create_user_id` INT NULL COMMENT '创建菜单用户ID',
-    `update_user_id` INT NULL COMMENT '更新菜单用户ID',
+    `creator` bigint DEFAULT NULL COMMENT '创建者',
+    `updater` bigint DEFAULT NULL COMMENT '更新者',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`)
@@ -82,6 +89,7 @@ CREATE TABLE perm_role_menu_rel (
     `id` INT AUTO_INCREMENT COMMENT '自增ID',
     `role_id` INT(10) NOT NULL COMMENT '角色ID',
     `menu_id` INT(10) NOT NULL COMMENT '菜单ID',
+    `creator` bigint DEFAULT NULL COMMENT '创建者',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`),
@@ -108,19 +116,20 @@ CREATE TABLE perm_role_menu_rel (
  END IF;
  END;
  */
--- 用户API接口Token令牌表
-CREATE TABLE perm_user_api_token (
+-- 用户Token令牌表
+CREATE TABLE perm_user_token (
     `id` INT AUTO_INCREMENT COMMENT '自增ID',
     `user_id` INT(20) NOT NULL COMMENT '用户ID',
     `token` VARCHAR(50) NOT NULL COMMENT '令牌',
     `passphrase` VARCHAR(50) NOT NULL COMMENT '口令',
-    `permission` VARCHAR(20) NOT NULL COMMENT '权限:GET,POST,PUT,DELETE',
+    -- `permission` VARCHAR(20) NOT NULL COMMENT '权限:GET,POST,PUT,DELETE',
+    `expire` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '授权到期时间',
     `note` VARCHAR(200) NULL COMMENT '备注',
-    `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '是否启用,0:禁用,1:启用',
+    `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:禁用,1:启用',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`)
-) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户API接口Token令牌表';
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户Token令牌表, 一般openapi服务';
 
 -- 用户地理位置 - 待定
 CREATE TABLE _perm_user_location (
@@ -152,3 +161,33 @@ CREATE TABLE _perm_user_avatar (
 /* 待定
  - 部门 岗位 职级
  */
+
+ -- 部门表
+CREATE TABLE perm_dept (
+    `id` INT AUTO_INCREMENT COMMENT '部门ID',
+    `pid` bigint DEFAULT NULL COMMENT '上级部门ID',
+    `pids` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '所有上级部门ID，用逗号分开',
+    `name` VARCHAR(20) UNIQUE NOT NULL COMMENT '部门名称',
+    `sort` INT(11) NOT NULL DEFAULT 0 COMMENT '排序',
+    `note` VARCHAR(200) NULL COMMENT '备注',
+    `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:停用,1:正常',
+    `creator` bigint DEFAULT NULL COMMENT '创建者',
+    `updater` bigint DEFAULT NULL COMMENT '更新者',
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '角色表';
+
+-- 角色部门关联表-数据权限
+CREATE TABLE perm_role_dept_rel (
+    `id` INT AUTO_INCREMENT COMMENT '自增ID',
+    `role_id` INT(10) NOT NULL COMMENT '角色ID',
+    `dept_id` INT(10) NOT NULL COMMENT '部门ID',
+    `creator` bigint DEFAULT NULL COMMENT '创建者',
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uni_user_id_role_id` (`user_id`,`role_id`),
+    CONSTRAINT `perm_role_dept_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `perm_role_dept_rel_dept_id` FOREIGN KEY (`dept_id`) REFERENCES `perm_dept` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '角色部门关联表-数据权限';
