@@ -26,7 +26,7 @@ impl ErrorMsg {
 
     /// 重置错误信息
     pub fn with_msg(mut self, msg: &str) -> Self {
-        self.msg = msg.to_owned();
+        self.msg = msg.to_string();
         self
     }
 
