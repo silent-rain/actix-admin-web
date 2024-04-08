@@ -118,7 +118,7 @@ CREATE TABLE perm_role_menu_rel (
  */
 -- 用户Token令牌表
 CREATE TABLE perm_user_token (
-    `id` INT AUTO_INCREMENT COMMENT '自增ID',
+    `id` INT AUTO_INCREMENT COMMENT '令牌ID',
     `user_id` INT(20) NOT NULL COMMENT '用户ID',
     `token` VARCHAR(50) NOT NULL COMMENT '令牌',
     `passphrase` VARCHAR(50) NOT NULL COMMENT '口令',
