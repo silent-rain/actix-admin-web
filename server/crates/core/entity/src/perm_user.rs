@@ -7,7 +7,7 @@ use sea_orm::{
 use serde::{Deserialize, Serialize};
 
 /// 用户表
-#[derive(Clone, Default, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
 #[sea_orm(table_name = "perm_user")]
 pub struct Model {
     /// 用户ID
