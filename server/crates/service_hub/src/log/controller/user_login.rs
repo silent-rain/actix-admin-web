@@ -1,7 +1,7 @@
 //! 登陆日志
 
 use crate::{
-    inject::AProvider,
+    inject::AInjectProvider,
     log::{
         dto::user_login::{AddUserLoginInfoReq, GetUserLoginListReq, UpdateUserLoginStatusReq},
         service::user_login::UserLoginService,
@@ -21,7 +21,7 @@ pub struct UserLoginController;
 impl UserLoginController {
     /// 获取登录日志列表
     pub async fn list(
-        provider: Data<AProvider>,
+        provider: Data<AInjectProvider>,
         req: Query<GetUserLoginListReq>,
     ) -> impl Responder {
         let user_login_service: UserLoginService = provider.provide();
@@ -33,7 +33,7 @@ impl UserLoginController {
     }
 
     /// 获取登录日志信息
-    pub async fn info(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
+    pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
         let user_login_service: UserLoginService = provider.provide();
         let resp = user_login_service.info(*id).await;
         match resp {
@@ -43,7 +43,10 @@ impl UserLoginController {
     }
 
     /// 添加登陆日志
-    pub async fn add(provider: Data<AProvider>, data: Json<AddUserLoginInfoReq>) -> impl Responder {
+    pub async fn add(
+        provider: Data<AInjectProvider>,
+        data: Json<AddUserLoginInfoReq>,
+    ) -> impl Responder {
         let user_login_service: UserLoginService = provider.provide();
         let resp = user_login_service.add(data.into_inner()).await;
         match resp {
@@ -54,7 +57,7 @@ impl UserLoginController {
 
     /// 更新登录日志状态
     pub async fn status(
-        provider: Data<AProvider>,
+        provider: Data<AInjectProvider>,
         req: Json<UpdateUserLoginStatusReq>,
     ) -> impl Responder {
         let user_login_service: UserLoginService = provider.provide();

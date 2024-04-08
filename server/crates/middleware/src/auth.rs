@@ -1,7 +1,7 @@
 //! 权限拦截器
 use std::future::{ready, Ready};
 
-use service_hub::{auth::enums::UserStatus, inject::AProvider, log::UserLoginService};
+use service_hub::{auth::enums::UserStatus, inject::AInjectProvider, log::UserLoginService};
 
 use crate::constant::{
     HEADERS_AUTHORIZATION, HEADERS_AUTHORIZATION_BEARER, HEADERS_OPEN_API_AUTHORIZATION,
@@ -123,7 +123,7 @@ where
         }
         info!("user req, user_id: {user_id}, user_name: {user_name}");
 
-        let provider = match req.app_data::<Data<AProvider>>() {
+        let provider = match req.app_data::<Data<AInjectProvider>>() {
             Some(v) => v.as_ref().clone(),
             None => {
                 return Box::pin(async move {
@@ -181,7 +181,10 @@ impl<S> AuthMiddleware<S> {
     }
 
     /// 验证当前登陆的用户是否被禁用
-    async fn verify_user_status(provider: AProvider, user_id: i32) -> Result<(), code::Error> {
+    async fn verify_user_status(
+        provider: AInjectProvider,
+        user_id: i32,
+    ) -> Result<(), code::Error> {
         let perm_user_service: UserLoginService = provider.provide();
 
         let user = perm_user_service.info_by_user_id(user_id).await?;

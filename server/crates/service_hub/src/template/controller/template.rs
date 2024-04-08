@@ -1,7 +1,7 @@
 //! 模板管理
 
 use crate::{
-    inject::AProvider,
+    inject::AInjectProvider,
     template::{
         dto::template::{
             AddAppTemplateReq, BatchDeleteAppTemplateReq, GetAppTemplateListReq,
@@ -23,7 +23,7 @@ pub struct AppTemplateController;
 
 impl AppTemplateController {
     /// 获取所有{{InterfaceName}}
-    pub async fn all(provider: Data<AProvider>) -> impl Responder {
+    pub async fn all(provider: Data<AInjectProvider>) -> impl Responder {
         let perm_user_service: AppTemplateService = provider.provide();
         let resp = perm_user_service.all().await;
         match resp {
@@ -34,7 +34,7 @@ impl AppTemplateController {
 
     /// 获取所有{{InterfaceName}}
     pub async fn list(
-        provider: Data<AProvider>,
+        provider: Data<AInjectProvider>,
         req: Query<GetAppTemplateListReq>,
     ) -> impl Responder {
         let app_template_service: AppTemplateService = provider.provide();
@@ -46,7 +46,7 @@ impl AppTemplateController {
     }
 
     /// 获取单个{{InterfaceName}}信息
-    pub async fn info(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
+    pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
         let app_template_service: AppTemplateService = provider.provide();
         let resp = app_template_service.info(*id).await;
         match resp {
@@ -56,7 +56,10 @@ impl AppTemplateController {
     }
 
     /// 添加{{InterfaceName}}
-    pub async fn add(provider: Data<AProvider>, data: Json<AddAppTemplateReq>) -> impl Responder {
+    pub async fn add(
+        provider: Data<AInjectProvider>,
+        data: Json<AddAppTemplateReq>,
+    ) -> impl Responder {
         let data = data.into_inner();
         let app_template_service: AppTemplateService = provider.provide();
         let resp = app_template_service.add(data).await;
@@ -68,7 +71,7 @@ impl AppTemplateController {
 
     /// 更新{{InterfaceName}}
     pub async fn update(
-        provider: Data<AProvider>,
+        provider: Data<AInjectProvider>,
         data: Json<UpdateAppTemplateReq>,
     ) -> impl Responder {
         let app_template_service: AppTemplateService = provider.provide();
@@ -81,7 +84,7 @@ impl AppTemplateController {
 
     /// 更新{{InterfaceName}}状态
     pub async fn status(
-        provider: Data<AProvider>,
+        provider: Data<AInjectProvider>,
         data: Json<UpdateAppTemplateStatusReq>,
     ) -> impl Responder {
         let app_template_service: AppTemplateService = provider.provide();
@@ -93,7 +96,7 @@ impl AppTemplateController {
     }
 
     /// 删除{{InterfaceName}}
-    pub async fn delete(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
+    pub async fn delete(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
         let app_template_service: AppTemplateService = provider.provide();
         let resp = app_template_service.delete(*id).await;
         match resp {
@@ -104,7 +107,7 @@ impl AppTemplateController {
 
     /// 批量删除{{InterfaceName}}
     pub async fn batch_delete(
-        provider: Data<AProvider>,
+        provider: Data<AInjectProvider>,
         data: Json<BatchDeleteAppTemplateReq>,
     ) -> impl Responder {
         let app_template_service: AppTemplateService = provider.provide();

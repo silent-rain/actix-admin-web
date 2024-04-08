@@ -5,7 +5,7 @@ use crate::{
         dto::register::{RegisterReq, RegisterType},
         RegisterService,
     },
-    inject::AProvider,
+    inject::AInjectProvider,
 };
 
 use actix_validator::Json;
@@ -19,7 +19,10 @@ pub struct RegisterController;
 
 impl RegisterController {
     /// 注册用户
-    pub async fn register(provider: Data<AProvider>, data: Json<RegisterReq>) -> impl Responder {
+    pub async fn register(
+        provider: Data<AInjectProvider>,
+        data: Json<RegisterReq>,
+    ) -> impl Responder {
         let data = data.into_inner();
         match data.register_type {
             RegisterType::Phone => {

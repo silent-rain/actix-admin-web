@@ -1,7 +1,7 @@
 //! 用户管理
 
 use crate::{
-    inject::AProvider,
+    inject::AInjectProvider,
     perm::{
         dto::user::{AddUserReq, GetUserListReq, UpdateUserReq},
         service::user::UserService,
@@ -24,7 +24,10 @@ pub struct UserController;
 
 impl UserController {
     /// 获取用户列表
-    pub async fn list(provider: Data<AProvider>, req: Query<GetUserListReq>) -> impl Responder {
+    pub async fn list(
+        provider: Data<AInjectProvider>,
+        req: Query<GetUserListReq>,
+    ) -> impl Responder {
         let perm_user_service: UserService = provider.provide();
         let resp = perm_user_service.list(req.into_inner()).await;
         match resp {
@@ -34,7 +37,7 @@ impl UserController {
     }
 
     /// 获取用户信息
-    pub async fn info(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
+    pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
         let perm_user_service: UserService = provider.provide();
         let resp = perm_user_service.info(*id).await;
         match resp {
@@ -46,7 +49,7 @@ impl UserController {
     /// 添加用户
     pub async fn add(
         ctx: Context,
-        provider: Data<AProvider>,
+        provider: Data<AInjectProvider>,
         data: Json<AddUserReq>,
     ) -> impl Responder {
         let user_id = ctx.get_user_id();
@@ -69,7 +72,7 @@ impl UserController {
     /// 更新用户
     pub async fn update(
         ctx: Context,
-        provider: Data<AProvider>,
+        provider: Data<AInjectProvider>,
         data: Json<UpdateUserReq>,
     ) -> impl Responder {
         let user_id = ctx.get_user_id();
@@ -82,7 +85,7 @@ impl UserController {
     }
 
     /// 删除用户
-    pub async fn delete(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
+    pub async fn delete(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
         let perm_user_service: UserService = provider.provide();
         let resp = perm_user_service.delete(*id).await;
         match resp {
@@ -94,7 +97,7 @@ impl UserController {
 
 impl UserController {
     /// 获取用户个人信息
-    pub async fn profile(ctx: Context, provider: Data<AProvider>) -> impl Responder {
+    pub async fn profile(ctx: Context, provider: Data<AInjectProvider>) -> impl Responder {
         let user_id = ctx.get_user_id();
         let username = ctx.get_user_name();
         warn!("profile context user_id: {user_id} username: {username}");
@@ -108,7 +111,7 @@ impl UserController {
     }
 
     /// 通过用户ID获取角色列表
-    pub async fn roles(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
+    pub async fn roles(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
         let perm_user_service: UserService = provider.provide();
         let resp = perm_user_service.roles(*id).await;
         match resp {

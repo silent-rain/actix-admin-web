@@ -1,7 +1,7 @@
 //! 角色用户关系管理
 
 use crate::{
-    inject::AProvider,
+    inject::AInjectProvider,
     perm::{
         dto::user_role_rel::{
             BatchAddUserRoleRelReq, BatchDeleteUserRoleRelReq, GetUserRoleRelListReq,
@@ -22,7 +22,7 @@ pub struct UserRoleRelController;
 impl UserRoleRelController {
     /// 获取用户角色关联列表
     pub async fn list(
-        provider: Data<AProvider>,
+        provider: Data<AInjectProvider>,
         req: Query<GetUserRoleRelListReq>,
     ) -> impl Responder {
         let perm_user_service: UserRoleRelService = provider.provide();
@@ -36,7 +36,7 @@ impl UserRoleRelController {
     /// 批量创建用户角色关联
     pub async fn batch_add(
         ctx: Context,
-        provider: Data<AProvider>,
+        provider: Data<AInjectProvider>,
         data: Json<BatchAddUserRoleRelReq>,
     ) -> impl Responder {
         let user_id = ctx.get_user_id();
@@ -51,7 +51,7 @@ impl UserRoleRelController {
 
     /// 批量删除指定的用户角色关联关系
     pub async fn batch_delete(
-        provider: Data<AProvider>,
+        provider: Data<AInjectProvider>,
         data: Json<BatchDeleteUserRoleRelReq>,
     ) -> impl Responder {
         let data = data.into_inner();

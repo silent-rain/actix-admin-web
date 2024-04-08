@@ -1,5 +1,4 @@
 //! 程序入口
-use std::sync::Arc;
 
 mod asset;
 mod config;
@@ -7,12 +6,12 @@ mod router;
 mod server;
 mod state;
 
+use service_hub::inject::InjectProvider;
+
 // use migration::{Migrator, MigratorTrait};
 
 use dotenv::dotenv;
 use tracing::warn;
-
-use service_hub::inject::{AProvider, Provider};
 
 /// 程序入口
 #[actix_web::main]
@@ -56,7 +55,7 @@ async fn main() -> std::io::Result<()> {
     let app_state = state::AppState {};
 
     // Using an Arc to share the provider across multiple threads.
-    let provider: AProvider = Arc::new(Provider::new(db.clone()));
+    let provider = InjectProvider::anew(db.clone());
 
     // 启动服务, 并阻塞
     if let Err(e) = server::start(app_state.clone(), provider, conf).await {

@@ -1,7 +1,7 @@
 //! 角色管理
 
 use crate::{
-    inject::AProvider,
+    inject::AInjectProvider,
     perm::{
         dto::role::{AddRoleReq, GetRoleListReq, UpdateRoleReq},
         service::role::RoleService,
@@ -22,7 +22,10 @@ pub struct RoleController;
 
 impl RoleController {
     /// 获取角色列表
-    pub async fn list(provider: Data<AProvider>, req: Query<GetRoleListReq>) -> impl Responder {
+    pub async fn list(
+        provider: Data<AInjectProvider>,
+        req: Query<GetRoleListReq>,
+    ) -> impl Responder {
         let role_service: RoleService = provider.provide();
         let resp = role_service.list(req.into_inner()).await;
         match resp {
@@ -32,7 +35,7 @@ impl RoleController {
     }
 
     /// 获取角色信息
-    pub async fn info(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
+    pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
         let role_service: RoleService = provider.provide();
         let resp = role_service.info(*id).await;
         match resp {
@@ -44,7 +47,7 @@ impl RoleController {
     /// 添加角色
     pub async fn add(
         ctx: Context,
-        provider: Data<AProvider>,
+        provider: Data<AInjectProvider>,
         data: Json<AddRoleReq>,
     ) -> impl Responder {
         let user_id = ctx.get_user_id();
@@ -59,7 +62,7 @@ impl RoleController {
     /// 更新角色
     pub async fn update(
         ctx: Context,
-        provider: Data<AProvider>,
+        provider: Data<AInjectProvider>,
         data: Json<UpdateRoleReq>,
     ) -> impl Responder {
         let user_id = ctx.get_user_id();
@@ -72,7 +75,7 @@ impl RoleController {
     }
 
     /// 删除角色
-    pub async fn delete(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
+    pub async fn delete(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
         let role_service: RoleService = provider.provide();
         let resp = role_service.delete(*id).await;
         match resp {

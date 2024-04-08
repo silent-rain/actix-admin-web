@@ -2,7 +2,7 @@
 
 use crate::{
     auth::{dto::login::LoginReq, LoginService},
-    inject::AProvider,
+    inject::AInjectProvider,
 };
 
 use actix_validator::Json;
@@ -17,7 +17,7 @@ impl LoginController {
     /// 登陆
     pub async fn login(
         req: HttpRequest,
-        provider: Data<AProvider>,
+        provider: Data<AInjectProvider>,
         data: Json<LoginReq>,
     ) -> impl Responder {
         let login_service: LoginService = provider.provide();

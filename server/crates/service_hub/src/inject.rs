@@ -6,22 +6,28 @@ use database::{DbRepo, Pool};
 use nject::provider;
 
 #[provider]
-pub struct Provider {
+pub struct InjectProvider {
     #[provide(dyn DbRepo)]
     db: Pool,
 }
 
-impl Provider {
+impl InjectProvider {
     pub fn new(db: Pool) -> Self {
-        Provider { db }
+        InjectProvider { db }
+    }
+
+    pub fn anew(db: Pool) -> Arc<Self> {
+        let provide = InjectProvider { db };
+
+        Arc::new(provide)
     }
 
     // pub fn new() -> Self {
     //     #[provider]
-    //     struct InitProvider;
+    //     struct InitInjectProvider;
 
-    //     InitProvider.provide::<Provider>()
+    //     InitInjectProvider.provide::<InjectProvider>()
     // }
 }
 
-pub type AProvider = Arc<Provider>;
+pub type AInjectProvider = Arc<InjectProvider>;

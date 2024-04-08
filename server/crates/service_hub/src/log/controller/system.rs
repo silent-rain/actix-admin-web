@@ -1,7 +1,7 @@
 //! 系统日志
 
 use crate::{
-    inject::AProvider,
+    inject::AInjectProvider,
     log::{dto::system::GetSystemListReq, service::system::SystemService},
 };
 
@@ -18,7 +18,10 @@ pub struct SystemController;
 
 impl SystemController {
     /// 获取系统日志列表
-    pub async fn list(provider: Data<AProvider>, req: Query<GetSystemListReq>) -> impl Responder {
+    pub async fn list(
+        provider: Data<AInjectProvider>,
+        req: Query<GetSystemListReq>,
+    ) -> impl Responder {
         let system_service: SystemService = provider.provide();
         let resp = system_service.list(req.into_inner()).await;
         match resp {
@@ -28,7 +31,7 @@ impl SystemController {
     }
 
     /// 获取系统日志的详细信息
-    pub async fn info(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
+    pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
         let system_service: SystemService = provider.provide();
         let resp = system_service.info(*id).await;
         match resp {
@@ -38,7 +41,10 @@ impl SystemController {
     }
 
     /// 添加新的系统日志
-    pub async fn add(provider: Data<AProvider>, data: Json<log_system::Model>) -> impl Responder {
+    pub async fn add(
+        provider: Data<AInjectProvider>,
+        data: Json<log_system::Model>,
+    ) -> impl Responder {
         let data = data.into_inner();
         let system_service: SystemService = provider.provide();
         let resp = system_service.add(data).await;
@@ -49,7 +55,7 @@ impl SystemController {
     }
 
     /// 删除系统日志
-    pub async fn delete(provider: Data<AProvider>, id: Path<i32>) -> impl Responder {
+    pub async fn delete(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
         let system_service: SystemService = provider.provide();
         let resp = system_service.delete(*id).await;
         match resp {
