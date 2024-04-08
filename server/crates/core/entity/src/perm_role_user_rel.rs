@@ -6,11 +6,18 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
 #[sea_orm(table_name = "perm_user_role_rel")]
 pub struct Model {
+    /// 自增ID
     #[sea_orm(primary_key)]
     pub id: i32,
+    /// 用户ID
     pub user_id: i32,
+    /// 角色ID
     pub role_id: i32,
+    /// 创建者
+    pub creator: Option<i32>,
+    /// 创建时间
     pub created_at: DateTimeLocal,
+    /// 更新时间
     pub updated_at: DateTimeLocal,
 }
 

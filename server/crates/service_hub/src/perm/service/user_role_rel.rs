@@ -1,4 +1,4 @@
-//! 用户角色关联关系管理
+//! 角色用户关系管理
 use crate::perm::{
     dao::role_user_rel::UserRoleRelDao,
     dto::user_role_rel::{BatchAddUserRoleRelReq, GetUserRoleRelListReq},
@@ -32,12 +32,13 @@ impl<'a> UserRoleRelService<'a> {
     }
 
     /// 批量添加数据
-    pub async fn batch_add(&self, req: BatchAddUserRoleRelReq) -> Result<i32, Error> {
+    pub async fn batch_add(&self, creator: i32, req: BatchAddUserRoleRelReq) -> Result<i32, Error> {
         let mut models = Vec::new();
         for role_id in req.role_ids {
             let model = perm_role_user_rel::ActiveModel {
                 user_id: Set(req.user_id),
                 role_id: Set(role_id),
+                creator: Set(Some(creator)),
                 ..Default::default()
             };
             models.push(model);

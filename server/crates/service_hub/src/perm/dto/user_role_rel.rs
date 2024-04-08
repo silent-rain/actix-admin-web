@@ -1,4 +1,4 @@
-//! 用户角色关联关系管理
+//! 角色用户关系管理
 use actix_validator::Validate;
 
 use serde::{Deserialize, Serialize};

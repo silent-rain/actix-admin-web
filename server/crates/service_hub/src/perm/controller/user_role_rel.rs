@@ -1,4 +1,4 @@
-//! 用户角色关联关系管理
+//! 角色用户关系管理
 
 use crate::{
     inject::AProvider,
@@ -11,6 +11,7 @@ use crate::{
 };
 
 use actix_validator::{Json, Query};
+use context::Context;
 use response::Response;
 
 use actix_web::{web::Data, Responder};
@@ -34,12 +35,14 @@ impl UserRoleRelController {
 
     /// 批量创建用户角色关联
     pub async fn batch_add(
+        ctx: Context,
         provider: Data<AProvider>,
         data: Json<BatchAddUserRoleRelReq>,
     ) -> impl Responder {
+        let user_id = ctx.get_user_id();
         let data = data.into_inner();
         let perm_user_service: UserRoleRelService = provider.provide();
-        let resp = perm_user_service.batch_add(data).await;
+        let resp = perm_user_service.batch_add(user_id, data).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::code(err),

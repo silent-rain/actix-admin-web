@@ -1,4 +1,4 @@
-//! 用户角色关联关系管理
+//! 角色用户关系管理
 
 use crate::perm::dto::user_role_rel::GetUserRoleRelListReq;
 
