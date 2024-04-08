@@ -14,7 +14,7 @@ pub mod perm_menu;
 pub mod perm_role;
 pub mod perm_role_menu_rel;
 pub mod perm_user;
-pub mod perm_user_api_token;
+pub mod perm_user_token;
 pub mod perm_role_user_rel;
 pub mod sys_captcha;
 pub mod sys_config;

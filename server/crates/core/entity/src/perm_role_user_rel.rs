@@ -6,6 +6,7 @@ use sea_orm::{
 };
 use serde::{Deserialize, Serialize};
 
+/// 角色用户关联表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
 #[sea_orm(table_name = "perm_role_user_rel")]
 pub struct Model {
