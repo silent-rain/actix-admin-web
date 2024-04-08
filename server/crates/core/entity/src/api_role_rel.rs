@@ -19,8 +19,6 @@ pub struct Model {
     pub api_id: i32,
     /// 创建时间
     pub created_at: DateTimeLocal,
-    /// 更新时间
-    pub updated_at: DateTimeLocal,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

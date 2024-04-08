@@ -15,12 +15,12 @@ pub struct Model {
     pub id: i32,
     /// 上级部门ID
     pub pid: Option<i32>,
-    /// 所有上级部门ID，用逗号分开
+    /// 所有上级部门ID, 用逗号分开
     pub pids: Option<String>,
     /// 部门名称
     pub name: String,
     /// 排序
-    pub sort: i32,
+    pub sort: Option<i32>,
     /// 备注
     pub note: Option<String>,
     /// 状态,0:停用,1:正常
