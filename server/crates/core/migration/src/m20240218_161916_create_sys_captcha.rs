@@ -1,5 +1,5 @@
 //! 验证码表
-
+//! User Entity: [`entity::prelude::SysCaptcha`]
 use entity::prelude::SysCaptcha;
 use entity::sys_captcha::Column;
 
@@ -40,6 +40,7 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(Column::Captcha)
                             .string()
+                            .string_len(10)
                             .not_null()
                             .comment("验证码"),
                     )

@@ -1,4 +1,4 @@
-//! WEB日志表
+//! 接口请求与响应日志表
 
 use sea_orm::{
     prelude::DateTimeLocal, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey,
@@ -6,9 +6,9 @@ use sea_orm::{
 };
 use serde::{Deserialize, Serialize};
 
-/// WEB日志表
+/// 接口请求与响应日志表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "log_web")]
+#[sea_orm(table_name = "log_request_response")]
 pub struct Model {
     /// 自增ID
     #[sea_orm(primary_key)]
@@ -19,22 +19,25 @@ pub struct Model {
     pub username: Option<String>,
     /// 请求ID
     pub request_id: Option<String>,
-    /// 终端类型: 0: 未知,1: 安卓,2 :ios,3 :web
-    pub os_type: i8,
-    /// 错误类型: 1:接口报错,2:代码报错
-    pub error_type: i8,
-    /// 日志级别
-    pub level: String,
-    /// 日发生位置
-    pub caller_line: String,
-    /// 错误页面
-    pub url: String,
-    /// 日志消息
-    #[sea_orm(column_type = "Text", nullable)]
-    pub msg: Option<String>,
-    /// 堆栈信息
-    #[sea_orm(column_type = "Text", nullable)]
-    pub stack: Option<String>,
+    /// 请求状态码
+    pub status_code: i32,
+    /// 请求方法
+    pub method: String,
+    /// 请求地址路径
+    pub path: String,
+    /// 请求参数
+    pub query: Option<String>,
+    /// 请求体/响应体
+    #[sea_orm(column_type = "custom(\"LONGTEXT\")", nullable)]
+    pub body: Option<String>,
+    /// 请求IP
+    pub remote_addr: String,
+    /// 用户代理
+    pub user_agent: String,
+    /// 耗时,纳秒
+    pub cost: i32,
+    /// 请求类型:REQ/RSP
+    pub htpp_type: String,
     /// 备注
     pub note: Option<String>,
     /// 创建时间

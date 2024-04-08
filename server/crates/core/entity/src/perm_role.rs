@@ -34,18 +34,10 @@ pub struct Model {
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
-    #[sea_orm(has_many = "super::api_role_http_rel::Entity")]
-    ApiRoleHttpRel,
     #[sea_orm(has_many = "super::perm_role_menu_rel::Entity")]
     PermRoleMenuRel,
     #[sea_orm(has_many = "super::perm_role_user_rel::Entity")]
     PermUserRoleRel,
-}
-
-impl Related<super::api_role_http_rel::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::ApiRoleHttpRel.def()
-    }
 }
 
 impl Related<super::perm_role_menu_rel::Entity> for Entity {

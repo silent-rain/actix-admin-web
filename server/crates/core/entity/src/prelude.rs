@@ -2,10 +2,9 @@
 
 pub use super::app_template::Entity as AppTemplate;
 
-pub use super::api_http::Entity as ApiHttp;
-pub use super::api_role_http_rel::Entity as ApiRoleHttpRel;
-pub use super::api_token::Entity as ApiToken;
-pub use super::log_http::Entity as LogHttp;
+pub use super::api_auth::Entity as ApiAuth;
+pub use super::api_role_rel::Entity as ApiRoleRel;
+pub use super::log_request_response::Entity as LogRequestResponse;
 pub use super::log_system::Entity as LogSystem;
 pub use super::log_user_login::Entity as LogUserLogin;
 pub use super::log_web::Entity as LogWeb;

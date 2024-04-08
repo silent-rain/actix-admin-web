@@ -329,7 +329,7 @@ impl JsonLayer {
 
         let output = Model {
             // user_id: todo!(),
-            // nickname: todo!(),
+            // username: todo!(),
             parent_span_id: parent_span_id.map(|v| v as u32),
             span_id: span_id.map(|v| v as u32),
             name: self.name.to_owned(),
@@ -361,7 +361,7 @@ impl JsonLayer {
         //     Some(v) => v.as_i64().map(|v| v as i32),
         //     None => None,
         // };
-        // output.nickname = fields.get("nickname").map(|v| v.to_string());
+        // output.username = fields.get("username").map(|v| v.to_string());
         // output.created_at = Local::now().naive_local();
         Some(output)
     }

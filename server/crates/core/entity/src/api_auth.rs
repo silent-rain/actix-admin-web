@@ -1,4 +1,4 @@
-//! 用户登录日志表
+//! 接口权限表
 
 use sea_orm::{
     prelude::DateTimeLocal, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey,
@@ -6,22 +6,24 @@ use sea_orm::{
 };
 use serde::{Deserialize, Serialize};
 
-/// 用户登录日志表
+/// 接口权限表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "log_user_login")]
+#[sea_orm(table_name = "api_auth")]
 pub struct Model {
     /// 自增ID
     #[sea_orm(primary_key)]
     pub id: i32,
-    /// 用户ID
-    pub user_id: i32,
-    /// 用户名称
-    pub username: String,
-    /// 登录IP
-    pub remote_addr: String,
-    /// 用户代理
-    pub user_agent: String,
-    /// 登录状态,0:失败,1:成功
+    /// 父ID
+    pub pid: Option<i32>,
+    /// 接口名称
+    pub name: String,
+    /// 请求类型
+    pub method: String,
+    /// URI资源
+    pub uri: String,
+    /// 备注
+    pub note: Option<String>,
+    /// 是否启用,0:禁用,1:启用
     pub status: i8,
     /// 创建时间
     pub created_at: DateTimeLocal,

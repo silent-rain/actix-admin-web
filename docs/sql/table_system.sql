@@ -17,7 +17,7 @@ CREATE TABLE sys_captcha (
 -- 应用配置表
 CREATE TABLE sys_config (
     `id` INT AUTO_INCREMENT COMMENT '配置ID',
-    `parent_id` INT(11) DEFAULT NULL COMMENT '父节点ID',
+    `pid` INT(11) DEFAULT NULL COMMENT '父节点ID',
     `name` VARCHAR(32) NOT NULL COMMENT '配置名称',
     `key` VARCHAR(32) NOT NULL UNIQUE COMMENT '配置项(英文)',
     `value` TEXT COMMENT '配置参数值',
@@ -31,11 +31,11 @@ CREATE TABLE sys_config (
 
 -- ICON图标表
 CREATE TABLE sys_icon (
-    `id` INT AUTO_INCREMENT COMMENT '配置ID',
-    `name` VARCHAR(32) NOT NULL COMMENT '配置名称',
-    `value` VARCHAR(32) NOT NULL COMMENT '配置值',
+    `id` INT AUTO_INCREMENT COMMENT '图标ID',
+    `name` VARCHAR(32) NOT NULL UNIQUE COMMENT '图标名称',
+    `base_img` LONGBLOB NOT NULL COMMENT 'Base64图片',
     `category` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '图标类型,1:element,2:custom',
-    `note` VARCHAR(32) DEFAULT NULL COMMENT '配置描述',
+    `note` VARCHAR(32) DEFAULT NULL COMMENT '备注',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`)

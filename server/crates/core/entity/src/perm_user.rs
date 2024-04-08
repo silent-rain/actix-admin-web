@@ -51,16 +51,8 @@ pub struct Model {
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
-    #[sea_orm(has_one = "super::api_token::Entity")]
-    ApiToken,
     #[sea_orm(has_many = "super::perm_role_user_rel::Entity")]
     PermUserRoleRel,
-}
-
-impl Related<super::api_token::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::ApiToken.def()
-    }
 }
 
 impl Related<super::perm_role_user_rel::Entity> for Entity {
