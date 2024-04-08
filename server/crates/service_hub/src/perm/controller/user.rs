@@ -44,7 +44,13 @@ impl UserController {
     }
 
     /// 添加用户
-    pub async fn add(provider: Data<AProvider>, data: Json<AddUserReq>) -> impl Responder {
+    pub async fn add(
+        ctx: Context,
+        provider: Data<AProvider>,
+        data: Json<AddUserReq>,
+    ) -> impl Responder {
+        let user_id = ctx.get_user_id();
+
         let data = data.into_inner();
         // 检查用户
         if data.phone.is_none() && data.email.is_none() {
@@ -53,7 +59,7 @@ impl UserController {
 
         let perm_user_service: UserService = provider.provide();
 
-        let resp = perm_user_service.add(data).await;
+        let resp = perm_user_service.add(user_id, data).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -61,10 +67,14 @@ impl UserController {
     }
 
     /// 更新用户
-    pub async fn update(provider: Data<AProvider>, data: Json<UpdateUserReq>) -> impl Responder {
+    pub async fn update(
+        ctx: Context,
+        provider: Data<AProvider>,
+        data: Json<UpdateUserReq>,
+    ) -> impl Responder {
+        let user_id = ctx.get_user_id();
         let perm_user_service: UserService = provider.provide();
-
-        let resp = perm_user_service.update(data.into_inner()).await;
+        let resp = perm_user_service.update(user_id, data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::code(err),

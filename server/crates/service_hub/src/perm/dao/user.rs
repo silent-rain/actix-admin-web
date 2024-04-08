@@ -99,16 +99,6 @@ impl<'a> UserDao<'a> {
 
     /// 更新信息
     pub async fn update(&self, active_model: perm_user::ActiveModel) -> Result<u64, DbErr> {
-        // let pear = perm_user::ActiveModel {
-        //     nickname: Set(data.nickname),
-        //     gender: Set(data.gender),
-        //     age: Set(data.age),
-        //     phone: Set(data.phone),
-        //     password: Set(data.password),
-        //     status: Set(data.status),
-        //     ..Default::default()
-        // };
-
         let id: i32 = *(active_model.id.clone().as_ref());
         let result = PermUser::update_many()
             .set(active_model)
@@ -140,17 +130,20 @@ impl<'a> UserDao<'a> {
     /// 添加用户及对应用户的角色
     pub async fn add_user(
         &self,
-        data: perm_user::ActiveModel,
+        active_model: perm_user::ActiveModel,
         add_role_ids: Vec<i32>,
     ) -> Result<perm_user::Model, DbErr> {
         let txn = self.db.wdb().begin().await?;
-
+        // 创建者
+        let creator = *(active_model.creator.clone().as_ref());
         // 添加用户
-        let user = self.txn_add_user(&txn, data).await?;
+        let user = self.txn_add_user(&txn, active_model).await?;
         let user_id = user.id;
 
         // 添加批量角色
-        let _ = self.txn_add_user_roles(&txn, user_id, add_role_ids).await?;
+        let _ = self
+            .txn_batch_add_user_roles(&txn, creator, user_id, add_role_ids)
+            .await?;
 
         txn.commit().await?;
         Ok(user)
@@ -166,12 +159,18 @@ impl<'a> UserDao<'a> {
         let user_id: i32 = *(active_model.id.clone().as_ref());
         let txn = self.db.wdb().begin().await?;
 
+        // 创建者
+        let creator = *(active_model.creator.clone().as_ref());
         // 更新用户
         let _ = self.txn_update_user(&txn, active_model).await?;
         // 添加批量角色
-        let _ = self.txn_add_user_roles(&txn, user_id, add_role_ids).await?;
+        let _ = self
+            .txn_batch_add_user_roles(&txn, creator, user_id, add_role_ids)
+            .await?;
         // 删除批量角色
-        let _ = self.txn_del_user_roles(&txn, user_id, del_role_ids).await?;
+        let _ = self
+            .txn_batch_del_user_roles(&txn, user_id, del_role_ids)
+            .await?;
 
         txn.commit().await?;
         Ok(())
@@ -202,9 +201,10 @@ impl<'a> UserDao<'a> {
     }
 
     /// 添加批量角色
-    async fn txn_add_user_roles(
+    async fn txn_batch_add_user_roles(
         &self,
         txn: &DatabaseTransaction,
+        creator: Option<i32>,
         user_id: i32,
         role_ids: Vec<i32>,
     ) -> Result<i32, DbErr> {
@@ -216,6 +216,7 @@ impl<'a> UserDao<'a> {
             let model = perm_role_user_rel::ActiveModel {
                 user_id: Set(user_id),
                 role_id: Set(role_id),
+                creator: Set(creator),
                 ..Default::default()
             };
             user_ids.push(model)
@@ -226,7 +227,7 @@ impl<'a> UserDao<'a> {
     }
 
     /// 删除批量角色
-    async fn txn_del_user_roles(
+    async fn txn_batch_del_user_roles(
         &self,
         txn: &DatabaseTransaction,
         user_id: i32,

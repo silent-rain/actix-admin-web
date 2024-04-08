@@ -1,11 +1,11 @@
 //! 用户管理
 use crate::perm::{
-    dao::{user::UserDao, role_user_rel::UserRoleRelDao},
+    dao::{role_user_rel::UserRoleRelDao, user::UserDao},
     dto::user::{AddUserReq, GetUserListReq, ProfileRsp, UpdateUserReq},
 };
 
 use code::{Error, ErrorMsg};
-use entity::{perm_role, perm_user, perm_role_user_rel};
+use entity::{perm_role, perm_role_user_rel, perm_user};
 
 use nject::injectable;
 use sea_orm::Set;
@@ -140,8 +140,8 @@ impl<'a> UserService<'a> {
 }
 
 impl<'a> UserService<'a> {
-    /// 添加用户及对应用户的角色
-    pub async fn add(&self, data: AddUserReq) -> Result<perm_user::Model, ErrorMsg> {
+    /// 后台添加用户及对应用户的角色
+    pub async fn add(&self, user_id: i32, data: AddUserReq) -> Result<perm_user::Model, ErrorMsg> {
         // 检测是否已注册用户
         if let Some(phone) = data.phone.clone() {
             let user = self.user_dao.info_by_phone(phone).await.map_err(|err| {
@@ -188,6 +188,7 @@ impl<'a> UserService<'a> {
             email: Set(data.email),
             password: Set(password),
             status: Set(1),
+            creator: Set(Some(user_id)),
             ..Default::default()
         };
 
@@ -202,8 +203,8 @@ impl<'a> UserService<'a> {
         Ok(result)
     }
 
-    /// 更新用户及对应用户的角色
-    pub async fn update(&self, data: UpdateUserReq) -> Result<(), Error> {
+    /// 后台更新用户及对应用户的角色
+    pub async fn update(&self, user_id: i32, data: UpdateUserReq) -> Result<(), Error> {
         // 获取原角色列表
         let (user_role_rels, _) = self
             .user_role_rel_dao
@@ -231,6 +232,7 @@ impl<'a> UserService<'a> {
             intro: Set(data.intro),
             note: Set(data.note),
             status: Set(data.status),
+            updater: Set(Some(user_id)),
             ..Default::default()
         };
         self.user_dao
