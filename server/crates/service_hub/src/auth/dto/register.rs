@@ -61,6 +61,7 @@ pub struct PhoneRegisterReq {
     pub phone: String,
     #[validate(length(min = 5, max = 20, message = "用户名必须在5到20个字符之间"))]
     pub username: String,
+    pub real_name: Option<String>,
     #[validate(length(min = 6, message = "密码至少需要6个字符"))]
     pub password: String,
     #[validate(range(min = 1, max = 3, message = "性别;1:男,2:女,3:保密"))]
@@ -91,6 +92,7 @@ pub struct EmailRegisterReq {
     pub email: String,
     #[validate(length(min = 5, max = 20, message = "用户名必须在5到20个字符之间"))]
     pub username: String,
+    pub real_name: Option<String>,
     #[validate(length(min = 6, message = "密码至少需要6个字符"))]
     pub password: String,
     #[validate(range(min = 1, max = 3, message = "性别;1:男,2:女,3:保密"))]

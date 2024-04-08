@@ -119,7 +119,8 @@ impl<'a> RegisterService<'a> {
     /// 添加手机用户
     async fn add_phone_user(&self, data: PhoneRegisterReq) -> Result<perm_user::Model, ErrorMsg> {
         let data = perm_user::ActiveModel {
-            username: Set(Some(data.username)),
+            username: Set(data.username),
+            real_name: Set(data.real_name),
             gender: Set(data.gender),
             age: Set(data.age),
             birthday: Set(data.birthday),
@@ -140,7 +141,8 @@ impl<'a> RegisterService<'a> {
     /// 添加邮箱用户
     async fn add_email_user(&self, data: EmailRegisterReq) -> Result<perm_user::Model, ErrorMsg> {
         let data = perm_user::ActiveModel {
-            username: Set(Some(data.username)),
+            username: Set(data.username),
+            real_name: Set(data.real_name),
             gender: Set(data.gender),
             age: Set(data.age),
             birthday: Set(data.birthday),

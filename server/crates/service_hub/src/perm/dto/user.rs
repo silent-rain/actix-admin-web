@@ -20,6 +20,7 @@ pub struct GetUserListReq {
 #[derive(Serialize, Deserialize, Validate)]
 pub struct AddUserReq {
     pub username: String,
+    pub real_name: Option<String>,
     pub gender: i8,
     pub age: i32,
     pub birthday: Option<String>,
@@ -35,6 +36,7 @@ pub struct AddUserReq {
 pub struct UpdateUserReq {
     pub id: i32,
     pub username: String,
+    pub real_name: Option<String>,
     pub gender: i8,
     pub age: i32,
     pub birthday: Option<String>,
@@ -52,7 +54,7 @@ pub struct UpdateUserReq {
 #[derive(Serialize, Deserialize)]
 pub struct ProfileRsp {
     pub id: i32,
-    pub username: Option<String>,
+    pub username: String,
     pub gender: i8,
     pub age: Option<i32>,
     pub birthday: Option<String>,

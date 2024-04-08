@@ -1,4 +1,13 @@
-use sea_orm_migration::prelude::*;
+//! 角色表
+//! User Entity: [`entity::prelude::PermRole`]
+use entity::{perm_role::Column, prelude::PermRole};
+
+use sea_orm_migration::{
+    async_trait,
+    sea_orm::DeriveMigrationName,
+    sea_query::{ColumnDef, Table},
+    DbErr, MigrationTrait, SchemaManager,
+};
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
@@ -11,10 +20,10 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(PermRole::Table)
+                    .table(PermRole)
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(PermRole::Id)
+                        ColumnDef::new(Column::Id)
                             .integer()
                             .not_null()
                             .auto_increment()
@@ -22,39 +31,53 @@ impl MigrationTrait for Migration {
                             .comment("角色ID"),
                     )
                     .col(
-                        ColumnDef::new(PermRole::Name)
+                        ColumnDef::new(Column::Name)
                             .string()
+                            .string_len(20)
                             .not_null()
                             .unique_key()
                             .comment("角色名称"),
                     )
                     .col(
-                        ColumnDef::new(PermRole::Sort)
+                        ColumnDef::new(Column::Sort)
                             .integer()
                             .not_null()
-                            .default(1)
+                            .default(0)
                             .comment("排序"),
                     )
                     .col(
-                        ColumnDef::new(PermRole::Note)
+                        ColumnDef::new(Column::Note)
                             .string()
+                            .string_len(200)
                             .null()
                             .comment("备注"),
                     )
                     .col(
-                        ColumnDef::new(PermRole::Status)
+                        ColumnDef::new(Column::Status)
                             .tiny_integer()
                             .not_null()
-                            .comment("状态;1:启用,2:禁用"),
+                            .comment("状态,0:停用,1:正常"),
                     )
                     .col(
-                        ColumnDef::new(PermRole::CreatedAt)
+                        ColumnDef::new(Column::Creator)
+                            .integer()
+                            .null()
+                            .comment("创建者"),
+                    )
+                    .col(
+                        ColumnDef::new(Column::Updater)
+                            .integer()
+                            .null()
+                            .comment("更新者"),
+                    )
+                    .col(
+                        ColumnDef::new(Column::CreatedAt)
                             .date_time()
                             .not_null()
                             .comment("创建时间"),
                     )
                     .col(
-                        ColumnDef::new(PermRole::UpdatedAt)
+                        ColumnDef::new(Column::UpdatedAt)
                             .date_time()
                             .not_null()
                             .comment("更新时间"),
@@ -68,21 +91,7 @@ impl MigrationTrait for Migration {
         // Replace the sample below with your own migration scripts
 
         manager
-            .drop_table(Table::drop().table(PermRole::Table).to_owned())
+            .drop_table(Table::drop().table(PermRole).to_owned())
             .await
     }
-}
-
-/// Learn more at https://docs.rs/sea-query#iden
-#[derive(Iden)]
-enum PermRole {
-    #[iden = "perm_user"]
-    Table,
-    Id,
-    Name,
-    Sort,
-    Note,
-    Status,
-    CreatedAt,
-    UpdatedAt,
 }

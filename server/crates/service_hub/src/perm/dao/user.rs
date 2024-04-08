@@ -3,8 +3,8 @@ use crate::perm::dto::user::GetUserListReq;
 
 use database::{DbRepo, Pagination};
 use entity::{
-    perm_role, perm_user, perm_user_role_rel,
-    prelude::{PermRole, PermUser, PermUserRoleRel},
+    perm_role, perm_role_user_rel, perm_user,
+    prelude::{PermRole, PermRoleUserRel, PermUser},
 };
 
 use nject::injectable;
@@ -213,7 +213,7 @@ impl<'a> UserDao<'a> {
         }
         let mut user_ids = Vec::new();
         for role_id in role_ids {
-            let model = perm_user_role_rel::ActiveModel {
+            let model = perm_role_user_rel::ActiveModel {
                 user_id: Set(user_id),
                 role_id: Set(role_id),
                 ..Default::default()
@@ -221,7 +221,7 @@ impl<'a> UserDao<'a> {
             user_ids.push(model)
         }
 
-        let result = PermUserRoleRel::insert_many(user_ids).exec(txn).await?;
+        let result = PermRoleUserRel::insert_many(user_ids).exec(txn).await?;
         Ok(result.last_insert_id)
     }
 
@@ -236,9 +236,9 @@ impl<'a> UserDao<'a> {
             return Ok(0);
         }
 
-        let result = PermUserRoleRel::delete_many()
-            .filter(perm_user_role_rel::Column::UserId.eq(user_id))
-            .filter(perm_user_role_rel::Column::RoleId.is_in(role_ids))
+        let result = PermRoleUserRel::delete_many()
+            .filter(perm_role_user_rel::Column::UserId.eq(user_id))
+            .filter(perm_role_user_rel::Column::RoleId.is_in(role_ids))
             .exec(txn)
             .await?;
         Ok(result.rows_affected)
@@ -250,8 +250,8 @@ impl<'a> UserDao<'a> {
     /// 通过用户ID获取角色列表
     pub async fn roles(&self, user_id: i32) -> Result<(Vec<perm_role::Model>, u64), DbErr> {
         let results = PermRole::find()
-            .left_join(PermUserRoleRel)
-            .filter(perm_user_role_rel::Column::UserId.eq(user_id))
+            .left_join(PermRoleUserRel)
+            .filter(perm_role_user_rel::Column::UserId.eq(user_id))
             .order_by_asc(perm_user::Column::Id)
             .all(self.db.rdb())
             .await?;
@@ -272,8 +272,8 @@ mod tests {
         let result = PermRole::find()
             .select_only()
             .columns([perm_user::Column::Id])
-            .left_join(PermUserRoleRel)
-            .filter(perm_user_role_rel::Column::UserId.eq(10))
+            .left_join(PermRoleUserRel)
+            .filter(perm_role_user_rel::Column::UserId.eq(10))
             .order_by_asc(perm_user::Column::Id)
             .build(DbBackend::Postgres)
             .to_string();

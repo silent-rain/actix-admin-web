@@ -57,11 +57,10 @@ impl<'a> LoginService<'a> {
         }
 
         // 生成Token
-        let token = encode_token(user.id, user.username.clone().map_or("".to_owned(), |v| v))
-            .map_err(|err| {
-                error!("生成密匙失败, err: {}", err);
-                Error::TokenEncode.into_msg().with_msg("生成密匙失败")
-            })?;
+        let token = encode_token(user.id, user.username.clone()).map_err(|err| {
+            error!("生成密匙失败, err: {}", err);
+            Error::TokenEncode.into_msg().with_msg("生成密匙失败")
+        })?;
 
         // 添加登陆日志
         self.add_login_log(req, user.clone()).await?;
@@ -97,7 +96,7 @@ impl<'a> LoginService<'a> {
         req: HttpRequest,
         user: perm_user::Model,
     ) -> Result<log_user_login::Model, ErrorMsg> {
-        let username = user.username.map_or("".to_owned(), |v| v);
+        let username = user.username;
         // Get the remote address from the request
         // let remote_addr = req
         //     .connection_info()

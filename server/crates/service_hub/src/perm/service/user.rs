@@ -1,11 +1,11 @@
 //! 用户管理
 use crate::perm::{
-    dao::{user::UserDao, user_role_rel::UserRoleRelDao},
+    dao::{user::UserDao, role_user_rel::UserRoleRelDao},
     dto::user::{AddUserReq, GetUserListReq, ProfileRsp, UpdateUserReq},
 };
 
 use code::{Error, ErrorMsg};
-use entity::{perm_role, perm_user, perm_user_role_rel};
+use entity::{perm_role, perm_user, perm_role_user_rel};
 
 use nject::injectable;
 use sea_orm::Set;
@@ -178,7 +178,8 @@ impl<'a> UserService<'a> {
         let password = sha2_256(&data.password);
 
         let model = perm_user::ActiveModel {
-            username: Set(Some(data.username)),
+            username: Set(data.username),
+            real_name: Set(data.real_name),
             gender: Set(data.gender),
             age: Set(Some(data.age)),
             birthday: Set(data.birthday),
@@ -218,7 +219,8 @@ impl<'a> UserService<'a> {
 
         let model = perm_user::ActiveModel {
             id: Set(data.id),
-            username: Set(Some(data.username)),
+            username: Set(data.username),
+            real_name: Set(data.real_name),
             gender: Set(data.gender),
             age: Set(Some(data.age)),
             birthday: Set(data.birthday),
@@ -246,7 +248,7 @@ impl<'a> UserService<'a> {
     fn diff_role_ids(
         &self,
         role_ids: Vec<i32>,
-        user_role_rels: Vec<perm_user_role_rel::Model>,
+        user_role_rels: Vec<perm_role_user_rel::Model>,
     ) -> (Vec<i32>, Vec<i32>) {
         let raw_role_ids: Vec<i32> = user_role_rels.iter().map(|v| v.role_id).collect();
         // 待新增的ID

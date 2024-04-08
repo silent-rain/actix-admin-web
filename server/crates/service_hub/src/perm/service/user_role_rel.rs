@@ -1,11 +1,11 @@
 //! 用户角色关联关系管理
 use crate::perm::{
-    dao::user_role_rel::UserRoleRelDao,
+    dao::role_user_rel::UserRoleRelDao,
     dto::user_role_rel::{BatchAddUserRoleRelReq, GetUserRoleRelListReq},
 };
 
 use code::Error;
-use entity::perm_user_role_rel;
+use entity::perm_role_user_rel;
 
 use nject::injectable;
 use sea_orm::Set;
@@ -22,7 +22,7 @@ impl<'a> UserRoleRelService<'a> {
     pub async fn list(
         &self,
         req: GetUserRoleRelListReq,
-    ) -> Result<(Vec<perm_user_role_rel::Model>, u64), Error> {
+    ) -> Result<(Vec<perm_role_user_rel::Model>, u64), Error> {
         let (results, total) = self.user_role_rel_dao.list(req).await.map_err(|err| {
             error!("查询用户与角色关联关系列表失败, err: {:#?}", err);
             Error::DbQueryError
@@ -35,7 +35,7 @@ impl<'a> UserRoleRelService<'a> {
     pub async fn batch_add(&self, req: BatchAddUserRoleRelReq) -> Result<i32, Error> {
         let mut models = Vec::new();
         for role_id in req.role_ids {
-            let model = perm_user_role_rel::ActiveModel {
+            let model = perm_role_user_rel::ActiveModel {
                 user_id: Set(req.user_id),
                 role_id: Set(role_id),
                 ..Default::default()

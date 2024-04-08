@@ -2,7 +2,7 @@
 pub mod dto;
 
 mod dao;
-pub use dao::{role::RoleDao, user::UserDao, user_role_rel::UserRoleRelDao};
+pub use dao::{role::RoleDao, user::UserDao, role_user_rel::UserRoleRelDao};
 
 mod service;
 pub use service::{role::RoleService, user::UserService, user_role_rel::UserRoleRelService};
