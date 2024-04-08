@@ -9,7 +9,7 @@ use entity::{
 
 use nject::injectable;
 use sea_orm::{
-    ActiveModelTrait, ColumnTrait, Condition, DatabaseTransaction, DbErr, EntityTrait,
+    ActiveModelTrait, ColumnTrait, Condition, DatabaseTransaction, DbErr, EntityTrait, JoinType,
     PaginatorTrait, QueryFilter, QueryOrder, QuerySelect, QueryTrait, Set, TransactionTrait,
 };
 
@@ -247,13 +247,18 @@ impl<'a> UserDao<'a> {
 }
 
 impl<'a> UserDao<'a> {
-    // TODO 关联关系待修复
     /// 通过用户ID获取角色列表
     pub async fn roles(&self, user_id: i32) -> Result<(Vec<perm_role::Model>, u64), DbErr> {
         let results = PermRole::find()
-            .left_join(PermRoleUserRel)
+            .join_rev(
+                JoinType::InnerJoin,
+                PermRoleUserRel::belongs_to(PermRole)
+                    .from(perm_role_user_rel::Column::RoleId)
+                    .to(perm_role::Column::Id)
+                    .into(),
+            )
             .filter(perm_role_user_rel::Column::UserId.eq(user_id))
-            .order_by_asc(perm_user::Column::Id)
+            .order_by_asc(perm_role::Column::Id)
             .all(self.db.rdb())
             .await?;
         let total = results.len() as u64;
