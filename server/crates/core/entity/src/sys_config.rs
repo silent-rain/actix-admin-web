@@ -24,7 +24,7 @@ pub struct Model {
     #[sea_orm(column_type = "Text", nullable)]
     pub value: Option<String>,
     /// 排序
-    pub sort: i32,
+    pub sort: Option<i32>,
     /// 配置描述
     pub note: Option<String>,
     /// 是否启用,0: 禁用,1: 启用

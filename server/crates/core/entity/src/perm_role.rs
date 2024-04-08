@@ -17,7 +17,7 @@ pub struct Model {
     #[sea_orm(unique)]
     pub name: String,
     /// 排序
-    pub sort: i32,
+    pub sort: Option<i32>,
     /// 备注
     pub note: Option<String>,
     /// 状态,0:停用,1:正常

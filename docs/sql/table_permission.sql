@@ -32,7 +32,7 @@ CREATE TABLE perm_user (
 CREATE TABLE perm_role (
     `id` INT AUTO_INCREMENT COMMENT '角色ID',
     `name` VARCHAR(20) UNIQUE NOT NULL COMMENT '角色名称',
-    `sort` INT(11) NOT NULL DEFAULT 0 COMMENT '排序',
+    `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
     `note` VARCHAR(200) NULL COMMENT '备注',
     `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:停用,1:正常',
     `creator` bigint DEFAULT NULL COMMENT '创建者',
@@ -49,11 +49,10 @@ CREATE TABLE perm_role_user_rel (
     `role_id` INT(10) NOT NULL COMMENT '角色ID',
     `creator` bigint DEFAULT NULL COMMENT '创建者',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`),
     UNIQUE KEY `uni_user_id_role_id` (`user_id`,`role_id`),
-    CONSTRAINT `perm_user_role_rel_user_id` FOREIGN KEY (`user_id`) REFERENCES `perm_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `perm_user_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT `perm_role_user_rel_user_id` FOREIGN KEY (`user_id`) REFERENCES `perm_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `perm_role_user_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '角色用户关联表';
 
 -- 菜单表
@@ -74,7 +73,7 @@ CREATE TABLE perm_menu (
     `permission` VARCHAR(200) NULL COMMENT '权限标识',
     `hidden` TINYINT(1) NULL DEFAULT 1 COMMENT '是否隐藏,0:显示,1:隐藏',
     `always_show` TINYINT(1) NULL DEFAULT 1 COMMENT '始终显示根菜单,0:显示,1:隐藏',
-    `sort` INT(11) NOT NULL DEFAULT 0 COMMENT '排序',
+    `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
     `note` VARCHAR(200) NULL COMMENT '备注',
     `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:停用,1:启用',
     `creator` bigint DEFAULT NULL COMMENT '创建者',
@@ -91,7 +90,6 @@ CREATE TABLE perm_role_menu_rel (
     `menu_id` INT(10) NOT NULL COMMENT '菜单ID',
     `creator` bigint DEFAULT NULL COMMENT '创建者',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`),
     CONSTRAINT `perm_role_menu_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `perm_role_menu_rel_menu_id` FOREIGN KEY (`menu_id`) REFERENCES `perm_menu` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -166,9 +164,9 @@ CREATE TABLE _perm_user_avatar (
 CREATE TABLE perm_dept (
     `id` INT AUTO_INCREMENT COMMENT '部门ID',
     `pid` bigint DEFAULT NULL COMMENT '上级部门ID',
-    `pids` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '所有上级部门ID，用逗号分开',
+    `pids` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '所有上级部门ID, 用逗号分开',
     `name` VARCHAR(20) UNIQUE NOT NULL COMMENT '部门名称',
-    `sort` INT(11) NOT NULL DEFAULT 0 COMMENT '排序',
+    `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
     `note` VARCHAR(200) NULL COMMENT '备注',
     `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:停用,1:正常',
     `creator` bigint DEFAULT NULL COMMENT '创建者',
@@ -185,9 +183,8 @@ CREATE TABLE perm_role_dept_rel (
     `dept_id` INT(10) NOT NULL COMMENT '部门ID',
     `creator` bigint DEFAULT NULL COMMENT '创建者',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`),
-    UNIQUE KEY `uni_user_id_role_id` (`user_id`,`role_id`),
+    UNIQUE KEY `uni_user_id_role_id` (`role_id`,`dept_id`),
     CONSTRAINT `perm_role_dept_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `perm_role_dept_rel_dept_id` FOREIGN KEY (`dept_id`) REFERENCES `perm_dept` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '角色部门关联表-数据权限';

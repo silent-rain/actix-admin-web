@@ -41,7 +41,7 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(Column::Sort)
                             .integer()
-                            .not_null()
+                            .null()
                             .default(0)
                             .comment("排序"),
                     )
@@ -56,6 +56,7 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::Status)
                             .tiny_integer()
                             .not_null()
+                            .default(1)
                             .comment("状态,0:停用,1:正常"),
                     )
                     .col(

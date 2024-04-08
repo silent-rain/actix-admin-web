@@ -53,12 +53,6 @@ impl MigrationTrait for Migration {
                             .not_null()
                             .comment("创建时间"),
                     )
-                    .col(
-                        ColumnDef::new(Column::UpdatedAt)
-                            .date_time()
-                            .not_null()
-                            .comment("更新时间"),
-                    )
                     .to_owned(),
             )
             .await

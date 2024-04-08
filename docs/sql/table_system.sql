@@ -21,7 +21,7 @@ CREATE TABLE sys_config (
     `name` VARCHAR(32) NOT NULL COMMENT '配置名称',
     `key` VARCHAR(32) NOT NULL UNIQUE COMMENT '配置项(英文)',
     `value` TEXT COMMENT '配置参数值',
-    `sort` INT(11) NOT NULL DEFAULT 0 COMMENT '排序',
+    `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
     `note` VARCHAR(32) DEFAULT NULL COMMENT '配置描述',
     `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '是否启用,0: 禁用,1: 启用',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

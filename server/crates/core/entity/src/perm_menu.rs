@@ -44,7 +44,7 @@ pub struct Model {
     /// 始终显示根菜单,0:显示,1:隐藏
     pub always_show: Option<i8>,
     /// 排序
-    pub sort: i32,
+    pub sort: Option<i32>,
     /// 备注
     pub note: Option<String>,
     /// 状态,0:停用,1:启用

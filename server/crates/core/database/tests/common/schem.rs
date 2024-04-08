@@ -29,6 +29,7 @@ pub async fn create_user_table(db: &Pool) -> Result<ExecResult, DbErr> {
             ColumnDef::new(user::Column::Status)
                 .tiny_integer()
                 .not_null()
+                .default(1)
                 .comment("登录状态,0:禁用,1:启用"),
         )
         .to_owned();

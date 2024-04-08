@@ -23,7 +23,7 @@ pub struct GetRoleListReq {
 pub struct AddRoleReq {
     #[validate(length(min = 2, message = "至少输入两个字符"))]
     pub name: String,
-    pub sort: i32,
+    pub sort: Option<i32>,
     pub note: Option<String>,
     pub status: i8,
 }
@@ -35,5 +35,5 @@ pub struct UpdateRoleReq {
     pub status: i8,
     pub name: String,
     pub note: Option<String>,
-    pub sort: i32,
+    pub sort: Option<i32>,
 }
