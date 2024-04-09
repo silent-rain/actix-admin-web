@@ -4,7 +4,7 @@ pub mod dto;
 pub mod service;
 
 mod controller;
-pub use controller::health::HealthController;
+pub use controller::{admin_web_site::AdminWebSiteController, health::HealthController};
 
 mod router;
-pub use router::health::HealthRouter;
+pub use router::{admin_web_site::AdminWebSiteRouter, health::HealthRouter};

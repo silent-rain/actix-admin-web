@@ -18,6 +18,8 @@ members = [
     "crates/middleware",
     # 插件
     "crates/plugins",
+    # 应用状态
+    "crates/app_state",
     # 服务集
     "crates/service_hub",
 
@@ -66,15 +68,11 @@ serde_yaml = "0.9"
 jsonwebtoken = "9.2"
 chrono = "0.4"
 captcha-rs = "0.2"
-sha2 = { version = "0.10" }
+sha2 = "0.10"
 regex = "1.10"
-uuid = { version = "1.7.0", features = ["v4"] }
+uuid = "1.7.0"
 time = "0.3"
-rust-embed = { version = "8.3", features = [
-    # "debug-embed",
-    "include-exclude",
-    "mime-guess",
-] }
+rust-embed = "8.3"
 
 # 其他
 futures = "0.3"

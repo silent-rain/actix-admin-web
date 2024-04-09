@@ -107,6 +107,9 @@ pub enum Error {
     #[error("用户添加失败")]
     UserAddError = 10262,
 
+    #[error("未找到资源")]
+    AssetNotFound = 10290,
+
     // 文件或目录操作
     #[error("获取目录失败")]
     FsReadDirError = 10301,

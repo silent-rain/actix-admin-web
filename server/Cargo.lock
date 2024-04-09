@@ -259,6 +259,7 @@ dependencies = [
  "actix-request-identifier",
  "actix-web",
  "actix-web-requestid",
+ "app_state",
  "code",
  "context",
  "database",
@@ -274,6 +275,7 @@ dependencies = [
  "service_hub",
  "tracing",
  "tracing-actix-web",
+ "utils",
 ]
 
 [[package]]
@@ -397,6 +399,13 @@ checksum = "1cd54b81ec8d6180e24654d0b371ad22fc3dd083b6ff8ba325b72e00c87660a7"
 dependencies = [
  "anstyle",
  "windows-sys 0.52.0",
+]
+
+[[package]]
+name = "app_state"
+version = "0.1.0"
+dependencies = [
+ "utils",
 ]
 
 [[package]]
@@ -3334,6 +3343,7 @@ version = "0.1.0"
 dependencies = [
  "actix-web",
  "actix_validator",
+ "app_state",
  "chrono",
  "code",
  "context",
@@ -3343,6 +3353,7 @@ dependencies = [
  "nject",
  "regex",
  "response",
+ "rust-embed",
  "sea-orm",
  "serde",
  "serde_json",
@@ -4206,6 +4217,7 @@ dependencies = [
  "captcha-rs",
  "chrono",
  "code",
+ "rust-embed",
  "serde",
  "serde_json",
  "sha2",

@@ -18,12 +18,15 @@ actix_validator = { path = "../core/actix_validator" }
 utils = { path = "../core/utils" }
 jwt = { path = "../core/jwt" }
 
+app_state = { path = "../app_state" }
+
 actix-web = { workspace = true }
 validator = { workspace = true, features = ["derive"] }
 sea-orm = { workspace = true }
 
 tracing = { workspace = true }
 nject = { workspace = true }
+rust-embed = { workspace = true }
 regex = { workspace = true }
 chrono = { workspace = true }
 uuid = { workspace = true, features = ["v4"] }

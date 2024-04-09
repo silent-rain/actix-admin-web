@@ -11,8 +11,10 @@ database = { path = "../crates/core/database" }
 logger = { path = "../crates/core/logger" }
 code = { path = "../crates/core/code" }
 context = { path = "../crates/core/context" }
+utils = { path = "../crates/core/utils" }
 
 middleware = { path = "../crates/middleware" }
+app_state = { path = "../crates/app_state" }
 service_hub = { path = "../crates/service_hub" }
 # migration = { path = "../core/migration" }
 

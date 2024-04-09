@@ -1,12 +1,11 @@
 //! 服务
 
-use crate::{
-    config::AppConfig,
-    router::{self, admin_web_site::AdminWebSiteRouter},
-    state::AppState,
-};
+use std::sync::Arc;
 
-use service_hub::inject::AInjectProvider;
+use crate::{config::AppConfig, router};
+
+use app_state::{AppState, AssetState};
+use service_hub::{inject::AInjectProvider, public::AdminWebSiteRouter};
 
 use actix_web::{http::KeepAlive, web, App, HttpServer};
 use listenfd::ListenFd;
@@ -15,13 +14,17 @@ use tracing::{error, warn};
 /// 启动服务
 pub async fn start(
     app_state: AppState,
+    asset_state: Arc<AssetState>,
     inject_provider: AInjectProvider,
     config: AppConfig,
 ) -> std::io::Result<()> {
     let config_s = config.clone();
+    let asset_state_s = asset_state.clone();
+
     let mut server = HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(app_state.clone()))
+            .app_data(web::Data::new(asset_state_s.clone()))
             .app_data(web::Data::new(inject_provider.clone()))
             .app_data(web::Data::new(config_s.clone()))
             // API 服务

@@ -8,8 +8,6 @@ use service_hub::{
     system::CaptchaRouter,
 };
 
-pub mod admin_web_site;
-
 use actix_request_identifier::RequestIdentifier;
 use actix_web::{dev::HttpServiceFactory, middleware::Logger, web};
 use actix_web_requestid::RequestIDMiddleware;
