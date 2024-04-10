@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 /// 角色菜单关联表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "perm_role_menu_rel")]
+#[sea_orm(table_name = "perm_menu_role_rel")]
 pub struct Model {
     /// 自增ID
     #[sea_orm(primary_key)]
