@@ -1,11 +1,11 @@
-//! 角色部门关系管理
+//! 部门角色关系管理
 use actix_validator::Validate;
 
 use serde::{Deserialize, Serialize};
 
-/// 查询角色部门关系列表
+/// 查询部门角色关系列表
 #[derive(Default, Deserialize, Validate)]
-pub struct GetRoleDeptRelListReq {
+pub struct GetDeptRoleRelListReq {
     /// 当前分页
     pub page: u64,
     /// 页面大小
@@ -14,19 +14,19 @@ pub struct GetRoleDeptRelListReq {
     pub start_time: Option<String>,
     /// 结束时间
     pub end_time: Option<String>,
-    /// 角色ID
-    pub role_id: Option<i32>,
+    /// 部门ID
+    pub dept_id: Option<i32>,
 }
 
-/// 批量添加角色部门关系
+/// 批量添加部门角色关系
 #[derive(Serialize, Deserialize, Validate)]
-pub struct BatchAddRoleDeptRelReq {
+pub struct BatchAddDeptRoleRelReq {
     pub dept_id: i32,
     pub role_ids: Vec<i32>,
 }
 
-/// 批量删除角色部门关系
+/// 批量删除部门角色关系
 #[derive(Default, Deserialize, Validate)]
-pub struct BatchDeleteRoleDeptRelReq {
+pub struct BatchDeleteDeptRoleRelReq {
     pub ids: Vec<i32>,
 }

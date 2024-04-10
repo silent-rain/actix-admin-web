@@ -3,24 +3,24 @@ pub mod dto;
 
 mod dao;
 pub use dao::{
-    dept::DeptDao, role::RoleDao, role_dept_rel::RoleDeptRelDao, role_user_rel::UserRoleRelDao,
+    dept::DeptDao, dept_role_rel::RoleDeptRelDao, role::RoleDao, role_user_rel::UserRoleRelDao,
     user::UserDao,
 };
 
 mod service;
 pub use service::{
-    dept::DeptService, role::RoleService, role_dept_rel::RoleDeptRelService, user::UserService,
+    dept::DeptService, dept_role_rel::DeptRoleRelService, role::RoleService, user::UserService,
     user_role_rel::UserRoleRelService,
 };
 
 mod controller;
 pub use controller::{
-    dept::DeptController, role::RoleController, role_dept_rel::RoleDeptRelController,
+    dept::DeptController, dept_role_rel::DeptRoleRelController, role::RoleController,
     user::UserController, user_role_rel::UserRoleRelController,
 };
 
 mod router;
 pub use router::{
-    dept::DeptRouter, role::RoleRouter, role_dept_rel::RoleDeptRelRouter, user::UserRouter,
+    dept::DeptRouter, dept_role_rel::DeptRoleRelRouter, role::RoleRouter, user::UserRouter,
     user_role_rel::UserRoleRelRouter,
 };

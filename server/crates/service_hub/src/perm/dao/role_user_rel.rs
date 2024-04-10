@@ -48,7 +48,7 @@ impl<'a> UserRoleRelDao<'a> {
         Ok((results, total))
     }
 
-    /// 添加关联关系
+    /// 添加数据
     pub async fn add(
         &self,
         active_model: perm_role_user_rel::ActiveModel,

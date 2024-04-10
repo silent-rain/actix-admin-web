@@ -176,8 +176,8 @@ CREATE TABLE perm_dept (
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '角色表';
 
--- 角色部门关联表-数据权限
-CREATE TABLE perm_role_dept_rel (
+-- 部门角色关联表-数据权限
+CREATE TABLE perm_dept_role_rel (
     `id` INT AUTO_INCREMENT COMMENT '自增ID',
     `role_id` INT(10) NOT NULL COMMENT '角色ID',
     `dept_id` INT(10) NOT NULL COMMENT '部门ID',
@@ -187,4 +187,4 @@ CREATE TABLE perm_role_dept_rel (
     UNIQUE KEY `uni_user_id_role_id` (`role_id`,`dept_id`),
     CONSTRAINT `perm_role_dept_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `perm_role_dept_rel_dept_id` FOREIGN KEY (`dept_id`) REFERENCES `perm_dept` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '角色部门关联表-数据权限';
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '部门角色关联表-数据权限';

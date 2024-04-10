@@ -5,7 +5,7 @@ mod m20230617_084425_create_log_user_login;
 mod m20240216_123914_create_perm_user;
 mod m20240218_145452_create_perm_dept;
 mod m20240218_145452_create_perm_role;
-mod m20240218_161914_create_perm_role_dept_rel;
+mod m20240218_161914_create_perm_dept_role_rel;
 mod m20240218_161914_create_perm_role_user_rel;
 mod m20240218_161916_create_sys_captcha;
 
@@ -21,7 +21,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20240218_145452_create_perm_role::Migration),
             Box::new(m20240218_145452_create_perm_dept::Migration),
             Box::new(m20240218_161914_create_perm_role_user_rel::Migration),
-            Box::new(m20240218_161914_create_perm_role_dept_rel::Migration),
+            Box::new(m20240218_161914_create_perm_dept_role_rel::Migration),
             Box::new(m20240218_161916_create_sys_captcha::Migration),
         ]
     }

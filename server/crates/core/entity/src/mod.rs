@@ -13,7 +13,7 @@ pub mod log_web;
 pub mod perm_dept;
 pub mod perm_menu;
 pub mod perm_role;
-pub mod perm_role_dept_rel;
+pub mod perm_dept_role_rel;
 pub mod perm_role_menu_rel;
 pub mod perm_role_user_rel;
 pub mod perm_user;

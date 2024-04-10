@@ -1,12 +1,12 @@
-//! 角色部门关系管理
+//! 部门角色关系管理
 
 use crate::{
     inject::AInjectProvider,
     perm::{
-        dto::role_dept_rel::{
-            BatchAddRoleDeptRelReq, BatchDeleteRoleDeptRelReq, GetRoleDeptRelListReq,
+        dto::dept_role_rel::{
+            BatchAddDeptRoleRelReq, BatchDeleteDeptRoleRelReq, GetDeptRoleRelListReq,
         },
-        service::role_dept_rel::RoleDeptRelService,
+        service::dept_role_rel::DeptRoleRelService,
     },
 };
 
@@ -17,46 +17,46 @@ use response::Response;
 use actix_web::{web::Data, Responder};
 
 /// 控制器
-pub struct RoleDeptRelController;
+pub struct DeptRoleRelController;
 
-impl RoleDeptRelController {
-    /// 获取角色与部门关系列表
+impl DeptRoleRelController {
+    /// 获取部门角色关系列表
     pub async fn list(
         provider: Data<AInjectProvider>,
-        req: Query<GetRoleDeptRelListReq>,
+        req: Query<GetDeptRoleRelListReq>,
     ) -> impl Responder {
-        let role_dept_rel_service: RoleDeptRelService = provider.provide();
-        let resp = role_dept_rel_service.list(req.into_inner()).await;
+        let dept_role_rel_service: DeptRoleRelService = provider.provide();
+        let resp = dept_role_rel_service.list(req.into_inner()).await;
         match resp {
             Ok((results, total)) => Response::ok().data_list(results, total),
             Err(err) => Response::code(err),
         }
     }
 
-    /// 批量创建角色与部门关系
+    /// 批量创建部门角色关系
     pub async fn batch_add(
         ctx: Context,
         provider: Data<AInjectProvider>,
-        data: Json<BatchAddRoleDeptRelReq>,
+        data: Json<BatchAddDeptRoleRelReq>,
     ) -> impl Responder {
         let user_id = ctx.get_user_id();
         let data = data.into_inner();
-        let role_dept_rel_service: RoleDeptRelService = provider.provide();
-        let resp = role_dept_rel_service.batch_add(user_id, data).await;
+        let dept_role_rel_service: DeptRoleRelService = provider.provide();
+        let resp = dept_role_rel_service.batch_add(user_id, data).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::code(err),
         }
     }
 
-    /// 批量删除指定的角色与部门关系关系
+    /// 批量删除部门角色关系
     pub async fn batch_delete(
         provider: Data<AInjectProvider>,
-        data: Json<BatchDeleteRoleDeptRelReq>,
+        data: Json<BatchDeleteDeptRoleRelReq>,
     ) -> impl Responder {
         let data = data.into_inner();
-        let role_dept_rel_service: RoleDeptRelService = provider.provide();
-        let resp = role_dept_rel_service.batch_delete(data.ids).await;
+        let dept_role_rel_service: DeptRoleRelService = provider.provide();
+        let resp = dept_role_rel_service.batch_delete(data.ids).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::code(err),

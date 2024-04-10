@@ -1,6 +1,6 @@
-//! 角色部门关联表
-//! User Entity: [`entity::prelude::PermRoleDeptRel`]
-use entity::{perm_role_dept_rel::Column, prelude::PermRoleDeptRel};
+//! 部门角色关联表
+//! User Entity: [`entity::prelude::PermDeptRoleRel`]
+use entity::{perm_dept_role_rel::Column, prelude::PermDeptRoleRel};
 
 use sea_orm_migration::{
     async_trait,
@@ -19,7 +19,7 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(PermRoleDeptRel)
+                    .table(PermDeptRoleRel)
                     .if_not_exists()
                     .col(
                         ColumnDef::new(Column::Id)
@@ -61,7 +61,7 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
         manager
-            .drop_table(Table::drop().table(PermRoleDeptRel).to_owned())
+            .drop_table(Table::drop().table(PermDeptRoleRel).to_owned())
             .await
     }
 }
