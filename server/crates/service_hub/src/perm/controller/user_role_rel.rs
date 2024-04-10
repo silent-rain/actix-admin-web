@@ -25,8 +25,8 @@ impl UserRoleRelController {
         provider: Data<AInjectProvider>,
         req: Query<GetUserRoleRelListReq>,
     ) -> impl Responder {
-        let perm_user_service: UserRoleRelService = provider.provide();
-        let resp = perm_user_service.list(req.into_inner()).await;
+        let user_role_rel_service: UserRoleRelService = provider.provide();
+        let resp = user_role_rel_service.list(req.into_inner()).await;
         match resp {
             Ok((results, total)) => Response::ok().data_list(results, total),
             Err(err) => Response::code(err),
@@ -41,8 +41,8 @@ impl UserRoleRelController {
     ) -> impl Responder {
         let user_id = ctx.get_user_id();
         let data = data.into_inner();
-        let perm_user_service: UserRoleRelService = provider.provide();
-        let resp = perm_user_service.batch_add(user_id, data).await;
+        let user_role_rel_service: UserRoleRelService = provider.provide();
+        let resp = user_role_rel_service.batch_add(user_id, data).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::code(err),
@@ -55,8 +55,8 @@ impl UserRoleRelController {
         data: Json<BatchDeleteUserRoleRelReq>,
     ) -> impl Responder {
         let data = data.into_inner();
-        let perm_user_service: UserRoleRelService = provider.provide();
-        let resp = perm_user_service.batch_delete(data.ids).await;
+        let user_role_rel_service: UserRoleRelService = provider.provide();
+        let resp = user_role_rel_service.batch_delete(data.ids).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::code(err),

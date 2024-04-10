@@ -28,8 +28,8 @@ impl UserController {
         provider: Data<AInjectProvider>,
         req: Query<GetUserListReq>,
     ) -> impl Responder {
-        let perm_user_service: UserService = provider.provide();
-        let resp = perm_user_service.list(req.into_inner()).await;
+        let user_service: UserService = provider.provide();
+        let resp = user_service.list(req.into_inner()).await;
         match resp {
             Ok((results, total)) => Response::ok().data_list(results, total),
             Err(err) => Response::code(err),
@@ -38,8 +38,8 @@ impl UserController {
 
     /// 获取用户信息
     pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let perm_user_service: UserService = provider.provide();
-        let resp = perm_user_service.info(*id).await;
+        let user_service: UserService = provider.provide();
+        let resp = user_service.info(*id).await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::code(err),
@@ -60,9 +60,9 @@ impl UserController {
             return Response::code(Error::UserAddError);
         }
 
-        let perm_user_service: UserService = provider.provide();
+        let user_service: UserService = provider.provide();
 
-        let resp = perm_user_service.add(user_id, data).await;
+        let resp = user_service.add(user_id, data).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -76,8 +76,8 @@ impl UserController {
         data: Json<UpdateUserReq>,
     ) -> impl Responder {
         let user_id = ctx.get_user_id();
-        let perm_user_service: UserService = provider.provide();
-        let resp = perm_user_service.update(user_id, data.into_inner()).await;
+        let user_service: UserService = provider.provide();
+        let resp = user_service.update(user_id, data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::code(err),
@@ -86,8 +86,8 @@ impl UserController {
 
     /// 删除用户
     pub async fn delete(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let perm_user_service: UserService = provider.provide();
-        let resp = perm_user_service.delete(*id).await;
+        let user_service: UserService = provider.provide();
+        let resp = user_service.delete(*id).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::code(err),
@@ -102,8 +102,8 @@ impl UserController {
         let username = ctx.get_user_name();
         warn!("profile context user_id: {user_id} username: {username}");
 
-        let perm_user_service: UserService = provider.provide();
-        let resp = perm_user_service.profile(user_id).await;
+        let user_service: UserService = provider.provide();
+        let resp = user_service.profile(user_id).await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::code(err),
@@ -112,8 +112,8 @@ impl UserController {
 
     /// 通过用户ID获取角色列表
     pub async fn roles(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let perm_user_service: UserService = provider.provide();
-        let resp = perm_user_service.roles(*id).await;
+        let user_service: UserService = provider.provide();
+        let resp = user_service.roles(*id).await;
         match resp {
             Ok((results, total)) => Response::ok().data_list(results, total),
             Err(err) => Response::code(err),
