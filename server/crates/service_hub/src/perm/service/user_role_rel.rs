@@ -27,7 +27,7 @@ impl<'a> UserRoleRelService<'a> {
             error!("查询用户角色关系列表失败, err: {:#?}", err);
             Error::DbQueryError
                 .into_msg()
-                .with_msg("查询部门角色关系列表失败")
+                .with_msg("查询用户角色关系列表失败")
         })?;
 
         Ok((results, total))
@@ -58,7 +58,7 @@ impl<'a> UserRoleRelService<'a> {
                 error!("批量添加用户角色关系失败, err: {:#?}", err);
                 Error::DbBatchAddError
                     .into_msg()
-                    .with_msg("查询部门角色关系列表失败")
+                    .with_msg("批量添加用户角色关系失败")
             })?;
 
         Ok(result)
@@ -74,7 +74,7 @@ impl<'a> UserRoleRelService<'a> {
                 error!("批量删除用户角色关系失败, err: {:#?}", err);
                 Error::DbBatchDeleteError
                     .into_msg()
-                    .with_msg("查询部门角色关系列表失败")
+                    .with_msg("批量删除用户角色关系失败")
             })?;
 
         Ok(result)

@@ -2,13 +2,14 @@
 use crate::perm::{
     dao::role::RoleDao,
     dto::role::{AddRoleReq, GetRoleListReq, UpdateRoleReq},
+    enums::RoleStatus,
 };
 
 use code::{Error, ErrorMsg};
 use entity::perm_role;
 
 use nject::injectable;
-use sea_orm::Set;
+use sea_orm::{DbErr::RecordNotUpdated, Set};
 use tracing::error;
 
 /// 服务层
@@ -27,13 +28,13 @@ impl<'a> RoleService<'a> {
         if let Some(true) = req.all {
             return self.role_dao.all().await.map_err(|err| {
                 error!("查询角色列表失败, err: {:#?}", err);
-                Error::DbQueryError.into_msg().with_msg("删除部门信息失败")
+                Error::DbQueryError.into_msg().with_msg("查询角色列表失败")
             });
         }
 
         let (results, total) = self.role_dao.list(req).await.map_err(|err| {
             error!("查询角色列表失败, err: {:#?}", err);
-            Error::DbQueryError.into_msg().with_msg("删除部门信息失败")
+            Error::DbQueryError.into_msg().with_msg("查询角色列表失败")
         })?;
 
         Ok((results, total))
@@ -47,13 +48,11 @@ impl<'a> RoleService<'a> {
             .await
             .map_err(|err| {
                 error!("查询角色信息失败, err: {:#?}", err);
-                Error::DbQueryError.into_msg().with_msg("删除部门信息失败")
+                Error::DbQueryError.into_msg().with_msg("查询角色信息失败")
             })?
             .ok_or_else(|| {
                 error!("角色不存在");
-                Error::DbQueryEmptyError
-                    .into_msg()
-                    .with_msg("删除部门信息失败")
+                Error::DbQueryEmptyError.into_msg().with_msg("角色不存在")
             })?;
 
         Ok(result)
@@ -61,17 +60,31 @@ impl<'a> RoleService<'a> {
 
     /// 添加数据
     pub async fn add(&self, user_id: i32, req: AddRoleReq) -> Result<perm_role::Model, ErrorMsg> {
+        // 查询角色是否存在
+        let role = self
+            .role_dao
+            .info_by_name(req.name.clone())
+            .await
+            .map_err(|err| {
+                error!("查询角色信息失败, err: {:#?}", err);
+                Error::DbQueryError.into_msg().with_msg("查询角色信息失败")
+            })?;
+        if role.is_some() {
+            error!("角色已存在");
+            return Err(Error::DbDataExistError.into_msg().with_msg("角色已存在"));
+        }
+
         let model = perm_role::ActiveModel {
             name: Set(req.name),
             sort: Set(req.sort),
             note: Set(req.note),
-            status: Set(req.status),
+            status: Set(RoleStatus::Enabled as i8),
             creator: Set(Some(user_id)),
             ..Default::default()
         };
         let result = self.role_dao.add(model).await.map_err(|err| {
             error!("添加角色信息失败, err: {:#?}", err);
-            Error::DbAddError.into_msg().with_msg("删除部门信息失败")
+            Error::DbAddError.into_msg().with_msg("添加角色信息失败")
         })?;
 
         Ok(result)
@@ -91,7 +104,7 @@ impl<'a> RoleService<'a> {
 
         let result = self.role_dao.update(model).await.map_err(|err| {
             error!("更新角色失败, err: {:#?}", err);
-            Error::DbUpdateError.into_msg().with_msg("删除部门信息失败")
+            Error::DbUpdateError.into_msg().with_msg("更新角色失败")
         })?;
 
         Ok(result)
@@ -100,8 +113,14 @@ impl<'a> RoleService<'a> {
     /// 更新数据状态
     pub async fn status(&self, id: i32, status: i8) -> Result<(), ErrorMsg> {
         self.role_dao.status(id, status).await.map_err(|err| {
+            if err == RecordNotUpdated {
+                error!("更新角色状态失败, 该角色不存在");
+                return Error::DbUpdateError
+                    .into_msg()
+                    .with_msg("更新角色状态失败, 该角色不存在");
+            }
             error!("更新角色状态失败, err: {:#?}", err);
-            Error::DbUpdateError.into_msg().with_msg("删除部门信息失败")
+            Error::DbUpdateError.into_msg().with_msg("更新角色状态失败")
         })?;
 
         Ok(())
@@ -111,7 +130,7 @@ impl<'a> RoleService<'a> {
     pub async fn delete(&self, id: i32) -> Result<u64, ErrorMsg> {
         let result = self.role_dao.delete(id).await.map_err(|err| {
             error!("删除角色信息失败, err: {:#?}", err);
-            Error::DbDeleteError.into_msg().with_msg("删除部门信息失败")
+            Error::DbDeleteError.into_msg().with_msg("删除角色信息失败")
         })?;
 
         Ok(result)

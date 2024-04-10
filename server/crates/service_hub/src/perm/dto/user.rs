@@ -50,6 +50,15 @@ pub struct UpdateUserReq {
     pub role_ids: Vec<i32>,
 }
 
+/// 更新数据状态
+#[derive(Default, Serialize, Deserialize, Validate)]
+pub struct UpdateUserStatusReq {
+    /// 用户ID
+    pub id: i32,
+    /// 用户状态
+    pub status: i8,
+}
+
 /// 获取用户个人信息
 #[derive(Serialize, Deserialize)]
 pub struct ProfileRsp {

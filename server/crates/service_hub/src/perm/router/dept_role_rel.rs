@@ -10,7 +10,7 @@ pub struct DeptRoleRelRouter;
 impl DeptRoleRelRouter {
     /// 注册`部门角色关系管理`路由
     pub fn admin_register() -> Scope {
-        web::scope("/user-role-rels")
+        web::scope("/dept-role-rels")
             .route("", web::get().to(DeptRoleRelController::list))
             .route("/batch", web::post().to(DeptRoleRelController::batch_add))
             .route(

@@ -1,7 +1,12 @@
 //! 权限拦截器
 use std::future::{ready, Ready};
 
-use service_hub::{auth::enums::UserStatus, inject::AInjectProvider, log::UserLoginService};
+use service_hub::{
+    auth::enums::{UserLoginStatus, UserStatus},
+    inject::AInjectProvider,
+    log::UserLoginService,
+    perm::UserService,
+};
 
 use crate::constant::{
     HEADERS_AUTHORIZATION, HEADERS_AUTHORIZATION_BEARER, HEADERS_OPEN_API_AUTHORIZATION,
@@ -137,8 +142,14 @@ where
         let fut = self.service.call(req);
         let provider = provider.clone();
         Box::pin(async move {
+            // 验证用户及用户在状态
+            if let Err(err) = Self::verify_user_status(provider.clone(), user_id).await {
+                return Err(Response::err(err).into());
+            }
+
+            // TODO 待完善
             // 验证当前登陆的用户是否被禁用
-            if let Err(err) = Self::verify_user_status(provider, user_id).await {
+            if let Err(err) = Self::verify_user_login_status(provider, user_id).await {
                 return Err(Response::err(err).into());
             }
 
@@ -180,16 +191,31 @@ impl<S> AuthMiddleware<S> {
         Ok(token)
     }
 
-    /// 验证当前登陆的用户是否被禁用
+    /// 验证用户及用户在状态
     async fn verify_user_status(
         provider: AInjectProvider,
         user_id: i32,
     ) -> Result<(), code::ErrorMsg> {
-        let perm_user_service: UserLoginService = provider.provide();
-
-        let user = perm_user_service.info_by_user_id(user_id).await?;
+        let user_service: UserService = provider.provide();
+        let user = user_service.info(user_id).await?;
         if user.status == UserStatus::Disabled as i8 {
             error!("user_id: {}, 用户已被禁用", user.id);
+            return Err(code::Error::LoginStatusDisabled
+                .into_msg()
+                .with_msg("当前登陆态已失效, 请重新登陆"));
+        }
+        Ok(())
+    }
+
+    /// 验证当前登陆的用户是否被禁用
+    async fn verify_user_login_status(
+        provider: AInjectProvider,
+        user_id: i32,
+    ) -> Result<(), code::ErrorMsg> {
+        let user_login_service: UserLoginService = provider.provide();
+        let user = user_login_service.info_by_user_id(user_id).await?;
+        if user.status == UserLoginStatus::Failed as i8 {
+            error!("user_id: {}, 当前登陆态已被禁用", user.id);
             return Err(code::Error::LoginStatusDisabled
                 .into_msg()
                 .with_msg("当前登陆态已失效, 请重新登陆"));

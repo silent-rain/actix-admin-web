@@ -2,6 +2,7 @@
 use crate::perm::{
     dao::dept::DeptDao,
     dto::dept::{AddDeptReq, GetDeptListReq, UpdateDeptReq},
+    enums::DeptStatus,
 };
 
 use code::{Error, ErrorMsg};
@@ -23,6 +24,7 @@ impl<'a> DeptService<'a> {
         &self,
         req: GetDeptListReq,
     ) -> Result<(Vec<perm_dept::Model>, u64), ErrorMsg> {
+        // TODO 返回树结构or新接口
         // 获取所有数据
         if let Some(true) = req.all {
             return self.dept_dao.all().await.map_err(|err| {
@@ -59,6 +61,20 @@ impl<'a> DeptService<'a> {
 
     /// 添加数据
     pub async fn add(&self, user_id: i32, req: AddDeptReq) -> Result<perm_dept::Model, ErrorMsg> {
+        // 查询部门是否存在
+        let dept = self
+            .dept_dao
+            .info_by_name(req.name.clone())
+            .await
+            .map_err(|err| {
+                error!("查询部门信息失败, err: {:#?}", err);
+                Error::DbQueryError.into_msg().with_msg("查询部门信息失败")
+            })?;
+        if dept.is_some() {
+            error!("部门已存在");
+            return Err(Error::DbDataExistError.into_msg().with_msg("部门已存在"));
+        }
+
         // TODO pid 待处理
         let model = perm_dept::ActiveModel {
             pid: Set(req.pid),
@@ -66,7 +82,7 @@ impl<'a> DeptService<'a> {
             name: Set(req.name),
             sort: Set(req.sort),
             note: Set(req.note),
-            status: Set(req.status),
+            status: Set(DeptStatus::Enabled as i8),
             creator: Set(Some(user_id)),
             ..Default::default()
         };
@@ -115,9 +131,7 @@ impl<'a> DeptService<'a> {
     pub async fn delete(&self, id: i32) -> Result<u64, ErrorMsg> {
         let result = self.dept_dao.delete(id).await.map_err(|err| {
             error!("删除部门信息失败, err: {:#?}", err);
-            Error::DbDeleteError
-                .into_msg()
-                .with_msg("删除部门信息失败")
+            Error::DbDeleteError.into_msg().with_msg("删除部门信息失败")
         })?;
 
         Ok(result)

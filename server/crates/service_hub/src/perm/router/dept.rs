@@ -10,7 +10,7 @@ pub struct DeptRouter;
 impl DeptRouter {
     /// 注册`部门管理`路由
     pub fn admin_register() -> Scope {
-        web::scope("/roles")
+        web::scope("/depts")
             .route("", web::get().to(DeptController::list))
             .route("/{id}", web::get().to(DeptController::info))
             .route("", web::post().to(DeptController::add))

@@ -3,7 +3,7 @@
 use crate::{
     inject::AInjectProvider,
     perm::{
-        dto::user::{AddUserReq, GetUserListReq, UpdateUserReq},
+        dto::user::{AddUserReq, GetUserListReq, UpdateUserReq, UpdateUserStatusReq},
         service::user::UserService,
     },
 };
@@ -80,6 +80,19 @@ impl UserController {
         let user_id = ctx.get_user_id();
         let user_service: UserService = provider.provide();
         let resp = user_service.update(user_id, data.into_inner()).await;
+        match resp {
+            Ok(_v) => Response::ok(),
+            Err(err) => Response::err(err),
+        }
+    }
+
+    /// 更新用户状态
+    pub async fn status(
+        provider: Data<AInjectProvider>,
+        data: Json<UpdateUserStatusReq>,
+    ) -> impl Responder {
+        let user_service: UserService = provider.provide();
+        let resp = user_service.status(data.id, data.status).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

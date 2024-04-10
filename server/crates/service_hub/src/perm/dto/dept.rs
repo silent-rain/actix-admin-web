@@ -32,8 +32,6 @@ pub struct AddDeptReq {
     pub sort: Option<i32>,
     /// 备注
     pub note: Option<String>,
-    /// 状态,0:停用,1:正常
-    pub status: i8,
 }
 
 /// 更新数据

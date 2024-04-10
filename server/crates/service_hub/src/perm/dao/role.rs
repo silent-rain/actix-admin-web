@@ -56,6 +56,14 @@ impl<'a> RoleDao<'a> {
         PermRole::find_by_id(id).one(self.db.rdb()).await
     }
 
+    /// 通过名称获取详情信息
+    pub async fn info_by_name(&self, name: String) -> Result<Option<perm_role::Model>, DbErr> {
+        PermRole::find()
+            .filter(perm_role::Column::Name.eq(name))
+            .one(self.db.rdb())
+            .await
+    }
+
     /// 添加详情信息
     pub async fn add(
         &self,

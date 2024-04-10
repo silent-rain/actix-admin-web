@@ -16,6 +16,7 @@ impl UserRouter {
             .route("/{id}", web::get().to(UserController::info))
             .route("", web::post().to(UserController::add))
             .route("/update", web::put().to(UserController::update))
+            .route("/status", web::put().to(UserController::status))
             .route("/{id}", web::delete().to(UserController::delete))
             .route("/{id}/roles", web::get().to(UserController::roles))
     }

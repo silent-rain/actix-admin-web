@@ -1,10 +1,11 @@
 //! 权限管理
 pub mod dto;
+pub mod enums;
 
 mod dao;
 pub use dao::{
-    dept::DeptDao, dept_role_rel::DeptRoleRelDao, role::RoleDao, user_role_rel::UserRoleRelDao,
-    user::UserDao,
+    dept::DeptDao, dept_role_rel::DeptRoleRelDao, role::RoleDao, user::UserDao,
+    user_role_rel::UserRoleRelDao,
 };
 
 mod service;

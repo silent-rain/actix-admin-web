@@ -25,7 +25,6 @@ pub struct AddRoleReq {
     pub name: String,
     pub sort: Option<i32>,
     pub note: Option<String>,
-    pub status: i8,
 }
 
 /// 更新数据 请求体

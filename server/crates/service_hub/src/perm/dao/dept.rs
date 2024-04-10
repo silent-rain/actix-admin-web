@@ -56,6 +56,14 @@ impl<'a> DeptDao<'a> {
         PermDept::find_by_id(id).one(self.db.rdb()).await
     }
 
+    /// 通过名称获取详情信息
+    pub async fn info_by_name(&self, name: String) -> Result<Option<perm_dept::Model>, DbErr> {
+        PermDept::find()
+            .filter(perm_dept::Column::Name.eq(name))
+            .one(self.db.rdb())
+            .await
+    }
+
     /// 添加详情信息
     pub async fn add(
         &self,

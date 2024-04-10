@@ -88,6 +88,7 @@ impl From<Error> for Response {
         Response::code(code)
     }
 }
+/// 将错误信息转为响应体
 impl From<ErrorMsg> for Response {
     fn from(err: ErrorMsg) -> Response {
         Response::err(err)
@@ -112,9 +113,11 @@ impl Responder for Response {
 ///  实现 actix_web 异常响应
 impl ResponseError for Response {
     fn error_response(&self) -> HttpResponse {
+        let body =
+            serde_json::to_string(&self).unwrap_or_else(|e| format!("接口序列化异常: {:#?}", e));
         HttpResponse::build(self.status_code())
             .insert_header(ContentType::json())
-            .body(self.to_string())
+            .body(body)
     }
 
     fn status_code(&self) -> StatusCode {

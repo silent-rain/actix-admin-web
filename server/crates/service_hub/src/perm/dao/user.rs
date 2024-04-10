@@ -109,6 +109,17 @@ impl<'a> UserDao<'a> {
         Ok(result.rows_affected)
     }
 
+    /// 更新状态
+    pub async fn status(&self, id: i32, status: i8) -> Result<(), DbErr> {
+        let active_model = perm_user::ActiveModel {
+            id: Set(id),
+            status: Set(status),
+            ..Default::default()
+        };
+        let _ = active_model.update(self.db.wdb()).await?;
+        Ok(())
+    }
+
     /// 按主键删除信息
     pub async fn delete(&self, id: i32) -> Result<u64, DbErr> {
         let result = PermUser::delete_by_id(id).exec(self.db.wdb()).await?;
