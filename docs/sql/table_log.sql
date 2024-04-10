@@ -16,8 +16,8 @@ CREATE TABLE log_user_login (
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户登录日志表';
 
 
--- 接口请求与响应日志表
-CREATE TABLE log_request_response (
+-- API操作日志表
+CREATE TABLE log_api_operation (
     `id` INT AUTO_INCREMENT COMMENT '自增ID',
     `user_id` INT NULL COMMENT '用户ID',
     `username` VARCHAR(32) NULL COMMENT '用户名称',
@@ -34,7 +34,7 @@ CREATE TABLE log_request_response (
     `note` VARCHAR(255) NULL COMMENT '备注',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     PRIMARY KEY (`id`)
-) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '接口请求与响应日志表';
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT 'API操作日志表';
 
 
 

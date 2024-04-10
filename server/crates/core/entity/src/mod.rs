@@ -6,7 +6,7 @@ pub mod app_template;
 
 pub mod api_auth;
 pub mod api_role_rel;
-pub mod log_request_response;
+pub mod log_api_operation;
 pub mod log_system;
 pub mod log_user_login;
 pub mod log_web;
