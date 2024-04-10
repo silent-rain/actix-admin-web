@@ -24,7 +24,7 @@ pub struct Model {
     /// 请求方法
     pub method: String,
     /// 请求地址路径
-    pub path: String,
+    pub url: String,
     /// 请求参数
     pub query: Option<String>,
     /// 请求体/响应体
