@@ -37,3 +37,10 @@ pub struct UpdateRoleReq {
     pub note: Option<String>,
     pub sort: Option<i32>,
 }
+
+/// 更新数据状态
+#[derive(Default, Serialize, Deserialize, Validate)]
+pub struct UpdateRoleStatusReq {
+    pub id: i32,
+    pub status: i8,
+}

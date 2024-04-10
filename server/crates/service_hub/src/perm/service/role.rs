@@ -85,11 +85,21 @@ impl<'a> RoleService<'a> {
         };
 
         let result = self.role_dao.update(model).await.map_err(|err| {
-            error!("更新{{InterfaceName}}失败, err: {:#?}", err);
+            error!("更新角色失败, err: {:#?}", err);
             Error::DbUpdateError
         })?;
 
         Ok(result)
+    }
+
+    /// 更新数据状态
+    pub async fn status(&self, id: i32, status: i8) -> Result<(), Error> {
+        self.role_dao.status(id, status).await.map_err(|err| {
+            error!("更新角色状态失败, err: {:#?}", err);
+            Error::DbUpdateError
+        })?;
+
+        Ok(())
     }
 
     /// 删除数据

@@ -3,7 +3,7 @@
 use crate::{
     inject::AInjectProvider,
     perm::{
-        dto::role::{AddRoleReq, GetRoleListReq, UpdateRoleReq},
+        dto::role::{AddRoleReq, GetRoleListReq, UpdateRoleReq, UpdateRoleStatusReq},
         service::role::RoleService,
     },
 };
@@ -68,6 +68,19 @@ impl RoleController {
         let user_id = ctx.get_user_id();
         let role_service: RoleService = provider.provide();
         let resp = role_service.update(user_id, data.into_inner()).await;
+        match resp {
+            Ok(_v) => Response::ok(),
+            Err(err) => Response::code(err),
+        }
+    }
+
+    /// 更新角色状态
+    pub async fn status(
+        provider: Data<AInjectProvider>,
+        data: Json<UpdateRoleStatusReq>,
+    ) -> impl Responder {
+        let role_service: RoleService = provider.provide();
+        let resp = role_service.status(data.id, data.status).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::code(err),
