@@ -9,21 +9,17 @@ use service_hub::{
 };
 
 use actix_request_identifier::RequestIdentifier;
-use actix_web::{dev::HttpServiceFactory, middleware::Logger, web};
-use actix_web_requestid::RequestIDMiddleware;
+use actix_web::{dev::HttpServiceFactory, web};
 use tracing_actix_web::TracingLogger;
 
 /// 注册路由
+/// 
 /// Service Hub Module: [`service_hub`]
 pub fn register() -> impl HttpServiceFactory {
     web::scope("/api/v1")
         // >>> 中间件 >>>
-        .wrap(Logger::default())
         .wrap(TracingLogger::default())
         .wrap(middleware::cors::wrap_cors())
-        // Request ID
-        .wrap(RequestIDMiddleware::default())
-        // Actix Request Identifier
         .wrap(RequestIdentifier::with_uuid())
         // 接口鉴权
         .wrap(middleware::auth::Auth)

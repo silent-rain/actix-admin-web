@@ -36,13 +36,12 @@
 - [ ] 中间件
   - [x] 跨域
   - [x] Request ID
-  - [x] Tracing Logger
   - [x] Actix Request Identifier Middleware
+  - [x] Tracing Logger
   - [x] JWT 令牌
   - [ ] 访问频率限制
   - [ ] 访问 IP 限制
-  - [ ] 内部接口鉴权
-  - [ ] Public API 鉴权
+  - [ ] OpenApi 鉴权
 - [ ] API 文档
   - [ ] ApiPost 接口工具
   - [ ] 内置接口文档
@@ -76,7 +75,7 @@
   - [x] 部门管理
   - [x] 部门角色关系管理
   - [ ] 菜单管理
-- [ ] API 鉴权管理
+- [ ] OpenApi 鉴权管理
   - [ ] HTTP 接口管理
 - [ ] 系统管理
   - [ ] 网站配置管理
@@ -84,7 +83,7 @@
     - [ ] 已经使用过的验证码应该设置为过期
 - [ ] 日志管理
   - [x] 系统日志
-  - [ ] 请求日志
+  - [ ] API 操作日志表
   - [ ] 前端日志
   - [x] 登陆日志管理
     - [ ] 操作日志类型
