@@ -1,4 +1,4 @@
-//! 角色用户关系管理
+//! 角色与用户关系管理
 
 use crate::perm::UserRoleRelController;
 
@@ -8,7 +8,7 @@ use actix_web::{web, Scope};
 pub struct UserRoleRelRouter;
 
 impl UserRoleRelRouter {
-    /// 注册`角色用户关系管理`路由
+    /// 注册`角色与用户关系管理`路由
     pub fn admin_register() -> Scope {
         web::scope("/user-role-rels")
             .route("", web::get().to(UserRoleRelController::list))

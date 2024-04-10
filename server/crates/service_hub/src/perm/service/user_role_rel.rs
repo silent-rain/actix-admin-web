@@ -1,4 +1,4 @@
-//! 角色用户关系管理
+//! 角色与用户关系管理
 use crate::perm::{
     dao::role_user_rel::UserRoleRelDao,
     dto::user_role_rel::{BatchAddUserRoleRelReq, GetUserRoleRelListReq},
