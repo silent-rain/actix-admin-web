@@ -1,4 +1,4 @@
-//! 角色菜单关联表
+//! 菜单角色关联表
 
 use sea_orm::{
     prelude::DateTimeLocal, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey,
@@ -6,7 +6,7 @@ use sea_orm::{
 };
 use serde::{Deserialize, Serialize};
 
-/// 角色菜单关联表
+/// 菜单角色关联表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
 #[sea_orm(table_name = "perm_menu_role_rel")]
 pub struct Model {
