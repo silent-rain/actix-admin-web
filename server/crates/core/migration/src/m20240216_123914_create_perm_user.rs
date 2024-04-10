@@ -95,7 +95,7 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(Column::Password)
                             .string()
-                            .string_len(50)
+                            .string_len(64)
                             .not_null()
                             .comment("密码"),
                     )

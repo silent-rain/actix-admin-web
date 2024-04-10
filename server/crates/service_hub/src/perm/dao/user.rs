@@ -135,7 +135,11 @@ impl<'a> UserDao<'a> {
     ) -> Result<perm_user::Model, DbErr> {
         let txn = self.db.wdb().begin().await?;
         // 创建者
-        let creator = *(active_model.creator.clone().as_ref());
+        let creator = if active_model.creator.is_set() {
+            *(active_model.creator.clone().as_ref())
+        } else {
+            None
+        };
         // 添加用户
         let user = self.txn_add_user(&txn, active_model).await?;
         let user_id = user.id;
@@ -160,7 +164,11 @@ impl<'a> UserDao<'a> {
         let txn = self.db.wdb().begin().await?;
 
         // 创建者
-        let creator = *(active_model.creator.clone().as_ref());
+        let creator = if active_model.creator.is_set() {
+            *(active_model.creator.clone().as_ref())
+        } else {
+            None
+        };
         // 更新用户
         let _ = self.txn_update_user(&txn, active_model).await?;
         // 添加批量角色

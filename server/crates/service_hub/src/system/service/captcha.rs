@@ -33,7 +33,7 @@ impl<'a> CaptchaService<'a> {
             error!("查询验证码列表失败, err: {:#?}", err);
             Error::DbQueryError
                 .into_msg()
-                .with_msg("查询部门角色关系列表失败")
+                .with_msg("查询验证码列表失败")
         })?;
 
         Ok((results, total))
@@ -49,13 +49,11 @@ impl<'a> CaptchaService<'a> {
                 error!("查询验证码信息失败, err: {:#?}", err);
                 Error::DbQueryError
                     .into_msg()
-                    .with_msg("查询部门角色关系列表失败")
+                    .with_msg("查询验证码信息失败")
             })?
             .ok_or_else(|| {
                 error!("验证码不存在");
-                Error::DbQueryEmptyError
-                    .into_msg()
-                    .with_msg("查询部门角色关系列表失败")
+                Error::DbQueryEmptyError.into_msg().with_msg("验证码不存在")
             })?;
 
         Ok(result)
@@ -74,13 +72,11 @@ impl<'a> CaptchaService<'a> {
                 error!("查询验证码信息失败, err: {:#?}", err);
                 Error::DbQueryError
                     .into_msg()
-                    .with_msg("查询部门角色关系列表失败")
+                    .with_msg("查询验证码信息失败")
             })?
             .ok_or_else(|| {
                 error!("验证码不存在");
-                Error::DbQueryEmptyError
-                    .into_msg()
-                    .with_msg("查询部门角色关系列表失败")
+                Error::DbQueryEmptyError.into_msg().with_msg("验证码不存在")
             })?;
 
         Ok(result)
@@ -102,9 +98,7 @@ impl<'a> CaptchaService<'a> {
         };
         let result = self.captcha_dao.add(model).await.map_err(|err| {
             error!("添加验证码信息失败, err: {:#?}", err);
-            Error::DbAddError
-                .into_msg()
-                .with_msg("查询部门角色关系列表失败")
+            Error::DbAddError.into_msg().with_msg("添加验证码信息失败")
         })?;
 
         let result = AddCaptchaResp {
@@ -127,7 +121,7 @@ impl<'a> CaptchaService<'a> {
             error!("删除验证码信息失败, err: {:#?}", err);
             Error::DbDeleteError
                 .into_msg()
-                .with_msg("查询部门角色关系列表失败")
+                .with_msg("删除验证码信息失败")
         })?;
 
         Ok(result)
@@ -139,7 +133,7 @@ impl<'a> CaptchaService<'a> {
             error!("批量删除验证码信息失败, err: {:#?}", err);
             Error::DbBatchDeleteError
                 .into_msg()
-                .with_msg("查询部门角色关系列表失败")
+                .with_msg("批量删除验证码信息失败")
         })?;
 
         Ok(result)
