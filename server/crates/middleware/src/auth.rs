@@ -139,7 +139,7 @@ where
         Box::pin(async move {
             // 验证当前登陆的用户是否被禁用
             if let Err(err) = Self::verify_user_status(provider, user_id).await {
-                return Err(Response::code(err).into());
+                return Err(Response::err(err).into());
             }
 
             let resp = fut.await?;
@@ -184,26 +184,30 @@ impl<S> AuthMiddleware<S> {
     async fn verify_user_status(
         provider: AInjectProvider,
         user_id: i32,
-    ) -> Result<(), code::Error> {
+    ) -> Result<(), code::ErrorMsg> {
         let perm_user_service: UserLoginService = provider.provide();
 
         let user = perm_user_service.info_by_user_id(user_id).await?;
         if user.status == UserStatus::Disabled as i8 {
             error!("user_id: {}, 用户已被禁用", user.id);
-            return Err(code::Error::LoginStatusDisabled);
+            return Err(code::Error::LoginStatusDisabled
+                .into_msg()
+                .with_msg("当前登陆态已失效, 请重新登陆"));
         }
         Ok(())
     }
 
     /// 获取OPEN API鉴权标识Token
-    fn get_openapi_token(req: HttpRequest) -> Result<String, code::Error> {
+    fn get_openapi_token(req: HttpRequest) -> Result<String, code::ErrorMsg> {
         let open_api_authorization = req
             .headers()
             .get(HEADERS_OPEN_API_AUTHORIZATION)
             .map_or("default", |v| v.to_str().map_or("", |v| v));
 
         if !open_api_authorization.is_empty() {
-            return Err(code::Error::HeadersNotAuthorization);
+            return Err(code::Error::HeadersNotAuthorization
+                .into_msg()
+                .with_msg("非法请求"));
         }
         Ok(open_api_authorization.to_string())
     }

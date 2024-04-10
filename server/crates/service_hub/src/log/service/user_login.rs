@@ -4,7 +4,7 @@ use crate::log::{
     dto::user_login::{AddUserLoginInfoReq, GetUserLoginListReq},
 };
 
-use code::Error;
+use code::{Error, ErrorMsg};
 use entity::log_user_login;
 
 use nject::injectable;
@@ -22,17 +22,19 @@ impl<'a> UserLoginService<'a> {
     pub async fn list(
         &self,
         req: GetUserLoginListReq,
-    ) -> Result<(Vec<log_user_login::Model>, u64), Error> {
+    ) -> Result<(Vec<log_user_login::Model>, u64), ErrorMsg> {
         let (results, total) = self.user_login_dao.list(req).await.map_err(|err| {
             error!("查询登陆日志列表失败, err: {:#?}", err);
             Error::DbQueryError
+                .into_msg()
+                .with_msg("查询登陆日志列表失败")
         })?;
 
         Ok((results, total))
     }
 
     /// 获取详情数据
-    pub async fn info(&self, id: i32) -> Result<log_user_login::Model, Error> {
+    pub async fn info(&self, id: i32) -> Result<log_user_login::Model, ErrorMsg> {
         let result = self
             .user_login_dao
             .info(id)
@@ -40,17 +42,21 @@ impl<'a> UserLoginService<'a> {
             .map_err(|err| {
                 error!("查询登陆日志信息失败, err: {:#?}", err);
                 Error::DbQueryError
+                    .into_msg()
+                    .with_msg("查询登陆日志信息失败")
             })?
             .ok_or_else(|| {
                 error!("登陆日志不存在");
                 Error::DbQueryEmptyError
+                    .into_msg()
+                    .with_msg("登陆日志不存在")
             })?;
 
         Ok(result)
     }
 
     /// 根据用户ID获取详情信息
-    pub async fn info_by_user_id(&self, user_id: i32) -> Result<log_user_login::Model, Error> {
+    pub async fn info_by_user_id(&self, user_id: i32) -> Result<log_user_login::Model, ErrorMsg> {
         let result = self
             .user_login_dao
             .info_by_user_id(user_id)
@@ -58,17 +64,21 @@ impl<'a> UserLoginService<'a> {
             .map_err(|err| {
                 error!("查询登陆日志信息失败, err: {:#?}", err);
                 Error::DbQueryError
+                    .into_msg()
+                    .with_msg("查询登陆日志信息失败")
             })?
             .ok_or_else(|| {
                 error!("登陆日志不存在");
                 Error::DbQueryEmptyError
+                    .into_msg()
+                    .with_msg("登陆日志不存在")
             })?;
 
         Ok(result)
     }
 
     /// 添加数据
-    pub async fn add(&self, data: AddUserLoginInfoReq) -> Result<log_user_login::Model, Error> {
+    pub async fn add(&self, data: AddUserLoginInfoReq) -> Result<log_user_login::Model, ErrorMsg> {
         let model = log_user_login::ActiveModel {
             user_id: Set(data.user_id),
             username: Set(data.username),
@@ -80,19 +90,23 @@ impl<'a> UserLoginService<'a> {
         let result = self.user_login_dao.add(model).await.map_err(|err| {
             error!("添加登陆日志信息失败, err: {:#?}", err);
             Error::DbAddError
+                .into_msg()
+                .with_msg("添加登陆日志信息失败")
         })?;
 
         Ok(result)
     }
 
     /// 更新登录日志状态
-    pub async fn status(&self, id: i32, status: i8) -> Result<(), Error> {
+    pub async fn status(&self, id: i32, status: i8) -> Result<(), ErrorMsg> {
         self.user_login_dao
             .status(id, status)
             .await
             .map_err(|err| {
                 error!("更新登录日志状态失败, err: {:#?}", err);
                 Error::DbUpdateError
+                    .into_msg()
+                    .with_msg("更新登录日志状态失败")
             })?;
 
         Ok(())

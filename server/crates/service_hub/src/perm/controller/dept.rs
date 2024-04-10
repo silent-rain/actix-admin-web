@@ -30,7 +30,7 @@ impl DeptController {
         let resp = dept_service.list(req.into_inner()).await;
         match resp {
             Ok(v) => Response::ok().data(v),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 
@@ -40,7 +40,7 @@ impl DeptController {
         let resp = dept_service.info(*id).await;
         match resp {
             Ok(v) => Response::ok().data(v),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 
@@ -55,7 +55,7 @@ impl DeptController {
         let resp = dept_service.add(user_id, data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 
@@ -70,7 +70,7 @@ impl DeptController {
         let resp = dept_service.update(user_id, data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 
@@ -83,7 +83,7 @@ impl DeptController {
         let resp = dept_service.status(data.id, data.status).await;
         match resp {
             Ok(_v) => Response::ok(),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 
@@ -93,7 +93,7 @@ impl DeptController {
         let resp = dept_service.delete(*id).await;
         match resp {
             Ok(_v) => Response::ok(),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 }

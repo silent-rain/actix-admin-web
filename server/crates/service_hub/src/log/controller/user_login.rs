@@ -28,7 +28,7 @@ impl UserLoginController {
         let resp = user_login_service.list(req.into_inner()).await;
         match resp {
             Ok((results, total)) => Response::ok().data_list(results, total),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 
@@ -38,7 +38,7 @@ impl UserLoginController {
         let resp = user_login_service.info(*id).await;
         match resp {
             Ok(v) => Response::ok().data(v),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 
@@ -51,7 +51,7 @@ impl UserLoginController {
         let resp = user_login_service.add(data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 
@@ -64,7 +64,7 @@ impl UserLoginController {
         let resp = user_login_service.status(req.id, req.status).await;
         match resp {
             Ok(_v) => Response::ok(),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 }

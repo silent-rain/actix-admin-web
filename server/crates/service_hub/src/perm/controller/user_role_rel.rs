@@ -29,7 +29,7 @@ impl UserRoleRelController {
         let resp = user_role_rel_service.list(req.into_inner()).await;
         match resp {
             Ok((results, total)) => Response::ok().data_list(results, total),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 
@@ -45,7 +45,7 @@ impl UserRoleRelController {
         let resp = user_role_rel_service.batch_add(user_id, data).await;
         match resp {
             Ok(_v) => Response::ok(),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 
@@ -59,7 +59,7 @@ impl UserRoleRelController {
         let resp = user_role_rel_service.batch_delete(data.ids).await;
         match resp {
             Ok(_v) => Response::ok(),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 }

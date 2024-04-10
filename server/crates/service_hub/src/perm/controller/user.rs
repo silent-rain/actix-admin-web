@@ -32,7 +32,7 @@ impl UserController {
         let resp = user_service.list(req.into_inner()).await;
         match resp {
             Ok((results, total)) => Response::ok().data_list(results, total),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 
@@ -42,7 +42,7 @@ impl UserController {
         let resp = user_service.info(*id).await;
         match resp {
             Ok(v) => Response::ok().data(v),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 
@@ -57,7 +57,9 @@ impl UserController {
         let data = data.into_inner();
         // 检查用户
         if data.phone.is_none() && data.email.is_none() {
-            return Response::code(Error::UserAddError);
+            return Response::code(Error::InvalidParameterError(
+                "phone/email 不能为空".to_owned(),
+            ));
         }
 
         let user_service: UserService = provider.provide();
@@ -80,7 +82,7 @@ impl UserController {
         let resp = user_service.update(user_id, data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 
@@ -90,7 +92,7 @@ impl UserController {
         let resp = user_service.delete(*id).await;
         match resp {
             Ok(_v) => Response::ok(),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 }
@@ -106,7 +108,7 @@ impl UserController {
         let resp = user_service.profile(user_id).await;
         match resp {
             Ok(v) => Response::ok().data(v),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 
@@ -116,7 +118,7 @@ impl UserController {
         let resp = user_service.roles(*id).await;
         match resp {
             Ok((results, total)) => Response::ok().data_list(results, total),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 }

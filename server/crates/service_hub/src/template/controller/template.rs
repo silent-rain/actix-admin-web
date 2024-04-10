@@ -28,7 +28,7 @@ impl AppTemplateController {
         let resp = perm_user_service.all().await;
         match resp {
             Ok((results, total)) => Response::ok().data_list(results, total),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 
@@ -41,7 +41,7 @@ impl AppTemplateController {
         let resp = app_template_service.list(req.into_inner()).await;
         match resp {
             Ok((results, total)) => Response::ok().data_list(results, total),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 
@@ -51,7 +51,7 @@ impl AppTemplateController {
         let resp = app_template_service.info(*id).await;
         match resp {
             Ok(v) => Response::ok().data(v),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 
@@ -65,7 +65,7 @@ impl AppTemplateController {
         let resp = app_template_service.add(data).await;
         match resp {
             Ok(_v) => Response::ok(),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 
@@ -78,7 +78,7 @@ impl AppTemplateController {
         let resp = app_template_service.update(data.id, data.status).await;
         match resp {
             Ok(_v) => Response::ok(),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 
@@ -91,7 +91,7 @@ impl AppTemplateController {
         let resp = app_template_service.status(data.id, data.status).await;
         match resp {
             Ok(_v) => Response::ok(),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 
@@ -101,7 +101,7 @@ impl AppTemplateController {
         let resp = app_template_service.delete(*id).await;
         match resp {
             Ok(_v) => Response::ok(),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 
@@ -114,7 +114,7 @@ impl AppTemplateController {
         let resp = app_template_service.batch_delete(data.ids.clone()).await;
         match resp {
             Ok(_v) => Response::ok(),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 }

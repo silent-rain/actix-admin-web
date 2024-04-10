@@ -8,7 +8,7 @@ use crate::{
     },
 };
 
-use code::Error;
+use code::{Error, ErrorMsg};
 use entity::sys_captcha;
 use utils::captcha::generate_captcha;
 
@@ -28,17 +28,19 @@ impl<'a> CaptchaService<'a> {
     pub async fn list(
         &self,
         req: GetCaptchaListReq,
-    ) -> Result<(Vec<sys_captcha::Model>, u64), Error> {
+    ) -> Result<(Vec<sys_captcha::Model>, u64), ErrorMsg> {
         let (results, total) = self.captcha_dao.list(req).await.map_err(|err| {
             error!("查询验证码列表失败, err: {:#?}", err);
             Error::DbQueryError
+                .into_msg()
+                .with_msg("查询部门角色关系列表失败")
         })?;
 
         Ok((results, total))
     }
 
     /// 获取详情数据
-    pub async fn info(&self, id: i32) -> Result<sys_captcha::Model, Error> {
+    pub async fn info(&self, id: i32) -> Result<sys_captcha::Model, ErrorMsg> {
         let result = self
             .captcha_dao
             .info(id)
@@ -46,10 +48,14 @@ impl<'a> CaptchaService<'a> {
             .map_err(|err| {
                 error!("查询验证码信息失败, err: {:#?}", err);
                 Error::DbQueryError
+                    .into_msg()
+                    .with_msg("查询部门角色关系列表失败")
             })?
             .ok_or_else(|| {
                 error!("验证码不存在");
                 Error::DbQueryEmptyError
+                    .into_msg()
+                    .with_msg("查询部门角色关系列表失败")
             })?;
 
         Ok(result)
@@ -59,7 +65,7 @@ impl<'a> CaptchaService<'a> {
     pub async fn info_by_captcha_id(
         &self,
         captcha_id: String,
-    ) -> Result<sys_captcha::Model, Error> {
+    ) -> Result<sys_captcha::Model, ErrorMsg> {
         let result = self
             .captcha_dao
             .info_by_captcha_id(captcha_id)
@@ -67,17 +73,21 @@ impl<'a> CaptchaService<'a> {
             .map_err(|err| {
                 error!("查询验证码信息失败, err: {:#?}", err);
                 Error::DbQueryError
+                    .into_msg()
+                    .with_msg("查询部门角色关系列表失败")
             })?
             .ok_or_else(|| {
                 error!("验证码不存在");
                 Error::DbQueryEmptyError
+                    .into_msg()
+                    .with_msg("查询部门角色关系列表失败")
             })?;
 
         Ok(result)
     }
 
     /// 添加数据
-    pub async fn add(&self) -> Result<AddCaptchaResp, Error> {
+    pub async fn add(&self) -> Result<AddCaptchaResp, ErrorMsg> {
         // 生成验证码
         let (captcha, base_img) = generate_captcha();
         let captcha_id = Uuid::new_v4().to_string();
@@ -93,6 +103,8 @@ impl<'a> CaptchaService<'a> {
         let result = self.captcha_dao.add(model).await.map_err(|err| {
             error!("添加验证码信息失败, err: {:#?}", err);
             Error::DbAddError
+                .into_msg()
+                .with_msg("查询部门角色关系列表失败")
         })?;
 
         let result = AddCaptchaResp {
@@ -110,20 +122,24 @@ impl<'a> CaptchaService<'a> {
     }
 
     /// 删除数据
-    pub async fn delete(&self, id: i32) -> Result<u64, Error> {
+    pub async fn delete(&self, id: i32) -> Result<u64, ErrorMsg> {
         let result = self.captcha_dao.delete(id).await.map_err(|err| {
             error!("删除验证码信息失败, err: {:#?}", err);
             Error::DbDeleteError
+                .into_msg()
+                .with_msg("查询部门角色关系列表失败")
         })?;
 
         Ok(result)
     }
 
     /// 批量删除
-    pub async fn batch_delete(&self, ids: Vec<i32>) -> Result<u64, Error> {
+    pub async fn batch_delete(&self, ids: Vec<i32>) -> Result<u64, ErrorMsg> {
         let result = self.captcha_dao.batch_delete(ids).await.map_err(|err| {
             error!("批量删除验证码信息失败, err: {:#?}", err);
             Error::DbBatchDeleteError
+                .into_msg()
+                .with_msg("查询部门角色关系列表失败")
         })?;
 
         Ok(result)

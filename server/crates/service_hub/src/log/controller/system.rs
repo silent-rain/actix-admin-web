@@ -26,7 +26,7 @@ impl SystemController {
         let resp = system_service.list(req.into_inner()).await;
         match resp {
             Ok((results, total)) => Response::ok().data_list(results, total),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 
@@ -36,7 +36,7 @@ impl SystemController {
         let resp = system_service.info(*id).await;
         match resp {
             Ok(v) => Response::ok().data(v),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 
@@ -50,7 +50,7 @@ impl SystemController {
         let resp = system_service.add(data).await;
         match resp {
             Ok(_v) => Response::ok(),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 
@@ -60,7 +60,7 @@ impl SystemController {
         let resp = system_service.delete(*id).await;
         match resp {
             Ok(_v) => Response::ok(),
-            Err(err) => Response::code(err),
+            Err(err) => Response::err(err),
         }
     }
 }

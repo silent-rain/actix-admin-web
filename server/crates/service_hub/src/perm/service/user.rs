@@ -1,11 +1,11 @@
 //! 用户管理
 use crate::perm::{
-    dao::{user_role_rel::UserRoleRelDao, user::UserDao},
+    dao::{user::UserDao, user_role_rel::UserRoleRelDao},
     dto::user::{AddUserReq, GetUserListReq, ProfileRsp, UpdateUserReq},
 };
 
 use code::{Error, ErrorMsg};
-use entity::{perm_role, perm_user_role_rel, perm_user};
+use entity::{perm_role, perm_user, perm_user_role_rel};
 
 use nject::injectable;
 use sea_orm::Set;
@@ -21,17 +21,22 @@ pub struct UserService<'a> {
 
 impl<'a> UserService<'a> {
     /// 获取列表数据
-    pub async fn list(&self, req: GetUserListReq) -> Result<(Vec<perm_user::Model>, u64), Error> {
+    pub async fn list(
+        &self,
+        req: GetUserListReq,
+    ) -> Result<(Vec<perm_user::Model>, u64), ErrorMsg> {
         let (results, total) = self.user_dao.list(req).await.map_err(|err| {
             error!("查询用户列表失败, err: {:#?}", err);
             Error::DbQueryError
+                .into_msg()
+                .with_msg("查询部门角色关系列表失败")
         })?;
 
         Ok((results, total))
     }
 
     /// 获取详情数据
-    pub async fn info(&self, id: i32) -> Result<perm_user::Model, Error> {
+    pub async fn info(&self, id: i32) -> Result<perm_user::Model, ErrorMsg> {
         let result = self
             .user_dao
             .info(id)
@@ -39,17 +44,21 @@ impl<'a> UserService<'a> {
             .map_err(|err| {
                 error!("查询用户信息失败, err: {:#?}", err);
                 Error::DbQueryError
+                    .into_msg()
+                    .with_msg("查询部门角色关系列表失败")
             })?
             .ok_or_else(|| {
                 error!("用户不存在");
                 Error::DbQueryEmptyError
+                    .into_msg()
+                    .with_msg("查询部门角色关系列表失败")
             })?;
 
         Ok(result)
     }
 
     /// 获取用户个人信息
-    pub async fn profile(&self, id: i32) -> Result<ProfileRsp, Error> {
+    pub async fn profile(&self, id: i32) -> Result<ProfileRsp, ErrorMsg> {
         let user = self
             .user_dao
             .info(id)
@@ -57,10 +66,14 @@ impl<'a> UserService<'a> {
             .map_err(|err| {
                 error!("查询用户信息失败, err: {:#?}", err);
                 Error::DbQueryError
+                    .into_msg()
+                    .with_msg("查询部门角色关系列表失败")
             })?
             .ok_or_else(|| {
                 error!("用户不存在");
                 Error::DbQueryEmptyError
+                    .into_msg()
+                    .with_msg("查询部门角色关系列表失败")
             })?;
 
         let result = ProfileRsp {
@@ -75,7 +88,7 @@ impl<'a> UserService<'a> {
     }
 
     /// 根据手机号/邮箱获取详情信息
-    pub async fn info_by_username(&self, username: String) -> Result<perm_user::Model, Error> {
+    pub async fn info_by_username(&self, username: String) -> Result<perm_user::Model, ErrorMsg> {
         let result = self
             .user_dao
             .info_by_username(username)
@@ -83,17 +96,21 @@ impl<'a> UserService<'a> {
             .map_err(|err| {
                 error!("查询用户信息失败, err: {:#?}", err);
                 Error::DbQueryError
+                    .into_msg()
+                    .with_msg("查询部门角色关系列表失败")
             })?
             .ok_or_else(|| {
                 error!("用户不存在");
                 Error::DbQueryEmptyError
+                    .into_msg()
+                    .with_msg("查询部门角色关系列表失败")
             })?;
 
         Ok(result)
     }
 
     /// 获取详情数据
-    pub async fn info_by_phone(&self, phone: String) -> Result<perm_user::Model, Error> {
+    pub async fn info_by_phone(&self, phone: String) -> Result<perm_user::Model, ErrorMsg> {
         let result = self
             .user_dao
             .info_by_phone(phone)
@@ -101,17 +118,21 @@ impl<'a> UserService<'a> {
             .map_err(|err| {
                 error!("查询用户信息失败, err: {:#?}", err);
                 Error::DbQueryError
+                    .into_msg()
+                    .with_msg("查询部门角色关系列表失败")
             })?
             .ok_or_else(|| {
                 error!("用户不存在");
                 Error::DbQueryEmptyError
+                    .into_msg()
+                    .with_msg("查询部门角色关系列表失败")
             })?;
 
         Ok(result)
     }
 
     /// 根据邮箱获取详情信息
-    pub async fn info_by_email(&self, email: String) -> Result<perm_user::Model, Error> {
+    pub async fn info_by_email(&self, email: String) -> Result<perm_user::Model, ErrorMsg> {
         let result = self
             .user_dao
             .info_by_email(email)
@@ -119,6 +140,8 @@ impl<'a> UserService<'a> {
             .map_err(|err| {
                 error!("查询用户信息失败, err: {:#?}", err);
                 Error::DbQueryError
+                    .into_msg()
+                    .with_msg("查询部门角色关系列表失败")
             })?
             .ok_or_else(|| {
                 error!("用户不存在");
@@ -129,10 +152,12 @@ impl<'a> UserService<'a> {
     }
 
     /// 删除数据
-    pub async fn delete(&self, id: i32) -> Result<u64, Error> {
+    pub async fn delete(&self, id: i32) -> Result<u64, ErrorMsg> {
         let result = self.user_dao.delete(id).await.map_err(|err| {
             error!("删除用户失败, err: {:#?}", err);
             Error::DbDeleteError
+                .into_msg()
+                .with_msg("查询部门角色关系列表失败")
         })?;
 
         Ok(result)
@@ -204,7 +229,7 @@ impl<'a> UserService<'a> {
     }
 
     /// 后台更新用户及对应用户的角色
-    pub async fn update(&self, user_id: i32, data: UpdateUserReq) -> Result<(), Error> {
+    pub async fn update(&self, user_id: i32, data: UpdateUserReq) -> Result<(), ErrorMsg> {
         // 获取原角色列表
         let (user_role_rels, _) = self
             .user_role_rel_dao
@@ -213,6 +238,8 @@ impl<'a> UserService<'a> {
             .map_err(|err| {
                 error!("查询用户与角色关系列表失败, err: {:#?}", err);
                 Error::DbQueryError
+                    .into_msg()
+                    .with_msg("查询部门角色关系列表失败")
             })?;
 
         // 获取角色ID的差异列表
@@ -241,6 +268,8 @@ impl<'a> UserService<'a> {
             .map_err(|err| {
                 error!("更新用户信息失败, err: {:#?}", err);
                 Error::DbUpdateError
+                    .into_msg()
+                    .with_msg("查询部门角色关系列表失败")
             })?;
 
         Ok(())
@@ -275,10 +304,12 @@ impl<'a> UserService<'a> {
 
 impl<'a> UserService<'a> {
     /// 通过用户ID获取角色列表
-    pub async fn roles(&self, user_id: i32) -> Result<(Vec<perm_role::Model>, u64), Error> {
+    pub async fn roles(&self, user_id: i32) -> Result<(Vec<perm_role::Model>, u64), ErrorMsg> {
         let (results, total) = self.user_dao.roles(user_id).await.map_err(|err| {
             error!("查询用户失败, err: {:#?}", err);
             Error::DbQueryError
+                .into_msg()
+                .with_msg("查询部门角色关系列表失败")
         })?;
 
         Ok((results, total))
