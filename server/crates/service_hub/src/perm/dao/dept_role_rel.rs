@@ -13,11 +13,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct RoleDeptRelDao<'a> {
+pub struct DeptRoleRelDao<'a> {
     db: &'a dyn DbRepo,
 }
 
-impl<'a> RoleDeptRelDao<'a> {
+impl<'a> DeptRoleRelDao<'a> {
     /// 获取数据列表
     pub async fn list(
         &self,

@@ -3,7 +3,7 @@ pub mod dto;
 
 mod dao;
 pub use dao::{
-    dept::DeptDao, dept_role_rel::RoleDeptRelDao, role::RoleDao, role_user_rel::UserRoleRelDao,
+    dept::DeptDao, dept_role_rel::DeptRoleRelDao, role::RoleDao, user_role_rel::UserRoleRelDao,
     user::UserDao,
 };
 

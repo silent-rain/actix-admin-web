@@ -1,4 +1,4 @@
-//! 角色与用户关系管理
+//! 用户角色关系管理
 
 use crate::{
     inject::AInjectProvider,
@@ -20,7 +20,7 @@ use actix_web::{web::Data, Responder};
 pub struct UserRoleRelController;
 
 impl UserRoleRelController {
-    /// 获取角色与用户关系列表
+    /// 获取用户角色关系列表
     pub async fn list(
         provider: Data<AInjectProvider>,
         req: Query<GetUserRoleRelListReq>,
@@ -33,7 +33,7 @@ impl UserRoleRelController {
         }
     }
 
-    /// 批量创建角色与用户关系
+    /// 批量创建用户角色关系
     pub async fn batch_add(
         ctx: Context,
         provider: Data<AInjectProvider>,
@@ -49,7 +49,7 @@ impl UserRoleRelController {
         }
     }
 
-    /// 批量删除角色与用户关系
+    /// 批量删除用户角色关系
     pub async fn batch_delete(
         provider: Data<AInjectProvider>,
         data: Json<BatchDeleteUserRoleRelReq>,

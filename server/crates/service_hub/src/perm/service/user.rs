@@ -1,11 +1,11 @@
 //! 用户管理
 use crate::perm::{
-    dao::{role_user_rel::UserRoleRelDao, user::UserDao},
+    dao::{user_role_rel::UserRoleRelDao, user::UserDao},
     dto::user::{AddUserReq, GetUserListReq, ProfileRsp, UpdateUserReq},
 };
 
 use code::{Error, ErrorMsg};
-use entity::{perm_role, perm_role_user_rel, perm_user};
+use entity::{perm_role, perm_user_role_rel, perm_user};
 
 use nject::injectable;
 use sea_orm::Set;
@@ -250,7 +250,7 @@ impl<'a> UserService<'a> {
     fn diff_role_ids(
         &self,
         role_ids: Vec<i32>,
-        user_role_rels: Vec<perm_role_user_rel::Model>,
+        user_role_rels: Vec<perm_user_role_rel::Model>,
     ) -> (Vec<i32>, Vec<i32>) {
         let raw_role_ids: Vec<i32> = user_role_rels.iter().map(|v| v.role_id).collect();
         // 待新增的ID

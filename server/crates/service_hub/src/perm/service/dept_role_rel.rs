@@ -1,6 +1,6 @@
 //! 部门角色关系管理
 use crate::perm::{
-    dao::dept_role_rel::RoleDeptRelDao,
+    dao::dept_role_rel::DeptRoleRelDao,
     dto::dept_role_rel::{BatchAddDeptRoleRelReq, GetDeptRoleRelListReq},
 };
 
@@ -14,7 +14,7 @@ use tracing::error;
 /// 服务层
 #[injectable]
 pub struct DeptRoleRelService<'a> {
-    dept_role_rel_dao: RoleDeptRelDao<'a>,
+    dept_role_rel_dao: DeptRoleRelDao<'a>,
 }
 
 impl<'a> DeptRoleRelService<'a> {

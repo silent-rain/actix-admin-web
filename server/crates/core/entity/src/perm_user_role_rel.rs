@@ -1,4 +1,4 @@
-//! 角色用户关联表
+//! 用户角色关联表
 
 use sea_orm::{
     prelude::DateTimeLocal, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey,
@@ -6,9 +6,9 @@ use sea_orm::{
 };
 use serde::{Deserialize, Serialize};
 
-/// 角色用户关联表
+/// 用户角色关联表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "perm_role_user_rel")]
+#[sea_orm(table_name = "perm_user_role_rel")]
 pub struct Model {
     /// 自增ID
     #[sea_orm(primary_key)]
