@@ -1,4 +1,4 @@
-//! 配置表
+//! 全局配置表
 
 use sea_orm::{
     prelude::DateTimeLocal, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey,
@@ -6,7 +6,7 @@ use sea_orm::{
 };
 use serde::{Deserialize, Serialize};
 
-/// 配置表
+/// 全局配置表
 #[derive(Clone, Debug, Default, PartialEq, Eq, Deserialize, Serialize, DeriveEntityModel)]
 #[sea_orm(table_name = "sys_config")]
 pub struct Model {

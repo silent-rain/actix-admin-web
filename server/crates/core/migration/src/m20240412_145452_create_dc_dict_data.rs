@@ -1,6 +1,6 @@
-//! 全局配置表
-//! User Entity: [`entity::prelude::SysConfig`]
-use entity::{prelude::SysConfig, sys_config::Column};
+//! 字典数据表
+//! User Entity: [`entity::prelude::DcDictData`]
+use entity::{dc_dict_data::Column, prelude::DcDictData};
 
 use sea_orm_migration::{
     async_trait,
@@ -20,7 +20,7 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(SysConfig)
+                    .table(DcDictData)
                     .if_not_exists()
                     .col(
                         ColumnDef::new(Column::Id)
@@ -28,35 +28,26 @@ impl MigrationTrait for Migration {
                             .not_null()
                             .auto_increment()
                             .primary_key()
-                            .comment("配置ID"),
+                            .comment("字典项ID"),
                     )
                     .col(
-                        ColumnDef::new(Column::Pid)
+                        ColumnDef::new(Column::DictId)
                             .integer()
-                            .null()
-                            .comment("父节点ID"),
+                            .not_null()
+                            .comment("字典维度ID"),
                     )
                     .col(
                         ColumnDef::new(Column::Name)
                             .string()
                             .string_len(64)
                             .not_null()
-                            .unique_key()
-                            .comment("配置名称"),
-                    )
-                    .col(
-                        ColumnDef::new(Column::Code)
-                            .string()
-                            .string_len(64)
-                            .not_null()
-                            .unique_key()
-                            .comment("配置编码(英文)"),
+                            .comment("字典项名称"),
                     )
                     .col(
                         ColumnDef::new(Column::Value)
                             .text()
-                            .null()
-                            .comment("配置值"),
+                            .not_null()
+                            .comment("字典项值"),
                     )
                     .col(
                         ColumnDef::new(Column::Sort)
@@ -66,11 +57,11 @@ impl MigrationTrait for Migration {
                             .comment("排序"),
                     )
                     .col(
-                        ColumnDef::new(Column::Desc)
+                        ColumnDef::new(Column::Note)
                             .string()
                             .string_len(200)
                             .null()
-                            .comment("配置描述"),
+                            .comment("备注"),
                     )
                     .col(
                         ColumnDef::new(Column::Status)
@@ -100,7 +91,7 @@ impl MigrationTrait for Migration {
         // Replace the sample below with your own migration scripts
 
         manager
-            .drop_table(Table::drop().table(SysConfig).to_owned())
+            .drop_table(Table::drop().table(DcDictData).to_owned())
             .await
     }
 }

@@ -10,6 +10,8 @@ mod m20240218_145453_create_perm_dept;
 mod m20240218_145453_create_perm_dept_role_rel;
 mod m20240218_161916_create_sys_captcha;
 mod m20240218_161916_create_sys_config;
+mod m20240412_145452_create_dc_dict_data;
+mod m20240412_145452_create_dc_dict_dim;
 
 pub struct Migrator;
 
@@ -27,6 +29,8 @@ impl MigratorTrait for Migrator {
             Box::new(m20240218_145453_create_perm_dept_role_rel::Migration),
             Box::new(m20240218_161916_create_sys_captcha::Migration),
             Box::new(m20240218_161916_create_sys_config::Migration),
+            Box::new(m20240412_145452_create_dc_dict_dim::Migration),
+            Box::new(m20240412_145452_create_dc_dict_data::Migration),
         ]
     }
 }

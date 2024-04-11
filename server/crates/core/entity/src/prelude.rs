@@ -4,6 +4,8 @@ pub use super::app_template::Entity as AppTemplate;
 
 pub use super::api_auth::Entity as ApiAuth;
 pub use super::api_role_rel::Entity as ApiRoleRel;
+pub use super::dc_dict_data::Entity as DcDictData;
+pub use super::dc_dict_dim::Entity as DcDictDim;
 pub use super::log_api_operation::Entity as LogApiOperation;
 pub use super::log_system::Entity as LogSystem;
 pub use super::log_user_login::Entity as LogUserLogin;
