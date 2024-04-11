@@ -27,7 +27,7 @@ pub struct Model {
     pub avatar: Option<String>,
     /// 手机号码
     pub phone: Option<String>,
-    /// 邮件
+    /// 邮箱
     pub email: Option<String>,
     /// 介绍
     pub intro: Option<String>,

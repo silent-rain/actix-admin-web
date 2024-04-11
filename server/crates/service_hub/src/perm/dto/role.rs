@@ -1,9 +1,11 @@
 //! 角色管理
+use crate::perm::enums::RoleStatus;
+
 use actix_validator::Validate;
 
 use serde::{Deserialize, Serialize};
 
-/// 角色列表查询
+/// 查询角色列表
 #[derive(Default, Deserialize, Validate)]
 pub struct GetRoleListReq {
     /// 当前分页
@@ -21,25 +23,35 @@ pub struct GetRoleListReq {
 /// 添加角色
 #[derive(Serialize, Deserialize, Validate)]
 pub struct AddRoleReq {
+    /// 角色名称
     #[validate(length(min = 2, message = "至少输入两个字符"))]
     pub name: String,
+    /// 排序
     pub sort: Option<i32>,
+    /// 备注
     pub note: Option<String>,
 }
 
 /// 更新数据 请求体
-#[derive(Default, Serialize, Deserialize, Validate)]
+#[derive(Default, Clone, Serialize, Deserialize, Validate)]
 pub struct UpdateRoleReq {
+    /// 角色ID
     pub id: i32,
-    pub status: i8,
+    /// 角色名称
     pub name: String,
-    pub note: Option<String>,
+    /// 排序
     pub sort: Option<i32>,
+    /// 备注
+    pub note: Option<String>,
+    /// 状态,0:停用,1:正常
+    pub status: RoleStatus,
 }
 
 /// 更新数据状态
-#[derive(Default, Serialize, Deserialize, Validate)]
+#[derive(Default, Clone, Serialize, Deserialize, Validate)]
 pub struct UpdateRoleStatusReq {
+    /// 角色ID
     pub id: i32,
-    pub status: i8,
+    /// 状态,0:停用,1:正常
+    pub status: RoleStatus,
 }

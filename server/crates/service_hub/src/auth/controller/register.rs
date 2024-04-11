@@ -13,6 +13,7 @@ use code::Error;
 use response::Response;
 
 use actix_web::{web::Data, Responder};
+use tracing::error;
 
 /// 控制器
 pub struct RegisterController;
@@ -27,14 +28,22 @@ impl RegisterController {
         match data.register_type {
             RegisterType::Phone => {
                 if data.phone.is_none() {
-                    return Response::code(Error::InvalidParameterError(
-                        "请输入手机号码".to_owned(),
-                    ));
+                    error!("请输入手机号码");
+                    return Response::err(
+                        Error::InvalidParameterError
+                            .into_msg()
+                            .with_msg("请输入手机号码"),
+                    );
                 }
             }
             RegisterType::Email => {
                 if data.email.is_none() {
-                    return Response::code(Error::InvalidParameterError("请输入邮箱".to_owned()));
+                    error!("请输入邮箱");
+                    return Response::err(
+                        Error::InvalidParameterError
+                            .into_msg()
+                            .with_msg("请输入邮箱"),
+                    );
                 }
             }
         }

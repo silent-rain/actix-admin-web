@@ -80,7 +80,9 @@ impl RoleController {
         data: Json<UpdateRoleStatusReq>,
     ) -> impl Responder {
         let role_service: RoleService = provider.provide();
-        let resp = role_service.status(data.id, data.status).await;
+        let resp = role_service
+            .status(data.id, data.status.clone().into())
+            .await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

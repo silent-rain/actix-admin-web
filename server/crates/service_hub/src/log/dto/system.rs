@@ -2,7 +2,7 @@
 
 use serde::Deserialize;
 
-/// 系统日志列表查询
+/// 查询系统日志列表
 #[derive(Default, Deserialize)]
 pub struct GetSystemListReq {
     /// 当前分页

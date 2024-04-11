@@ -80,7 +80,9 @@ impl DeptController {
         data: Json<UpdateDeptStatusReq>,
     ) -> impl Responder {
         let dept_service: DeptService = provider.provide();
-        let resp = dept_service.status(data.id, data.status).await;
+        let resp = dept_service
+            .status(data.id, data.status.clone().into())
+            .await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

@@ -14,7 +14,7 @@ CREATE TABLE perm_user (
     `birthday` VARCHAR(20) NULL COMMENT '出生日期',
     `avatar` VARCHAR(200) NULL COMMENT '头像URL',
     `phone` VARCHAR(20) NULL COMMENT '手机号码',
-    `email` VARCHAR(100) NULL COMMENT '邮件',
+    `email` VARCHAR(100) NULL COMMENT '邮箱',
     `intro` VARCHAR(200) NULL COMMENT '介绍',
     `note` VARCHAR(200) NULL COMMENT '备注',
     `password` VARCHAR(64) NOT NULL COMMENT '密码',

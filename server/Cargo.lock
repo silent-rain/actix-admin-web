@@ -223,6 +223,7 @@ dependencies = [
  "response",
  "serde",
  "serde_urlencoded",
+ "tracing",
  "validator",
  "validator_derive",
 ]

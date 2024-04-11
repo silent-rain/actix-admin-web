@@ -7,6 +7,7 @@ use response::Response;
 use actix_web::{dev::Payload, web, FromRequest, HttpRequest, HttpResponse};
 use futures::future::{err, ok, Ready};
 use serde::de::DeserializeOwned;
+use tracing::error;
 use validator::Validate;
 
 #[derive(Debug)]
@@ -58,14 +59,24 @@ where
         let inner_query = match query_info {
             Ok(v) => v,
             Err(e) => {
-                let resp = Response::code(code::Error::InvalidParameterError(e.to_string()));
+                error!("请求参数解析失败, err: {e}");
+                let resp = Response::err(
+                    code::Error::InvalidParameterError
+                        .into_msg()
+                        .with_msg("请求参数解析失败"),
+                );
                 return err(resp.into());
             }
         };
 
         // 验证字段
         if let Err(e) = inner_query.validate() {
-            let resp = Response::code(code::Error::InvalidParameterError(e.to_owned().to_string()));
+            error!("请求参数验证失败, err: {e}");
+            let resp = Response::err(
+                code::Error::InvalidParameterError
+                    .into_msg()
+                    .with_msg("请求参数验证失败"),
+            );
             return err(resp.into());
         }
         ok(Query(inner_query))

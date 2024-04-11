@@ -69,7 +69,7 @@ impl<'a> UserService<'a> {
         let result = ProfileRsp {
             id,
             username: user.username,
-            gender: user.gender,
+            gender: user.gender.into(),
             age: user.age,
             birthday: user.birthday,
             avatar: user.avatar,
@@ -171,7 +171,7 @@ impl<'a> UserService<'a> {
             }
         }
 
-        // 检测是否已注册邮件
+        // 检测是否已注册邮箱
         if let Some(email) = data.email.clone() {
             let user = self.user_dao.info_by_email(email).await.map_err(|err| {
                 error!("查询用户信息失败, err: {:#?}", err);
@@ -193,7 +193,7 @@ impl<'a> UserService<'a> {
         let model = perm_user::ActiveModel {
             username: Set(data.username),
             real_name: Set(data.real_name),
-            gender: Set(data.gender),
+            gender: Set(data.gender.clone().into()),
             age: Set(Some(data.age)),
             birthday: Set(data.birthday),
             avatar: Set(data.avatar),
@@ -237,7 +237,7 @@ impl<'a> UserService<'a> {
             id: Set(data.id),
             username: Set(data.username),
             real_name: Set(data.real_name),
-            gender: Set(data.gender),
+            gender: Set(data.gender.clone().into()),
             age: Set(Some(data.age)),
             birthday: Set(data.birthday),
             avatar: Set(data.avatar),
@@ -246,7 +246,7 @@ impl<'a> UserService<'a> {
             password: Set(data.password),
             intro: Set(data.intro),
             note: Set(data.note),
-            status: Set(data.status),
+            status: Set(data.status.clone().into()),
             updater: Set(Some(user_id)),
             ..Default::default()
         };

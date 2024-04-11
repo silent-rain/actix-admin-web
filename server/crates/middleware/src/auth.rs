@@ -2,10 +2,9 @@
 use std::future::{ready, Ready};
 
 use service_hub::{
-    auth::enums::{UserLoginStatus, UserStatus},
     inject::AInjectProvider,
-    log::UserLoginService,
-    perm::UserService,
+    log::{enums::UserLoginStatus, UserLoginService},
+    perm::{enums::UserStatus, UserService},
 };
 
 use crate::constant::{

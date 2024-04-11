@@ -22,39 +22,49 @@ pub struct GetAppTemplateListReq {
 /// 添加数据 请求体
 #[derive(Default, Deserialize)]
 pub struct AddAppTemplateReq {
+    /// 用户ID
     pub user_id: i32,
+    /// 状态
     pub status: i8,
 }
 
 /// 批量添加数据结点
 #[derive(Default, Deserialize)]
 pub struct BatchAddAppTemplateNode {
+    /// 用户ID
     pub user_id: i32,
+    /// 状态
     pub status: i8,
 }
 
 /// 批量添加数据 请求体
 #[derive(Default, Deserialize)]
 pub struct BatchAddAppTemplateReq {
+    /// 数据列表
     pub data: Vec<BatchAddAppTemplateNode>,
 }
 
 /// 更新数据 请求体
 #[derive(Default, Deserialize)]
 pub struct UpdateAppTemplateReq {
+    /// ID
     pub id: i32,
+    /// 状态
     pub status: i8,
 }
 
 /// 更新数据状态 请求体
 #[derive(Default, Deserialize)]
 pub struct UpdateAppTemplateStatusReq {
+    /// ID
     pub id: i32,
+    /// 状态
     pub status: i8,
 }
 
 /// 批量删除数据 请求体
 #[derive(Default, Deserialize, Validate)]
 pub struct BatchDeleteAppTemplateReq {
+    /// ID列表
     pub ids: Vec<i32>,
 }

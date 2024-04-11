@@ -17,7 +17,7 @@ use actix_web::{
     web::{Data, Path},
     Responder,
 };
-use tracing::warn;
+use tracing::{error, warn};
 
 /// 控制器
 pub struct UserController;
@@ -57,9 +57,12 @@ impl UserController {
         let data = data.into_inner();
         // 检查用户
         if data.phone.is_none() && data.email.is_none() {
-            return Response::code(Error::InvalidParameterError(
-                "phone/email 不能为空".to_owned(),
-            ));
+            error!("请求参数错误, phone/email 不能为空");
+            return Response::err(
+                Error::InvalidParameterError
+                    .into_msg()
+                    .with_msg("请求参数错误, phone/email 不能为空"),
+            );
         }
 
         let user_service: UserService = provider.provide();
@@ -92,7 +95,9 @@ impl UserController {
         data: Json<UpdateUserStatusReq>,
     ) -> impl Responder {
         let user_service: UserService = provider.provide();
-        let resp = user_service.status(data.id, data.status).await;
+        let resp = user_service
+            .status(data.id, data.status.clone().into())
+            .await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

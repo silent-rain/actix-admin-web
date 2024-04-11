@@ -21,12 +21,15 @@ pub struct GetDeptRoleRelListReq {
 /// 批量添加部门角色关系
 #[derive(Serialize, Deserialize, Validate)]
 pub struct BatchAddDeptRoleRelReq {
+    /// 部门ID
     pub dept_id: i32,
+    /// 角色ID列表
     pub role_ids: Vec<i32>,
 }
 
 /// 批量删除部门角色关系
 #[derive(Default, Deserialize, Validate)]
 pub struct BatchDeleteDeptRoleRelReq {
+    /// ID列表
     pub ids: Vec<i32>,
 }

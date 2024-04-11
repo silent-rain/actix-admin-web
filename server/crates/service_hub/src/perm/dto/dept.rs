@@ -3,7 +3,9 @@ use actix_validator::Validate;
 
 use serde::{Deserialize, Serialize};
 
-/// 部门列表查询
+use crate::perm::enums::DeptStatus;
+
+/// 查询部门列表
 #[derive(Default, Deserialize, Validate)]
 pub struct GetDeptListReq {
     /// 当前分页
@@ -35,7 +37,7 @@ pub struct AddDeptReq {
 }
 
 /// 更新数据
-#[derive(Default, Serialize, Deserialize, Validate)]
+#[derive(Default, Clone, Serialize, Deserialize, Validate)]
 pub struct UpdateDeptReq {
     /// 部门ID
     pub id: i32,
@@ -50,12 +52,14 @@ pub struct UpdateDeptReq {
     /// 备注
     pub note: Option<String>,
     /// 状态,0:停用,1:正常
-    pub status: i8,
+    pub status: DeptStatus,
 }
 
 /// 更新数据状态
-#[derive(Default, Serialize, Deserialize, Validate)]
+#[derive(Default, Clone, Serialize, Deserialize, Validate)]
 pub struct UpdateDeptStatusReq {
+    /// ID
     pub id: i32,
-    pub status: i8,
+    /// 状态,0:停用,1:正常
+    pub status: DeptStatus,
 }

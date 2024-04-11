@@ -104,7 +104,7 @@ impl<'a> DeptService<'a> {
             name: Set(req.name),
             sort: Set(req.sort),
             note: Set(req.note),
-            status: Set(req.status),
+            status: Set(req.status.clone().into()),
             updater: Set(Some(user_id)),
             ..Default::default()
         };

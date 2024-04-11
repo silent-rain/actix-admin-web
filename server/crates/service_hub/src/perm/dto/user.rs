@@ -1,9 +1,11 @@
 //! 用户管理
+use crate::perm::enums::{Gender, UserStatus};
+
 use actix_validator::Validate;
 
 use serde::{Deserialize, Serialize};
 
-/// 用户列表查询
+/// 查询用户列表
 #[derive(Default, Deserialize, Validate)]
 pub struct GetUserListReq {
     /// 当前分页
@@ -17,55 +19,85 @@ pub struct GetUserListReq {
 }
 
 /// 添加用户
-#[derive(Serialize, Deserialize, Validate)]
+#[derive(Serialize, Clone, Deserialize, Validate)]
 pub struct AddUserReq {
+    /// 用户名称
     pub username: String,
+    /// 真实姓名
     pub real_name: Option<String>,
-    pub gender: i8,
+    /// 性别, 0:男,1:女,2:保密
+    pub gender: Gender,
+    /// 年龄
     pub age: i32,
+    /// 出生日期
     pub birthday: Option<String>,
+    /// 手机号码
     pub phone: Option<String>,
+    /// 邮箱
     pub email: Option<String>,
+    /// 密码
     pub password: String,
+    /// 头像URL
     pub avatar: Option<String>,
+    /// 角色ID列表
     pub role_ids: Vec<i32>,
 }
 
 /// 更新用户
-#[derive(Serialize, Deserialize, Validate)]
+#[derive(Serialize, Clone, Deserialize, Validate)]
 pub struct UpdateUserReq {
+    /// 用户ID
     pub id: i32,
+    /// 用户名称
     pub username: String,
+    /// 真实姓名
     pub real_name: Option<String>,
-    pub gender: i8,
+    /// 性别, 0:男,1:女,2:保密
+    pub gender: Gender,
+    /// 年龄
     pub age: i32,
+    /// 出生日期
     pub birthday: Option<String>,
+    /// 手机号码
     pub phone: Option<String>,
+    /// 邮箱
     pub email: Option<String>,
+    /// 密码
     pub password: String,
+    /// 头像URL
     pub avatar: Option<String>,
+    /// 介绍
     pub intro: Option<String>,
+    /// 备注
     pub note: Option<String>,
-    pub status: i8,
+    /// 状态,0:停用,1:正常
+    pub status: UserStatus,
+    /// 角色ID列表
     pub role_ids: Vec<i32>,
 }
 
 /// 更新数据状态
-#[derive(Default, Serialize, Deserialize, Validate)]
+#[derive(Default, Clone, Serialize, Deserialize, Validate)]
 pub struct UpdateUserStatusReq {
     /// 用户ID
     pub id: i32,
     /// 用户状态
-    pub status: i8,
+    pub status: UserStatus,
 }
 
 /// 获取用户个人信息
-#[derive(Serialize, Deserialize)]
+#[derive(Default, Clone, Serialize, Deserialize)]
 pub struct ProfileRsp {
+    /// 用户ID
     pub id: i32,
+    /// 用户名称
     pub username: String,
-    pub gender: i8,
+    /// 性别, 0:男,1:女,2:保密
+    pub gender: Gender,
+    /// 年龄
     pub age: Option<i32>,
+    /// 出生日期
     pub birthday: Option<String>,
+    /// 头像URL
     pub avatar: Option<String>,
 }
