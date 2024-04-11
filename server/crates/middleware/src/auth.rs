@@ -76,7 +76,6 @@ where
     forward_ready!(service);
 
     fn call(&self, req: ServiceRequest) -> Self::Future {
-        println!("Hi from start. You requested: {}", req.path());
         let path = req.path();
         // 白名单放行
         if WHITE_LIST.contains(&path) {
@@ -98,6 +97,7 @@ where
                 Ok(resp)
             });
         }
+
         // TODO API 鉴权
 
         // 获取系统鉴权标识Token

@@ -7,5 +7,6 @@ edition = "2021"
 code = { path = "../code" }
 
 actix-web = { workspace = true }
+tracing-actix-web = { workspace = true }
 futures = { workspace = true }
 serde = { workspace = true }

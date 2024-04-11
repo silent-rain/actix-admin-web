@@ -120,7 +120,8 @@ impl UserController {
     pub async fn profile(ctx: Context, provider: Data<AInjectProvider>) -> impl Responder {
         let user_id = ctx.get_user_id();
         let username = ctx.get_user_name();
-        warn!("profile context user_id: {user_id} username: {username}");
+        let request_id = ctx.get_request_id();
+        warn!("profile context request_id: {request_id} user_id: {user_id} username: {username}");
 
         let user_service: UserService = provider.provide();
         let resp = user_service.profile(user_id).await;

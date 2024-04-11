@@ -8,19 +8,18 @@ use service_hub::{
     system::CaptchaRouter,
 };
 
-use actix_request_identifier::RequestIdentifier;
 use actix_web::{dev::HttpServiceFactory, web};
 use tracing_actix_web::TracingLogger;
 
 /// 注册路由
-/// 
+///
 /// Service Hub Module: [`service_hub`]
 pub fn register() -> impl HttpServiceFactory {
     web::scope("/api/v1")
         // >>> 中间件 >>>
+        // 注意中间件加载顺序: Last in, first loading
         .wrap(TracingLogger::default())
         .wrap(middleware::cors::wrap_cors())
-        .wrap(RequestIdentifier::with_uuid())
         // 接口鉴权
         .wrap(middleware::auth::Auth)
         // 上下文中间件
