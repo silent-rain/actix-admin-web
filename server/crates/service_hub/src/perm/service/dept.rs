@@ -1,7 +1,7 @@
 //! 部门管理
 use crate::perm::{
     dao::dept::DeptDao,
-    dto::dept::{dept_list_to_tree, AddDeptReq, DeptTree, GetDeptListReq, UpdateDeptReq},
+    dto::dept::{AddDeptReq, DeptTree, GetDeptListReq, UpdateDeptReq},
     enums::DeptStatus,
 };
 
@@ -48,8 +48,26 @@ impl<'a> DeptService<'a> {
         })?;
 
         // 将列表转换为树列表
-        let results = dept_list_to_tree(&results, None);
+        let results = Self::dept_list_to_tree(&results, None);
         Ok(results)
+    }
+
+    /// 将列表转换为树列表
+    fn dept_list_to_tree(depts: &[perm_dept::Model], pid: Option<i32>) -> Vec<DeptTree> {
+        let mut trees = Vec::new();
+        for dept in depts {
+            // 根节点或子节点
+            if (dept.pid.is_none() && pid.is_none())
+                || (dept.pid.is_some() && pid.is_some() && dept.pid == pid)
+            {
+                trees.push(DeptTree::new(dept));
+            }
+        }
+        for item in trees.iter_mut() {
+            let children = Self::dept_list_to_tree(depts, Some(item.dept.id));
+            item.children.extend(children)
+        }
+        trees
     }
 
     /// 获取详情数据
@@ -144,5 +162,46 @@ impl<'a> DeptService<'a> {
         })?;
 
         Ok(result)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_dept_list_to_tree() {
+        let depts = vec![
+            perm_dept::Model {
+                id: 1,
+                pid: None,
+                name: "name1".to_string(),
+                status: 1,
+                ..Default::default()
+            },
+            perm_dept::Model {
+                id: 2,
+                pid: None,
+                name: "name2".to_string(),
+                status: 1,
+                ..Default::default()
+            },
+            perm_dept::Model {
+                id: 3,
+                pid: Some(2),
+                name: "name3".to_string(),
+                status: 1,
+                ..Default::default()
+            },
+            perm_dept::Model {
+                id: 4,
+                pid: Some(3),
+                name: "name4".to_string(),
+                status: 1,
+                ..Default::default()
+            },
+        ];
+        let results = DeptService::dept_list_to_tree(&depts, None);
+        assert!(!results.is_empty());
     }
 }
