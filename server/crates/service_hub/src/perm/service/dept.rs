@@ -1,7 +1,7 @@
 //! 部门管理
 use crate::perm::{
     dao::dept::DeptDao,
-    dto::dept::{AddDeptReq, GetDeptListReq, UpdateDeptReq},
+    dto::dept::{dept_list_to_tree, AddDeptReq, DeptTree, GetDeptListReq, UpdateDeptReq},
     enums::DeptStatus,
 };
 
@@ -24,7 +24,6 @@ impl<'a> DeptService<'a> {
         &self,
         req: GetDeptListReq,
     ) -> Result<(Vec<perm_dept::Model>, u64), ErrorMsg> {
-        // TODO 返回树结构or新接口
         // 获取所有数据
         if let Some(true) = req.all {
             return self.dept_dao.all().await.map_err(|err| {
@@ -39,6 +38,18 @@ impl<'a> DeptService<'a> {
         })?;
 
         Ok((results, total))
+    }
+
+    /// 获取树列表数据
+    pub async fn tree(&self) -> Result<Vec<DeptTree>, ErrorMsg> {
+        let (results, _total) = self.dept_dao.all().await.map_err(|err| {
+            error!("查询部门列表失败, err: {:#?}", err);
+            Error::DbQueryError.into_msg().with_msg("查询部门列表失败")
+        })?;
+
+        // 将列表转换为树列表
+        let results = dept_list_to_tree(&results, None);
+        Ok(results)
     }
 
     /// 获取详情数据

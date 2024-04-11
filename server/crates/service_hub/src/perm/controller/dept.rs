@@ -33,6 +33,16 @@ impl DeptController {
         }
     }
 
+    /// 获取部门树列表
+    pub async fn tree(provider: Data<AInjectProvider>) -> impl Responder {
+        let dept_service: DeptService = provider.provide();
+        let resp = dept_service.tree().await;
+        match resp {
+            Ok(v) => Response::ok().data(v),
+            Err(err) => Response::err(err),
+        }
+    }
+
     /// 获取部门信息
     pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
         let dept_service: DeptService = provider.provide();
