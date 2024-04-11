@@ -9,6 +9,7 @@ mod m20240218_145452_create_perm_role;
 mod m20240218_145453_create_perm_dept;
 mod m20240218_145453_create_perm_dept_role_rel;
 mod m20240218_161916_create_sys_captcha;
+mod m20240218_161916_create_sys_config;
 
 pub struct Migrator;
 
@@ -25,6 +26,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20240218_145453_create_perm_dept::Migration),
             Box::new(m20240218_145453_create_perm_dept_role_rel::Migration),
             Box::new(m20240218_161916_create_sys_captcha::Migration),
+            Box::new(m20240218_161916_create_sys_config::Migration),
         ]
     }
 }

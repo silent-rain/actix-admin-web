@@ -14,20 +14,20 @@ CREATE TABLE sys_captcha (
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '验证码表';
 
 
--- 应用配置表
+-- 配置表
 CREATE TABLE sys_config (
     `id` INT AUTO_INCREMENT COMMENT '配置ID',
     `pid` INT(11) DEFAULT NULL COMMENT '父节点ID',
-    `name` VARCHAR(32) NOT NULL COMMENT '配置名称',
-    `key` VARCHAR(32) NOT NULL UNIQUE COMMENT '配置项(英文)',
-    `value` TEXT COMMENT '配置参数值',
+    `name` VARCHAR(64) NOT NULL COMMENT '配置名称',
+    `code` VARCHAR(64) NOT NULL UNIQUE COMMENT '配置编码(英文)',
+    `value` TEXT COMMENT '配置值',
     `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
-    `note` VARCHAR(32) DEFAULT NULL COMMENT '配置描述',
-    `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '是否启用,0: 禁用,1: 启用',
+    `desc` VARCHAR(200) DEFAULT NULL COMMENT '配置描述',
+    `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:停用,1:正常',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`)
-) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '应用配置表';
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '配置表';
 
 -- ICON图标表
 CREATE TABLE sys_icon (
