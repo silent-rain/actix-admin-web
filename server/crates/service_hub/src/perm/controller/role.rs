@@ -9,7 +9,6 @@ use crate::{
 };
 
 use actix_validator::{Json, Query};
-use context::Context;
 use response::Response;
 
 use actix_web::{
@@ -45,14 +44,9 @@ impl RoleController {
     }
 
     /// 添加角色
-    pub async fn add(
-        ctx: Context,
-        provider: Data<AInjectProvider>,
-        data: Json<AddRoleReq>,
-    ) -> impl Responder {
-        let user_id = ctx.get_user_id();
+    pub async fn add(provider: Data<AInjectProvider>, data: Json<AddRoleReq>) -> impl Responder {
         let role_service: RoleService = provider.provide();
-        let resp = role_service.add(user_id, data.into_inner()).await;
+        let resp = role_service.add(data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -61,13 +55,11 @@ impl RoleController {
 
     /// 更新角色
     pub async fn update(
-        ctx: Context,
         provider: Data<AInjectProvider>,
         data: Json<UpdateRoleReq>,
     ) -> impl Responder {
-        let user_id = ctx.get_user_id();
         let role_service: RoleService = provider.provide();
-        let resp = role_service.update(user_id, data.into_inner()).await;
+        let resp = role_service.update(data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

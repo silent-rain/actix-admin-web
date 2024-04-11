@@ -59,7 +59,7 @@ impl<'a> RoleService<'a> {
     }
 
     /// 添加数据
-    pub async fn add(&self, user_id: i32, req: AddRoleReq) -> Result<perm_role::Model, ErrorMsg> {
+    pub async fn add(&self, req: AddRoleReq) -> Result<perm_role::Model, ErrorMsg> {
         // 查询角色是否存在
         let role = self
             .role_dao
@@ -79,7 +79,6 @@ impl<'a> RoleService<'a> {
             sort: Set(req.sort),
             note: Set(req.note),
             status: Set(RoleStatus::Enabled as i8),
-            creator: Set(Some(user_id)),
             ..Default::default()
         };
         let result = self.role_dao.add(model).await.map_err(|err| {
@@ -91,14 +90,13 @@ impl<'a> RoleService<'a> {
     }
 
     /// 更新角色
-    pub async fn update(&self, user_id: i32, req: UpdateRoleReq) -> Result<u64, ErrorMsg> {
+    pub async fn update(&self, req: UpdateRoleReq) -> Result<u64, ErrorMsg> {
         let model = perm_role::ActiveModel {
             id: Set(req.id),
             name: Set(req.name),
             sort: Set(req.sort),
             note: Set(req.note),
             status: Set(req.status.clone().into()),
-            updater: Set(Some(user_id)),
             ..Default::default()
         };
 

@@ -60,18 +60,6 @@ impl MigrationTrait for Migration {
                             .comment("状态,0:停用,1:正常"),
                     )
                     .col(
-                        ColumnDef::new(Column::Creator)
-                            .integer()
-                            .null()
-                            .comment("创建者"),
-                    )
-                    .col(
-                        ColumnDef::new(Column::Updater)
-                            .integer()
-                            .null()
-                            .comment("更新者"),
-                    )
-                    .col(
                         ColumnDef::new(Column::CreatedAt)
                             .date_time()
                             .not_null()

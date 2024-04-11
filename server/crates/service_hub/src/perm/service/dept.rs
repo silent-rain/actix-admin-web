@@ -60,7 +60,7 @@ impl<'a> DeptService<'a> {
     }
 
     /// 添加数据
-    pub async fn add(&self, user_id: i32, req: AddDeptReq) -> Result<perm_dept::Model, ErrorMsg> {
+    pub async fn add(&self, req: AddDeptReq) -> Result<perm_dept::Model, ErrorMsg> {
         // 查询部门是否存在
         let dept = self
             .dept_dao
@@ -75,7 +75,7 @@ impl<'a> DeptService<'a> {
             return Err(Error::DbDataExistError.into_msg().with_msg("部门已存在"));
         }
 
-        // TODO pid 待处理
+        // TODO pids 待处理
         let model = perm_dept::ActiveModel {
             pid: Set(req.pid),
             // pids: Set(req.pids),
@@ -83,7 +83,6 @@ impl<'a> DeptService<'a> {
             sort: Set(req.sort),
             note: Set(req.note),
             status: Set(DeptStatus::Enabled as i8),
-            creator: Set(Some(user_id)),
             ..Default::default()
         };
         let result = self.dept_dao.add(model).await.map_err(|err| {
@@ -95,8 +94,8 @@ impl<'a> DeptService<'a> {
     }
 
     /// 更新数据
-    pub async fn update(&self, user_id: i32, req: UpdateDeptReq) -> Result<u64, ErrorMsg> {
-        // TODO pid 待处理
+    pub async fn update(&self, req: UpdateDeptReq) -> Result<u64, ErrorMsg> {
+        // TODO pids 待处理
         let model = perm_dept::ActiveModel {
             id: Set(req.id),
             pid: Set(req.pid),
@@ -105,7 +104,6 @@ impl<'a> DeptService<'a> {
             sort: Set(req.sort),
             note: Set(req.note),
             status: Set(req.status.clone().into()),
-            updater: Set(Some(user_id)),
             ..Default::default()
         };
 

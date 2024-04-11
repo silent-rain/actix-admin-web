@@ -145,19 +145,14 @@ impl<'a> UserDao<'a> {
         add_role_ids: Vec<i32>,
     ) -> Result<perm_user::Model, DbErr> {
         let txn = self.db.wdb().begin().await?;
-        // 创建者
-        let creator = if active_model.creator.is_set() {
-            *(active_model.creator.clone().as_ref())
-        } else {
-            None
-        };
+
         // 添加用户
         let user = self.txn_add_user(&txn, active_model).await?;
         let user_id = user.id;
 
         // 添加批量角色
         let _ = self
-            .txn_batch_add_user_roles(&txn, creator, user_id, add_role_ids)
+            .txn_batch_add_user_roles(&txn, user_id, add_role_ids)
             .await?;
 
         txn.commit().await?;
@@ -174,17 +169,11 @@ impl<'a> UserDao<'a> {
         let user_id: i32 = *(active_model.id.clone().as_ref());
         let txn = self.db.wdb().begin().await?;
 
-        // 创建者
-        let creator = if active_model.creator.is_set() {
-            *(active_model.creator.clone().as_ref())
-        } else {
-            None
-        };
         // 更新用户
         let _ = self.txn_update_user(&txn, active_model).await?;
         // 添加批量角色
         let _ = self
-            .txn_batch_add_user_roles(&txn, creator, user_id, add_role_ids)
+            .txn_batch_add_user_roles(&txn, user_id, add_role_ids)
             .await?;
         // 删除批量角色
         let _ = self
@@ -223,7 +212,6 @@ impl<'a> UserDao<'a> {
     async fn txn_batch_add_user_roles(
         &self,
         txn: &DatabaseTransaction,
-        creator: Option<i32>,
         user_id: i32,
         role_ids: Vec<i32>,
     ) -> Result<i32, DbErr> {
@@ -235,7 +223,6 @@ impl<'a> UserDao<'a> {
             let model = perm_user_role_rel::ActiveModel {
                 user_id: Set(user_id),
                 role_id: Set(role_id),
-                creator: Set(creator),
                 ..Default::default()
             };
             user_ids.push(model)

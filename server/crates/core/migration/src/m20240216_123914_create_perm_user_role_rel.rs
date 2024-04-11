@@ -42,12 +42,6 @@ impl MigrationTrait for Migration {
                             .comment("角色ID"),
                     )
                     .col(
-                        ColumnDef::new(Column::Creator)
-                            .integer()
-                            .null()
-                            .comment("创建者"),
-                    )
-                    .col(
                         ColumnDef::new(Column::CreatedAt)
                             .date_time()
                             .not_null()

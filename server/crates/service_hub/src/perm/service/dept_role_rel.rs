@@ -34,17 +34,12 @@ impl<'a> DeptRoleRelService<'a> {
     }
 
     /// 批量添加数据
-    pub async fn batch_add(
-        &self,
-        user_id: i32,
-        req: BatchAddDeptRoleRelReq,
-    ) -> Result<i32, ErrorMsg> {
+    pub async fn batch_add(&self, req: BatchAddDeptRoleRelReq) -> Result<i32, ErrorMsg> {
         let mut models = Vec::new();
         for role_id in req.role_ids {
             let model = perm_dept_role_rel::ActiveModel {
                 role_id: Set(role_id),
                 dept_id: Set(req.dept_id),
-                creator: Set(Some(user_id)),
                 ..Default::default()
             };
             models.push(model);

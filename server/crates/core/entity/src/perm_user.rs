@@ -39,10 +39,6 @@ pub struct Model {
     pub status: i8,
     /// 部门ID
     pub dept_id: Option<i32>,
-    /// 创建者
-    pub creator: Option<i32>,
-    /// 更新者
-    pub updater: Option<i32>,
     /// 创建时间
     pub created_at: DateTimeLocal,
     /// 更新时间

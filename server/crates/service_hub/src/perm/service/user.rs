@@ -154,7 +154,7 @@ impl<'a> UserService<'a> {
 
 impl<'a> UserService<'a> {
     /// 后台添加用户及对应用户的角色
-    pub async fn add(&self, user_id: i32, data: AddUserReq) -> Result<perm_user::Model, ErrorMsg> {
+    pub async fn add(&self, data: AddUserReq) -> Result<perm_user::Model, ErrorMsg> {
         // 检测是否已注册用户
         if let Some(phone) = data.phone.clone() {
             let user = self.user_dao.info_by_phone(phone).await.map_err(|err| {
@@ -201,7 +201,6 @@ impl<'a> UserService<'a> {
             email: Set(data.email),
             password: Set(password),
             status: Set(1),
-            creator: Set(Some(user_id)),
             ..Default::default()
         };
 
@@ -217,7 +216,7 @@ impl<'a> UserService<'a> {
     }
 
     /// 后台更新用户及对应用户的角色
-    pub async fn update(&self, user_id: i32, data: UpdateUserReq) -> Result<(), ErrorMsg> {
+    pub async fn update(&self, data: UpdateUserReq) -> Result<(), ErrorMsg> {
         // 获取原角色列表
         let (user_role_rels, _) = self
             .user_role_rel_dao
@@ -247,7 +246,6 @@ impl<'a> UserService<'a> {
             intro: Set(data.intro),
             note: Set(data.note),
             status: Set(data.status.clone().into()),
-            updater: Set(Some(user_id)),
             ..Default::default()
         };
         self.user_dao

@@ -17,8 +17,6 @@ pub struct Model {
     pub user_id: i32,
     /// 角色ID
     pub role_id: i32,
-    /// 创建者
-    pub creator: Option<i32>,
     /// 创建时间
     pub created_at: DateTimeLocal,
 }
