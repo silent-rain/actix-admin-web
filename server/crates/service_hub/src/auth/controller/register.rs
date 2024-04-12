@@ -1,10 +1,7 @@
 //! 注册
 
 use crate::{
-    auth::{
-        dto::register::{RegisterReq, RegisterType},
-        RegisterService,
-    },
+    auth::{dto::register::RegisterReq, enums::RegisterType, RegisterService},
     inject::AInjectProvider,
 };
 

@@ -498,11 +498,14 @@ mod tests {
     use crate::config;
     use code::Error;
 
-    use once_cell::sync::Lazy;
-    use tracing::{debug, debug_span, error, event, info, info_span, trace, warn, Level};
+    use tracing::{
+        debug, debug_span, error, event, info, info_span, subscriber::DefaultGuard, trace, warn,
+        Level,
+    };
     use tracing_subscriber::layer::SubscriberExt;
 
-    static INIT: Lazy<Arc<WorkerGuard>> = Lazy::new(|| {
+    /// 注册日志订阅器
+    fn setup() -> (DefaultGuard, WorkerGuard) {
         let conf = DbConfig {
             // server/core/logger/data.dat
             address: "sqlite://./data.dat?mode=rwc".to_string(),
@@ -513,17 +516,14 @@ mod tests {
 
         let (layer, guard) = layer(conf);
         let subscriber = tracing_subscriber::registry().with(layer);
-        tracing::subscriber::set_global_default(subscriber).expect("注册全局日志订阅器失败");
-        Arc::new(guard)
-    });
+        let trace_guard = tracing::subscriber::set_default(subscriber);
 
-    fn setup() -> Arc<WorkerGuard> {
-        INIT.clone()
+        (trace_guard, guard)
     }
 
     #[tokio::test]
     async fn test_log() {
-        let _guard = setup();
+        let (_trace_guard, _guard) = setup();
 
         trace!("this is trace");
         debug!("this is debug");
@@ -534,7 +534,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_event() {
-        let _guard = setup();
+        let (_trace_guard, _guard) = setup();
 
         let error = "a bad error";
         event!(Level::ERROR, %error, "Received error");
@@ -542,9 +542,10 @@ mod tests {
 
     #[tokio::test]
     async fn test_outer_record() {
-        let _guard = setup();
+        let (_trace_guard, _guard) = setup();
 
-        // info!("span outer example");
+        info!("span outer example");
+
         let outer_span = info_span!(
             "outer",
             level = 0,
@@ -557,16 +558,16 @@ mod tests {
         outer_span.record("other_field", 7);
         outer_span.record("cc", 10);
 
-        // trace!("this is trace");
-        // debug!("this is debug");
-        // info!("this is info");
-        // warn!("this is warn");
+        trace!("this is trace");
+        debug!("this is debug");
+        info!("this is info");
+        warn!("this is warn");
         error!("this is error");
     }
 
     #[tokio::test]
     async fn test_inner_record() {
-        let _guard = setup();
+        let (_trace_guard, _guard) = setup();
 
         {
             let inner_span = debug_span!("inner", level = 1, "xxxxxxxxxx");
@@ -587,7 +588,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_inner_record2() {
-        let _guard = setup();
+        let (_trace_guard, _guard) = setup();
 
         let inner_span = debug_span!("inner", level = 1);
         let _inner_entered = inner_span.enter();
@@ -610,7 +611,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_code_error() {
-        let _guard = setup();
+        let (_trace_guard, _guard) = setup();
 
         info!("second example");
         error!("{}", Error::UnknownError);

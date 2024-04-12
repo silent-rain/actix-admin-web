@@ -283,15 +283,20 @@ mod tests {
     fn test_role_list() {
         let result = PermRole::find()
             .select_only()
-            .columns([perm_user::Column::Id])
-            .left_join(PermUserRoleRel)
+            .columns([perm_role::Column::Id])
+            .join_rev(
+                JoinType::InnerJoin,
+                PermUserRoleRel::belongs_to(PermRole)
+                    .from(perm_user_role_rel::Column::RoleId)
+                    .to(perm_role::Column::Id)
+                    .into(),
+            )
             .filter(perm_user_role_rel::Column::UserId.eq(10))
             .order_by_asc(perm_user::Column::Id)
             .build(DbBackend::Postgres)
             .to_string();
 
-        let sql = r#"SELECT "perm_user"."id" FROM "perm_user" LEFT JOIN "perm_user_role_rel" ON "perm_user"."id" = "perm_user_role_rel"."role_id" WHERE "perm_user_role_rel"."user_id" = 10 ORDER BY "perm_user"."id" ASC"#;
-
+        let sql = r#"SELECT "perm_role"."id" FROM "perm_role" INNER JOIN "perm_user_role_rel" ON "perm_user_role_rel"."role_id" = "perm_role"."id" WHERE "perm_user_role_rel"."user_id" = 10 ORDER BY "perm_user"."id" ASC"#;
         assert_eq!(result, sql);
     }
 }

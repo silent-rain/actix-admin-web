@@ -168,6 +168,8 @@ mod tests {
         let text = r#"
         {
             "filepath": "logs",
+            "filename": "app.log",
+            "level": "warn",
             "enable": true
         }
         "#;

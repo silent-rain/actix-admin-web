@@ -1,8 +1,7 @@
 //! 注册
 use crate::{
-    auth::common::captcha::check_captcha,
-    auth::dto::register::{RegisterReq, RegisterType},
-    perm::UserDao,
+    auth::{common::captcha::check_captcha, dto::register::RegisterReq, enums::RegisterType},
+    perm::{enums::UserStatus, UserDao},
     system::CaptchaDao,
 };
 
@@ -131,7 +130,7 @@ impl<'a> RegisterService<'a> {
             avatar: Set(data.avatar),
             phone: Set(data.phone),
             password: Set(data.password),
-            status: Set(1),
+            status: Set(UserStatus::Enabled as i8),
             ..Default::default()
         };
 
@@ -153,7 +152,7 @@ impl<'a> RegisterService<'a> {
             avatar: Set(data.avatar),
             email: Set(data.email),
             password: Set(data.password),
-            status: Set(1),
+            status: Set(UserStatus::Enabled as i8),
             ..Default::default()
         };
 

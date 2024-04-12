@@ -1,5 +1,6 @@
 //! 模板管理
 pub mod dto;
+pub mod enums;
 
 mod dao;
 pub use dao::template::AppTemplateDao;

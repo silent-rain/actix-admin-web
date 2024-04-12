@@ -1,5 +1,4 @@
 //! 登陆日志
-use crate::log::enums::UserLoginStatus;
 
 use serde::Deserialize;
 
@@ -27,7 +26,8 @@ pub struct AddUserLoginInfoReq {
     /// 用户代理
     pub user_agent: String,
     /// 登录状态,0:失败,1:成功
-    pub status: UserLoginStatus,
+    /// Enum: [`crate::log::enums::UserLoginStatus`]
+    pub status: i8,
 }
 
 /// 更新登录日志状态
@@ -36,5 +36,6 @@ pub struct UpdateUserLoginStatusReq {
     /// ID
     pub id: i32,
     /// 登录状态,0:失败,1:成功
-    pub status: UserLoginStatus,
+    /// Enum: [`crate::log::enums::UserLoginStatus`]
+    pub status: i8,
 }

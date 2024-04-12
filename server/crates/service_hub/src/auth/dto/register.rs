@@ -1,41 +1,10 @@
 //! 注册
 
-use std::str::FromStr;
+use crate::auth::enums::RegisterType;
 
 use actix_validator::Validate;
 
 use serde::{Deserialize, Serialize};
-
-/// 注册用户类型
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub enum RegisterType {
-    /// 手机号码
-    #[serde(rename = "phone")]
-    Phone,
-    /// 邮箱
-    #[serde(rename = "email")]
-    Email,
-}
-
-impl Default for RegisterType {
-    /// 默认注册为手机号
-    fn default() -> Self {
-        Self::Phone
-    }
-}
-
-/// 实现FromStr trait来定义如何从字符串解析为RegisterType
-impl FromStr for RegisterType {
-    type Err = ();
-
-    fn from_str(input: &str) -> Result<Self, Self::Err> {
-        match input {
-            "phone" => Ok(RegisterType::Phone),
-            "email" => Ok(RegisterType::Email),
-            _ => Err(()),
-        }
-    }
-}
 
 /// 注册用户
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
@@ -76,6 +45,8 @@ pub struct RegisterReq {
 
 #[cfg(test)]
 mod tests {
+    use crate::auth::enums::RegisterType;
+
     use super::*;
 
     use serde_json::json;
@@ -112,6 +83,7 @@ mod tests {
             "captcha": "captcha",
         });
         let result: RegisterReq = struct_to_struct(&body).unwrap();
+        println!("expected: {:#?}", expected);
         println!("result: {:#?}", result);
         assert!(expected == result)
     }
@@ -138,16 +110,16 @@ mod tests {
             "register_type": "phone",
             "username": "username",
             "real_name": "real_name",
-            "gender": 11,
+            "gender": 1,
             "age": 12,
             "birthday": null,
             "password": "password",
-            "avatar": "avatar",
+            "avatar": null,
             "captcha_id":"captcha_id",
             "captcha": "captcha",
         });
         let result: RegisterReq = struct_to_struct(&body).unwrap();
-        println!("result: {:#?}", result);
+
         assert!(expected == result)
     }
 
@@ -182,6 +154,7 @@ mod tests {
             // "captcha": "captcha",
         });
         let result: RegisterReq = struct_to_struct(&body).unwrap();
+        println!("expected: {:#?}", expected);
         println!("result: {:#?}", result);
         assert!(expected == result)
     }

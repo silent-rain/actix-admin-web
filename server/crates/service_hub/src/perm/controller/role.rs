@@ -56,10 +56,11 @@ impl RoleController {
     /// 更新角色
     pub async fn update(
         provider: Data<AInjectProvider>,
+        id: Path<i32>,
         data: Json<UpdateRoleReq>,
     ) -> impl Responder {
         let role_service: RoleService = provider.provide();
-        let resp = role_service.update(data.into_inner()).await;
+        let resp = role_service.update(*id, data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -69,12 +70,11 @@ impl RoleController {
     /// 更新角色状态
     pub async fn status(
         provider: Data<AInjectProvider>,
+        id: Path<i32>,
         data: Json<UpdateRoleStatusReq>,
     ) -> impl Responder {
         let role_service: RoleService = provider.provide();
-        let resp = role_service
-            .status(data.id, data.status.clone().into())
-            .await;
+        let resp = role_service.status(*id, data.status).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

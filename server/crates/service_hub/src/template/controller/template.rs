@@ -72,10 +72,11 @@ impl AppTemplateController {
     /// 更新{{InterfaceName}}
     pub async fn update(
         provider: Data<AInjectProvider>,
+        id: Path<i32>,
         data: Json<UpdateAppTemplateReq>,
     ) -> impl Responder {
         let app_template_service: AppTemplateService = provider.provide();
-        let resp = app_template_service.update(data.id, data.status).await;
+        let resp = app_template_service.update(*id, data.status).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -85,10 +86,11 @@ impl AppTemplateController {
     /// 更新{{InterfaceName}}状态
     pub async fn status(
         provider: Data<AInjectProvider>,
+        id: Path<i32>,
         data: Json<UpdateAppTemplateStatusReq>,
     ) -> impl Responder {
         let app_template_service: AppTemplateService = provider.provide();
-        let resp = app_template_service.status(data.id, data.status).await;
+        let resp = app_template_service.status(*id, data.status).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

@@ -24,7 +24,8 @@ pub struct GetAppTemplateListReq {
 pub struct AddAppTemplateReq {
     /// 用户ID
     pub user_id: i32,
-    /// 状态
+    /// 状态,0:停用,1:正常
+    /// Enum: [`crate::template::enums::AppTemplateStatus`]
     pub status: i8,
 }
 
@@ -33,7 +34,8 @@ pub struct AddAppTemplateReq {
 pub struct BatchAddAppTemplateNode {
     /// 用户ID
     pub user_id: i32,
-    /// 状态
+    /// 状态,0:停用,1:正常
+    /// Enum: [`crate::template::enums::AppTemplateStatus`]
     pub status: i8,
 }
 
@@ -47,18 +49,16 @@ pub struct BatchAddAppTemplateReq {
 /// 更新数据 请求体
 #[derive(Default, Deserialize)]
 pub struct UpdateAppTemplateReq {
-    /// ID
-    pub id: i32,
-    /// 状态
+    /// 状态,0:停用,1:正常
+    /// Enum: [`crate::template::enums::AppTemplateStatus`]
     pub status: i8,
 }
 
 /// 更新数据状态 请求体
 #[derive(Default, Deserialize)]
 pub struct UpdateAppTemplateStatusReq {
-    /// ID
-    pub id: i32,
-    /// 状态
+    /// 状态,0:停用,1:正常
+    /// Enum: [`crate::template::enums::AppTemplateStatus`]
     pub status: i8,
 }
 

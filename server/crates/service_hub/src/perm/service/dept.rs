@@ -123,16 +123,16 @@ impl<'a> DeptService<'a> {
     }
 
     /// 更新数据
-    pub async fn update(&self, req: UpdateDeptReq) -> Result<u64, ErrorMsg> {
+    pub async fn update(&self, id: i32, req: UpdateDeptReq) -> Result<u64, ErrorMsg> {
         // TODO pids 待处理
         let model = perm_dept::ActiveModel {
-            id: Set(req.id),
+            id: Set(id),
             pid: Set(req.pid),
             // pids: Set(req.pids),
             name: Set(req.name),
             sort: Set(req.sort),
             note: Set(req.note),
-            status: Set(req.status.clone().into()),
+            status: Set(req.status),
             ..Default::default()
         };
 

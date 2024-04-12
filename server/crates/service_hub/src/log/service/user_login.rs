@@ -84,7 +84,7 @@ impl<'a> UserLoginService<'a> {
             username: Set(data.username),
             remote_addr: Set(data.remote_addr),
             user_agent: Set(data.user_agent),
-            status: Set(data.status.clone().into()),
+            status: Set(data.status),
             ..Default::default()
         };
         let result = self.user_login_dao.add(model).await.map_err(|err| {

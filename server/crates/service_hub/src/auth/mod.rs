@@ -2,6 +2,7 @@
 pub mod common;
 pub mod dao;
 pub mod dto;
+pub mod enums;
 
 mod service;
 pub use service::{login::LoginService, register::RegisterService};

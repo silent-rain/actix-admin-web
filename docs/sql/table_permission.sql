@@ -1,6 +1,19 @@
 -- 创建数据库 
 CREATE DATABASE `actix_admin_web` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
+-- 角色表
+CREATE TABLE perm_role (
+    `id` INT AUTO_INCREMENT COMMENT '角色ID',
+    `name` VARCHAR(20) UNIQUE NOT NULL COMMENT '角色名称',
+    `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
+    `note` VARCHAR(200) NULL COMMENT '备注',
+    `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:停用,1:正常',
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '角色表';
+
+
 /*
  权限相关的表
  */
@@ -26,17 +39,6 @@ CREATE TABLE perm_user (
     NIQUE KEY `uk_username` (`username`) USING BTREE
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户';
 
--- 角色表
-CREATE TABLE perm_role (
-    `id` INT AUTO_INCREMENT COMMENT '角色ID',
-    `name` VARCHAR(20) UNIQUE NOT NULL COMMENT '角色名称',
-    `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
-    `note` VARCHAR(200) NULL COMMENT '备注',
-    `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:停用,1:正常',
-    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '角色表';
 
 -- 用户角色关联表
 CREATE TABLE perm_user_role_rel (
@@ -149,7 +151,7 @@ CREATE TABLE _perm_user_avatar (
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户头像';
 
 /* 待定
- - 部门 岗位 职级
+ - 岗位 职级
  */
 
  -- 部门表

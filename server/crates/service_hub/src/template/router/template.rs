@@ -2,7 +2,10 @@
 
 use crate::template::AppTemplateController;
 
-use actix_web::{web, Scope};
+use actix_web::{
+    web::{delete, get, post, put, scope},
+    Scope,
+};
 
 /// 路由器
 pub struct AppTemplateRouter;
@@ -10,16 +13,13 @@ pub struct AppTemplateRouter;
 impl AppTemplateRouter {
     /// 注册路由
     pub fn register() -> Scope {
-        web::scope("/app-templates")
-            .route("", web::get().to(AppTemplateController::list))
-            .route("/{id}", web::get().to(AppTemplateController::info))
-            .route("", web::post().to(AppTemplateController::add))
-            .route("/update", web::put().to(AppTemplateController::update))
-            .route("/{id}/status", web::put().to(AppTemplateController::status))
-            .route("/{id}", web::delete().to(AppTemplateController::delete))
-            .route(
-                "/batch",
-                web::delete().to(AppTemplateController::batch_delete),
-            )
+        scope("/app-templates")
+            .route("", get().to(AppTemplateController::list))
+            .route("/{id}", get().to(AppTemplateController::info))
+            .route("", post().to(AppTemplateController::add))
+            .route("/{id}", put().to(AppTemplateController::update))
+            .route("/{id}/status", put().to(AppTemplateController::status))
+            .route("/batch", delete().to(AppTemplateController::batch_delete))
+            .route("/{id}", delete().to(AppTemplateController::delete))
     }
 }

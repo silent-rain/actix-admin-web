@@ -66,10 +66,11 @@ impl DeptController {
     /// 更新部门
     pub async fn update(
         provider: Data<AInjectProvider>,
+        id: Path<i32>,
         data: Json<UpdateDeptReq>,
     ) -> impl Responder {
         let dept_service: DeptService = provider.provide();
-        let resp = dept_service.update(data.into_inner()).await;
+        let resp = dept_service.update(*id, data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -79,12 +80,11 @@ impl DeptController {
     /// 更新部门状态
     pub async fn status(
         provider: Data<AInjectProvider>,
+        id: Path<i32>,
         data: Json<UpdateDeptStatusReq>,
     ) -> impl Responder {
         let dept_service: DeptService = provider.provide();
-        let resp = dept_service
-            .status(data.id, data.status.clone().into())
-            .await;
+        let resp = dept_service.status(*id, data.status).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

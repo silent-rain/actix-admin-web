@@ -90,13 +90,13 @@ impl<'a> RoleService<'a> {
     }
 
     /// 更新角色
-    pub async fn update(&self, req: UpdateRoleReq) -> Result<u64, ErrorMsg> {
+    pub async fn update(&self, id: i32, req: UpdateRoleReq) -> Result<u64, ErrorMsg> {
         let model = perm_role::ActiveModel {
-            id: Set(req.id),
+            id: Set(id),
             name: Set(req.name),
             sort: Set(req.sort),
             note: Set(req.note),
-            status: Set(req.status.clone().into()),
+            status: Set(req.status),
             ..Default::default()
         };
 

@@ -15,8 +15,8 @@ impl DeptRouter {
             .route("/tree", web::get().to(DeptController::tree))
             .route("/{id}", web::get().to(DeptController::info))
             .route("", web::post().to(DeptController::add))
-            .route("/update", web::put().to(DeptController::update))
-            .route("/status", web::put().to(DeptController::status))
+            .route("/{id}/update", web::put().to(DeptController::update))
+            .route("/{id}/status", web::put().to(DeptController::status))
             .route("/{id}", web::delete().to(DeptController::delete))
     }
 }

@@ -54,8 +54,8 @@ impl Pool {
             .await
             .map_err(|err| Error::DbConnectionAcquire(err.to_string()))?;
 
-        // 设置 Time Zone
-        Self::set_time_zone(&db).await?;
+        // 设置 Time Zone, 不支持SQLite3
+        // Self::set_time_zone(&db).await?;
 
         Ok(db)
     }
@@ -81,6 +81,7 @@ impl Pool {
     }
 
     /// 设置 Time Zone
+    #[allow(unused)]
     async fn set_time_zone(db: &DatabaseConnection) -> Result<(), Error> {
         let stmt = sea_orm::Statement::from_string(
             db.get_database_backend(),
@@ -110,7 +111,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_connect() {
-        let db_url = "sqlite://../../data.dat?mode=rwc";
+        let db_url = "sqlite://./data.dat?mode=rwc";
         let options = DbOptions::default();
         let db = Pool::connect(db_url.to_owned(), options).await.unwrap();
         let _ = db.close().await;

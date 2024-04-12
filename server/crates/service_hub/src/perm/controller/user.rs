@@ -71,10 +71,11 @@ impl UserController {
     /// 更新用户
     pub async fn update(
         provider: Data<AInjectProvider>,
+        id: Path<i32>,
         data: Json<UpdateUserReq>,
     ) -> impl Responder {
         let user_service: UserService = provider.provide();
-        let resp = user_service.update(data.into_inner()).await;
+        let resp = user_service.update(*id, data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -84,12 +85,11 @@ impl UserController {
     /// 更新用户状态
     pub async fn status(
         provider: Data<AInjectProvider>,
+        id: Path<i32>,
         data: Json<UpdateUserStatusReq>,
     ) -> impl Responder {
         let user_service: UserService = provider.provide();
-        let resp = user_service
-            .status(data.id, data.status.clone().into())
-            .await;
+        let resp = user_service.status(*id, data.status).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
