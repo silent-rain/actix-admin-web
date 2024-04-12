@@ -58,12 +58,11 @@ impl UserLoginController {
     /// 更新登录日志状态
     pub async fn status(
         provider: Data<AInjectProvider>,
-        req: Json<UpdateUserLoginStatusReq>,
+        id: Path<i32>,
+        data: Json<UpdateUserLoginStatusReq>,
     ) -> impl Responder {
         let user_login_service: UserLoginService = provider.provide();
-        let resp = user_login_service
-            .status(req.id, req.status.clone().into())
-            .await;
+        let resp = user_login_service.status(*id, data.status).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

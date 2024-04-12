@@ -1,7 +1,8 @@
 //! 用户管理
 use crate::perm::{
     dao::{user::UserDao, user_role_rel::UserRoleRelDao},
-    dto::user::{AddUserReq, GetUserListReq, ProfileRsp, UpdateUserReq}, enums::UserStatus,
+    dto::user::{AddUserReq, GetUserListReq, ProfileRsp, UpdateUserReq},
+    enums::UserStatus,
 };
 
 use code::{Error, ErrorMsg};
@@ -69,7 +70,7 @@ impl<'a> UserService<'a> {
         let result = ProfileRsp {
             id,
             username: user.username,
-            gender: user.gender.into(),
+            gender: user.gender,
             age: user.age,
             birthday: user.birthday,
             avatar: user.avatar,
@@ -193,7 +194,7 @@ impl<'a> UserService<'a> {
         let model = perm_user::ActiveModel {
             username: Set(data.username),
             real_name: Set(data.real_name),
-            gender: Set(data.gender.clone().into()),
+            gender: Set(data.gender),
             age: Set(Some(data.age)),
             birthday: Set(data.birthday),
             avatar: Set(data.avatar),
@@ -216,27 +217,27 @@ impl<'a> UserService<'a> {
     }
 
     /// 后台更新用户及对应用户的角色
-    pub async fn update(&self, data: UpdateUserReq) -> Result<(), ErrorMsg> {
+    pub async fn update(&self, id: i32, data: UpdateUserReq) -> Result<(), ErrorMsg> {
         // 获取原角色列表
-        let (user_role_rels, _) = self
-            .user_role_rel_dao
-            .list_by_user_id(data.id)
-            .await
-            .map_err(|err| {
-                error!("查询用户与角色关系列表失败, err: {:#?}", err);
-                Error::DbQueryError
-                    .into_msg()
-                    .with_msg("查询用户与角色关系列表失败")
-            })?;
+        let (user_role_rels, _) =
+            self.user_role_rel_dao
+                .list_by_user_id(id)
+                .await
+                .map_err(|err| {
+                    error!("查询用户与角色关系列表失败, err: {:#?}", err);
+                    Error::DbQueryError
+                        .into_msg()
+                        .with_msg("查询用户与角色关系列表失败")
+                })?;
 
         // 获取角色ID的差异列表
         let (add_role_ids, del_role_ids) = self.diff_role_ids(data.role_ids, user_role_rels);
 
         let model = perm_user::ActiveModel {
-            id: Set(data.id),
+            id: Set(id),
             username: Set(data.username),
             real_name: Set(data.real_name),
-            gender: Set(data.gender.clone().into()),
+            gender: Set(data.gender),
             age: Set(Some(data.age)),
             birthday: Set(data.birthday),
             avatar: Set(data.avatar),
@@ -245,7 +246,7 @@ impl<'a> UserService<'a> {
             password: Set(data.password),
             intro: Set(data.intro),
             note: Set(data.note),
-            status: Set(data.status.clone().into()),
+            status: Set(data.status),
             ..Default::default()
         };
         self.user_dao

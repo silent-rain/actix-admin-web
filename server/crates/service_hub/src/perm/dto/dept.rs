@@ -1,5 +1,4 @@
 //! 部门管理
-use crate::perm::enums::DeptStatus;
 
 use actix_validator::Validate;
 use entity::perm_dept;
@@ -40,8 +39,6 @@ pub struct AddDeptReq {
 /// 更新数据
 #[derive(Default, Clone, Serialize, Deserialize, Validate)]
 pub struct UpdateDeptReq {
-    /// 部门ID
-    pub id: i32,
     /// 上级部门ID
     pub pid: Option<i32>,
     /// 所有上级部门ID, 用逗号分开
@@ -53,16 +50,16 @@ pub struct UpdateDeptReq {
     /// 备注
     pub note: Option<String>,
     /// 状态,0:停用,1:正常
-    pub status: DeptStatus,
+    /// Enum: [`crate::perm::enums::DeptStatus`]
+    pub status: i8,
 }
 
 /// 更新数据状态
 #[derive(Default, Clone, Serialize, Deserialize, Validate)]
 pub struct UpdateDeptStatusReq {
-    /// ID
-    pub id: i32,
     /// 状态,0:停用,1:正常
-    pub status: DeptStatus,
+    /// Enum: [`crate::perm::enums::DeptStatus`]
+    pub status: i8,
 }
 
 /// 部门树列表

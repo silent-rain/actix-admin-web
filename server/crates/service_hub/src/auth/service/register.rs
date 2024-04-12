@@ -1,9 +1,6 @@
 //! 注册
 use crate::{
-    auth::{
-        common::captcha::check_captcha,
-        dto::register::{RegisterReq, RegisterType},
-    },
+    auth::{common::captcha::check_captcha, dto::register::RegisterReq, enums::RegisterType},
     perm::{enums::UserStatus, UserDao},
     system::CaptchaDao,
 };

@@ -1,7 +1,5 @@
 //! 模板管理
 
-use crate::template::enums::AppTemplateStatus;
-
 use actix_validator::Validate;
 
 use serde::Deserialize;
@@ -26,8 +24,9 @@ pub struct GetAppTemplateListReq {
 pub struct AddAppTemplateReq {
     /// 用户ID
     pub user_id: i32,
-    /// 状态
-    pub status: AppTemplateStatus,
+    /// 状态,0:停用,1:正常
+    /// Enum: [`crate::template::enums::AppTemplateStatus`]
+    pub status: i8,
 }
 
 /// 批量添加数据结点
@@ -35,8 +34,9 @@ pub struct AddAppTemplateReq {
 pub struct BatchAddAppTemplateNode {
     /// 用户ID
     pub user_id: i32,
-    /// 状态
-    pub status: AppTemplateStatus,
+    /// 状态,0:停用,1:正常
+    /// Enum: [`crate::template::enums::AppTemplateStatus`]
+    pub status: i8,
 }
 
 /// 批量添加数据 请求体
@@ -49,19 +49,17 @@ pub struct BatchAddAppTemplateReq {
 /// 更新数据 请求体
 #[derive(Default, Deserialize)]
 pub struct UpdateAppTemplateReq {
-    /// ID
-    pub id: i32,
-    /// 状态
-    pub status: AppTemplateStatus,
+    /// 状态,0:停用,1:正常
+    /// Enum: [`crate::template::enums::AppTemplateStatus`]
+    pub status: i8,
 }
 
 /// 更新数据状态 请求体
 #[derive(Default, Deserialize)]
 pub struct UpdateAppTemplateStatusReq {
-    /// ID
-    pub id: i32,
-    /// 状态
-    pub status: AppTemplateStatus,
+    /// 状态,0:停用,1:正常
+    /// Enum: [`crate::template::enums::AppTemplateStatus`]
+    pub status: i8,
 }
 
 /// 批量删除数据 请求体

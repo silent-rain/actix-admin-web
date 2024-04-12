@@ -13,6 +13,6 @@ impl UserLoginRouter {
         web::scope("/user-logins")
             .route("", web::get().to(UserLoginController::list))
             .route("/{id}", web::get().to(UserLoginController::info))
-            .route("/status", web::put().to(UserLoginController::status))
+            .route("/{id}/status", web::put().to(UserLoginController::status))
     }
 }
