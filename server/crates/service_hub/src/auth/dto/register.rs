@@ -4,20 +4,21 @@ use std::str::FromStr;
 
 use actix_validator::Validate;
 
-use regex::Regex;
 use serde::{Deserialize, Serialize};
-use validator::ValidationError;
 
-/// 注册类型
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+/// 注册用户类型
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum RegisterType {
+    /// 手机号码
     #[serde(rename = "phone")]
     Phone,
+    /// 邮箱
     #[serde(rename = "email")]
     Email,
 }
 
 impl Default for RegisterType {
+    /// 默认注册为手机号
     fn default() -> Self {
         Self::Phone
     }
@@ -37,71 +38,39 @@ impl FromStr for RegisterType {
 }
 
 /// 注册用户
-#[derive(Debug, PartialEq, Serialize, Deserialize, Validate)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
 pub struct RegisterReq {
+    /// 手机号码
+    // #[validate(custom(function = "validate_phone"))]
     pub phone: Option<String>,
+    /// 邮箱
+    // #[validate(email)]
     pub email: Option<String>,
+    /// 注册用户类型
     pub register_type: RegisterType,
-    pub username: String,
-    pub gender: i8,
-    pub age: i32,
-    pub birthday: Option<String>,
-    pub password: String,
-    pub avatar: Option<String>,
-    #[serde(default)]
-    pub captcha_id: String,
-    #[serde(default)]
-    pub captcha: String,
-}
-
-/// 注册手机用户
-#[derive(Serialize, Deserialize, Validate)]
-pub struct PhoneRegisterReq {
-    #[validate(custom(function = "validate_phone"))]
-    pub phone: String,
+    /// 用户名称
     #[validate(length(min = 5, max = 20, message = "用户名必须在5到20个字符之间"))]
     pub username: String,
+    /// 真实姓名
     pub real_name: Option<String>,
-    #[validate(length(min = 6, message = "密码至少需要6个字符"))]
-    pub password: String,
-    #[validate(range(min = 1, max = 3, message = "性别;1:男,2:女,3:保密"))]
+    /// 性别, 0:男,1:女,2:保密
+    #[validate(range(min = 0, max = 3, message = "性别, 0:男,1:女,2:保密"))]
     pub gender: i8,
+    /// 年龄
     #[validate(range(min = 18, max = 100, message = "年龄必须在18到100岁之间"))]
     pub age: Option<i32>,
+    /// 出生日期
     pub birthday: Option<String>,
-    pub avatar: Option<String>,
-    pub captcha_id: String,
-    pub captcha: String,
-}
-
-// 自定义电话号码验证函数
-fn validate_phone(phone: &str) -> Result<(), ValidationError> {
-    let phone_regex =
-        Regex::new(r"^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$")
-            .map_err(|_err| ValidationError::new("invalid phone"))?;
-    if !phone_regex.is_match(phone) {
-        return Err(ValidationError::new("invalid phone"));
-    }
-    Ok(())
-}
-
-/// 注册邮件用户
-#[derive(Serialize, Deserialize, Validate)]
-pub struct EmailRegisterReq {
-    #[validate(email)]
-    pub email: String,
-    #[validate(length(min = 5, max = 20, message = "用户名必须在5到20个字符之间"))]
-    pub username: String,
-    pub real_name: Option<String>,
+    /// 密码
     #[validate(length(min = 6, message = "密码至少需要6个字符"))]
     pub password: String,
-    #[validate(range(min = 1, max = 3, message = "性别;1:男,2:女,3:保密"))]
-    pub gender: i8,
-    #[validate(range(min = 18, max = 100, message = "年龄必须在18到100岁之间"))]
-    pub age: Option<i32>,
-    pub birthday: Option<String>,
+    /// 头像URL
     pub avatar: Option<String>,
+    /// 验证码ID
+    #[serde(default)]
     pub captcha_id: String,
+    /// 验证码
+    #[serde(default)]
     pub captcha: String,
 }
 
@@ -119,8 +88,9 @@ mod tests {
             email: Some("email".to_owned()),
             register_type: RegisterType::Phone,
             username: "username".to_owned(),
+            real_name: Some("real_name".to_owned()),
             gender: 11,
-            age: 12,
+            age: Some(12),
             birthday: Some("birthday".to_owned()),
             password: "password".to_owned(),
             avatar: Some("avatar".to_owned()),
@@ -132,6 +102,7 @@ mod tests {
             "email": "email",
             "register_type": "phone",
             "username": "username",
+            "real_name": "real_name",
             "gender": 11,
             "age": 12,
             "birthday": "birthday",
@@ -152,8 +123,9 @@ mod tests {
             email: None,
             register_type: RegisterType::Phone,
             username: "username".to_owned(),
-            gender: 11,
-            age: 12,
+            real_name: Some("real_name".to_owned()),
+            gender: 1,
+            age: Some(12),
             birthday: None,
             password: "password".to_owned(),
             avatar: None,
@@ -165,6 +137,7 @@ mod tests {
             "email": null,
             "register_type": "phone",
             "username": "username",
+            "real_name": "real_name",
             "gender": 11,
             "age": 12,
             "birthday": null,
@@ -185,8 +158,9 @@ mod tests {
             email: None,
             register_type: RegisterType::Phone,
             username: "username".to_owned(),
+            real_name: Some("real_name".to_owned()),
             gender: 11,
-            age: 12,
+            age: Some(12),
             birthday: None,
             password: "password".to_owned(),
             avatar: None,
@@ -198,6 +172,7 @@ mod tests {
             "email": null,
             "register_type": "phone",
             "username": "username",
+            "real_name": "real_name",
             "gender": 11,
             "age": 12,
             "birthday": null,

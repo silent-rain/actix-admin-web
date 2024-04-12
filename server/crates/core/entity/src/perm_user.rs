@@ -27,7 +27,7 @@ pub struct Model {
     pub avatar: Option<String>,
     /// 手机号码
     pub phone: Option<String>,
-    /// 邮件
+    /// 邮箱
     pub email: Option<String>,
     /// 介绍
     pub intro: Option<String>,
@@ -39,10 +39,6 @@ pub struct Model {
     pub status: i8,
     /// 部门ID
     pub dept_id: Option<i32>,
-    /// 创建者
-    pub creator: Option<i32>,
-    /// 更新者
-    pub updater: Option<i32>,
     /// 创建时间
     pub created_at: DateTimeLocal,
     /// 更新时间

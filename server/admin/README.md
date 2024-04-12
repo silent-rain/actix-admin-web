@@ -28,6 +28,14 @@ cd server/admin
 cargo build -p admin
 ```
 
+## 开发文档
+
+```shell
+cd server/admin
+
+cargo doc -p admin
+```
+
 ## 服务
 
 - [前端服务](http://127.0.0.1:8000/)

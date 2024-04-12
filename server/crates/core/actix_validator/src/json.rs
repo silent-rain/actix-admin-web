@@ -7,6 +7,7 @@ use response::Response;
 use actix_web::{dev::Payload, web, FromRequest, HttpRequest, HttpResponse};
 use futures::future::LocalBoxFuture;
 use serde::de::DeserializeOwned;
+use tracing::error;
 use validator::Validate;
 
 #[derive(Debug)]
@@ -64,7 +65,12 @@ where
 
             // 验证 body 数据
             inner_body.validate().map_err(|e| {
-                Response::code(code::Error::InvalidParameterError(e.to_owned().to_string()))
+                error!("参数验证失败, err: {e}");
+                Response::err(
+                    code::Error::InvalidParameterError
+                        .into_msg()
+                        .with_msg("参数验证失败"),
+                )
             })?;
             Ok(Json(inner_body))
         })

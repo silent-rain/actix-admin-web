@@ -69,7 +69,7 @@ impl<'a> UserService<'a> {
         let result = ProfileRsp {
             id,
             username: user.username,
-            gender: user.gender,
+            gender: user.gender.into(),
             age: user.age,
             birthday: user.birthday,
             avatar: user.avatar,
@@ -154,7 +154,7 @@ impl<'a> UserService<'a> {
 
 impl<'a> UserService<'a> {
     /// 后台添加用户及对应用户的角色
-    pub async fn add(&self, user_id: i32, data: AddUserReq) -> Result<perm_user::Model, ErrorMsg> {
+    pub async fn add(&self, data: AddUserReq) -> Result<perm_user::Model, ErrorMsg> {
         // 检测是否已注册用户
         if let Some(phone) = data.phone.clone() {
             let user = self.user_dao.info_by_phone(phone).await.map_err(|err| {
@@ -171,7 +171,7 @@ impl<'a> UserService<'a> {
             }
         }
 
-        // 检测是否已注册邮件
+        // 检测是否已注册邮箱
         if let Some(email) = data.email.clone() {
             let user = self.user_dao.info_by_email(email).await.map_err(|err| {
                 error!("查询用户信息失败, err: {:#?}", err);
@@ -193,7 +193,7 @@ impl<'a> UserService<'a> {
         let model = perm_user::ActiveModel {
             username: Set(data.username),
             real_name: Set(data.real_name),
-            gender: Set(data.gender),
+            gender: Set(data.gender.clone().into()),
             age: Set(Some(data.age)),
             birthday: Set(data.birthday),
             avatar: Set(data.avatar),
@@ -201,7 +201,6 @@ impl<'a> UserService<'a> {
             email: Set(data.email),
             password: Set(password),
             status: Set(1),
-            creator: Set(Some(user_id)),
             ..Default::default()
         };
 
@@ -217,7 +216,7 @@ impl<'a> UserService<'a> {
     }
 
     /// 后台更新用户及对应用户的角色
-    pub async fn update(&self, user_id: i32, data: UpdateUserReq) -> Result<(), ErrorMsg> {
+    pub async fn update(&self, data: UpdateUserReq) -> Result<(), ErrorMsg> {
         // 获取原角色列表
         let (user_role_rels, _) = self
             .user_role_rel_dao
@@ -237,7 +236,7 @@ impl<'a> UserService<'a> {
             id: Set(data.id),
             username: Set(data.username),
             real_name: Set(data.real_name),
-            gender: Set(data.gender),
+            gender: Set(data.gender.clone().into()),
             age: Set(Some(data.age)),
             birthday: Set(data.birthday),
             avatar: Set(data.avatar),
@@ -246,8 +245,7 @@ impl<'a> UserService<'a> {
             password: Set(data.password),
             intro: Set(data.intro),
             note: Set(data.note),
-            status: Set(data.status),
-            updater: Set(Some(user_id)),
+            status: Set(data.status.clone().into()),
             ..Default::default()
         };
         self.user_dao

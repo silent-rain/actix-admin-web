@@ -1,7 +1,7 @@
 //! 部门管理
 use crate::perm::{
     dao::dept::DeptDao,
-    dto::dept::{AddDeptReq, GetDeptListReq, UpdateDeptReq},
+    dto::dept::{AddDeptReq, DeptTree, GetDeptListReq, UpdateDeptReq},
     enums::DeptStatus,
 };
 
@@ -24,7 +24,6 @@ impl<'a> DeptService<'a> {
         &self,
         req: GetDeptListReq,
     ) -> Result<(Vec<perm_dept::Model>, u64), ErrorMsg> {
-        // TODO 返回树结构or新接口
         // 获取所有数据
         if let Some(true) = req.all {
             return self.dept_dao.all().await.map_err(|err| {
@@ -39,6 +38,36 @@ impl<'a> DeptService<'a> {
         })?;
 
         Ok((results, total))
+    }
+
+    /// 获取树列表数据
+    pub async fn tree(&self) -> Result<Vec<DeptTree>, ErrorMsg> {
+        let (results, _total) = self.dept_dao.all().await.map_err(|err| {
+            error!("查询部门列表失败, err: {:#?}", err);
+            Error::DbQueryError.into_msg().with_msg("查询部门列表失败")
+        })?;
+
+        // 将列表转换为树列表
+        let results = Self::dept_list_to_tree(&results, None);
+        Ok(results)
+    }
+
+    /// 将列表转换为树列表
+    fn dept_list_to_tree(depts: &[perm_dept::Model], pid: Option<i32>) -> Vec<DeptTree> {
+        let mut trees = Vec::new();
+        for dept in depts {
+            // 根节点或子节点
+            if (dept.pid.is_none() && pid.is_none())
+                || (dept.pid.is_some() && pid.is_some() && dept.pid == pid)
+            {
+                trees.push(DeptTree::new(dept));
+            }
+        }
+        for item in trees.iter_mut() {
+            let children = Self::dept_list_to_tree(depts, Some(item.dept.id));
+            item.children.extend(children)
+        }
+        trees
     }
 
     /// 获取详情数据
@@ -60,7 +89,7 @@ impl<'a> DeptService<'a> {
     }
 
     /// 添加数据
-    pub async fn add(&self, user_id: i32, req: AddDeptReq) -> Result<perm_dept::Model, ErrorMsg> {
+    pub async fn add(&self, req: AddDeptReq) -> Result<perm_dept::Model, ErrorMsg> {
         // 查询部门是否存在
         let dept = self
             .dept_dao
@@ -75,7 +104,7 @@ impl<'a> DeptService<'a> {
             return Err(Error::DbDataExistError.into_msg().with_msg("部门已存在"));
         }
 
-        // TODO pid 待处理
+        // TODO pids 待处理
         let model = perm_dept::ActiveModel {
             pid: Set(req.pid),
             // pids: Set(req.pids),
@@ -83,7 +112,6 @@ impl<'a> DeptService<'a> {
             sort: Set(req.sort),
             note: Set(req.note),
             status: Set(DeptStatus::Enabled as i8),
-            creator: Set(Some(user_id)),
             ..Default::default()
         };
         let result = self.dept_dao.add(model).await.map_err(|err| {
@@ -95,8 +123,8 @@ impl<'a> DeptService<'a> {
     }
 
     /// 更新数据
-    pub async fn update(&self, user_id: i32, req: UpdateDeptReq) -> Result<u64, ErrorMsg> {
-        // TODO pid 待处理
+    pub async fn update(&self, req: UpdateDeptReq) -> Result<u64, ErrorMsg> {
+        // TODO pids 待处理
         let model = perm_dept::ActiveModel {
             id: Set(req.id),
             pid: Set(req.pid),
@@ -104,8 +132,7 @@ impl<'a> DeptService<'a> {
             name: Set(req.name),
             sort: Set(req.sort),
             note: Set(req.note),
-            status: Set(req.status),
-            updater: Set(Some(user_id)),
+            status: Set(req.status.clone().into()),
             ..Default::default()
         };
 
@@ -135,5 +162,46 @@ impl<'a> DeptService<'a> {
         })?;
 
         Ok(result)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_dept_list_to_tree() {
+        let depts = vec![
+            perm_dept::Model {
+                id: 1,
+                pid: None,
+                name: "name1".to_string(),
+                status: 1,
+                ..Default::default()
+            },
+            perm_dept::Model {
+                id: 2,
+                pid: None,
+                name: "name2".to_string(),
+                status: 1,
+                ..Default::default()
+            },
+            perm_dept::Model {
+                id: 3,
+                pid: Some(2),
+                name: "name3".to_string(),
+                status: 1,
+                ..Default::default()
+            },
+            perm_dept::Model {
+                id: 4,
+                pid: Some(3),
+                name: "name4".to_string(),
+                status: 1,
+                ..Default::default()
+            },
+        ];
+        let results = DeptService::dept_list_to_tree(&depts, None);
+        assert!(!results.is_empty());
     }
 }

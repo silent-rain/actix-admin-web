@@ -1,14 +1,14 @@
 //! 注册
 use crate::{
     auth::common::captcha::check_captcha,
-    auth::dto::register::{EmailRegisterReq, PhoneRegisterReq, RegisterReq, RegisterType},
+    auth::dto::register::{RegisterReq, RegisterType},
     perm::UserDao,
     system::CaptchaDao,
 };
 
 use code::{Error, ErrorMsg};
 use entity::perm_user;
-use utils::{crypto::sha2_256, json::struct_to_struct};
+use utils::crypto::sha2_256;
 
 use nject::injectable;
 use sea_orm::Set;
@@ -25,20 +25,23 @@ impl<'a> RegisterService<'a> {
     /// 根据不同的注册类型进行注册用户
     pub async fn register(&self, data: RegisterReq) -> Result<perm_user::Model, ErrorMsg> {
         match data.register_type {
-            RegisterType::Phone => {
-                let data: PhoneRegisterReq = struct_to_struct(&data)?;
-                self.register_phone(data).await
-            }
-            RegisterType::Email => {
-                let data: EmailRegisterReq = struct_to_struct(&data)?;
-                self.register_email(data).await
-            }
+            RegisterType::Phone => self.register_phone(data).await,
+            RegisterType::Email => self.register_email(data).await,
         }
     }
 
     /// 注册手机用户
-    async fn register_phone(&self, data: PhoneRegisterReq) -> Result<perm_user::Model, ErrorMsg> {
-        let mut data = data;
+    async fn register_phone(&self, data: RegisterReq) -> Result<perm_user::Model, ErrorMsg> {
+        let phone = match data.phone.clone() {
+            Some(v) => v,
+            None => {
+                return Err(code::Error::InvalidParameterError
+                    .into_msg()
+                    .with_msg("请求参数错误, phone 不能为空"))
+            }
+        };
+
+        let mut data = data.clone();
 
         // 检测验证码
         check_captcha(
@@ -51,14 +54,10 @@ impl<'a> RegisterService<'a> {
         // TODO 检测手机验证码, 待接入第三方服务
 
         // 检测是否已注册用户
-        let user = self
-            .user_dao
-            .info_by_phone(data.phone.clone())
-            .await
-            .map_err(|err| {
-                error!("查询用户信息失败, err: {:#?}", err);
-                Error::DbQueryError.into_msg().with_msg("查询用户信息失败")
-            })?;
+        let user = self.user_dao.info_by_phone(phone).await.map_err(|err| {
+            error!("查询用户信息失败, err: {:#?}", err);
+            Error::DbQueryError.into_msg().with_msg("查询用户信息失败")
+        })?;
         if user.is_some() {
             {
                 error!("该手机号码已注册");
@@ -75,9 +74,18 @@ impl<'a> RegisterService<'a> {
         self.add_phone_user(data).await
     }
 
-    /// 注册邮件用户
-    async fn register_email(&self, data: EmailRegisterReq) -> Result<perm_user::Model, ErrorMsg> {
-        let mut data = data;
+    /// 注册邮箱用户
+    async fn register_email(&self, data: RegisterReq) -> Result<perm_user::Model, ErrorMsg> {
+        let email = match data.email.clone() {
+            Some(v) => v,
+            None => {
+                return Err(code::Error::DbDataExistError
+                    .into_msg()
+                    .with_msg("请求参数错误, email 不能为空"))
+            }
+        };
+
+        let mut data = data.clone();
 
         // 检测验证码
         check_captcha(
@@ -87,15 +95,11 @@ impl<'a> RegisterService<'a> {
         )
         .await?;
 
-        // 检测是否已注册邮件
-        let user = self
-            .user_dao
-            .info_by_email(data.email.clone())
-            .await
-            .map_err(|err| {
-                error!("查询用户信息失败, err: {:#?}", err);
-                Error::DbQueryError.into_msg().with_msg("查询用户信息失败")
-            })?;
+        // 检测是否已注册邮箱
+        let user = self.user_dao.info_by_email(email).await.map_err(|err| {
+            error!("查询用户信息失败, err: {:#?}", err);
+            Error::DbQueryError.into_msg().with_msg("查询用户信息失败")
+        })?;
         if user.is_some() {
             {
                 error!("该邮箱已注册");
@@ -117,7 +121,7 @@ impl<'a> RegisterService<'a> {
     }
 
     /// 添加手机用户
-    async fn add_phone_user(&self, data: PhoneRegisterReq) -> Result<perm_user::Model, ErrorMsg> {
+    async fn add_phone_user(&self, data: RegisterReq) -> Result<perm_user::Model, ErrorMsg> {
         let data = perm_user::ActiveModel {
             username: Set(data.username),
             real_name: Set(data.real_name),
@@ -125,7 +129,7 @@ impl<'a> RegisterService<'a> {
             age: Set(data.age),
             birthday: Set(data.birthday),
             avatar: Set(data.avatar),
-            phone: Set(Some(data.phone)),
+            phone: Set(data.phone),
             password: Set(data.password),
             status: Set(1),
             ..Default::default()
@@ -139,7 +143,7 @@ impl<'a> RegisterService<'a> {
     }
 
     /// 添加邮箱用户
-    async fn add_email_user(&self, data: EmailRegisterReq) -> Result<perm_user::Model, ErrorMsg> {
+    async fn add_email_user(&self, data: RegisterReq) -> Result<perm_user::Model, ErrorMsg> {
         let data = perm_user::ActiveModel {
             username: Set(data.username),
             real_name: Set(data.real_name),
@@ -147,7 +151,7 @@ impl<'a> RegisterService<'a> {
             age: Set(data.age),
             birthday: Set(data.birthday),
             avatar: Set(data.avatar),
-            email: Set(Some(data.email)),
+            email: Set(data.email),
             password: Set(data.password),
             status: Set(1),
             ..Default::default()

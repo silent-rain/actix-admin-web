@@ -1,5 +1,6 @@
 //! 日志管理
 pub mod dto;
+pub mod enums;
 
 mod dao;
 pub use dao::{system::SystemDao, user_login::UserLoginDao};

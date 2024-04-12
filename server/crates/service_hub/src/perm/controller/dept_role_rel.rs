@@ -11,7 +11,6 @@ use crate::{
 };
 
 use actix_validator::{Json, Query};
-use context::Context;
 use response::Response;
 
 use actix_web::{web::Data, Responder};
@@ -35,14 +34,12 @@ impl DeptRoleRelController {
 
     /// 批量创建部门角色关系
     pub async fn batch_add(
-        ctx: Context,
         provider: Data<AInjectProvider>,
         data: Json<BatchAddDeptRoleRelReq>,
     ) -> impl Responder {
-        let user_id = ctx.get_user_id();
         let data = data.into_inner();
         let dept_role_rel_service: DeptRoleRelService = provider.provide();
-        let resp = dept_role_rel_service.batch_add(user_id, data).await;
+        let resp = dept_role_rel_service.batch_add(data).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

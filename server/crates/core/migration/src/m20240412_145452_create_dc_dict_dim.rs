@@ -1,6 +1,6 @@
-//! 角色表
-//! User Entity: [`entity::prelude::PermRole`]
-use entity::{perm_role::Column, prelude::PermRole};
+//! 字典维度表
+//! User Entity: [`entity::prelude::DcDictDim`]
+use entity::{dc_dict_dim::Column, prelude::DcDictDim};
 
 use sea_orm_migration::{
     async_trait,
@@ -20,7 +20,7 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(PermRole)
+                    .table(DcDictDim)
                     .if_not_exists()
                     .col(
                         ColumnDef::new(Column::Id)
@@ -28,15 +28,23 @@ impl MigrationTrait for Migration {
                             .not_null()
                             .auto_increment()
                             .primary_key()
-                            .comment("角色ID"),
+                            .comment("字典ID"),
                     )
                     .col(
                         ColumnDef::new(Column::Name)
                             .string()
-                            .string_len(20)
+                            .string_len(64)
                             .not_null()
                             .unique_key()
-                            .comment("角色名称"),
+                            .comment("字典名称"),
+                    )
+                    .col(
+                        ColumnDef::new(Column::Name)
+                            .string()
+                            .string_len(64)
+                            .not_null()
+                            .unique_key()
+                            .comment("字典编码"),
                     )
                     .col(
                         ColumnDef::new(Column::Sort)
@@ -80,7 +88,7 @@ impl MigrationTrait for Migration {
         // Replace the sample below with your own migration scripts
 
         manager
-            .drop_table(Table::drop().table(PermRole).to_owned())
+            .drop_table(Table::drop().table(DcDictDim).to_owned())
             .await
     }
 }

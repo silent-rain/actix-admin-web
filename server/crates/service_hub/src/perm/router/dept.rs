@@ -12,6 +12,7 @@ impl DeptRouter {
     pub fn admin_register() -> Scope {
         web::scope("/depts")
             .route("", web::get().to(DeptController::list))
+            .route("/tree", web::get().to(DeptController::tree))
             .route("/{id}", web::get().to(DeptController::info))
             .route("", web::post().to(DeptController::add))
             .route("/update", web::put().to(DeptController::update))

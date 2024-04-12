@@ -1,6 +1,6 @@
-//! 角色表
-//! User Entity: [`entity::prelude::PermRole`]
-use entity::{perm_role::Column, prelude::PermRole};
+//! 全局配置表
+//! User Entity: [`entity::prelude::SysConfig`]
+use entity::{prelude::SysConfig, sys_config::Column};
 
 use sea_orm_migration::{
     async_trait,
@@ -20,7 +20,7 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(PermRole)
+                    .table(SysConfig)
                     .if_not_exists()
                     .col(
                         ColumnDef::new(Column::Id)
@@ -28,15 +28,35 @@ impl MigrationTrait for Migration {
                             .not_null()
                             .auto_increment()
                             .primary_key()
-                            .comment("角色ID"),
+                            .comment("配置ID"),
+                    )
+                    .col(
+                        ColumnDef::new(Column::Pid)
+                            .integer()
+                            .null()
+                            .comment("父节点ID"),
                     )
                     .col(
                         ColumnDef::new(Column::Name)
                             .string()
-                            .string_len(20)
+                            .string_len(64)
                             .not_null()
                             .unique_key()
-                            .comment("角色名称"),
+                            .comment("配置名称"),
+                    )
+                    .col(
+                        ColumnDef::new(Column::Code)
+                            .string()
+                            .string_len(64)
+                            .not_null()
+                            .unique_key()
+                            .comment("配置编码(英文)"),
+                    )
+                    .col(
+                        ColumnDef::new(Column::Value)
+                            .text()
+                            .null()
+                            .comment("配置值"),
                     )
                     .col(
                         ColumnDef::new(Column::Sort)
@@ -46,11 +66,11 @@ impl MigrationTrait for Migration {
                             .comment("排序"),
                     )
                     .col(
-                        ColumnDef::new(Column::Note)
+                        ColumnDef::new(Column::Desc)
                             .string()
                             .string_len(200)
                             .null()
-                            .comment("备注"),
+                            .comment("配置描述"),
                     )
                     .col(
                         ColumnDef::new(Column::Status)
@@ -80,7 +100,7 @@ impl MigrationTrait for Migration {
         // Replace the sample below with your own migration scripts
 
         manager
-            .drop_table(Table::drop().table(PermRole).to_owned())
+            .drop_table(Table::drop().table(SysConfig).to_owned())
             .await
     }
 }

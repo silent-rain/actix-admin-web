@@ -1,4 +1,4 @@
-//! 接口请求与响应日志表
+//! API操作日志表
 
 use sea_orm::{
     prelude::DateTimeLocal, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey,
@@ -6,9 +6,9 @@ use sea_orm::{
 };
 use serde::{Deserialize, Serialize};
 
-/// 接口请求与响应日志表
+/// API操作日志表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "log_request_response")]
+#[sea_orm(table_name = "log_api_operation")]
 pub struct Model {
     /// 自增ID
     #[sea_orm(primary_key)]
@@ -24,7 +24,7 @@ pub struct Model {
     /// 请求方法
     pub method: String,
     /// 请求地址路径
-    pub path: String,
+    pub url: String,
     /// 请求参数
     pub query: Option<String>,
     /// 请求体/响应体

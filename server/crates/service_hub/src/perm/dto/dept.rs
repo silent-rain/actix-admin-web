@@ -1,9 +1,12 @@
 //! 部门管理
+use crate::perm::enums::DeptStatus;
+
 use actix_validator::Validate;
+use entity::perm_dept;
 
 use serde::{Deserialize, Serialize};
 
-/// 部门列表查询
+/// 查询部门列表
 #[derive(Default, Deserialize, Validate)]
 pub struct GetDeptListReq {
     /// 当前分页
@@ -35,7 +38,7 @@ pub struct AddDeptReq {
 }
 
 /// 更新数据
-#[derive(Default, Serialize, Deserialize, Validate)]
+#[derive(Default, Clone, Serialize, Deserialize, Validate)]
 pub struct UpdateDeptReq {
     /// 部门ID
     pub id: i32,
@@ -50,12 +53,38 @@ pub struct UpdateDeptReq {
     /// 备注
     pub note: Option<String>,
     /// 状态,0:停用,1:正常
-    pub status: i8,
+    pub status: DeptStatus,
 }
 
 /// 更新数据状态
-#[derive(Default, Serialize, Deserialize, Validate)]
+#[derive(Default, Clone, Serialize, Deserialize, Validate)]
 pub struct UpdateDeptStatusReq {
+    /// ID
     pub id: i32,
-    pub status: i8,
+    /// 状态,0:停用,1:正常
+    pub status: DeptStatus,
+}
+
+/// 部门树列表
+#[derive(Debug, Serialize, Deserialize)]
+pub struct DeptTree {
+    #[serde(flatten)]
+    pub dept: perm_dept::Model,
+    /// 子部门列表
+    pub children: Vec<DeptTree>,
+}
+
+impl DeptTree {
+    /// 将Dept转换为DeptTree
+    pub fn new(model: &perm_dept::Model) -> Self {
+        DeptTree {
+            dept: model.clone(),
+            children: Vec::new(),
+        }
+    }
+
+    /// 添加子部门
+    pub fn add_child(&mut self, child: DeptTree) {
+        self.children.push(child);
+    }
 }

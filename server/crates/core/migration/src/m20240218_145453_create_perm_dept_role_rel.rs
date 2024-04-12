@@ -1,6 +1,6 @@
-//! 用户角色关联表
-//! User Entity: [`entity::prelude::PermUserRoleRel`]
-use entity::{perm_user_role_rel::Column, prelude::PermUserRoleRel};
+//! 部门角色关联表
+//! User Entity: [`entity::prelude::PermDeptRoleRel`]
+use entity::{perm_dept_role_rel::Column, prelude::PermDeptRoleRel};
 
 use sea_orm_migration::{
     async_trait,
@@ -19,7 +19,7 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(PermUserRoleRel)
+                    .table(PermDeptRoleRel)
                     .if_not_exists()
                     .col(
                         ColumnDef::new(Column::Id)
@@ -27,13 +27,7 @@ impl MigrationTrait for Migration {
                             .not_null()
                             .auto_increment()
                             .primary_key()
-                            .comment("ID"),
-                    )
-                    .col(
-                        ColumnDef::new(Column::UserId)
-                            .integer()
-                            .not_null()
-                            .comment("用户ID"),
+                            .comment("自增ID"),
                     )
                     .col(
                         ColumnDef::new(Column::RoleId)
@@ -42,10 +36,10 @@ impl MigrationTrait for Migration {
                             .comment("角色ID"),
                     )
                     .col(
-                        ColumnDef::new(Column::Creator)
+                        ColumnDef::new(Column::DeptId)
                             .integer()
-                            .null()
-                            .comment("创建者"),
+                            .not_null()
+                            .comment("部门ID"),
                     )
                     .col(
                         ColumnDef::new(Column::CreatedAt)
@@ -61,7 +55,7 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
         manager
-            .drop_table(Table::drop().table(PermUserRoleRel).to_owned())
+            .drop_table(Table::drop().table(PermDeptRoleRel).to_owned())
             .await
     }
 }

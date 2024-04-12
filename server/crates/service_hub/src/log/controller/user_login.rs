@@ -61,7 +61,9 @@ impl UserLoginController {
         req: Json<UpdateUserLoginStatusReq>,
     ) -> impl Responder {
         let user_login_service: UserLoginService = provider.provide();
-        let resp = user_login_service.status(req.id, req.status).await;
+        let resp = user_login_service
+            .status(req.id, req.status.clone().into())
+            .await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

@@ -21,12 +21,15 @@ pub struct GetUserRoleRelListReq {
 /// 批量添加用户角色关系
 #[derive(Serialize, Deserialize, Validate)]
 pub struct BatchAddUserRoleRelReq {
+    /// 用户ID
     pub user_id: i32,
+    /// 角色ID列表
     pub role_ids: Vec<i32>,
 }
 
 /// 批量删除用户角色关系
 #[derive(Default, Deserialize, Validate)]
 pub struct BatchDeleteUserRoleRelReq {
+    /// ID列表
     pub ids: Vec<i32>,
 }

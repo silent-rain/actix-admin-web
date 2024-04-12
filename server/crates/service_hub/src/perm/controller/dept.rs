@@ -9,7 +9,6 @@ use crate::{
 };
 
 use actix_validator::{Json, Query};
-use context::Context;
 use response::Response;
 
 use actix_web::{
@@ -34,6 +33,16 @@ impl DeptController {
         }
     }
 
+    /// 获取部门树列表
+    pub async fn tree(provider: Data<AInjectProvider>) -> impl Responder {
+        let dept_service: DeptService = provider.provide();
+        let resp = dept_service.tree().await;
+        match resp {
+            Ok(v) => Response::ok().data(v),
+            Err(err) => Response::err(err),
+        }
+    }
+
     /// 获取部门信息
     pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
         let dept_service: DeptService = provider.provide();
@@ -45,14 +54,9 @@ impl DeptController {
     }
 
     /// 添加部门
-    pub async fn add(
-        ctx: Context,
-        provider: Data<AInjectProvider>,
-        data: Json<AddDeptReq>,
-    ) -> impl Responder {
-        let user_id = ctx.get_user_id();
+    pub async fn add(provider: Data<AInjectProvider>, data: Json<AddDeptReq>) -> impl Responder {
         let dept_service: DeptService = provider.provide();
-        let resp = dept_service.add(user_id, data.into_inner()).await;
+        let resp = dept_service.add(data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -61,13 +65,11 @@ impl DeptController {
 
     /// 更新部门
     pub async fn update(
-        ctx: Context,
         provider: Data<AInjectProvider>,
         data: Json<UpdateDeptReq>,
     ) -> impl Responder {
-        let user_id = ctx.get_user_id();
         let dept_service: DeptService = provider.provide();
-        let resp = dept_service.update(user_id, data.into_inner()).await;
+        let resp = dept_service.update(data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -80,7 +82,9 @@ impl DeptController {
         data: Json<UpdateDeptStatusReq>,
     ) -> impl Responder {
         let dept_service: DeptService = provider.provide();
-        let resp = dept_service.status(data.id, data.status).await;
+        let resp = dept_service
+            .status(data.id, data.status.clone().into())
+            .await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

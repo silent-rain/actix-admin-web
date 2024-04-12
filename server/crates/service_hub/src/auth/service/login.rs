@@ -3,11 +3,10 @@
 use crate::{
     auth::{
         common::captcha::check_captcha,
-        dto::login::{LoginReq, LoginRsp},
-        enums::UserStatus,
+        dto::login::{BrowserInfo, LoginReq, LoginRsp},
     },
     log::UserLoginDao,
-    perm::UserDao,
+    perm::{enums::UserStatus, UserDao},
     system::CaptchaDao,
 };
 
@@ -15,7 +14,6 @@ use code::{Error, ErrorMsg};
 use entity::{log_user_login, perm_user};
 use jwt::encode_token;
 
-use actix_web::HttpRequest;
 use nject::injectable;
 use sea_orm::Set;
 use tracing::error;
@@ -30,7 +28,11 @@ pub struct LoginService<'a> {
 
 impl<'a> LoginService<'a> {
     /// 登陆
-    pub async fn login(&self, req: HttpRequest, data: LoginReq) -> Result<LoginRsp, ErrorMsg> {
+    pub async fn login(
+        &self,
+        browser_info: BrowserInfo,
+        data: LoginReq,
+    ) -> Result<LoginRsp, ErrorMsg> {
         // 检测验证码
         check_captcha(
             &self.captcha_dao,
@@ -63,7 +65,7 @@ impl<'a> LoginService<'a> {
         })?;
 
         // 添加登陆日志
-        self.add_login_log(req, user.clone()).await?;
+        self.add_login_log(browser_info, user.clone()).await?;
 
         // 返回Token
         Ok(LoginRsp {
@@ -93,29 +95,14 @@ impl<'a> LoginService<'a> {
     /// 添加登陆日志
     async fn add_login_log(
         &self,
-        req: HttpRequest,
+        browser_info: BrowserInfo,
         user: perm_user::Model,
     ) -> Result<log_user_login::Model, ErrorMsg> {
-        let username = user.username;
-        // Get the remote address from the request
-        // let remote_addr = req
-        //     .connection_info()
-        //     .remote_addr()
-        //     .map_or("".to_owned(), |addr| addr.to_string());
-        let remote_addr = req
-            .peer_addr()
-            .map_or("".to_owned(), |addr| addr.to_string());
-        // Get the user agent from the request headers
-        let user_agent = req
-            .headers()
-            .get("User-Agent")
-            .map_or("".to_owned(), |ua| ua.to_str().unwrap_or("").to_owned());
-
         let data = log_user_login::ActiveModel {
             user_id: Set(user.id),
-            username: Set(username),
-            remote_addr: Set(remote_addr),
-            user_agent: Set(user_agent),
+            username: Set(user.username),
+            remote_addr: Set(browser_info.remote_addr),
+            user_agent: Set(browser_info.user_agent),
             status: Set(1),
             ..Default::default()
         };

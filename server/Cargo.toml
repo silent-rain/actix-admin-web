@@ -50,8 +50,8 @@ sea-orm-migration = "0.12"
 
 # WEB
 actix-web = "4.5"
-validator_derive = "0.17"
-validator = "0.17"
+validator_derive = "0.18"
+validator = "0.18"
 actix-cors = "0.7"
 actix-web-requestid = "2.1"
 actix-request-identifier = "4.1"

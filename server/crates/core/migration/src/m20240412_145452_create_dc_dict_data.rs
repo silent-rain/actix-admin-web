@@ -1,6 +1,6 @@
-//! 角色表
-//! User Entity: [`entity::prelude::PermRole`]
-use entity::{perm_role::Column, prelude::PermRole};
+//! 字典数据表
+//! User Entity: [`entity::prelude::DcDictData`]
+use entity::{dc_dict_data::Column, prelude::DcDictData};
 
 use sea_orm_migration::{
     async_trait,
@@ -20,7 +20,7 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(PermRole)
+                    .table(DcDictData)
                     .if_not_exists()
                     .col(
                         ColumnDef::new(Column::Id)
@@ -28,15 +28,26 @@ impl MigrationTrait for Migration {
                             .not_null()
                             .auto_increment()
                             .primary_key()
-                            .comment("角色ID"),
+                            .comment("字典项ID"),
+                    )
+                    .col(
+                        ColumnDef::new(Column::DictId)
+                            .integer()
+                            .not_null()
+                            .comment("字典维度ID"),
                     )
                     .col(
                         ColumnDef::new(Column::Name)
                             .string()
-                            .string_len(20)
+                            .string_len(64)
                             .not_null()
-                            .unique_key()
-                            .comment("角色名称"),
+                            .comment("字典项名称"),
+                    )
+                    .col(
+                        ColumnDef::new(Column::Value)
+                            .text()
+                            .not_null()
+                            .comment("字典项值"),
                     )
                     .col(
                         ColumnDef::new(Column::Sort)
@@ -80,7 +91,7 @@ impl MigrationTrait for Migration {
         // Replace the sample below with your own migration scripts
 
         manager
-            .drop_table(Table::drop().table(PermRole).to_owned())
+            .drop_table(Table::drop().table(DcDictData).to_owned())
             .await
     }
 }

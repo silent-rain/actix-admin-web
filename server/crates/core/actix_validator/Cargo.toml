@@ -13,6 +13,6 @@ validator = { workspace = true }
 actix-web = { workspace = true }
 serde = { workspace = true }
 serde_urlencoded = { workspace = true }
-
+tracing = { workspace = true }
 
 [features]

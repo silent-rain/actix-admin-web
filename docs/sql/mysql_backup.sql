@@ -334,7 +334,7 @@ CREATE TABLE `perm_user` (
   `birthday` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '出生日期',
   `avatar` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '用户头像URL',
   `phone` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '手机号码',
-  `email` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '邮件',
+  `email` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '邮箱',
   `intro` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '介绍',
   `note` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '备注',
   `password` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '密码',

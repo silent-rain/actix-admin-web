@@ -17,10 +17,6 @@ pub struct Model {
     pub user_id: i32,
     /// 状态,0:停用,1:正常
     pub status: i8,
-    /// 创建者
-    pub creator: Option<i32>,
-    /// 更新者
-    pub updater: Option<i32>,
     /// 创建时间
     pub created_at: DateTimeLocal,
     /// 更新时间

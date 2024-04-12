@@ -19,9 +19,9 @@ service_hub = { path = "../crates/service_hub" }
 # migration = { path = "../core/migration" }
 
 actix-web = { workspace = true }
-actix-web-requestid = { workspace = true }
-actix-request-identifier = { workspace = true }
 tracing-actix-web = { workspace = true }
+# actix-web-requestid = { workspace = true }
+# actix-request-identifier = { workspace = true }
 # actix-web-validator = { workspace = true }
 # actix-files = { workspace = true }
 listenfd = { workspace = true }
