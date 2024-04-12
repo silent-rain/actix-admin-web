@@ -112,6 +112,7 @@ mod tests {
             "captcha": "captcha",
         });
         let result: RegisterReq = struct_to_struct(&body).unwrap();
+        println!("expected: {:#?}", expected);
         println!("result: {:#?}", result);
         assert!(expected == result)
     }
@@ -138,16 +139,16 @@ mod tests {
             "register_type": "phone",
             "username": "username",
             "real_name": "real_name",
-            "gender": 11,
+            "gender": 1,
             "age": 12,
             "birthday": null,
             "password": "password",
-            "avatar": "avatar",
+            "avatar": null,
             "captcha_id":"captcha_id",
             "captcha": "captcha",
         });
         let result: RegisterReq = struct_to_struct(&body).unwrap();
-        println!("result: {:#?}", result);
+
         assert!(expected == result)
     }
 
@@ -182,6 +183,7 @@ mod tests {
             // "captcha": "captcha",
         });
         let result: RegisterReq = struct_to_struct(&body).unwrap();
+        println!("expected: {:#?}", expected);
         println!("result: {:#?}", result);
         assert!(expected == result)
     }

@@ -84,7 +84,7 @@ mod tests {
 
         let layer = blocking_layer(&conf);
         let subscriber = tracing_subscriber::registry().with(layer);
-        tracing::subscriber::set_global_default(subscriber).expect("注册全局日志订阅器失败");
+        let _guard = tracing::subscriber::set_default(subscriber);
 
         trace!("this is trace");
         debug!("this is debug");
@@ -103,7 +103,7 @@ mod tests {
 
         let (layer, _guard) = non_blocking_layer(&conf);
         let subscriber = tracing_subscriber::registry().with(layer);
-        tracing::subscriber::set_global_default(subscriber).expect("注册全局日志订阅器失败");
+        let _guard = tracing::subscriber::set_default(subscriber);
 
         trace!("this is trace");
         debug!("this is debug");

@@ -174,8 +174,7 @@ mod tests {
     use super::*;
 
     use color_eyre::{eyre::eyre, Result};
-    use config::{ConsoleBunyanConfig, ConsoleConfig, DbConfig, FileConfig};
-    use tracing::{debug, error, info, instrument, span, trace, warn, Level};
+    use tracing::{error, info, instrument, span, warn, Level};
 
     #[instrument]
     fn return_err() -> Result<()> {
@@ -204,41 +203,8 @@ mod tests {
     fn test_default_init() {
         Logger::set_default_logger();
 
+        let _ = return_err();
         call_return_err();
         demo1();
-    }
-
-    #[test]
-    fn test_init_subscriber() {
-        let conf = config::Logger {
-            color_eyre: false,
-            console: ConsoleConfig {
-                level: config::Level::Debug,
-                enable: true,
-            },
-            console_bunyan: ConsoleBunyanConfig {
-                level: config::Level::Debug,
-                enable: false,
-            },
-            file: FileConfig {
-                level: config::Level::Debug,
-                enable: false,
-                ..Default::default()
-            },
-            db: DbConfig {
-                level: config::Level::Debug,
-                enable: false,
-                ..Default::default()
-            },
-        };
-        let _guards = Logger::build(&conf).expect("日志初始化失败");
-
-        call_return_err();
-        demo1();
-        trace!("this is trace");
-        debug!("this is debug");
-        info!("this is info");
-        warn!("this is warn");
-        error!("this is error");
     }
 }

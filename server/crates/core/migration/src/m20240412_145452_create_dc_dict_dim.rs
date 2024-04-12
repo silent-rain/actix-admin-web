@@ -39,7 +39,7 @@ impl MigrationTrait for Migration {
                             .comment("字典名称"),
                     )
                     .col(
-                        ColumnDef::new(Column::Name)
+                        ColumnDef::new(Column::Code)
                             .string()
                             .string_len(64)
                             .not_null()

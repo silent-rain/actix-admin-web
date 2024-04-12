@@ -147,16 +147,19 @@ struct CustomFieldStorage(BTreeMap<String, serde_json::Value>);
 #[cfg(test)]
 mod tests {
     use super::*;
+
     use tracing::{debug_span, info, info_span};
     use tracing_subscriber::layer::SubscriberExt;
-    use tracing_subscriber::util::SubscriberInitExt;
 
     #[test]
     fn test_output_json() {
-        tracing_subscriber::registry().with(JsonLayer).init();
+        let subscriber = tracing_subscriber::registry().with(JsonLayer);
+        let _guard = tracing::subscriber::set_default(subscriber);
 
+        // 不支持常规事件
         // info!("span outer example");
 
+        // 进入 span
         let outer_span = info_span!(
             "outer",
             level = 0,

@@ -75,6 +75,7 @@ impl MigrationTrait for Migration {
                             .date_time()
                             .not_null()
                             .timestamp_with_time_zone()
+                            // Sqlite3 不支持 ON UPDATE CURRENT_TIMESTAMP
                             .extra("DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
                             .comment("更新时间"),
                     )

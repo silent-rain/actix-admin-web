@@ -78,7 +78,7 @@ mod tests {
 
     #[test]
     fn test_init() {
-        let path = "../../config.yaml";
+        let path = "config.yaml";
         let config = init(path);
         assert!(config.is_ok())
     }
