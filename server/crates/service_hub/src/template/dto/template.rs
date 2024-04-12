@@ -1,5 +1,7 @@
 //! 模板管理
 
+use crate::template::enums::AppTemplateStatus;
+
 use actix_validator::Validate;
 
 use serde::Deserialize;
@@ -25,7 +27,7 @@ pub struct AddAppTemplateReq {
     /// 用户ID
     pub user_id: i32,
     /// 状态
-    pub status: i8,
+    pub status: AppTemplateStatus,
 }
 
 /// 批量添加数据结点
@@ -34,7 +36,7 @@ pub struct BatchAddAppTemplateNode {
     /// 用户ID
     pub user_id: i32,
     /// 状态
-    pub status: i8,
+    pub status: AppTemplateStatus,
 }
 
 /// 批量添加数据 请求体
@@ -50,7 +52,7 @@ pub struct UpdateAppTemplateReq {
     /// ID
     pub id: i32,
     /// 状态
-    pub status: i8,
+    pub status: AppTemplateStatus,
 }
 
 /// 更新数据状态 请求体
@@ -59,7 +61,7 @@ pub struct UpdateAppTemplateStatusReq {
     /// ID
     pub id: i32,
     /// 状态
-    pub status: i8,
+    pub status: AppTemplateStatus,
 }
 
 /// 批量删除数据 请求体

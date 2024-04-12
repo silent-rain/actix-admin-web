@@ -71,7 +71,7 @@ impl<'a> AppTemplateService<'a> {
     pub async fn add(&self, data: AddAppTemplateReq) -> Result<app_template::Model, ErrorMsg> {
         let model = app_template::ActiveModel {
             user_id: Set(data.user_id),
-            status: Set(data.status),
+            status: Set(data.status.clone().into()),
             ..Default::default()
         };
 
@@ -91,7 +91,7 @@ impl<'a> AppTemplateService<'a> {
         for item in data.data {
             let model = app_template::ActiveModel {
                 user_id: Set(item.user_id),
-                status: Set(item.status),
+                status: Set(item.status.clone().into()),
                 ..Default::default()
             };
             models.push(model);

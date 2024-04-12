@@ -1,7 +1,7 @@
 //! 用户管理
 use crate::perm::{
     dao::{user::UserDao, user_role_rel::UserRoleRelDao},
-    dto::user::{AddUserReq, GetUserListReq, ProfileRsp, UpdateUserReq},
+    dto::user::{AddUserReq, GetUserListReq, ProfileRsp, UpdateUserReq}, enums::UserStatus,
 };
 
 use code::{Error, ErrorMsg};
@@ -200,7 +200,7 @@ impl<'a> UserService<'a> {
             phone: Set(data.phone),
             email: Set(data.email),
             password: Set(password),
-            status: Set(1),
+            status: Set(UserStatus::Enabled as i8),
             ..Default::default()
         };
 

@@ -75,7 +75,9 @@ impl AppTemplateController {
         data: Json<UpdateAppTemplateReq>,
     ) -> impl Responder {
         let app_template_service: AppTemplateService = provider.provide();
-        let resp = app_template_service.update(data.id, data.status).await;
+        let resp = app_template_service
+            .update(data.id, data.status.clone().into())
+            .await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -88,7 +90,9 @@ impl AppTemplateController {
         data: Json<UpdateAppTemplateStatusReq>,
     ) -> impl Responder {
         let app_template_service: AppTemplateService = provider.provide();
-        let resp = app_template_service.status(data.id, data.status).await;
+        let resp = app_template_service
+            .status(data.id, data.status.clone().into())
+            .await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
