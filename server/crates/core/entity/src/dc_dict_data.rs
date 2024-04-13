@@ -14,7 +14,7 @@ pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,
     /// 字典维度ID
-    pub dict_id: String,
+    pub dim_id: String,
     /// 字典项名称
     pub name: String,
     /// 字典项值
@@ -35,7 +35,7 @@ pub struct Model {
 pub enum Relation {
     #[sea_orm(
         belongs_to = "super::dc_dict_dim::Entity",
-        from = "Column::DictId",
+        from = "Column::DimId",
         to = "super::dc_dict_dim::Column::Id",
         on_update = "Cascade",
         on_delete = "Cascade"

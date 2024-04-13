@@ -31,7 +31,7 @@ impl MigrationTrait for Migration {
                             .comment("字典项ID"),
                     )
                     .col(
-                        ColumnDef::new(Column::DictId)
+                        ColumnDef::new(Column::DimId)
                             .integer()
                             .not_null()
                             .comment("字典维度ID"),
