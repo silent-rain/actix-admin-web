@@ -1,5 +1,6 @@
 //! 路由层
 
+pub mod api_operation;
 pub mod system;
 pub mod user_login;
 
@@ -16,5 +17,7 @@ impl LogRouter {
             .service(system::SystemRouter::admin_register())
             // 登陆日志管理
             .service(user_login::UserLoginRouter::admin_register())
+            // 操作日志管理
+            .service(api_operation::ApiOperationRouter::admin_register())
     }
 }
