@@ -7,6 +7,7 @@ use crate::system::{
 
 use code::{Error, ErrorMsg};
 use entity::sys_config;
+use utils::list_tree::GenericTree;
 
 use nject::injectable;
 use sea_orm::{DbErr::RecordNotUpdated, Set};
@@ -38,6 +39,19 @@ impl<'a> ConfigService<'a> {
         })?;
 
         Ok((results, total))
+    }
+
+    /// 获取树列表数据
+    pub async fn tree(&self) -> Result<Vec<GenericTree<sys_config::Model>>, ErrorMsg> {
+        let (results, _total) = self.config_dao.all().await.map_err(|err| {
+            error!("查询配置列表失败, err: {:#?}", err);
+            Error::DbQueryError.into_msg().with_msg("查询配置列表失败")
+        })?;
+
+        // 将列表转换为树列表
+        let results = GenericTree::to_tree(&results, None);
+
+        Ok(results)
     }
 
     /// 获取详情数据

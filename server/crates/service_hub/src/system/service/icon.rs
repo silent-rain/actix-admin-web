@@ -16,13 +16,13 @@ use tracing::error;
 /// 服务层
 #[injectable]
 pub struct IconService<'a> {
-    captcha_dao: IconDao<'a>,
+    icon_dao: IconDao<'a>,
 }
 
 impl<'a> IconService<'a> {
     /// 获取列表数据
     pub async fn list(&self, req: GetIconListReq) -> Result<(Vec<GetIconListRsp>, u64), ErrorMsg> {
-        let (results, total) = self.captcha_dao.list(req).await.map_err(|err| {
+        let (results, total) = self.icon_dao.list(req).await.map_err(|err| {
             error!("查询ICON图标列表失败, err: {:#?}", err);
             Error::DbQueryError
                 .into_msg()
@@ -42,7 +42,7 @@ impl<'a> IconService<'a> {
     /// 获取详情数据
     pub async fn info(&self, id: i32) -> Result<GetIconRsp, ErrorMsg> {
         let result = self
-            .captcha_dao
+            .icon_dao
             .info(id)
             .await
             .map_err(|err| {
@@ -81,7 +81,7 @@ impl<'a> IconService<'a> {
             note: Set(req.note),
             ..Default::default()
         };
-        let result = self.captcha_dao.add(model).await.map_err(|err| {
+        let result = self.icon_dao.add(model).await.map_err(|err| {
             error!("添加ICON图标信息失败, err: {:#?}", err);
             Error::DbAddError
                 .into_msg()
@@ -102,7 +102,7 @@ impl<'a> IconService<'a> {
             ..Default::default()
         };
 
-        let result = self.captcha_dao.update(model).await.map_err(|err| {
+        let result = self.icon_dao.update(model).await.map_err(|err| {
             error!("更新ICON图标失败, err: {:#?}", err);
             Error::DbUpdateError.into_msg().with_msg("更新ICON图标失败")
         })?;
@@ -112,7 +112,7 @@ impl<'a> IconService<'a> {
 
     /// 删除数据
     pub async fn delete(&self, id: i32) -> Result<u64, ErrorMsg> {
-        let result = self.captcha_dao.delete(id).await.map_err(|err| {
+        let result = self.icon_dao.delete(id).await.map_err(|err| {
             error!("删除ICON图标信息失败, err: {:#?}", err);
             Error::DbDeleteError
                 .into_msg()
@@ -124,7 +124,7 @@ impl<'a> IconService<'a> {
 
     /// 批量删除
     pub async fn batch_delete(&self, ids: Vec<i32>) -> Result<u64, ErrorMsg> {
-        let result = self.captcha_dao.batch_delete(ids).await.map_err(|err| {
+        let result = self.icon_dao.batch_delete(ids).await.map_err(|err| {
             error!("批量删除ICON图标信息失败, err: {:#?}", err);
             Error::DbBatchDeleteError
                 .into_msg()

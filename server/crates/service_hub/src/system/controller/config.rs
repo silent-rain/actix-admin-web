@@ -20,7 +20,7 @@ use actix_web::{
 pub struct ConfigController;
 
 impl ConfigController {
-    /// 获配置色列表
+    /// 获配置列表
     pub async fn list(
         provider: Data<AInjectProvider>,
         req: Query<GetConfigListReq>,
@@ -33,7 +33,17 @@ impl ConfigController {
         }
     }
 
-    /// 获配置色信息
+    /// 获取配置树列表
+    pub async fn tree(provider: Data<AInjectProvider>) -> impl Responder {
+        let config_service: ConfigService = provider.provide();
+        let resp = config_service.tree().await;
+        match resp {
+            Ok(v) => Response::ok().data(v),
+            Err(err) => Response::err(err),
+        }
+    }
+
+    /// 获配置信息
     pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
         let config_service: ConfigService = provider.provide();
         let resp = config_service.info(*id).await;
