@@ -37,6 +37,9 @@ impl<'a> DeptDao<'a> {
             })
             .apply_if(req.end_time, |query, v| {
                 query.filter(perm_dept::Column::CreatedAt.lt(v))
+            })
+            .apply_if(req.name, |query, v| {
+                query.filter(perm_dept::Column::Name.like(format!("%{v}%")))
             });
 
         let total = states.clone().count(self.db.rdb()).await?;
