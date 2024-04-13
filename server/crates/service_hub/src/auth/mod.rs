@@ -11,4 +11,6 @@ mod controller;
 pub use controller::{login::LoginController, register::RegisterController};
 
 mod router;
-pub use router::{captcha::GenCaptchaRouter, login::LoginRouter, register::RegisterRouter};
+pub use router::{
+    captcha::GenCaptchaRouter, login::LoginRouter, register::RegisterRouter, AuthRouter,
+};

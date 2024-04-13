@@ -1,10 +1,7 @@
 //! 路由集散处, 将各个模块的路由在此处进行注册。
 use context::ContextMiddleware;
 use service_hub::{
-    auth::{GenCaptchaRouter, LoginRouter, RegisterRouter},
-    log::LogRouter,
-    perm::PermissionRouter,
-    public::HealthRouter,
+    auth::AuthRouter, log::LogRouter, perm::PermissionRouter, public::HealthRouter,
     system::SystemRouter,
 };
 
@@ -27,12 +24,8 @@ pub fn register() -> impl HttpServiceFactory {
         // <<< 中间件 <<<
         // 健康检查
         .service(HealthRouter::register())
-        // 生成验证码
-        .service(GenCaptchaRouter::register())
-        // 登陆
-        .service(LoginRouter::register())
-        // 注册用户
-        .service(RegisterRouter::register())
+        // 认证管理
+        .service(AuthRouter::register())
         // 后台管理接口
         .service(
             web::scope("/admin")
