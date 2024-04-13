@@ -14,7 +14,7 @@ CREATE TABLE sys_captcha (
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '验证码表';
 
 
--- 全局配置表
+-- 配置表
 CREATE TABLE sys_config (
     `id` INT AUTO_INCREMENT COMMENT '配置ID',
     `pid` INT(11) DEFAULT NULL COMMENT '父节点ID',
@@ -27,7 +27,7 @@ CREATE TABLE sys_config (
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`)
-) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '全局配置表';
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '配置表';
 
 -- ICON图标表
 CREATE TABLE sys_icon (

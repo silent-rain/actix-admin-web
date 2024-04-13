@@ -5,7 +5,7 @@ use service_hub::{
     log::LogRouter,
     perm::{DeptRoleRelRouter, DeptRouter, RoleRouter, UserRoleRelRouter, UserRouter},
     public::HealthRouter,
-    system::CaptchaRouter,
+    system::SystemRouter,
 };
 
 use actix_web::{dev::HttpServiceFactory, web};
@@ -46,8 +46,8 @@ pub fn register() -> impl HttpServiceFactory {
                 .service(DeptRouter::admin_register())
                 // 部门角色关系管理
                 .service(DeptRoleRelRouter::admin_register())
-                // 验证码管理
-                .service(CaptchaRouter::admin_register())
+                // 系统管理
+                .service(SystemRouter::admin_register())
                 // 日志管理
                 .service(LogRouter::admin_register()),
         )

@@ -23,7 +23,7 @@ pub struct Model {
     pub uri: String,
     /// 备注
     pub note: Option<String>,
-    /// 是否启用,0:禁用,1:启用
+    /// 状态, 0:停用,1:正常
     pub status: i8,
     /// 创建时间
     pub created_at: DateTimeLocal,

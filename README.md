@@ -35,13 +35,12 @@
 - [x] 依赖注入
 - [ ] 中间件
   - [x] 跨域
-  - [x] Request ID
-  - [x] Actix Request Identifier Middleware
+  - [x] Actix Request Identifier
   - [x] Tracing Logger
   - [x] JWT 令牌
+  - [ ] OpenApi 鉴权
   - [ ] 访问频率限制
   - [ ] 访问 IP 限制
-  - [ ] OpenApi 鉴权
 - [ ] API 文档
   - [ ] ApiPost 接口工具
   - [ ] 内置接口文档
@@ -71,16 +70,13 @@
 - [ ] 权限管理
   - [x] 角色管理
   - [x] 用户管理
-  - [x] 用户角色关系管理
   - [x] 部门管理
-  - [x] 部门角色关系管理
   - [ ] 菜单管理
-  - [ ] 菜单角色关系管理
 - [ ] OpenApi 管理
   - [ ] OpenApi 接口管理
   - [ ] OpenApi 权限管理
 - [ ] 系统管理
-  - [ ] 全局配置管理
+  - [ ] 配置管理
   - [x] 验证码管理
     - [ ] 已经使用过的验证码应该设置为过期
 - [ ] 日志管理
@@ -92,7 +88,6 @@
     - [ ] 状态: 成功/失败
       - [ ] 新增一条禁用的登陆日志？
 - [ ] 数据中心
-  - [ ] 数据字典维度管理
   - [ ] 数据字典管理
 - [ ] 前端权限
   - [ ] 动态路由
@@ -107,14 +102,8 @@
 - doc 文档，细化为接口文档；
 - 用户权限封装；
 - 配置表/API 操作日志表/字典管理
-  log span 的使用看能不能使用事件的调研，放置在中间件，监听整个流程；
-  api 接口操作日志
-  web 日志，看是否可以接入框架；
-  定时任务调研与集成，有参考项目；
-  权限封装；
-  路由匹配
-  状态还是需要使用 ID 进行透传，同时 body 取消 id 传入；
-  数据状态调整为i8
+- 定时任务调研与集成；
+- 路由匹配 open api 接口 rbac
 
 https://github.com/actix/actix-extras/tree/master/actix-identity
 https://crates.io/crates/actix-ws

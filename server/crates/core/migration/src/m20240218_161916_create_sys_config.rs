@@ -1,4 +1,4 @@
-//! 全局配置表
+//! 配置表
 //! User Entity: [`entity::prelude::SysConfig`]
 use entity::{prelude::SysConfig, sys_config::Column};
 
@@ -41,7 +41,6 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(64)
                             .not_null()
-                            .unique_key()
                             .comment("配置名称"),
                     )
                     .col(

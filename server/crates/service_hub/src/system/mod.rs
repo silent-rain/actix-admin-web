@@ -1,14 +1,15 @@
 //! 系统管理
 pub mod dto;
+pub mod enums;
 
 mod dao;
-pub use dao::captcha::CaptchaDao;
+pub use dao::{captcha::CaptchaDao, config::ConfigDao};
 
 mod service;
-pub use service::captcha::CaptchaService;
+pub use service::{captcha::CaptchaService, config::ConfigService};
 
 mod controller;
-pub use controller::captcha::CaptchaController;
+pub use controller::{captcha::CaptchaController, config::ConfigController};
 
 mod router;
-pub use router::captcha::CaptchaRouter;
+pub use router::{captcha::CaptchaRouter, config::ConfigRouter, SystemRouter};
