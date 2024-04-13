@@ -1,7 +1,6 @@
-//! 验证码表
-//! User Entity: [`entity::prelude::SysCaptcha`]
-use entity::prelude::SysCaptcha;
-use entity::sys_captcha::Column;
+//! ICON图标表
+//! User Entity: [`entity::prelude::SysIcon`]
+use entity::{prelude::SysIcon, sys_icon::Column};
 
 use sea_orm_migration::{
     async_trait,
@@ -20,7 +19,7 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(SysCaptcha)
+                    .table(SysIcon)
                     .if_not_exists()
                     .col(
                         ColumnDef::new(Column::Id)
@@ -28,22 +27,15 @@ impl MigrationTrait for Migration {
                             .not_null()
                             .auto_increment()
                             .primary_key()
-                            .comment("ID"),
+                            .comment("图标ID"),
                     )
                     .col(
-                        ColumnDef::new(Column::CaptchaId)
+                        ColumnDef::new(Column::Name)
                             .string()
-                            .string_len(40)
+                            .string_len(32)
                             .not_null()
                             .unique_key()
-                            .comment("验证码ID"),
-                    )
-                    .col(
-                        ColumnDef::new(Column::Captcha)
-                            .string()
-                            .string_len(10)
-                            .not_null()
-                            .comment("验证码"),
+                            .comment("图标名称"),
                     )
                     .col(
                         ColumnDef::new(Column::BaseImg)
@@ -52,10 +44,17 @@ impl MigrationTrait for Migration {
                             .comment("Base64图片"),
                     )
                     .col(
-                        ColumnDef::new(Column::Expire)
+                        ColumnDef::new(Column::Category)
                             .integer()
                             .not_null()
-                            .comment("过期时间"),
+                            .comment("图标类型,1:element,2:custom"),
+                    )
+                    .col(
+                        ColumnDef::new(Column::Note)
+                            .string()
+                            .string_len(200)
+                            .null()
+                            .comment("备注"),
                     )
                     .col(
                         ColumnDef::new(Column::CreatedAt)
@@ -63,6 +62,12 @@ impl MigrationTrait for Migration {
                             .not_null()
                             .default(Expr::current_timestamp())
                             .comment("创建时间"),
+                    )
+                    .col(
+                        ColumnDef::new(Column::UpdatedAt)
+                            .date_time()
+                            .not_null()
+                            .comment("更新时间"),
                     )
                     .to_owned(),
             )
@@ -72,7 +77,7 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
         manager
-            .drop_table(Table::drop().table(SysCaptcha).to_owned())
+            .drop_table(Table::drop().table(SysIcon).to_owned())
             .await
     }
 }

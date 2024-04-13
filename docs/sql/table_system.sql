@@ -5,7 +5,7 @@
 -- 验证码表
 CREATE TABLE sys_captcha (
     `id` INT AUTO_INCREMENT COMMENT '自增ID',
-    `captcha_id` VARCHAR(40) NOT NULL COMMENT '验证码ID',
+    `captcha_id` VARCHAR(40) NOT NULL UNIQUE COMMENT '验证码ID',
     `captcha` VARCHAR(10) NOT NULL COMMENT '验证码',
     `base_img` LONGBLOB NOT NULL COMMENT 'Base64图片',
     `expire` INT(4) UNSIGNED NOT NULL DEFAULT 1 COMMENT '过期时间',
@@ -35,7 +35,7 @@ CREATE TABLE sys_icon (
     `name` VARCHAR(32) NOT NULL UNIQUE COMMENT '图标名称',
     `base_img` LONGBLOB NOT NULL COMMENT 'Base64图片',
     `category` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '图标类型,1:element,2:custom',
-    `note` VARCHAR(32) DEFAULT NULL COMMENT '备注',
+    `note` VARCHAR(200) DEFAULT NULL COMMENT '备注',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`)
