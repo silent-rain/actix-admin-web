@@ -7,7 +7,7 @@ use sea_orm::{
 use serde::{Deserialize, Serialize};
 
 /// API操作日志表
-#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize, DeriveEntityModel)]
 #[sea_orm(table_name = "log_api_operation")]
 pub struct Model {
     /// 自增ID
@@ -24,7 +24,7 @@ pub struct Model {
     /// 请求方法
     pub method: String,
     /// 请求地址路径
-    pub url: String,
+    pub path: String,
     /// 请求参数
     pub query: Option<String>,
     /// 请求体/响应体
@@ -35,9 +35,9 @@ pub struct Model {
     /// 用户代理
     pub user_agent: String,
     /// 耗时,纳秒
-    pub cost: i32,
+    pub cost: f64,
     /// 请求类型:REQ/RSP
-    pub htpp_type: String,
+    pub http_type: String,
     /// 备注
     pub note: Option<String>,
     /// 创建时间

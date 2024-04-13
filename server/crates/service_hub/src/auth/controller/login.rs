@@ -30,7 +30,7 @@ impl LoginController {
         //     .map_or("".to_owned(), |addr| addr.to_string());
         let remote_addr = req
             .peer_addr()
-            .map_or("".to_owned(), |addr| addr.to_string());
+            .map_or("".to_owned(), |addr| addr.ip().to_string());
         // Get the user agent from the request headers
         let user_agent = req
             .headers()

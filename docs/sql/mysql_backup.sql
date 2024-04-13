@@ -127,7 +127,7 @@ CREATE TABLE `log_http` (
   `remote_addr` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '请求IP',
   `user_agent` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '用户代理',
   `cost` int(20) NOT NULL COMMENT '耗时,纳秒',
-  `htpp_type` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '日志类型:REQ/RSP',
+  `http_type` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '日志类型:REQ/RSP',
   `note` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '备注',
   `created_at` datetime NOT NULL DEFAULT current_timestamp() COMMENT '创建时间',
   PRIMARY KEY (`id`)

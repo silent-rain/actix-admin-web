@@ -63,7 +63,7 @@ impl MigrationTrait for Migration {
                             .comment("请求方法"),
                     )
                     .col(
-                        ColumnDef::new(Column::Url)
+                        ColumnDef::new(Column::Path)
                             .string()
                             .string_len(500)
                             .not_null()
@@ -98,14 +98,14 @@ impl MigrationTrait for Migration {
                     )
                     .col(
                         ColumnDef::new(Column::Cost)
-                            .integer()
+                            .double()
                             .not_null()
                             .comment("耗时,纳秒"),
                     )
                     .col(
-                        ColumnDef::new(Column::HtppType)
+                        ColumnDef::new(Column::HttpType)
                             .string()
-                            .string_len(64)
+                            .string_len(10)
                             .not_null()
                             .comment("请求类型:REQ/RSP"),
                     )

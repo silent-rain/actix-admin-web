@@ -61,13 +61,13 @@ impl<'a> ApiOperationService<'a> {
             request_id: Set(req.request_id),
             status_code: Set(req.status_code),
             method: Set(req.method),
-            url: Set(req.url),
+            path: Set(req.path),
             query: Set(req.query),
             body: Set(req.body),
             remote_addr: Set(req.remote_addr),
             user_agent: Set(req.user_agent),
             cost: Set(req.cost),
-            htpp_type: Set(req.htpp_type),
+            http_type: Set(req.http_type),
             note: Set(req.note),
             ..Default::default()
         };

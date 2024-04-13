@@ -1679,7 +1679,7 @@
             "example": ""
           },
           {
-            "name": "htpp_type",
+            "name": "http_type",
             "in": "query",
             "description": "请求类型",
             "required": true,
@@ -1694,7 +1694,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 13700,\n\t\t\t\t\"user_id\": 20,\n\t\t\t\t\"parent_trace_id\": \"\",\n\t\t\t\t\"trace_id\": \"3fa925b39d10a6b3832135902c99d715\",\n\t\t\t\t\"error_code\": 200,\n\t\t\t\t\"method\": \"GET\",\n\t\t\t\t\"path\": \"/api/v1/httpLog/list\",\n\t\t\t\t\"query\": \"page=1&page_size=10&user_id=0&trace_id=&error_code=&method=&path=&remote_addr=&htpp_type=\",\n\t\t\t\t\"body\": \"\",\n\t\t\t\t\"remote_addr\": \"127.0.0.1\",\n\t\t\t\t\"user_agent\": \"PostmanRuntime-ApipostRuntime/1.1.0\",\n\t\t\t\t\"cost\": 7443,\n\t\t\t\t\"htpp_type\": \"REQ\",\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"created_at\": \"2023-02-18T17:04:42+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 13294\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 13700,\n\t\t\t\t\"user_id\": 20,\n\t\t\t\t\"parent_trace_id\": \"\",\n\t\t\t\t\"trace_id\": \"3fa925b39d10a6b3832135902c99d715\",\n\t\t\t\t\"error_code\": 200,\n\t\t\t\t\"method\": \"GET\",\n\t\t\t\t\"path\": \"/api/v1/httpLog/list\",\n\t\t\t\t\"query\": \"page=1&page_size=10&user_id=0&trace_id=&error_code=&method=&path=&remote_addr=&http_type=\",\n\t\t\t\t\"body\": \"\",\n\t\t\t\t\"remote_addr\": \"127.0.0.1\",\n\t\t\t\t\"user_agent\": \"PostmanRuntime-ApipostRuntime/1.1.0\",\n\t\t\t\t\"cost\": 7443,\n\t\t\t\t\"http_type\": \"REQ\",\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"created_at\": \"2023-02-18T17:04:42+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 13294\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -2956,7 +2956,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 13700,\n\t\t\t\t\"user_id\": 20,\n\t\t\t\t\"parent_trace_id\": \"\",\n\t\t\t\t\"trace_id\": \"3fa925b39d10a6b3832135902c99d715\",\n\t\t\t\t\"error_code\": 200,\n\t\t\t\t\"method\": \"GET\",\n\t\t\t\t\"path\": \"/api/v1/httpLog/list\",\n\t\t\t\t\"query\": \"page=1&page_size=10&user_id=0&trace_id=&error_code=&method=&path=&remote_addr=&htpp_type=\",\n\t\t\t\t\"body\": \"\",\n\t\t\t\t\"remote_addr\": \"127.0.0.1\",\n\t\t\t\t\"user_agent\": \"PostmanRuntime-ApipostRuntime/1.1.0\",\n\t\t\t\t\"cost\": 7443,\n\t\t\t\t\"htpp_type\": \"REQ\",\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"created_at\": \"2023-02-18T17:04:42+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 13294\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 13700,\n\t\t\t\t\"user_id\": 20,\n\t\t\t\t\"parent_trace_id\": \"\",\n\t\t\t\t\"trace_id\": \"3fa925b39d10a6b3832135902c99d715\",\n\t\t\t\t\"error_code\": 200,\n\t\t\t\t\"method\": \"GET\",\n\t\t\t\t\"path\": \"/api/v1/httpLog/list\",\n\t\t\t\t\"query\": \"page=1&page_size=10&user_id=0&trace_id=&error_code=&method=&path=&remote_addr=&http_type=\",\n\t\t\t\t\"body\": \"\",\n\t\t\t\t\"remote_addr\": \"127.0.0.1\",\n\t\t\t\t\"user_agent\": \"PostmanRuntime-ApipostRuntime/1.1.0\",\n\t\t\t\t\"cost\": 7443,\n\t\t\t\t\"http_type\": \"REQ\",\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"created_at\": \"2023-02-18T17:04:42+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 13294\n\t}\n}"
           },
           "404": {
             "description": "失败",

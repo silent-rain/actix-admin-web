@@ -1,5 +1,6 @@
 //! 路由集散处, 将各个模块的路由在此处进行注册。
 use context::ContextMiddleware;
+use middleware::api_operation::ApiOperation;
 use service_hub::{
     auth::AuthRouter, log::LogRouter, perm::PermissionRouter, public::HealthRouter,
     system::SystemRouter,
@@ -15,12 +16,13 @@ pub fn register() -> impl HttpServiceFactory {
     web::scope("/api/v1")
         // >>> 中间件 >>>
         // 注意中间件加载顺序: Last in, first loading
+        .wrap(ApiOperation::default())
         .wrap(TracingLogger::default())
         .wrap(middleware::cors::wrap_cors())
         // 接口鉴权
-        .wrap(middleware::auth::Auth)
+        .wrap(middleware::auth::Auth::default())
         // 上下文中间件
-        .wrap(ContextMiddleware)
+        .wrap(ContextMiddleware::default())
         // <<< 中间件 <<<
         // 健康检查
         .service(HealthRouter::register())
