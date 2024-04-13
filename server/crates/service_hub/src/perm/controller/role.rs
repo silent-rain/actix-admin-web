@@ -20,7 +20,7 @@ use actix_web::{
 pub struct RoleController;
 
 impl RoleController {
-    /// 获取角色列表
+    /// 获角色色列表
     pub async fn list(
         provider: Data<AInjectProvider>,
         req: Query<GetRoleListReq>,
@@ -33,7 +33,7 @@ impl RoleController {
         }
     }
 
-    /// 获取角色信息
+    /// 获角色色信息
     pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
         let role_service: RoleService = provider.provide();
         let resp = role_service.info(*id).await;
