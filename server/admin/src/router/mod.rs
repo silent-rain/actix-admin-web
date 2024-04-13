@@ -3,7 +3,7 @@ use context::ContextMiddleware;
 use service_hub::{
     auth::{GenCaptchaRouter, LoginRouter, RegisterRouter},
     log::LogRouter,
-    perm::{DeptRoleRelRouter, DeptRouter, RoleRouter, UserRoleRelRouter, UserRouter},
+    perm::PermissionRouter,
     public::HealthRouter,
     system::SystemRouter,
 };
@@ -36,16 +36,8 @@ pub fn register() -> impl HttpServiceFactory {
         // 后台管理接口
         .service(
             web::scope("/admin")
-                // 角色管理
-                .service(RoleRouter::admin_register())
-                // 用户管理
-                .service(UserRouter::admin_register())
-                // 用户角色关系管理
-                .service(UserRoleRelRouter::admin_register())
-                // 部门管理
-                .service(DeptRouter::admin_register())
-                // 部门角色关系管理
-                .service(DeptRoleRelRouter::admin_register())
+                // 权限管理
+                .service(PermissionRouter::admin_register())
                 // 系统管理
                 .service(SystemRouter::admin_register())
                 // 日志管理
