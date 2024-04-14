@@ -50,6 +50,7 @@ sea-orm-migration = "0.12"
 
 # WEB
 actix-web = "4.5"
+actix-http = "3.6"
 validator_derive = "0.18"
 validator = "0.18"
 actix-cors = "0.7"

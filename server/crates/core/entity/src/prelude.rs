@@ -4,8 +4,6 @@ pub use super::app_template::Entity as AppTemplate;
 
 pub use super::api_auth::Entity as ApiAuth;
 pub use super::api_role_rel::Entity as ApiRoleRel;
-pub use super::dc_dict_data::Entity as DcDictData;
-pub use super::dc_dict_dim::Entity as DcDictDim;
 pub use super::log_api_operation::Entity as LogApiOperation;
 pub use super::log_system::Entity as LogSystem;
 pub use super::log_user_login::Entity as LogUserLogin;
@@ -20,4 +18,6 @@ pub use super::perm_user_role_rel::Entity as PermUserRoleRel;
 pub use super::perm_user_token::Entity as PermUserToken;
 pub use super::sys_captcha::Entity as SysCaptcha;
 pub use super::sys_config::Entity as SysConfig;
+pub use super::sys_dict_data::Entity as SysDictData;
+pub use super::sys_dict_dim::Entity as SysDictDim;
 pub use super::sys_icon::Entity as SysIcon;

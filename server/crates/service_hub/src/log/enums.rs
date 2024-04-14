@@ -11,14 +11,22 @@ pub enum UserLoginStatus {
     Success = 1,
 }
 
-impl Default for UserLoginStatus {
-    fn default() -> Self {
-        Self::Success
-    }
+/// Api 操作日志类型
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum HttpType {
+    /// 请求
+    #[serde(rename = "REQ")]
+    Req,
+    /// 响应
+    #[serde(rename = "RSP")]
+    Rsp,
 }
 
-impl From<UserLoginStatus> for i8 {
-    fn from(value: UserLoginStatus) -> Self {
-        value as i8
+impl From<HttpType> for String {
+    fn from(value: HttpType) -> Self {
+        match value {
+            HttpType::Req => "REQ".to_owned(),
+            HttpType::Rsp => "RSP".to_owned(),
+        }
     }
 }

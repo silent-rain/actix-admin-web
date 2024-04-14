@@ -15,6 +15,8 @@ pub struct GetRoleListReq {
     pub start_time: Option<String>,
     /// 结束时间
     pub end_time: Option<String>,
+    /// 部门名称
+    pub name: Option<String>,
     /// 返回所有数据
     pub all: Option<bool>,
 }

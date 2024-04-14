@@ -37,6 +37,9 @@ impl<'a> DeptDao<'a> {
             })
             .apply_if(req.end_time, |query, v| {
                 query.filter(perm_dept::Column::CreatedAt.lt(v))
+            })
+            .apply_if(req.name, |query, v| {
+                query.filter(perm_dept::Column::Name.like(format!("%{v}%")))
             });
 
         let total = states.clone().count(self.db.rdb()).await?;
@@ -49,6 +52,14 @@ impl<'a> DeptDao<'a> {
             .await?;
 
         Ok((results, total))
+    }
+
+    /// 获取父ID下的所有子列表
+    pub async fn children(&self, pid: i32) -> Result<Vec<perm_dept::Model>, DbErr> {
+        PermDept::find()
+            .filter(perm_dept::Column::Pid.eq(pid))
+            .all(self.db.rdb())
+            .await
     }
 
     /// 获取详情信息

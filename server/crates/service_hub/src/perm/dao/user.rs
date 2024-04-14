@@ -40,6 +40,9 @@ impl<'a> UserDao<'a> {
             })
             .apply_if(req.end_time, |query, v| {
                 query.filter(perm_user::Column::CreatedAt.lt(v))
+            })
+            .apply_if(req.username, |query, v| {
+                query.filter(perm_user::Column::Username.like(format!("%{v}%")))
             });
 
         let total = states.clone().count(self.db.rdb()).await?;
@@ -253,7 +256,7 @@ impl<'a> UserDao<'a> {
 }
 
 impl<'a> UserDao<'a> {
-    /// 通过用户ID获取角色列表
+    /// 通过用户ID获角色色列表
     pub async fn roles(&self, user_id: i32) -> Result<(Vec<perm_role::Model>, u64), DbErr> {
         let results = PermRole::find()
             .join_rev(

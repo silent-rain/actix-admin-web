@@ -1,4 +1,6 @@
-//! 全局配置表
+//! 配置表
+
+use utils::list_tree::GenericTreeTrait;
 
 use sea_orm::{
     prelude::DateTimeLocal, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey,
@@ -6,7 +8,7 @@ use sea_orm::{
 };
 use serde::{Deserialize, Serialize};
 
-/// 全局配置表
+/// 配置表
 #[derive(Clone, Debug, Default, PartialEq, Eq, Deserialize, Serialize, DeriveEntityModel)]
 #[sea_orm(table_name = "sys_config")]
 pub struct Model {
@@ -27,7 +29,7 @@ pub struct Model {
     pub sort: Option<i32>,
     /// 配置描述
     pub desc: Option<String>,
-    /// 是否启用,0: 禁用,1: 启用
+    /// 状态, 0:停用,1:正常
     pub status: i8,
     /// 创建时间
     pub created_at: DateTimeLocal,
@@ -39,3 +41,14 @@ pub struct Model {
 pub enum Relation {}
 
 impl ActiveModelBehavior for ActiveModel {}
+
+/// 实现 `GenericTreeTrait` trait, 将列表数据转换为树结构
+impl GenericTreeTrait for Model {
+    fn id(&self) -> i32 {
+        self.id
+    }
+
+    fn pid(&self) -> Option<i32> {
+        self.pid
+    }
+}

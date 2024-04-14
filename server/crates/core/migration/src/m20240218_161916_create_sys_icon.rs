@@ -1,11 +1,11 @@
-//! 字典维度表
-//! User Entity: [`entity::prelude::DcDictDim`]
-use entity::{dc_dict_dim::Column, prelude::DcDictDim};
+//! ICON图标表
+//! User Entity: [`entity::prelude::SysIcon`]
+use entity::{prelude::SysIcon, sys_icon::Column};
 
 use sea_orm_migration::{
     async_trait,
     sea_orm::DeriveMigrationName,
-    sea_query::{ColumnDef, Table},
+    sea_query::{BlobSize, ColumnDef, Expr, Table},
     DbErr, MigrationTrait, SchemaManager,
 };
 
@@ -16,11 +16,10 @@ pub struct Migration;
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
-
         manager
             .create_table(
                 Table::create()
-                    .table(DcDictDim)
+                    .table(SysIcon)
                     .if_not_exists()
                     .col(
                         ColumnDef::new(Column::Id)
@@ -28,30 +27,27 @@ impl MigrationTrait for Migration {
                             .not_null()
                             .auto_increment()
                             .primary_key()
-                            .comment("字典ID"),
+                            .comment("图标ID"),
                     )
                     .col(
                         ColumnDef::new(Column::Name)
                             .string()
-                            .string_len(64)
+                            .string_len(32)
                             .not_null()
                             .unique_key()
-                            .comment("字典名称"),
+                            .comment("图标名称"),
                     )
                     .col(
-                        ColumnDef::new(Column::Code)
-                            .string()
-                            .string_len(64)
+                        ColumnDef::new(Column::BaseImg)
+                            .blob(BlobSize::Long)
                             .not_null()
-                            .unique_key()
-                            .comment("字典编码"),
+                            .comment("Base64图片"),
                     )
                     .col(
-                        ColumnDef::new(Column::Sort)
+                        ColumnDef::new(Column::Category)
                             .integer()
-                            .null()
-                            .default(0)
-                            .comment("排序"),
+                            .not_null()
+                            .comment("图标类型,1:element,2:custom"),
                     )
                     .col(
                         ColumnDef::new(Column::Note)
@@ -61,16 +57,10 @@ impl MigrationTrait for Migration {
                             .comment("备注"),
                     )
                     .col(
-                        ColumnDef::new(Column::Status)
-                            .tiny_integer()
-                            .not_null()
-                            .default(1)
-                            .comment("状态,0:停用,1:正常"),
-                    )
-                    .col(
                         ColumnDef::new(Column::CreatedAt)
                             .date_time()
                             .not_null()
+                            .default(Expr::current_timestamp())
                             .comment("创建时间"),
                     )
                     .col(
@@ -86,9 +76,8 @@ impl MigrationTrait for Migration {
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
-
         manager
-            .drop_table(Table::drop().table(DcDictDim).to_owned())
+            .drop_table(Table::drop().table(SysIcon).to_owned())
             .await
     }
 }

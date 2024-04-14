@@ -35,6 +35,7 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(40)
                             .not_null()
+                            .unique_key()
                             .comment("验证码ID"),
                     )
                     .col(

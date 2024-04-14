@@ -230,7 +230,7 @@ impl<'a> UserService<'a> {
                         .with_msg("查询用户与角色关系列表失败")
                 })?;
 
-        // 获取角色ID的差异列表
+        // 获角色色ID的差异列表
         let (add_role_ids, del_role_ids) = self.diff_role_ids(data.role_ids, user_role_rels);
 
         let model = perm_user::ActiveModel {
@@ -260,7 +260,7 @@ impl<'a> UserService<'a> {
         Ok(())
     }
 
-    /// 获取角色ID的差异列表
+    /// 获角色色ID的差异列表
     fn diff_role_ids(
         &self,
         role_ids: Vec<i32>,
@@ -288,7 +288,7 @@ impl<'a> UserService<'a> {
 }
 
 impl<'a> UserService<'a> {
-    /// 通过用户ID获取角色列表
+    /// 通过用户ID获角色色列表
     pub async fn roles(&self, user_id: i32) -> Result<(Vec<perm_role::Model>, u64), ErrorMsg> {
         let (results, total) = self.user_dao.roles(user_id).await.map_err(|err| {
             error!("查询用户失败, err: {:#?}", err);

@@ -1262,6 +1262,7 @@ dependencies = [
  "sea-orm",
  "serde",
  "serde_json",
+ "utils",
 ]
 
 [[package]]
@@ -2106,12 +2107,14 @@ name = "middleware"
 version = "0.1.0"
 dependencies = [
  "actix-cors",
+ "actix-http",
  "actix-web",
  "code",
  "context",
  "futures",
  "jwt",
  "response",
+ "serde_json",
  "service_hub",
  "tracing",
 ]

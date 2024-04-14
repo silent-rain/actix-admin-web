@@ -11,7 +11,8 @@ use actix_web::{
 use futures::future::LocalBoxFuture;
 
 /// 上下文中间件
-pub struct ContextMiddleware;
+#[derive(Default)]
+pub struct ContextMiddleware {}
 
 // Middleware factory is `Transform` trait
 // `S` - type of the next service

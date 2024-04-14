@@ -37,7 +37,8 @@ const WHITE_LIST: [&str; 4] = [
 // 2. Middleware's call method gets called with normal request.
 
 /// 接口鉴权
-pub struct Auth;
+#[derive(Default)]
+pub struct Auth {}
 
 // Middleware factory is `Transform` trait
 // `S` - type of the next service

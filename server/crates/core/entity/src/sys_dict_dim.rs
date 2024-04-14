@@ -8,15 +8,15 @@ use serde::{Deserialize, Serialize};
 
 /// 字典维度表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "dc_dict_dim")]
+#[sea_orm(table_name = "sys_dict_dim")]
 pub struct Model {
-    /// 字典ID
+    /// 字典维度ID
     #[sea_orm(primary_key)]
     pub id: i32,
-    /// 字典名称
+    /// 字典维度名称
     #[sea_orm(unique)]
     pub name: String,
-    /// 字典编码
+    /// 字典维度编码
     #[sea_orm(unique)]
     pub code: String,
     /// 排序
@@ -33,11 +33,11 @@ pub struct Model {
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
-    #[sea_orm(has_many = "super::dc_dict_data::Entity")]
+    #[sea_orm(has_many = "super::sys_dict_data::Entity")]
     DcDictData,
 }
 
-impl Related<super::dc_dict_data::Entity> for Entity {
+impl Related<super::sys_dict_data::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::DcDictData.def()
     }

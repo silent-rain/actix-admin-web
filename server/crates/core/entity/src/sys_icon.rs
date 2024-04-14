@@ -19,7 +19,7 @@ pub struct Model {
     pub name: String,
     /// Base64图片
     #[sea_orm(column_type = "Binary(BlobSize::Long)")]
-    pub base_img: String,
+    pub base_img: Vec<u8>,
     /// 图标类型,1:element,2:custom
     pub category: i8,
     /// 备注

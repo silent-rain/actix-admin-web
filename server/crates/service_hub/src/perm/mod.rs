@@ -23,5 +23,5 @@ pub use controller::{
 mod router;
 pub use router::{
     dept::DeptRouter, dept_role_rel::DeptRoleRelRouter, role::RoleRouter, user::UserRouter,
-    user_role_rel::UserRoleRelRouter,
+    user_role_rel::UserRoleRelRouter, PermissionRouter,
 };

@@ -1,7 +1,6 @@
 //! 部门管理
 
 use actix_validator::Validate;
-use entity::perm_dept;
 
 use serde::{Deserialize, Serialize};
 
@@ -16,6 +15,8 @@ pub struct GetDeptListReq {
     pub start_time: Option<String>,
     /// 结束时间
     pub end_time: Option<String>,
+    /// 角色名称
+    pub name: Option<String>,
     /// 返回所有数据
     pub all: Option<bool>,
 }
@@ -60,28 +61,4 @@ pub struct UpdateDeptStatusReq {
     /// 状态,0:停用,1:正常
     /// Enum: [`crate::perm::enums::DeptStatus`]
     pub status: i8,
-}
-
-/// 部门树列表
-#[derive(Debug, Serialize, Deserialize)]
-pub struct DeptTree {
-    #[serde(flatten)]
-    pub dept: perm_dept::Model,
-    /// 子部门列表
-    pub children: Vec<DeptTree>,
-}
-
-impl DeptTree {
-    /// 将Dept转换为DeptTree
-    pub fn new(model: &perm_dept::Model) -> Self {
-        DeptTree {
-            dept: model.clone(),
-            children: Vec::new(),
-        }
-    }
-
-    /// 添加子部门
-    pub fn add_child(&mut self, child: DeptTree) {
-        self.children.push(child);
-    }
 }

@@ -1,5 +1,7 @@
 //! 部门表
 
+use utils::list_tree::GenericTreeTrait;
+
 use sea_orm::{
     prelude::DateTimeLocal, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey,
     DeriveRelation, EntityTrait, EnumIter, PrimaryKeyTrait,
@@ -35,3 +37,14 @@ pub struct Model {
 pub enum Relation {}
 
 impl ActiveModelBehavior for ActiveModel {}
+
+/// 实现 `GenericTreeTrait` trait, 将列表数据转换为树结构
+impl GenericTreeTrait for Model {
+    fn id(&self) -> i32 {
+        self.id
+    }
+
+    fn pid(&self) -> Option<i32> {
+        self.pid
+    }
+}

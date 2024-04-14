@@ -15,6 +15,8 @@ pub struct GetUserListReq {
     pub start_time: Option<String>,
     /// 结束时间
     pub end_time: Option<String>,
+    /// 用户名称
+    pub username: Option<String>,
 }
 
 /// 添加用户

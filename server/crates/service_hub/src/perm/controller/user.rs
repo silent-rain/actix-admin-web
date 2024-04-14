@@ -123,7 +123,7 @@ impl UserController {
         }
     }
 
-    /// 通过用户ID获取角色列表
+    /// 通过用户ID获角色色列表
     pub async fn roles(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
         let user_service: UserService = provider.provide();
         let resp = user_service.roles(*id).await;
