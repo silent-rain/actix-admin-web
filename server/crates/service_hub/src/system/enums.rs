@@ -30,3 +30,13 @@ pub enum DictDataStatus {
     /// 正常
     Enabled = 1,
 }
+
+/// 验证码状态
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[repr(i8)]
+pub enum CaptchaStatus {
+    /// 无效验证码
+    Invalid = 0,
+    /// 有效验证码
+    Valid = 1,
+}

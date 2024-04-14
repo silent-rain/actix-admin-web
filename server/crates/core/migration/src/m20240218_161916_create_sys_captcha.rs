@@ -55,7 +55,14 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::Expire)
                             .integer()
                             .not_null()
-                            .comment("过期时间"),
+                            .comment("过期时间,秒"),
+                    )
+                    .col(
+                        ColumnDef::new(Column::Status)
+                            .tiny_integer()
+                            .not_null()
+                            .default(1)
+                            .comment("状态,0:无效,1:有效"),
                     )
                     .col(
                         ColumnDef::new(Column::CreatedAt)
@@ -63,6 +70,12 @@ impl MigrationTrait for Migration {
                             .not_null()
                             .default(Expr::current_timestamp())
                             .comment("创建时间"),
+                    )
+                    .col(
+                        ColumnDef::new(Column::UpdatedAt)
+                            .date_time()
+                            .not_null()
+                            .comment("更新时间"),
                     )
                     .to_owned(),
             )
