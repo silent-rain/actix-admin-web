@@ -37,17 +37,24 @@ impl MigrationTrait for Migration {
                             .comment("字典维度ID"),
                     )
                     .col(
-                        ColumnDef::new(Column::Name)
+                        ColumnDef::new(Column::DimCode)
                             .string()
                             .string_len(64)
                             .not_null()
-                            .comment("字典项名称"),
+                            .comment("字典维度编码"),
+                    )
+                    .col(
+                        ColumnDef::new(Column::Lable)
+                            .string()
+                            .string_len(64)
+                            .not_null()
+                            .comment("字典标签"),
                     )
                     .col(
                         ColumnDef::new(Column::Value)
                             .text()
                             .not_null()
-                            .comment("字典项值"),
+                            .comment("字典键值"),
                     )
                     .col(
                         ColumnDef::new(Column::Sort)

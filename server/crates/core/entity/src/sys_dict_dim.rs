@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 /// 字典维度表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "dc_dict_dim")]
+#[sea_orm(table_name = "sys_dict_dim")]
 pub struct Model {
     /// 字典维度ID
     #[sea_orm(primary_key)]

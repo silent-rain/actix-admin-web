@@ -15,10 +15,12 @@ pub struct GetDictDataListReq {
     pub start_time: Option<String>,
     /// 结束时间
     pub end_time: Option<String>,
-    /// 字典项名称
-    pub name: Option<String>,
+    /// 字典标签
+    pub lable: Option<String>,
     /// 字典维度ID
     pub dim_id: Option<i32>,
+    /// 字典维度编码
+    pub dim_code: Option<String>,
 }
 
 /// 添加字典数据
@@ -26,10 +28,12 @@ pub struct GetDictDataListReq {
 pub struct AddDictDataReq {
     /// 字典维度ID
     pub dim_id: i32,
-    /// 字典项名称
+    /// 字典维度编码
+    pub dim_code: String,
+    /// 字典标签
     #[validate(length(min = 2, message = "至少输入两个字符"))]
-    pub name: String,
-    /// 字典项值
+    pub lable: String,
+    /// 字典键值
     pub value: String,
     /// 排序
     pub sort: Option<i32>,
@@ -40,12 +44,10 @@ pub struct AddDictDataReq {
 /// 更新数据 请求体
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
 pub struct UpdateDictDataReq {
-    /// 字典维度ID
-    pub dim_id: i32,
-    /// 字典项名称
+    /// 字典标签
     #[validate(length(min = 2, message = "至少输入两个字符"))]
-    pub name: String,
-    /// 字典项值
+    pub lable: String,
+    /// 字典键值
     pub value: String,
     /// 排序
     pub sort: Option<i32>,

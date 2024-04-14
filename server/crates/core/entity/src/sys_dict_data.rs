@@ -15,9 +15,11 @@ pub struct Model {
     pub id: i32,
     /// 字典维度ID
     pub dim_id: i32,
-    /// 字典项名称
-    pub name: String,
-    /// 字典项值
+    /// 字典维度编码
+    pub dim_code: String,
+    /// 字典标签
+    pub lable: String,
+    /// 字典键值
     pub value: String,
     /// 排序
     pub sort: Option<i32>,

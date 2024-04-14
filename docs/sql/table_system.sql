@@ -59,8 +59,9 @@ CREATE TABLE sys_dict_dim (
 CREATE TABLE sys_dict_data (
     `id` INT AUTO_INCREMENT COMMENT '字典项ID',
     `dim_id` INT(11) NOT NULL COMMENT '字典维度ID',
-    `name` VARCHAR(64) NOT NULL COMMENT '字典项名称',
-    `value` TEXT NOT NULL COMMENT '字典项值',
+    `dim_code` VARCHAR(64) NOT NULL COMMENT '字典维度编码',
+    `lable` VARCHAR(64) NOT NULL COMMENT '字典标签',
+    `value` TEXT NOT NULL COMMENT '字典键值',
     `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
     `note` VARCHAR(200) NULL COMMENT '备注',
     `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:停用,1:正常',

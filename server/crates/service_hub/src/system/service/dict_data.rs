@@ -61,24 +61,23 @@ impl<'a> DictDataService<'a> {
         // 查询字典数据是否存在
         let dict_data = self
             .dict_data_dao
-            .info_by_name(req.dim_id, req.name.clone())
+            .info_by_lable(req.dim_id, req.lable.clone())
             .await
             .map_err(|err| {
-                error!("查询字典数据信息失败, err: {:#?}", err);
-                Error::DbQueryError
-                    .into_msg()
-                    .with_msg("查询字典数据信息失败")
+                error!("查询字典标签失败, err: {:#?}", err);
+                Error::DbQueryError.into_msg().with_msg("查询字典标签失败")
             })?;
         if dict_data.is_some() {
-            error!("字典数据已存在");
+            error!("字典标签已存在");
             return Err(Error::DbDataExistError
                 .into_msg()
-                .with_msg("字典数据已存在"));
+                .with_msg("字典标签已存在"));
         }
 
         let model = sys_dict_data::ActiveModel {
             dim_id: Set(req.dim_id),
-            name: Set(req.name),
+            dim_code: Set(req.dim_code),
+            lable: Set(req.lable),
             value: Set(req.value),
             sort: Set(req.sort),
             note: Set(req.note),
@@ -99,8 +98,7 @@ impl<'a> DictDataService<'a> {
     pub async fn update(&self, id: i32, req: UpdateDictDataReq) -> Result<u64, ErrorMsg> {
         let model = sys_dict_data::ActiveModel {
             id: Set(id),
-            dim_id: Set(req.dim_id),
-            name: Set(req.name),
+            lable: Set(req.lable),
             value: Set(req.value),
             sort: Set(req.sort),
             note: Set(req.note),
