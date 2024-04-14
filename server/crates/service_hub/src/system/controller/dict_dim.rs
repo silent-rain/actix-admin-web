@@ -1,10 +1,12 @@
-//! 角色管理
+//! 字典维度管理
 
 use crate::{
     inject::AInjectProvider,
-    perm::{
-        dto::role::{AddRoleReq, GetRoleListReq, UpdateRoleReq, UpdateRoleStatusReq},
-        service::role::RoleService,
+    system::{
+        dto::dict_dim::{
+            AddDictDimReq, GetDictDimListReq, UpdateDictDimReq, UpdateDictDimStatusReq,
+        },
+        service::dict_dim::DictDimService,
     },
 };
 
@@ -17,15 +19,15 @@ use actix_web::{
 };
 
 /// 控制器
-pub struct RoleController;
+pub struct DictDimController;
 
-impl RoleController {
-    /// 获取角色列表
+impl DictDimController {
+    /// 获取字典维度列表
     pub async fn list(
         provider: Data<AInjectProvider>,
-        req: Query<GetRoleListReq>,
+        req: Query<GetDictDimListReq>,
     ) -> impl Responder {
-        let role_service: RoleService = provider.provide();
+        let role_service: DictDimService = provider.provide();
         let resp = role_service.list(req.into_inner()).await;
         match resp {
             Ok(v) => Response::ok().data(v),
@@ -33,9 +35,9 @@ impl RoleController {
         }
     }
 
-    /// 获取角色信息
+    /// 获取字典维度信息
     pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let role_service: RoleService = provider.provide();
+        let role_service: DictDimService = provider.provide();
         let resp = role_service.info(*id).await;
         match resp {
             Ok(v) => Response::ok().data(v),
@@ -43,9 +45,9 @@ impl RoleController {
         }
     }
 
-    /// 添加角色
-    pub async fn add(provider: Data<AInjectProvider>, data: Json<AddRoleReq>) -> impl Responder {
-        let role_service: RoleService = provider.provide();
+    /// 添加字典维度
+    pub async fn add(provider: Data<AInjectProvider>, data: Json<AddDictDimReq>) -> impl Responder {
+        let role_service: DictDimService = provider.provide();
         let resp = role_service.add(data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
@@ -53,13 +55,13 @@ impl RoleController {
         }
     }
 
-    /// 更新角色
+    /// 更新字典维度
     pub async fn update(
         provider: Data<AInjectProvider>,
         id: Path<i32>,
-        data: Json<UpdateRoleReq>,
+        data: Json<UpdateDictDimReq>,
     ) -> impl Responder {
-        let role_service: RoleService = provider.provide();
+        let role_service: DictDimService = provider.provide();
         let resp = role_service.update(*id, data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
@@ -67,13 +69,13 @@ impl RoleController {
         }
     }
 
-    /// 更新角色状态
+    /// 更新字典维度状态
     pub async fn status(
         provider: Data<AInjectProvider>,
         id: Path<i32>,
-        data: Json<UpdateRoleStatusReq>,
+        data: Json<UpdateDictDimStatusReq>,
     ) -> impl Responder {
-        let role_service: RoleService = provider.provide();
+        let role_service: DictDimService = provider.provide();
         let resp = role_service.status(*id, data.status).await;
         match resp {
             Ok(_v) => Response::ok(),
@@ -81,9 +83,9 @@ impl RoleController {
         }
     }
 
-    /// 删除角色
+    /// 删除字典维度
     pub async fn delete(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let role_service: RoleService = provider.provide();
+        let role_service: DictDimService = provider.provide();
         let resp = role_service.delete(*id).await;
         match resp {
             Ok(_v) => Response::ok(),

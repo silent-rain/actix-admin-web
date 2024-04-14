@@ -1,6 +1,6 @@
 //! 字典维度表
-//! User Entity: [`entity::prelude::DcDictDim`]
-use entity::{dc_dict_dim::Column, prelude::DcDictDim};
+//! User Entity: [`entity::prelude::SysDictDim`]
+use entity::{sys_dict_dim::Column, prelude::SysDictDim};
 
 use sea_orm_migration::{
     async_trait,
@@ -20,7 +20,7 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(DcDictDim)
+                    .table(SysDictDim)
                     .if_not_exists()
                     .col(
                         ColumnDef::new(Column::Id)
@@ -28,7 +28,7 @@ impl MigrationTrait for Migration {
                             .not_null()
                             .auto_increment()
                             .primary_key()
-                            .comment("字典ID"),
+                            .comment("字典维度ID"),
                     )
                     .col(
                         ColumnDef::new(Column::Name)
@@ -36,7 +36,7 @@ impl MigrationTrait for Migration {
                             .string_len(64)
                             .not_null()
                             .unique_key()
-                            .comment("字典名称"),
+                            .comment("字典维度名称"),
                     )
                     .col(
                         ColumnDef::new(Column::Code)
@@ -44,7 +44,7 @@ impl MigrationTrait for Migration {
                             .string_len(64)
                             .not_null()
                             .unique_key()
-                            .comment("字典编码"),
+                            .comment("字典维度编码"),
                     )
                     .col(
                         ColumnDef::new(Column::Sort)
@@ -88,7 +88,7 @@ impl MigrationTrait for Migration {
         // Replace the sample below with your own migration scripts
 
         manager
-            .drop_table(Table::drop().table(DcDictDim).to_owned())
+            .drop_table(Table::drop().table(SysDictDim).to_owned())
             .await
     }
 }

@@ -8,13 +8,13 @@ use serde::{Deserialize, Serialize};
 
 /// 字典数据表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "dc_dict_data")]
+#[sea_orm(table_name = "sys_dict_data")]
 pub struct Model {
     /// 字典项ID
     #[sea_orm(primary_key)]
     pub id: i32,
     /// 字典维度ID
-    pub dim_id: String,
+    pub dim_id: i32,
     /// 字典项名称
     pub name: String,
     /// 字典项值
@@ -34,16 +34,16 @@ pub struct Model {
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
     #[sea_orm(
-        belongs_to = "super::dc_dict_dim::Entity",
+        belongs_to = "super::sys_dict_dim::Entity",
         from = "Column::DimId",
-        to = "super::dc_dict_dim::Column::Id",
+        to = "super::sys_dict_dim::Column::Id",
         on_update = "Cascade",
         on_delete = "Cascade"
     )]
     DcDictDim,
 }
 
-impl Related<super::dc_dict_dim::Entity> for Entity {
+impl Related<super::sys_dict_dim::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::DcDictDim.def()
     }

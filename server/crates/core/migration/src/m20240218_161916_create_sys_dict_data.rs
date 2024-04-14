@@ -1,6 +1,6 @@
 //! 字典数据表
-//! User Entity: [`entity::prelude::DcDictData`]
-use entity::{dc_dict_data::Column, prelude::DcDictData};
+//! User Entity: [`entity::prelude::SysDictData`]
+use entity::{prelude::SysDictData, sys_dict_data::Column};
 
 use sea_orm_migration::{
     async_trait,
@@ -20,7 +20,7 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(DcDictData)
+                    .table(SysDictData)
                     .if_not_exists()
                     .col(
                         ColumnDef::new(Column::Id)
@@ -91,7 +91,7 @@ impl MigrationTrait for Migration {
         // Replace the sample below with your own migration scripts
 
         manager
-            .drop_table(Table::drop().table(DcDictData).to_owned())
+            .drop_table(Table::drop().table(SysDictData).to_owned())
             .await
     }
 }
