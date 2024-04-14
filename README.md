@@ -105,10 +105,6 @@
 - 定时任务调研与集成；
 - 路由匹配 open api 接口 rbac
 - ICON 图标管理
-- 接口验证：
-  - 登陆禁用接口是否生效
-  - 登陆时禁用后的登陆态是否生效
-  - 列表接口返回字段需要屏蔽token
 
 https://github.com/actix/actix-extras/tree/master/actix-identity
 https://crates.io/crates/actix-ws
