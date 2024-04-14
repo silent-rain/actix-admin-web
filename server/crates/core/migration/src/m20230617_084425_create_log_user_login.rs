@@ -43,6 +43,13 @@ impl MigrationTrait for Migration {
                             .comment("用户名称"),
                     )
                     .col(
+                        ColumnDef::new(Column::Token)
+                            .string()
+                            .string_len(250)
+                            .not_null()
+                            .comment("登陆令牌"),
+                    )
+                    .col(
                         ColumnDef::new(Column::RemoteAddr)
                             .string()
                             .string_len(64)
@@ -60,7 +67,15 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::Status)
                             .tiny_integer()
                             .not_null()
+                            .default(1)
                             .comment("登录状态,0:失败,1:成功"),
+                    )
+                    .col(
+                        ColumnDef::new(Column::Disabled)
+                            .tiny_integer()
+                            .not_null()
+                            .default(0)
+                            .comment("禁用状态,0:未禁用,1:禁用"),
                     )
                     .col(
                         ColumnDef::new(Column::CreatedAt)

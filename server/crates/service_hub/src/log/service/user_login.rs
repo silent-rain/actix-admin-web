@@ -2,6 +2,7 @@
 use crate::log::{
     dao::user_login::UserLoginDao,
     dto::user_login::{AddUserLoginInfoReq, GetUserLoginListReq},
+    enums::UserLoginDisabledStatus,
 };
 
 use code::{Error, ErrorMsg};
@@ -23,19 +24,24 @@ impl<'a> UserLoginService<'a> {
         &self,
         req: GetUserLoginListReq,
     ) -> Result<(Vec<log_user_login::Model>, u64), ErrorMsg> {
-        let (results, total) = self.user_login_dao.list(req).await.map_err(|err| {
+        let (mut results, total) = self.user_login_dao.list(req).await.map_err(|err| {
             error!("查询登陆日志列表失败, err: {:#?}", err);
             Error::DbQueryError
                 .into_msg()
                 .with_msg("查询登陆日志列表失败")
         })?;
 
+        // 重置 token 为空
+        for item in results.iter_mut() {
+            item.token = "".to_owned();
+        }
+
         Ok((results, total))
     }
 
     /// 获取详情数据
     pub async fn info(&self, id: i32) -> Result<log_user_login::Model, ErrorMsg> {
-        let result = self
+        let mut result = self
             .user_login_dao
             .info(id)
             .await
@@ -52,14 +58,15 @@ impl<'a> UserLoginService<'a> {
                     .with_msg("登陆日志不存在")
             })?;
 
+        result.token = "".to_owned();
         Ok(result)
     }
 
-    /// 根据用户ID获取详情信息
-    pub async fn info_by_user_id(&self, user_id: i32) -> Result<log_user_login::Model, ErrorMsg> {
-        let result = self
+    /// 根据Token获取详情信息
+    pub async fn info_by_token(&self, token: String) -> Result<log_user_login::Model, ErrorMsg> {
+        let mut result = self
             .user_login_dao
-            .info_by_user_id(user_id)
+            .info_by_token(token)
             .await
             .map_err(|err| {
                 error!("查询登陆日志信息失败, err: {:#?}", err);
@@ -73,7 +80,7 @@ impl<'a> UserLoginService<'a> {
                     .into_msg()
                     .with_msg("登陆日志不存在")
             })?;
-
+        result.token = "".to_owned();
         Ok(result)
     }
 
@@ -82,9 +89,11 @@ impl<'a> UserLoginService<'a> {
         let model = log_user_login::ActiveModel {
             user_id: Set(data.user_id),
             username: Set(data.username),
+            token: Set(data.token),
             remote_addr: Set(data.remote_addr),
             user_agent: Set(data.user_agent),
             status: Set(data.status),
+            disabled: Set(UserLoginDisabledStatus::Enabled as i8),
             ..Default::default()
         };
         let result = self.user_login_dao.add(model).await.map_err(|err| {
@@ -107,6 +116,21 @@ impl<'a> UserLoginService<'a> {
                 Error::DbUpdateError
                     .into_msg()
                     .with_msg("更新登录日志状态失败")
+            })?;
+
+        Ok(())
+    }
+
+    /// 更新登录日志禁用状态
+    pub async fn disabled(&self, id: i32, disabled: i8) -> Result<(), ErrorMsg> {
+        self.user_login_dao
+            .disabled(id, disabled)
+            .await
+            .map_err(|err| {
+                error!("更新登录日志禁用状态失败, err: {:#?}", err);
+                Error::DbUpdateError
+                    .into_msg()
+                    .with_msg("更新登录日志禁用状态失败")
             })?;
 
         Ok(())

@@ -11,6 +11,15 @@ pub enum UserLoginStatus {
     Success = 1,
 }
 
+/// 用户登陆禁用状态
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum UserLoginDisabledStatus {
+    /// 停用
+    Disabled = 0,
+    /// 正常
+    Enabled = 1,
+}
+
 /// Api 操作日志类型
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum HttpType {

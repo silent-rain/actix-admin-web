@@ -32,6 +32,12 @@ impl<'a> UserLoginDao<'a> {
             })
             .apply_if(req.end_time, |query, v| {
                 query.filter(log_user_login::Column::CreatedAt.lt(v))
+            })
+            .apply_if(req.user_id, |query, v| {
+                query.filter(log_user_login::Column::UserId.eq(v))
+            })
+            .apply_if(req.username, |query, v| {
+                query.filter(log_user_login::Column::Username.like(format!("%{v}%")))
             });
 
         let total = states.clone().count(self.db.rdb()).await?;
@@ -50,13 +56,13 @@ impl<'a> UserLoginDao<'a> {
         LogUserLogin::find_by_id(id).one(self.db.rdb()).await
     }
 
-    /// 根据用户ID获取详情信息
-    pub async fn info_by_user_id(
+    /// 根据Token获取详情信息
+    pub async fn info_by_token(
         &self,
-        user_id: i32,
+        token: String,
     ) -> Result<Option<log_user_login::Model>, DbErr> {
         LogUserLogin::find()
-            .filter(log_user_login::Column::UserId.eq(user_id))
+            .filter(log_user_login::Column::Token.eq(token))
             .order_by_desc(log_user_login::Column::Id)
             .one(self.db.rdb())
             .await
@@ -70,11 +76,22 @@ impl<'a> UserLoginDao<'a> {
         active_model.insert(self.db.wdb()).await
     }
 
-    /// 更新状态
+    /// 更新禁用状态
     pub async fn status(&self, id: i32, status: i8) -> Result<(), DbErr> {
         let active_model = log_user_login::ActiveModel {
             id: Set(id),
             status: Set(status),
+            ..Default::default()
+        };
+        let _ = active_model.update(self.db.wdb()).await?;
+        Ok(())
+    }
+
+    /// 更新禁用状态
+    pub async fn disabled(&self, id: i32, disabled: i8) -> Result<(), DbErr> {
+        let active_model = log_user_login::ActiveModel {
+            id: Set(id),
+            disabled: Set(disabled),
             ..Default::default()
         };
         let _ = active_model.update(self.db.wdb()).await?;

@@ -91,9 +91,6 @@
   - [x] 操作日志
   - [ ] 前端日志
   - [x] 登陆日志
-    - [ ] 操作日志类型
-    - [ ] 状态: 成功/失败
-      - [ ] 新增一条禁用的登陆日志？
 - [ ] 前端权限
   - [ ] 动态路由
   - [ ] 按钮权限
@@ -108,6 +105,10 @@
 - 定时任务调研与集成；
 - 路由匹配 open api 接口 rbac
 - ICON 图标管理
+- 接口验证：
+  - 登陆禁用接口是否生效
+  - 登陆时禁用后的登陆态是否生效
+  - 列表接口返回字段需要屏蔽token
 
 https://github.com/actix/actix-extras/tree/master/actix-identity
 https://crates.io/crates/actix-ws
