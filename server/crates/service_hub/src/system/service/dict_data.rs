@@ -15,7 +15,7 @@ use tracing::error;
 /// 服务层
 #[injectable]
 pub struct DictDataService<'a> {
-    role_dao: DictDataDao<'a>,
+    dict_data_dao: DictDataDao<'a>,
 }
 
 impl<'a> DictDataService<'a> {
@@ -24,7 +24,7 @@ impl<'a> DictDataService<'a> {
         &self,
         req: GetDictDataListReq,
     ) -> Result<(Vec<sys_dict_data::Model>, u64), ErrorMsg> {
-        let (results, total) = self.role_dao.list(req).await.map_err(|err| {
+        let (results, total) = self.dict_data_dao.list(req).await.map_err(|err| {
             error!("查询字典数据列表失败, err: {:#?}", err);
             Error::DbQueryError
                 .into_msg()
@@ -37,7 +37,7 @@ impl<'a> DictDataService<'a> {
     /// 获取详情数据
     pub async fn info(&self, id: i32) -> Result<sys_dict_data::Model, ErrorMsg> {
         let result = self
-            .role_dao
+            .dict_data_dao
             .info(id)
             .await
             .map_err(|err| {
@@ -60,7 +60,7 @@ impl<'a> DictDataService<'a> {
     pub async fn add(&self, req: AddDictDataReq) -> Result<sys_dict_data::Model, ErrorMsg> {
         // 查询字典数据是否存在
         let dict_data = self
-            .role_dao
+            .dict_data_dao
             .info_by_name(req.dim_id, req.name.clone())
             .await
             .map_err(|err| {
@@ -85,7 +85,7 @@ impl<'a> DictDataService<'a> {
             status: Set(DictDataStatus::Enabled as i8),
             ..Default::default()
         };
-        let result = self.role_dao.add(model).await.map_err(|err| {
+        let result = self.dict_data_dao.add(model).await.map_err(|err| {
             error!("添加字典数据信息失败, err: {:#?}", err);
             Error::DbAddError
                 .into_msg()
@@ -108,7 +108,7 @@ impl<'a> DictDataService<'a> {
             ..Default::default()
         };
 
-        let result = self.role_dao.update(model).await.map_err(|err| {
+        let result = self.dict_data_dao.update(model).await.map_err(|err| {
             error!("更新字典数据失败, err: {:#?}", err);
             Error::DbUpdateError.into_msg().with_msg("更新字典数据失败")
         })?;
@@ -118,7 +118,7 @@ impl<'a> DictDataService<'a> {
 
     /// 更新数据状态
     pub async fn status(&self, id: i32, status: i8) -> Result<(), ErrorMsg> {
-        self.role_dao.status(id, status).await.map_err(|err| {
+        self.dict_data_dao.status(id, status).await.map_err(|err| {
             if err == RecordNotUpdated {
                 error!("更新字典数据状态失败, 该字典数据不存在");
                 return Error::DbUpdateError
@@ -136,7 +136,7 @@ impl<'a> DictDataService<'a> {
 
     /// 删除数据
     pub async fn delete(&self, id: i32) -> Result<u64, ErrorMsg> {
-        let result = self.role_dao.delete(id).await.map_err(|err| {
+        let result = self.dict_data_dao.delete(id).await.map_err(|err| {
             error!("删除字典数据信息失败, err: {:#?}", err);
             Error::DbDeleteError
                 .into_msg()

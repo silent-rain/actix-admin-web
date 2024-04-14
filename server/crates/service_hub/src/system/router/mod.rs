@@ -17,5 +17,7 @@ impl SystemRouter {
             .service(captcha::CaptchaRouter::admin_register())
             .service(config::ConfigRouter::admin_register())
             .service(icon::IconRouter::admin_register())
+            .service(dict_dim::DictDimRouter::admin_register())
+            .service(dict_data::DictDataRouter::admin_register())
     }
 }

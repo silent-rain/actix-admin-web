@@ -27,8 +27,8 @@ impl DictDataController {
         provider: Data<AInjectProvider>,
         req: Query<GetDictDataListReq>,
     ) -> impl Responder {
-        let role_service: DictDataService = provider.provide();
-        let resp = role_service.list(req.into_inner()).await;
+        let dict_data_service: DictDataService = provider.provide();
+        let resp = dict_data_service.list(req.into_inner()).await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::err(err),
@@ -37,8 +37,8 @@ impl DictDataController {
 
     /// 获取字典数据信息
     pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let role_service: DictDataService = provider.provide();
-        let resp = role_service.info(*id).await;
+        let dict_data_service: DictDataService = provider.provide();
+        let resp = dict_data_service.info(*id).await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::err(err),
@@ -50,8 +50,8 @@ impl DictDataController {
         provider: Data<AInjectProvider>,
         data: Json<AddDictDataReq>,
     ) -> impl Responder {
-        let role_service: DictDataService = provider.provide();
-        let resp = role_service.add(data.into_inner()).await;
+        let dict_data_service: DictDataService = provider.provide();
+        let resp = dict_data_service.add(data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -64,8 +64,8 @@ impl DictDataController {
         id: Path<i32>,
         data: Json<UpdateDictDataReq>,
     ) -> impl Responder {
-        let role_service: DictDataService = provider.provide();
-        let resp = role_service.update(*id, data.into_inner()).await;
+        let dict_data_service: DictDataService = provider.provide();
+        let resp = dict_data_service.update(*id, data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -78,8 +78,8 @@ impl DictDataController {
         id: Path<i32>,
         data: Json<UpdateDictDataStatusReq>,
     ) -> impl Responder {
-        let role_service: DictDataService = provider.provide();
-        let resp = role_service.status(*id, data.status).await;
+        let dict_data_service: DictDataService = provider.provide();
+        let resp = dict_data_service.status(*id, data.status).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -88,8 +88,8 @@ impl DictDataController {
 
     /// 删除字典数据
     pub async fn delete(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let role_service: DictDataService = provider.provide();
-        let resp = role_service.delete(*id).await;
+        let dict_data_service: DictDataService = provider.provide();
+        let resp = dict_data_service.delete(*id).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
