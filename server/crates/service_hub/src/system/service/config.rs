@@ -146,6 +146,22 @@ impl<'a> ConfigService<'a> {
 
     /// 删除数据
     pub async fn delete(&self, id: i32) -> Result<u64, ErrorMsg> {
+        let config_children = self.config_dao.children(id).await.map_err(|err| {
+            error!("获取所有子列表失败, err: {:#?}", err);
+            Error::DbQueryError
+                .into_msg()
+                .with_msg("获取所有子列表失败")
+        })?;
+        if !config_children.is_empty() {
+            error!(
+                "请先删除子列表, children count: {:#?}",
+                config_children.len()
+            );
+            return Err(Error::DbDataExistChildrenError
+                .into_msg()
+                .with_msg("请先删除子列表"));
+        }
+
         let result = self.config_dao.delete(id).await.map_err(|err| {
             error!("删除配置信息失败, err: {:#?}", err);
             Error::DbDeleteError.into_msg().with_msg("删除配置信息失败")

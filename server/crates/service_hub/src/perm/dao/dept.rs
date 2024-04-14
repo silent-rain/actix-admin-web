@@ -54,6 +54,14 @@ impl<'a> DeptDao<'a> {
         Ok((results, total))
     }
 
+    /// 获取父ID下的所有子列表
+    pub async fn children(&self, pid: i32) -> Result<Vec<perm_dept::Model>, DbErr> {
+        PermDept::find()
+            .filter(perm_dept::Column::Pid.eq(pid))
+            .all(self.db.rdb())
+            .await
+    }
+
     /// 获取详情信息
     pub async fn info(&self, id: i32) -> Result<Option<perm_dept::Model>, DbErr> {
         PermDept::find_by_id(id).one(self.db.rdb()).await
