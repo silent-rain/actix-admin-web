@@ -2140,8 +2140,14 @@ name = "migration"
 version = "0.1.0"
 dependencies = [
  "async-std",
+ "colored",
+ "database",
+ "dotenv",
  "entity",
+ "logger",
  "sea-orm-migration",
+ "tokio",
+ "tracing",
 ]
 
 [[package]]
@@ -3366,6 +3372,7 @@ dependencies = [
  "sea-orm",
  "serde",
  "serde_json",
+ "tokio",
  "tokio-cron-scheduler",
  "tracing",
  "utils",
