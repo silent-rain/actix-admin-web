@@ -85,7 +85,8 @@
   - [x] 验证码管理
   - [ ] ICON 图标管理
     - [ ] 后期需要改为存储二进制
-  - [x] 数据字典
+  - [x] 数据字典管理
+  - [x] 定时任务管理
 - [ ] 日志管理
   - [x] 系统日志
   - [x] 操作日志
@@ -102,9 +103,11 @@
 - web 日志，接入框架；
 - doc 文档，细化为接口文档；
 - 用户权限封装；
-- 定时任务调研与集成；
 - 路由匹配 open api 接口 rbac
 - ICON 图标管理
+- 细化登陆设备/浏览器
+- sql 日志？
+- 定时任务管理接口验证/定时任务调研与集成；
 
 https://github.com/actix/actix-extras/tree/master/actix-identity
 https://crates.io/crates/actix-ws
