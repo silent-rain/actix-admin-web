@@ -1,3 +1,4 @@
+//! 定时任务管理
 use std::time::Duration;
 
 use chrono::TimeZone;
@@ -98,10 +99,21 @@ async fn demo() -> Result<(), JobSchedulerError> {
     }));
 
     // 启动调度程序
+    println!("start done");
     sched.start().await?;
 
     // Wait while the jobs run
     // tokio::time::sleep(Duration::from_secs(100)).await;
 
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn test_log() {
+        demo().await;
+    }
 }

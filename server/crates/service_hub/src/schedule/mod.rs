@@ -1,5 +1,7 @@
 //! 定时任务管理
 
+pub mod task;
+
 pub mod dto;
 pub mod enums;
 
