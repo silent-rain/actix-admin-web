@@ -39,7 +39,6 @@ CREATE TABLE log_api_operation (
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT 'API操作日志表';
 
 
-
 -- 系统日志表
 CREATE TABLE `log_system` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',

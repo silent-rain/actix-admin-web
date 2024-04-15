@@ -33,7 +33,7 @@ impl<'a> UserLoginService<'a> {
 
         // 重置 token 为空
         for item in results.iter_mut() {
-            item.token = "".to_owned();
+            item.token = "".to_string();
         }
 
         Ok((results, total))
@@ -58,7 +58,7 @@ impl<'a> UserLoginService<'a> {
                     .with_msg("登陆日志不存在")
             })?;
 
-        result.token = "".to_owned();
+        result.token = "".to_string();
         Ok(result)
     }
 
@@ -80,7 +80,7 @@ impl<'a> UserLoginService<'a> {
                     .into_msg()
                     .with_msg("登陆日志不存在")
             })?;
-        result.token = "".to_owned();
+        result.token = "".to_string();
         Ok(result)
     }
 

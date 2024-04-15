@@ -7,6 +7,7 @@ edition = "2021"
 proc-macro = true # 开启过程宏
 
 [dependencies]
-syn = { workspace = true, features = ["full"] }
-quote = { workspace = true }
-proc-macro2 = { workspace = true }
+# 宏
+syn = { version = "2.0", features = ["full"] }
+quote = "1.0"
+proc-macro2 = "1.0"
