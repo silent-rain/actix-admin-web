@@ -3,7 +3,7 @@ CREATE DATABASE `actix_admin_web` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_
 
 -- 角色表
 CREATE TABLE
-    perm_role (
+    `t_perm_role` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '角色ID',
         `name` VARCHAR(20) UNIQUE NOT NULL COMMENT '角色名称',
         `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
@@ -19,7 +19,7 @@ CREATE TABLE
  */
 -- 用户表
 CREATE TABLE
-    perm_user (
+    `t_perm_user` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '用户ID',
         `username` VARCHAR(32) NOT NULL COMMENT '用户名称',
         `real_name` VARCHAR(32) NULL DEFAULT '' COMMENT '真实姓名',
@@ -42,20 +42,20 @@ CREATE TABLE
 
 -- 用户角色关联表
 CREATE TABLE
-    perm_user_role_rel (
+    `t_perm_user_role_rel` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
         `user_id` INT(10) NOT NULL COMMENT '用户ID',
         `role_id` INT(10) NOT NULL COMMENT '角色ID',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         PRIMARY KEY (`id`),
-        UNIQUE KEY `uni_user_id_role_id` (`user_id`, `role_id`),
-        CONSTRAINT `perm_user_role_rel_user_id` FOREIGN KEY (`user_id`) REFERENCES `perm_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-        CONSTRAINT `perm_user_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+        UNIQUE KEY `uk_user_id_role_id` (`user_id`, `role_id`),
+        CONSTRAINT `t_perm_user_role_rel_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_perm_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+        CONSTRAINT `t_perm_user_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户角色关联表';
 
 -- 菜单表
 CREATE TABLE
-    perm_menu (
+    `t_perm_menu` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '菜单ID',
         `parent_id` INT(20) NULL DEFAULT 0 COMMENT '父菜单ID',
         `title` VARCHAR(20) NOT NULL COMMENT '菜单名称',
@@ -82,14 +82,15 @@ CREATE TABLE
 
 -- 菜单角色关联表
 CREATE TABLE
-    perm_menu_role_rel (
+    `t_perm_menu_role_rel` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
         `role_id` INT(10) NOT NULL COMMENT '角色ID',
         `menu_id` INT(10) NOT NULL COMMENT '菜单ID',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         PRIMARY KEY (`id`),
-        CONSTRAINT `perm_menu_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-        CONSTRAINT `perm_menu_role_rel_menu_id` FOREIGN KEY (`menu_id`) REFERENCES `perm_menu` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+        UNIQUE KEY `uk_menu_id_role_id` (`menu_id`, `role_id`),
+        CONSTRAINT `t_perm_menu_role_rel_menu_id` FOREIGN KEY (`menu_id`) REFERENCES `t_perm_menu` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+        CONSTRAINT `t_perm_menu_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '菜单角色关联表';
 
 /*
@@ -113,7 +114,7 @@ END;
  */
 -- 用户Token令牌表
 CREATE TABLE
-    perm_user_token (
+    `t_perm_user_token` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '令牌ID',
         `user_id` INT(20) NOT NULL COMMENT '用户ID',
         `token` VARCHAR(50) NOT NULL COMMENT '令牌',
@@ -129,7 +130,7 @@ CREATE TABLE
 
 /*用户地理位置 - 待定
 CREATE TABLE
-_perm_user_location (
+`t_perm_user_location` (
 `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '位置ID',
 `user_id` VARCHAR(10) NOT NULL COMMENT '用户ID',
 `province_code` VARCHAR(10) NULL DEFAULT '' COMMENT '省',
@@ -147,7 +148,7 @@ CONSTRAINT `perm_user_location_user_id` FOREIGN KEY (`user_id`) REFERENCES `perm
  */
 /*用户头像表 - 待定, 可上传至服务器中
 CREATE TABLE
-_perm_user_avatar (
+`t_perm_user_avatar` (
 `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '头像ID',
 `user_id` VARCHAR(10) NOT NULL COMMENT '用户ID',
 `data` LONGBLOB NOT NULL COMMENT '头像数据',
@@ -161,7 +162,7 @@ PRIMARY KEY (`id`)
  */
 -- 部门表
 CREATE TABLE
-    perm_dept (
+    `t_perm_dept` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '部门ID',
         `pid` BIGINT DEFAULT NULL DEFAULT 0 COMMENT '上级部门ID',
         `pids` VARCHAR(200) DEFAULT NULL DEFAULT '' COMMENT '所有上级部门ID, 用逗号分开',
@@ -176,13 +177,13 @@ CREATE TABLE
 
 -- 部门角色关联表-数据权限
 CREATE TABLE
-    perm_dept_role_rel (
+    `t_perm_dept_role_rel` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
         `role_id` INT(10) NOT NULL COMMENT '角色ID',
         `dept_id` INT(10) NOT NULL COMMENT '部门ID',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         PRIMARY KEY (`id`),
-        UNIQUE KEY `uni_user_id_role_id` (`role_id`, `dept_id`),
-        CONSTRAINT `perm_dept_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-        CONSTRAINT `perm_dept_role_rel_dept_id` FOREIGN KEY (`dept_id`) REFERENCES `perm_dept` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+        UNIQUE KEY `uk_dept_id_role_id` (`dept_id`, `role_id`),
+        CONSTRAINT `t_perm_dept_role_rel_dept_id` FOREIGN KEY (`dept_id`) REFERENCES `t_perm_dept` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+        CONSTRAINT `t_perm_dept_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '部门角色关联表-数据权限';

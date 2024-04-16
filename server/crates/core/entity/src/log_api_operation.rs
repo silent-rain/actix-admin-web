@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 /// API操作日志表
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "log_api_operation")]
+#[sea_orm(table_name = "t_log_api_operation")]
 pub struct Model {
     /// 自增ID
     #[sea_orm(primary_key)]

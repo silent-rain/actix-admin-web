@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 /// 字典数据表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "sys_dict_data")]
+#[sea_orm(table_name = "t_sys_dict_data")]
 pub struct Model {
     /// 字典项ID
     #[sea_orm(primary_key)]

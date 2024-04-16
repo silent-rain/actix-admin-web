@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 
 /// 配置表
 #[derive(Clone, Debug, Default, PartialEq, Eq, Deserialize, Serialize, DeriveEntityModel)]
-#[sea_orm(table_name = "sys_config")]
+#[sea_orm(table_name = "t_sys_config")]
 pub struct Model {
     /// 配置ID
     #[sea_orm(primary_key)]

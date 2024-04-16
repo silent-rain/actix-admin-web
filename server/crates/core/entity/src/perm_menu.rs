@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 /// 菜单表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "perm_menu")]
+#[sea_orm(table_name = "t_perm_menu")]
 pub struct Model {
     /// 菜单ID
     #[sea_orm(primary_key)]

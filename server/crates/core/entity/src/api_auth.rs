@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 /// 接口权限表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "api_auth")]
+#[sea_orm(table_name = "t_api_auth")]
 pub struct Model {
     /// 自增ID
     #[sea_orm(primary_key)]

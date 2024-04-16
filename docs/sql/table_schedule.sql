@@ -3,9 +3,10 @@
  */
 -- 定时任务
 CREATE TABLE
-  `schedule_job` (
+  `t_schedule_job` (
     `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '定时任务ID',
     `name` VARCHAR(200) NOT NULL COMMENT '任务名称',
+    `source` TINYINT(1) NOT NULL COMMENT '任务来源,1:系统内部,2:用户定义',
     `job_type` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '任务类型,0:定时任务,1:即时任务',
     `expression` VARCHAR(100) DEFAULT '' COMMENT 'cron表达式',
     `interval` INT(11) DEFAULT 0 COMMENT '间隔时间,秒',
@@ -18,7 +19,7 @@ CREATE TABLE
 
 -- 定时任务日志
 CREATE TABLE
-  `schedule_job_log` (
+  `t_schedule_job_log` (
     `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '日志ID',
     `job_id` INT(11) NOT NULL COMMENT '任务ID',
     `job_name` VARCHAR(200) NOT NULL COMMENT '任务名称',
@@ -27,6 +28,5 @@ CREATE TABLE
     `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '任务状态,0:失败,1:成功',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '创建时间',
     PRIMARY KEY (`id`) USING BTREE,
-    KEY `idx_job_id` (`job_id`) USING BTREE,
-    KEY `idx_created_at` (`created_at`) USING BTREE
+    KEY `idx_job_id` (`job_id`) USING BTREE
   ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '定时任务日志';

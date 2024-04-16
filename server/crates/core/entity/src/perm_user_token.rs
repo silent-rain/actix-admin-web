@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 /// 用户Token令牌表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "perm_user_token")]
+#[sea_orm(table_name = "t_perm_user_token")]
 pub struct Model {
     /// 令牌ID
     #[sea_orm(primary_key)]

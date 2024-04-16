@@ -3,7 +3,7 @@
  */
 -- 用户登录日志表
 CREATE TABLE
-    log_user_login (
+    `t_log_user_login` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
         `user_id` INT(11) NOT NULL COMMENT '用户ID',
         `username` VARCHAR(32) NOT NULL COMMENT '用户名称',
@@ -19,7 +19,7 @@ CREATE TABLE
 
 -- API操作日志表
 CREATE TABLE
-    log_api_operation (
+    `t_log_api_operation` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
         `user_id` INT(11) NULL DEFAULT 0 COMMENT '用户ID',
         `username` VARCHAR(32) NULL DEFAULT '' COMMENT '用户名称',
@@ -40,7 +40,7 @@ CREATE TABLE
 
 -- 系统日志表
 CREATE TABLE
-    `log_system` (
+    `t_log_system` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
         `user_id` INT(20) NULL DEFAULT 0 COMMENT '请求用户ID',
         `username` VARCHAR(32) NULL DEFAULT '' COMMENT '用户名称',
@@ -68,7 +68,7 @@ CREATE TABLE
 
 -- WEB日志表
 CREATE TABLE
-    log_web (
+    `t_log_web` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
         `user_id` INT(11) NULL DEFAULT 0 COMMENT '用户ID',
         `username` VARCHAR(32) NULL DEFAULT '' COMMENT '用户名称',

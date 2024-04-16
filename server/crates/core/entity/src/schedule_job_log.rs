@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 /// 定时任务日志表
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "schedule_job_log")]
+#[sea_orm(table_name = "t_schedule_job_log")]
 pub struct Model {
     /// 日志ID
     #[sea_orm(primary_key)]

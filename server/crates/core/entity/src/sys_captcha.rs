@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 
 /// 验证码表
 #[derive(Clone, Debug, Default, PartialEq, Eq, Deserialize, Serialize, DeriveEntityModel)]
-#[sea_orm(table_name = "sys_captcha")]
+#[sea_orm(table_name = "t_sys_captcha")]
 pub struct Model {
     /// 自增ID
     #[sea_orm(primary_key)]
