@@ -38,6 +38,12 @@ impl MigrationTrait for Migration {
                             .comment("任务名称"),
                     )
                     .col(
+                        ColumnDef::new(Column::Source)
+                            .integer()
+                            .not_null()
+                            .comment("任务来源,0:系统内部,1:用户定义"),
+                    )
+                    .col(
                         ColumnDef::new(Column::JobType)
                             .integer()
                             .not_null()

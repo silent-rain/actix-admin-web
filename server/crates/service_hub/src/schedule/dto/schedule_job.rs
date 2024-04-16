@@ -28,7 +28,11 @@ pub struct GetScheduleJobReq {
 pub struct AddcheduleJobReq {
     /// 任务名称
     pub name: String,
+    /// 任务来源,0:系统内部,1:用户定义
+    /// Enum: [`crate::schedule::enums::ScheduleJobSource`]
+    pub source: i8,
     /// 任务类型,0:定时任务,1:即时任务
+    /// Enum: [`crate::schedule::enums::ScheduleJobType`]
     pub job_type: i8,
     /// cron表达式
     pub expression: Option<String>,
@@ -46,6 +50,9 @@ pub struct AddcheduleJobReq {
 pub struct UpdatecheduleJobReq {
     /// 任务名称
     pub name: String,
+    /// 任务来源,0:系统内部,1:用户定义
+    /// Enum: [`crate::schedule::enums::ScheduleJobSource`]
+    pub source: i8,
     /// 任务类型,0:定时任务,1:即时任务
     /// Enum: [`crate::schedule::enums::ScheduleJobType`]
     pub job_type: i8,

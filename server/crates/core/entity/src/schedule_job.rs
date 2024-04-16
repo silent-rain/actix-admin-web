@@ -15,6 +15,8 @@ pub struct Model {
     pub id: i32,
     /// 任务名称
     pub name: String,
+    /// 任务来源,0:系统内部,1:用户定义
+    pub source: i8,
     /// 任务类型,0:定时任务,1:即时任务
     pub job_type: i8,
     /// cron表达式

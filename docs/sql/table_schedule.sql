@@ -6,7 +6,7 @@ CREATE TABLE
   `t_schedule_job` (
     `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '定时任务ID',
     `name` VARCHAR(200) NOT NULL COMMENT '任务名称',
-    `source` TINYINT(1) NOT NULL COMMENT '任务来源,1:系统内部,2:用户定义',
+    `source` TINYINT(1) NOT NULL COMMENT '任务来源,0:系统内部,1:用户定义',
     `job_type` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '任务类型,0:定时任务,1:即时任务',
     `expression` VARCHAR(100) DEFAULT '' COMMENT 'cron表达式',
     `interval` INT(11) DEFAULT 0 COMMENT '间隔时间,秒',

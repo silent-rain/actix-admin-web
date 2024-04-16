@@ -19,6 +19,14 @@ pub enum ScheduleJobType {
     /// 即时任务
     Interval = 1,
 }
+/// 定时任务来源
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum ScheduleJobSource {
+    /// 系统内部
+    System = 0,
+    /// 用户定义
+    User = 1,
+}
 
 /// 定时任务运行状态
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
