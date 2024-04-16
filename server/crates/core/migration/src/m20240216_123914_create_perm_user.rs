@@ -41,12 +41,14 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(32)
                             .null()
+                            .default("")
                             .comment("真实姓名"),
                     )
                     .col(
                         ColumnDef::new(Column::Gender)
                             .tiny_integer()
                             .null()
+                            .default(1)
                             .comment("性别;1:男,2:女,3:保密"),
                     )
                     .col(ColumnDef::new(Column::Age).integer().null().comment("年龄"))
@@ -55,6 +57,7 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(20)
                             .null()
+                            .default("")
                             .comment("出生日期"),
                     )
                     .col(
@@ -62,6 +65,7 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(200)
                             .null()
+                            .default("")
                             .comment("头像URL"),
                     )
                     .col(
@@ -69,6 +73,7 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(20)
                             .null()
+                            .default("")
                             .comment("手机号码"),
                     )
                     .col(
@@ -76,6 +81,7 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(100)
                             .null()
+                            .default("")
                             .comment("邮箱"),
                     )
                     .col(
@@ -83,13 +89,16 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(200)
                             .null()
+                            .default("")
                             .comment("介绍"),
                     )
                     .col(
                         ColumnDef::new(Column::Note)
                             .string()
                             .string_len(200)
+                            .default("")
                             .null()
+                            .default("")
                             .comment("备注"),
                     )
                     .col(
@@ -110,6 +119,7 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::DeptId)
                             .integer()
                             .null()
+                            .default(0)
                             .comment("部门ID"),
                     )
                     .col(

@@ -60,6 +60,7 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(Column::Sort)
                             .integer()
+                            .unsigned()
                             .null()
                             .default(0)
                             .comment("排序"),
