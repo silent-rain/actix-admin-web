@@ -1,37 +1,29 @@
 /*Mysql 速查表*/
 -- 创建数据库 
-CREATE DATABASE IF NOT EXISTS `actix_admin_web` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE DATABASE IF NOT EXISTS `actix_admin_web` DEFAULT CHARACTER
+SET
+    utf8mb4 COLLATE utf8mb4_general_ci;
 
 -- 修改表名
-ALTER TABLE
-    avatar RENAME user_avatar;
+ALTER TABLE avatar RENAME user_avatar;
 
 -- 修改字段名称
-alter table
-    user_token change user_id `user_id` INT(20) NOT NULL COMMENT '用户ID';
+alter table user_token change user_id `user_id` INT (20) NOT NULL COMMENT '用户ID';
 
 -- 添加字段
-ALTER TABLE
-    http_log
-ADD
-    `trace_id` VARCHAR(32) NULL COMMENT '请求traceId';
+ALTER TABLE http_log ADD `trace_id` VARCHAR(32) NULL COMMENT '请求traceId';
 
 -- 添加唯一约束
-ALTER TABLE
-    okx_order.okx_main_order
-ADD
-    CONSTRAINT okx_main_order_uni_api_key UNIQUE KEY (api_key);
+ALTER TABLE okx_order.okx_main_order ADD CONSTRAINT okx_main_order_uni_api_key UNIQUE KEY (api_key);
 
 -- 添加主键约束
-ALTER TABLE
-    okx_order.minor_order_trade_history
-ADD
-    CONSTRAINT minor_order_trade_history_PK PRIMARY KEY (user_id, minor_order_id);
+ALTER TABLE okx_order.minor_order_trade_history ADD CONSTRAINT minor_order_trade_history_PK PRIMARY KEY (user_id, minor_order_id);
 
 -- 删除字段
-ALTER TABLE
-    数据表名 DROP 字段名;
+ALTER TABLE 数据表名
+DROP 字段名;
 
--- 备份数据库
-mysqldump - uxx - pxxxx gin_admin > gin_admin.sql -- 恢复数据库
-mysql - u root - proot密码 gin_admin < gin_admin.sql
+/*备份数据库
+mysqldump -uxx -pxxxx actix_admin_web > actix_admin_web.sql -- 恢复数据库
+mysql -uroot -proot密码 actix_admin_web < actix_admin_web.sql
+ */
