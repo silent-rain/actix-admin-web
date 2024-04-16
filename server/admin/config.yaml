@@ -14,7 +14,6 @@ server:
 
 # mysql 数据库配置
 mysql:
-  migrator: false # 数据库自动迁移
   options: # 参数配置
     max_connections: 5 # 设置池的最大连接数
     min_connections: 5 # 设置池的最小连接数

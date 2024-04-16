@@ -5,7 +5,7 @@ use entity::{log_user_login::Column, prelude::LogUserLogin};
 use sea_orm_migration::{
     async_trait,
     sea_orm::DeriveMigrationName,
-    sea_query::{ColumnDef, Table},
+    sea_query::{ColumnDef, Expr, Table},
     DbErr, MigrationTrait, SchemaManager,
 };
 
@@ -24,9 +24,9 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(Column::Id)
                             .integer()
-                            .not_null()
-                            .auto_increment()
                             .primary_key()
+                            .auto_increment()
+                            .not_null()
                             .comment("自增ID"),
                     )
                     .col(
@@ -43,10 +43,18 @@ impl MigrationTrait for Migration {
                             .comment("用户名称"),
                     )
                     .col(
+                        ColumnDef::new(Column::Token)
+                            .string()
+                            .string_len(250)
+                            .not_null()
+                            .comment("登陆令牌"),
+                    )
+                    .col(
                         ColumnDef::new(Column::RemoteAddr)
                             .string()
                             .string_len(64)
                             .null()
+                            .default("")
                             .comment("登录IP"),
                     )
                     .col(
@@ -54,19 +62,27 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(256)
                             .null()
+                            .default("")
                             .comment("用户代理"),
                     )
                     .col(
                         ColumnDef::new(Column::Status)
                             .tiny_integer()
                             .not_null()
+                            .default(1)
                             .comment("登录状态,0:失败,1:成功"),
+                    )
+                    .col(
+                        ColumnDef::new(Column::Disabled)
+                            .tiny_integer()
+                            .not_null()
+                            .default(0)
+                            .comment("禁用状态,0:未禁用,1:禁用"),
                     )
                     .col(
                         ColumnDef::new(Column::CreatedAt)
                             .date_time()
                             .not_null()
-                            .timestamp_with_time_zone()
                             .extra("DEFAULT CURRENT_TIMESTAMP")
                             .comment("创建时间"),
                     )
@@ -74,9 +90,9 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::UpdatedAt)
                             .date_time()
                             .not_null()
-                            .timestamp_with_time_zone()
                             // Sqlite3 不支持 ON UPDATE CURRENT_TIMESTAMP
-                            .extra("DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+                            // .extra("DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+                            .default(Expr::current_timestamp())
                             .comment("更新时间"),
                     )
                     .to_owned(),

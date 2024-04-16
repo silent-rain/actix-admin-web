@@ -5,7 +5,10 @@ use crate::{
         common::captcha::check_captcha,
         dto::login::{BrowserInfo, LoginReq, LoginRsp},
     },
-    log::UserLoginDao,
+    log::{
+        enums::{UserLoginDisabledStatus, UserLoginStatus},
+        UserLoginDao,
+    },
     perm::{enums::UserStatus, UserDao},
     system::CaptchaDao,
 };
@@ -45,6 +48,14 @@ impl<'a> LoginService<'a> {
         let user = self.get_username(data.clone()).await?;
         // 检查用户是否被禁用
         if user.status == UserStatus::Disabled as i8 {
+            // 添加失败登陆日志
+            self.add_login_log(
+                browser_info,
+                user.clone(),
+                "".to_owned(),
+                UserLoginStatus::Failed,
+            )
+            .await?;
             error!("用户已被禁用");
             return Err(Error::LoginUserDisableError
                 .into_msg()
@@ -52,6 +63,14 @@ impl<'a> LoginService<'a> {
         }
         // 检测密码
         if user.password != data.password {
+            // 添加失败登陆日志
+            self.add_login_log(
+                browser_info,
+                user.clone(),
+                "".to_owned(),
+                UserLoginStatus::Failed,
+            )
+            .await?;
             error!("账号或密码错误");
             return Err(Error::LoginPasswordError
                 .into_msg()
@@ -65,7 +84,13 @@ impl<'a> LoginService<'a> {
         })?;
 
         // 添加登陆日志
-        self.add_login_log(browser_info, user.clone()).await?;
+        self.add_login_log(
+            browser_info,
+            user.clone(),
+            token.clone(),
+            UserLoginStatus::Success,
+        )
+        .await?;
 
         // 返回Token
         Ok(LoginRsp {
@@ -97,13 +122,17 @@ impl<'a> LoginService<'a> {
         &self,
         browser_info: BrowserInfo,
         user: perm_user::Model,
+        token: String,
+        status: UserLoginStatus,
     ) -> Result<log_user_login::Model, ErrorMsg> {
         let data = log_user_login::ActiveModel {
             user_id: Set(user.id),
             username: Set(user.username),
+            token: Set(token),
             remote_addr: Set(browser_info.remote_addr),
             user_agent: Set(browser_info.user_agent),
-            status: Set(1),
+            status: Set(status as i8),
+            disabled: Set(UserLoginDisabledStatus::Enabled as i8),
             ..Default::default()
         };
 

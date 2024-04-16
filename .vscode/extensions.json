@@ -1,6 +1,7 @@
 {
   "recommendations": [
     "Vue.volar",
-    "rust-lang.rust-analyzer"
+    "rust-lang.rust-analyzer",
+    "inferrinizzard.prettier-sql-vscode"
   ]
 }

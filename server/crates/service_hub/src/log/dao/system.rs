@@ -35,6 +35,9 @@ impl<'a> SystemDao<'a> {
             });
 
         let total = states.clone().count(self.db.rdb()).await?;
+        if total == 0 {
+            return Ok((vec![], total));
+        }
 
         let results = states
             .order_by_desc(log_system::Column::Id)

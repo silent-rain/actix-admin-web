@@ -5,7 +5,7 @@ use entity::{prelude::SysDictData, sys_dict_data::Column};
 use sea_orm_migration::{
     async_trait,
     sea_orm::DeriveMigrationName,
-    sea_query::{ColumnDef, Table},
+    sea_query::{ColumnDef, Expr, Table},
     DbErr, MigrationTrait, SchemaManager,
 };
 
@@ -25,9 +25,9 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(Column::Id)
                             .integer()
-                            .not_null()
-                            .auto_increment()
                             .primary_key()
+                            .auto_increment()
+                            .not_null()
                             .comment("字典项ID"),
                     )
                     .col(
@@ -67,6 +67,7 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::Note)
                             .string()
                             .string_len(200)
+                            .default("")
                             .null()
                             .comment("备注"),
                     )
@@ -81,12 +82,14 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::CreatedAt)
                             .date_time()
                             .not_null()
+                            .default(Expr::current_timestamp())
                             .comment("创建时间"),
                     )
                     .col(
                         ColumnDef::new(Column::UpdatedAt)
                             .date_time()
                             .not_null()
+                            .default(Expr::current_timestamp())
                             .comment("更新时间"),
                     )
                     .to_owned(),

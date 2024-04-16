@@ -49,6 +49,9 @@ impl<'a> DictDimDao<'a> {
             });
 
         let total = states.clone().count(self.db.rdb()).await?;
+        if total == 0 {
+            return Ok((vec![], total));
+        }
 
         let results = states
             .order_by_desc(sys_dict_dim::Column::Id)

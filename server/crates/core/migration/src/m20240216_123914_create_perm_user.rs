@@ -5,7 +5,7 @@ use entity::{perm_user::Column, prelude::PermUser};
 use sea_orm_migration::{
     async_trait,
     sea_orm::DeriveMigrationName,
-    sea_query::{ColumnDef, Table},
+    sea_query::{ColumnDef, Expr, Table},
     DbErr, MigrationTrait, SchemaManager,
 };
 
@@ -24,9 +24,9 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(Column::Id)
                             .integer()
-                            .not_null()
-                            .auto_increment()
                             .primary_key()
+                            .auto_increment()
+                            .not_null()
                             .comment("用户ID"),
                     )
                     .col(
@@ -41,12 +41,14 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(32)
                             .null()
+                            .default("")
                             .comment("真实姓名"),
                     )
                     .col(
                         ColumnDef::new(Column::Gender)
                             .tiny_integer()
                             .null()
+                            .default(1)
                             .comment("性别;1:男,2:女,3:保密"),
                     )
                     .col(ColumnDef::new(Column::Age).integer().null().comment("年龄"))
@@ -55,6 +57,7 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(20)
                             .null()
+                            .default("")
                             .comment("出生日期"),
                     )
                     .col(
@@ -62,6 +65,7 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(200)
                             .null()
+                            .default("")
                             .comment("头像URL"),
                     )
                     .col(
@@ -69,6 +73,7 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(20)
                             .null()
+                            .default("")
                             .comment("手机号码"),
                     )
                     .col(
@@ -76,6 +81,7 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(100)
                             .null()
+                            .default("")
                             .comment("邮箱"),
                     )
                     .col(
@@ -83,13 +89,16 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(200)
                             .null()
+                            .default("")
                             .comment("介绍"),
                     )
                     .col(
                         ColumnDef::new(Column::Note)
                             .string()
                             .string_len(200)
+                            .default("")
                             .null()
+                            .default("")
                             .comment("备注"),
                     )
                     .col(
@@ -110,18 +119,21 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::DeptId)
                             .integer()
                             .null()
+                            .default(0)
                             .comment("部门ID"),
                     )
                     .col(
                         ColumnDef::new(Column::CreatedAt)
                             .date_time()
                             .not_null()
+                            .default(Expr::current_timestamp())
                             .comment("创建时间"),
                     )
                     .col(
                         ColumnDef::new(Column::UpdatedAt)
                             .date_time()
                             .not_null()
+                            .default(Expr::current_timestamp())
                             .comment("更新时间"),
                     )
                     .to_owned(),

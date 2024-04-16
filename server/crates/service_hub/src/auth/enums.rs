@@ -36,6 +36,9 @@ impl FromStr for RegisterType {
 
 impl From<RegisterType> for String {
     fn from(value: RegisterType) -> Self {
-        value.into()
+        match value {
+            RegisterType::Phone => "phone".to_owned(),
+            RegisterType::Email => "phone".to_owned(),
+        }
     }
 }

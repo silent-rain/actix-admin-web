@@ -1,6 +1,6 @@
 //! 验证码
 
-use crate::system::CaptchaDao;
+use crate::system::{enums::CaptchaStatus, CaptchaDao};
 
 use code::{Error, ErrorMsg};
 
@@ -26,6 +26,14 @@ pub async fn check_captcha<'a>(
                 .into_msg()
                 .with_msg("验证码信息不存在")
         })?;
+
+    // 检查验证码是否有效
+    if result.status == CaptchaStatus::Invalid as i8 {
+        return {
+            error!("无效验证码, captcha: {}", captcha);
+            Err(Error::CaptchaInvalid.into_msg().with_msg("无效验证码"))
+        };
+    }
 
     // 验证验证码
     if result.captcha.to_uppercase() != captcha.to_uppercase() {

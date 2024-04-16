@@ -1,11 +1,11 @@
 //! 字典维度表
 //! User Entity: [`entity::prelude::SysDictDim`]
-use entity::{sys_dict_dim::Column, prelude::SysDictDim};
+use entity::{prelude::SysDictDim, sys_dict_dim::Column};
 
 use sea_orm_migration::{
     async_trait,
     sea_orm::DeriveMigrationName,
-    sea_query::{ColumnDef, Table},
+    sea_query::{ColumnDef, Expr, Table},
     DbErr, MigrationTrait, SchemaManager,
 };
 
@@ -25,25 +25,25 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(Column::Id)
                             .integer()
-                            .not_null()
-                            .auto_increment()
                             .primary_key()
+                            .auto_increment()
+                            .not_null()
                             .comment("字典维度ID"),
                     )
                     .col(
                         ColumnDef::new(Column::Name)
                             .string()
                             .string_len(64)
-                            .not_null()
                             .unique_key()
+                            .not_null()
                             .comment("字典维度名称"),
                     )
                     .col(
                         ColumnDef::new(Column::Code)
                             .string()
                             .string_len(64)
-                            .not_null()
                             .unique_key()
+                            .not_null()
                             .comment("字典维度编码"),
                     )
                     .col(
@@ -57,6 +57,7 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::Note)
                             .string()
                             .string_len(200)
+                            .default("")
                             .null()
                             .comment("备注"),
                     )
@@ -71,12 +72,14 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::CreatedAt)
                             .date_time()
                             .not_null()
+                            .default(Expr::current_timestamp())
                             .comment("创建时间"),
                     )
                     .col(
                         ColumnDef::new(Column::UpdatedAt)
                             .date_time()
                             .not_null()
+                            .default(Expr::current_timestamp())
                             .comment("更新时间"),
                     )
                     .to_owned(),

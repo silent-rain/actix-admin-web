@@ -32,7 +32,7 @@ pub struct AddCaptchaResp {
     pub captcha_id: String,
     /// Base64图片
     pub base_img: String,
-    /// 过期时间
+    /// 过期时间,秒
     pub expire: u32,
     /// 创建时间
     pub created_at: DateTime<Local>,

@@ -24,17 +24,17 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(Column::Id)
                             .integer()
-                            .not_null()
-                            .auto_increment()
                             .primary_key()
+                            .auto_increment()
+                            .not_null()
                             .comment("图标ID"),
                     )
                     .col(
                         ColumnDef::new(Column::Name)
                             .string()
                             .string_len(32)
-                            .not_null()
                             .unique_key()
+                            .not_null()
                             .comment("图标名称"),
                     )
                     .col(
@@ -54,6 +54,7 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(200)
                             .null()
+                            .default("")
                             .comment("备注"),
                     )
                     .col(
@@ -67,6 +68,7 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::UpdatedAt)
                             .date_time()
                             .not_null()
+                            .default(Expr::current_timestamp())
                             .comment("更新时间"),
                     )
                     .to_owned(),

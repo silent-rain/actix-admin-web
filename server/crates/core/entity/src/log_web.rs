@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 /// WEB日志表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "log_web")]
+#[sea_orm(table_name = "t_log_web")]
 pub struct Model {
     /// 自增ID
     #[sea_orm(primary_key)]

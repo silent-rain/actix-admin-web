@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 /// 角色与接口关联表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "api_role_rel")]
+#[sea_orm(table_name = "t_api_role_rel")]
 pub struct Model {
     /// 自增ID
     #[sea_orm(primary_key)]

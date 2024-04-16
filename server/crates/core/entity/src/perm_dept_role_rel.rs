@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 /// 部门角色关联表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "perm_dept_role_rel")]
+#[sea_orm(table_name = "t_perm_dept_role_rel")]
 pub struct Model {
     /// 自增ID
     #[sea_orm(primary_key)]

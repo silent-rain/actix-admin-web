@@ -21,3 +21,17 @@ sea-orm-migration = { workspace = true, features = [
     "sqlx-mysql",
     "sqlx-sqlite",
 ] }
+
+
+[dev-dependencies]
+database = { path = "../database" }
+logger = { path = "../logger" }
+
+dotenv = { workspace = true }
+tracing = { workspace = true }
+tokio = { workspace = true, features = [
+    "macros",
+    "rt-multi-thread",
+    "test-util",
+] }
+colored = "2.1"

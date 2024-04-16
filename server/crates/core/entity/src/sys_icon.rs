@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 
 /// 验证码表
 #[derive(Clone, Debug, Default, PartialEq, Eq, Deserialize, Serialize, DeriveEntityModel)]
-#[sea_orm(table_name = "sys_icon")]
+#[sea_orm(table_name = "t_sys_icon")]
 pub struct Model {
     /// 图标ID
     #[sea_orm(primary_key)]

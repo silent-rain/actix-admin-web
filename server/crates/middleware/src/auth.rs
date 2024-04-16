@@ -3,7 +3,7 @@ use std::future::{ready, Ready};
 
 use service_hub::{
     inject::AInjectProvider,
-    log::{enums::UserLoginStatus, UserLoginService},
+    log::{enums::UserLoginDisabledStatus, UserLoginService},
     perm::{enums::UserStatus, UserService},
 };
 
@@ -26,9 +26,9 @@ use tracing::{error, info};
 /// 白名单
 const WHITE_LIST: [&str; 4] = [
     "/api/v1/health",
-    "/api/v1/captcha",
-    "/api/v1/login",
-    "/api/v1/register",
+    "/api/v1/auth/captcha",
+    "/api/v1/auth/login",
+    "/api/v1/auth/register",
 ];
 
 // There are two steps in middleware processing.
@@ -112,7 +112,7 @@ where
             }
         };
         // 检查系统鉴权
-        let (user_id, user_name) = match Self::check_system_auth(system_token) {
+        let (user_id, user_name) = match Self::check_system_auth(system_token.clone()) {
             Ok(v) => v,
             Err(err) => {
                 return Box::pin(async move {
@@ -149,7 +149,7 @@ where
 
             // TODO 待完善
             // 验证当前登陆的用户是否被禁用
-            if let Err(err) = Self::verify_user_login_status(provider, user_id).await {
+            if let Err(err) = Self::verify_user_login_disabled(provider, system_token).await {
                 return Err(Response::err(err).into());
             }
 
@@ -208,17 +208,18 @@ impl<S> AuthMiddleware<S> {
     }
 
     /// 验证当前登陆的用户是否被禁用
-    async fn verify_user_login_status(
+    /// TODO 后期可调整为缓存
+    async fn verify_user_login_disabled(
         provider: AInjectProvider,
-        user_id: i32,
+        token: String,
     ) -> Result<(), code::ErrorMsg> {
         let user_login_service: UserLoginService = provider.provide();
-        let user = user_login_service.info_by_user_id(user_id).await?;
-        if user.status == UserLoginStatus::Failed as i8 {
-            error!("user_id: {}, 当前登陆态已被禁用", user.id);
+        let user = user_login_service.info_by_token(token.clone()).await?;
+        if user.disabled == UserLoginDisabledStatus::Disabled as i8 {
+            error!("user_id: {} token: {}, 当前登陆态已被禁用", user.id, token);
             return Err(code::Error::LoginStatusDisabled
                 .into_msg()
-                .with_msg("当前登陆态已失效, 请重新登陆"));
+                .with_msg("当前登陆态已被禁用, 请重新登陆"));
         }
         Ok(())
     }

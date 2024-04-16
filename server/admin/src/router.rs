@@ -3,7 +3,7 @@ use context::ContextMiddleware;
 use middleware::api_operation::ApiOperation;
 use service_hub::{
     auth::AuthRouter, log::LogRouter, perm::PermissionRouter, public::HealthRouter,
-    system::SystemRouter,
+    schedule::ScheduleRouter, system::SystemRouter,
 };
 
 use actix_web::{dev::HttpServiceFactory, web};
@@ -36,6 +36,8 @@ pub fn register() -> impl HttpServiceFactory {
                 // 系统管理
                 .service(SystemRouter::admin_register())
                 // 日志管理
-                .service(LogRouter::admin_register()),
+                .service(LogRouter::admin_register())
+                // 定时任务管理
+                .service(ScheduleRouter::admin_register()),
         )
 }

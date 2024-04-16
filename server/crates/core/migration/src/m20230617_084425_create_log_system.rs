@@ -24,15 +24,16 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(Column::Id)
                             .integer()
-                            .not_null()
-                            .auto_increment()
                             .primary_key()
+                            .auto_increment()
+                            .not_null()
                             .comment("自增ID"),
                     )
                     .col(
                         ColumnDef::new(Column::UserId)
                             .integer()
                             .null()
+                            .default(0)
                             .comment("请求用户ID"),
                     )
                     .col(
@@ -40,6 +41,7 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(32)
                             .null()
+                            .default("")
                             .comment("自增ID"),
                     )
                     .col(
@@ -53,12 +55,14 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::ParentSpanId)
                             .integer()
                             .null()
+                            .default(0)
                             .comment("Parent Span Id"),
                     )
                     .col(
                         ColumnDef::new(Column::SpanId)
                             .integer()
                             .null()
+                            .default(0)
                             .comment("Span Id"),
                     )
                     .col(
@@ -66,6 +70,7 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(100)
                             .null()
+                            .default("")
                             .comment("模块路径"),
                     )
                     .col(
@@ -80,12 +85,14 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(500)
                             .null()
+                            .default("")
                             .comment("文件"),
                     )
                     .col(
                         ColumnDef::new(Column::Line)
                             .integer()
                             .null()
+                            .default(0)
                             .comment("报错行数"),
                     )
                     .col(
@@ -119,6 +126,7 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(500)
                             .null()
+                            .default("")
                             .comment("日志字段名称列表"),
                     )
                     .col(
@@ -137,6 +145,7 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::Code)
                             .integer()
                             .null()
+                            .default(0)
                             .comment("业务误码"),
                     )
                     .col(
@@ -144,6 +153,7 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(500)
                             .null()
+                            .default("")
                             .comment("业务误码信息"),
                     )
                     .col(
@@ -155,8 +165,9 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(Column::Note)
                             .string()
-                            .string_len(255)
+                            .string_len(200)
                             .null()
+                            .default("")
                             .comment("备注"),
                     )
                     .col(

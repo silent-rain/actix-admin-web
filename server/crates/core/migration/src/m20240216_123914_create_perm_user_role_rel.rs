@@ -5,7 +5,7 @@ use entity::{perm_user_role_rel::Column, prelude::PermUserRoleRel};
 use sea_orm_migration::{
     async_trait,
     sea_orm::DeriveMigrationName,
-    sea_query::{ColumnDef, Table},
+    sea_query::{ColumnDef, Expr, Table},
     DbErr, MigrationTrait, SchemaManager,
 };
 
@@ -24,9 +24,9 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(Column::Id)
                             .integer()
-                            .not_null()
-                            .auto_increment()
                             .primary_key()
+                            .auto_increment()
+                            .not_null()
                             .comment("ID"),
                     )
                     .col(
@@ -45,6 +45,7 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::CreatedAt)
                             .date_time()
                             .not_null()
+                            .default(Expr::current_timestamp())
                             .comment("创建时间"),
                     )
                     .to_owned(),

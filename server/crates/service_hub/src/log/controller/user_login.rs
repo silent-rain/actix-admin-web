@@ -3,7 +3,10 @@
 use crate::{
     inject::AInjectProvider,
     log::{
-        dto::user_login::{AddUserLoginInfoReq, GetUserLoginListReq, UpdateUserLoginStatusReq},
+        dto::user_login::{
+            AddUserLoginInfoReq, GetUserLoginListReq, UpdateUserLoginDisabledStatusReq,
+            UpdateUserLoginStatusReq,
+        },
         service::user_login::UserLoginService,
     },
 };
@@ -63,6 +66,20 @@ impl UserLoginController {
     ) -> impl Responder {
         let user_login_service: UserLoginService = provider.provide();
         let resp = user_login_service.status(*id, data.status).await;
+        match resp {
+            Ok(_v) => Response::ok(),
+            Err(err) => Response::err(err),
+        }
+    }
+
+    /// 更新登录日志禁用状态
+    pub async fn disabled(
+        provider: Data<AInjectProvider>,
+        id: Path<i32>,
+        data: Json<UpdateUserLoginDisabledStatusReq>,
+    ) -> impl Responder {
+        let user_login_service: UserLoginService = provider.provide();
+        let resp = user_login_service.disabled(*id, data.disabled).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

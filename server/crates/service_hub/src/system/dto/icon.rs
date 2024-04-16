@@ -23,17 +23,6 @@ pub struct GetIconListReq {
     pub category: Option<i8>,
 }
 
-/// 获取ICON图标列表 响应体
-#[derive(Default, Deserialize, Serialize)]
-pub struct GetIconListRsp {
-    #[serde(flatten)]
-    pub dept: sys_icon::Model,
-
-    /// Base64图片
-    #[serde(skip_serializing)]
-    pub base_img: Vec<u8>,
-}
-
 /// 获取ICON图标 响应体
 #[derive(Default, Deserialize, Serialize)]
 pub struct GetIconRsp {

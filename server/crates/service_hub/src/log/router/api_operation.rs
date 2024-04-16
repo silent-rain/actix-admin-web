@@ -13,7 +13,7 @@ impl ApiOperationRouter {
         web::scope("/api-operations")
             .route("", web::get().to(ApiOperationController::list))
             .route("/{id}", web::get().to(ApiOperationController::info))
-        // .route("", web::post().to(LogSystemController::add))
-        // .route("/{id}", web::delete().to(LogSystemController::delete))
+        // .route("", web::post().to(ApiOperationController::add))
+        // .route("/{id}", web::delete().to(ApiOperationController::delete))
     }
 }

@@ -5,6 +5,7 @@ use crate::{
     system::{
         dao::captcha::CaptchaDao,
         dto::captcha::{AddCaptchaResp, GetCaptchaListReq},
+        enums::CaptchaStatus,
     },
 };
 
@@ -77,6 +78,17 @@ impl<'a> CaptchaService<'a> {
             .ok_or_else(|| {
                 error!("验证码不存在");
                 Error::DbQueryEmptyError.into_msg().with_msg("验证码不存在")
+            })?;
+
+        // 验证码在使用后将其状态更新为无效
+        self.captcha_dao
+            .status(result.id, CaptchaStatus::Invalid as i8)
+            .await
+            .map_err(|err| {
+                error!("更新验证码状态失败, err: {:#?}", err);
+                Error::DbQueryError
+                    .into_msg()
+                    .with_msg("更新验证码状态失败")
             })?;
 
         Ok(result)

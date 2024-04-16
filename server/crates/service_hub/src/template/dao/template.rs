@@ -46,6 +46,9 @@ impl<'a> AppTemplateDao<'a> {
             });
 
         let total = states.clone().count(self.db.rdb()).await?;
+        if total == 0 {
+            return Ok((vec![], total));
+        }
 
         let order_by_col = match req.order_by {
             Some(v) => app_template::Column::from_str(&v).map_or(app_template::Column::Id, |v| v),

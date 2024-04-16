@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 /// 应用模板
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "app_template")]
+#[sea_orm(table_name = "t_app_template")]
 pub struct Model {
     /// 模板ID
     #[sea_orm(primary_key)]

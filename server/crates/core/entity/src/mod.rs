@@ -18,6 +18,8 @@ pub mod perm_role;
 pub mod perm_user;
 pub mod perm_user_role_rel;
 pub mod perm_user_token;
+pub mod schedule_job;
+pub mod schedule_job_log;
 pub mod sys_captcha;
 pub mod sys_config;
 pub mod sys_dict_data;
