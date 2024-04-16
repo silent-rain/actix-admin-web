@@ -4,7 +4,7 @@
 -- 验证码表
 CREATE TABLE
     sys_captcha (
-        `id` INT AUTO_INCREMENT COMMENT '自增ID',
+        `id` INT (11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
         `captcha_id` VARCHAR(40) NOT NULL UNIQUE COMMENT '验证码ID',
         `captcha` VARCHAR(10) NOT NULL COMMENT '验证码',
         `base_img` LONGBLOB NOT NULL COMMENT 'Base64图片',
@@ -20,7 +20,7 @@ SET
 -- 配置表
 CREATE TABLE
     sys_config (
-        `id` INT AUTO_INCREMENT COMMENT '配置ID',
+        `id` INT (11) AUTO_INCREMENT NOT NULL COMMENT '配置ID',
         `pid` INT (11) DEFAULT NULL COMMENT '父节点ID',
         `name` VARCHAR(64) NOT NULL COMMENT '配置名称',
         `code` VARCHAR(64) NOT NULL UNIQUE COMMENT '配置编码(英文)',
@@ -38,7 +38,7 @@ SET
 -- ICON图标表
 CREATE TABLE
     sys_icon (
-        `id` INT AUTO_INCREMENT COMMENT '图标ID',
+        `id` INT (11) AUTO_INCREMENT NOT NULL COMMENT '图标ID',
         `name` VARCHAR(32) NOT NULL UNIQUE COMMENT '图标名称',
         `base_img` LONGBLOB NOT NULL COMMENT 'Base64图片',
         `category` TINYINT (1) NOT NULL DEFAULT 0 COMMENT '图标类型,1:element,2:custom',
@@ -53,7 +53,7 @@ SET
 -- 字典维度表
 CREATE TABLE
     sys_dict_dim (
-        `id` INT AUTO_INCREMENT COMMENT '字典维度ID',
+        `id` INT (11) AUTO_INCREMENT NOT NULL COMMENT '字典维度ID',
         `name` VARCHAR(64) NOT NULL UNIQUE COMMENT '字典维度名称',
         `code` VARCHAR(64) NOT NULL UNIQUE COMMENT '字典维度编码',
         `sort` INT (11) NULL DEFAULT 0 COMMENT '排序',
@@ -69,7 +69,7 @@ SET
 -- 字典数据表
 CREATE TABLE
     sys_dict_data (
-        `id` INT AUTO_INCREMENT COMMENT '字典项ID',
+        `id` INT (11) AUTO_INCREMENT NOT NULL COMMENT '字典项ID',
         `dim_id` INT (11) NOT NULL COMMENT '字典维度ID',
         `dim_code` VARCHAR(64) NOT NULL COMMENT '字典维度编码',
         `lable` VARCHAR(64) NOT NULL COMMENT '字典标签',

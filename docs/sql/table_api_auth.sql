@@ -2,7 +2,7 @@
 -- 接口权限表
 CREATE TABLE
     api_auth (
-        `id` INT AUTO_INCREMENT COMMENT '自增ID',
+        `id` INT (11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
         `pid` INT (20) NULL COMMENT '父ID',
         `name` VARCHAR(50) NOT NULL COMMENT '接口名称',
         `method` VARCHAR(50) NOT NULL COMMENT '请求类型',
@@ -19,7 +19,7 @@ SET
 -- 角色与接口关联表
 CREATE TABLE
     api_role_http_rel (
-        `id` INT AUTO_INCREMENT COMMENT '自增ID',
+        `id` INT (11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
         `role_id` INT (11) NOT NULL COMMENT '角色ID',
         `api_id` INT (11) NOT NULL COMMENT '接口ID',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

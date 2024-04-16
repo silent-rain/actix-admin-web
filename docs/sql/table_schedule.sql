@@ -4,7 +4,7 @@
 -- 定时任务
 CREATE TABLE
   `schedule_job` (
-    `id` INT AUTO_INCREMENT COMMENT '定时任务ID',
+    `id` INT (11) AUTO_INCREMENT NOT NULL COMMENT '定时任务ID',
     `name` VARCHAR(200) NOT NULL COMMENT '任务名称',
     `job_type` TINYINT (1) NOT NULL DEFAULT 0 COMMENT '任务类型,0:定时任务,1:即时任务',
     `expression` VARCHAR(100) DEFAULT NULL COMMENT 'cron表达式',
@@ -21,7 +21,7 @@ SET
 -- 定时任务日志
 CREATE TABLE
   `schedule_job_log` (
-    `id` INT AUTO_INCREMENT NOT NULL COMMENT '日志ID',
+    `id` INT (11) AUTO_INCREMENT NOT NULL NOT NULL COMMENT '日志ID',
     `job_id` INT (11) NOT NULL COMMENT '任务ID',
     `job_name` VARCHAR(200) NOT NULL COMMENT '任务名称',
     `error` TEXT DEFAULT NULL COMMENT '失败信息',

@@ -6,10 +6,10 @@ SET
 -- 角色表
 CREATE TABLE
     perm_role (
-        `id` INT AUTO_INCREMENT COMMENT '角色ID',
+        `id` INT (11) AUTO_INCREMENT NOT NULL COMMENT '角色ID',
         `name` VARCHAR(20) UNIQUE NOT NULL COMMENT '角色名称',
         `sort` INT (11) NULL DEFAULT 0 COMMENT '排序',
-        `note` VARCHAR(200) NULL COMMENT '备注',
+        `note` VARCHAR(200) NULL DEFAULT '' COMMENT '备注',
         `status` TINYINT (1) NOT NULL DEFAULT 1 COMMENT '状态,0:停用,1:正常',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -24,7 +24,7 @@ SET
 -- 用户表
 CREATE TABLE
     perm_user (
-        `id` INT AUTO_INCREMENT COMMENT '用户ID',
+        `id` INT (11) AUTO_INCREMENT NOT NULL COMMENT '用户ID',
         `username` VARCHAR(32) NOT NULL COMMENT '用户名称',
         `real_name` VARCHAR(32) NULL COMMENT '真实姓名',
         `gender` TINYINT (1) NULL COMMENT '性别, 0:男,1:女,2:保密',
@@ -49,7 +49,7 @@ SET
 -- 用户角色关联表
 CREATE TABLE
     perm_user_role_rel (
-        `id` INT AUTO_INCREMENT COMMENT '自增ID',
+        `id` INT (11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
         `user_id` INT (10) NOT NULL COMMENT '用户ID',
         `role_id` INT (10) NOT NULL COMMENT '角色ID',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -64,7 +64,7 @@ SET
 -- 菜单表
 CREATE TABLE
     perm_menu (
-        `id` INT AUTO_INCREMENT COMMENT '菜单ID',
+        `id` INT (11) AUTO_INCREMENT NOT NULL COMMENT '菜单ID',
         `parent_id` INT (20) NULL COMMENT '父菜单ID',
         `title` VARCHAR(20) NOT NULL COMMENT '菜单名称',
         `icon` VARCHAR(20) NULL COMMENT '菜单图标',
@@ -93,7 +93,7 @@ SET
 -- 菜单角色关联表
 CREATE TABLE
     perm_menu_role_rel (
-        `id` INT AUTO_INCREMENT COMMENT '自增ID',
+        `id` INT (11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
         `role_id` INT (10) NOT NULL COMMENT '角色ID',
         `menu_id` INT (10) NOT NULL COMMENT '菜单ID',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -126,7 +126,7 @@ END;
 -- 用户Token令牌表
 CREATE TABLE
     perm_user_token (
-        `id` INT AUTO_INCREMENT COMMENT '令牌ID',
+        `id` INT (11) AUTO_INCREMENT NOT NULL COMMENT '令牌ID',
         `user_id` INT (20) NOT NULL COMMENT '用户ID',
         `token` VARCHAR(50) NOT NULL COMMENT '令牌',
         `passphrase` VARCHAR(50) NOT NULL COMMENT '口令',
@@ -144,7 +144,7 @@ SET
 -- 用户地理位置 - 待定
 CREATE TABLE
     _perm_user_location (
-        `id` INT AUTO_INCREMENT COMMENT '位置ID',
+        `id` INT (11) AUTO_INCREMENT NOT NULL COMMENT '位置ID',
         `user_id` VARCHAR(10) NOT NULL COMMENT '用户ID',
         `province_code` VARCHAR(10) NULL COMMENT '省',
         `city_code` VARCHAR(10) NULL COMMENT '市',
@@ -164,7 +164,7 @@ SET
 -- 用户头像表 - 待定, 可上传至服务器中
 CREATE TABLE
     _perm_user_avatar (
-        `id` INT AUTO_INCREMENT COMMENT '头像ID',
+        `id` INT (11) AUTO_INCREMENT NOT NULL COMMENT '头像ID',
         `user_id` VARCHAR(10) NOT NULL COMMENT '用户ID',
         `data` LONGBLOB NULL COMMENT '头像数据',
         `hash` VARCHAR(50) NULL COMMENT '头像hash值',
@@ -180,7 +180,7 @@ SET
 -- 部门表
 CREATE TABLE
     perm_dept (
-        `id` INT AUTO_INCREMENT COMMENT '部门ID',
+        `id` INT (11) AUTO_INCREMENT NOT NULL COMMENT '部门ID',
         `pid` bigint DEFAULT NULL COMMENT '上级部门ID',
         `pids` varchar(200) CHARACTER
         SET
@@ -199,7 +199,7 @@ SET
 -- 部门角色关联表-数据权限
 CREATE TABLE
     perm_dept_role_rel (
-        `id` INT AUTO_INCREMENT COMMENT '自增ID',
+        `id` INT (11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
         `role_id` INT (10) NOT NULL COMMENT '角色ID',
         `dept_id` INT (10) NOT NULL COMMENT '部门ID',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

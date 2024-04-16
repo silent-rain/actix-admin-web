@@ -4,7 +4,7 @@
 -- 用户登录日志表
 CREATE TABLE
     log_user_login (
-        `id` INT AUTO_INCREMENT COMMENT '自增ID',
+        `id` INT (11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
         `user_id` INT (11) NOT NULL COMMENT '用户ID',
         `username` VARCHAR(32) NOT NULL COMMENT '用户名称',
         `token` VARCHAR(250) NOT NULL COMMENT '登陆令牌',
@@ -22,7 +22,7 @@ SET
 -- API操作日志表
 CREATE TABLE
     log_api_operation (
-        `id` INT AUTO_INCREMENT COMMENT '自增ID',
+        `id` INT (11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
         `user_id` INT NULL COMMENT '用户ID',
         `username` VARCHAR(32) NULL COMMENT '用户名称',
         `request_id` VARCHAR(32) NULL COMMENT '请求ID',
@@ -73,7 +73,7 @@ CREATE TABLE
 -- WEB日志表
 CREATE TABLE
     log_web (
-        `id` INT AUTO_INCREMENT COMMENT '自增ID',
+        `id` INT (11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
         `user_id` INT NULL COMMENT '用户ID',
         `username` VARCHAR(32) NULL COMMENT '用户名称',
         `request_id` VARCHAR(32) NULL COMMENT '请求ID',

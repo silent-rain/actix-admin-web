@@ -1,6 +1,6 @@
 //! 字典维度表
 //! User Entity: [`entity::prelude::SysDictDim`]
-use entity::{sys_dict_dim::Column, prelude::SysDictDim};
+use entity::{prelude::SysDictDim, sys_dict_dim::Column};
 
 use sea_orm_migration::{
     async_trait,
@@ -25,9 +25,9 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(Column::Id)
                             .integer()
-                            .not_null()
-                            .auto_increment()
                             .primary_key()
+                            .auto_increment()
+                            .not_null()
                             .comment("字典维度ID"),
                     )
                     .col(
