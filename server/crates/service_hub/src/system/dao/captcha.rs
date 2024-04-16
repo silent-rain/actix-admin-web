@@ -33,6 +33,9 @@ impl<'a> CaptchaDao<'a> {
             });
 
         let total = states.clone().count(self.db.rdb()).await?;
+        if total == 0 {
+            return Ok((vec![], total));
+        }
 
         let results = states
             .order_by_desc(sys_captcha::Column::Id)
