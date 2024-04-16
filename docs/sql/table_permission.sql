@@ -6,7 +6,7 @@ CREATE TABLE
     perm_role (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '角色ID',
         `name` VARCHAR(20) UNIQUE NOT NULL COMMENT '角色名称',
-        `sort` UNSIGNED INT(11) NULL DEFAULT 0 COMMENT '排序',
+        `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
         `note` VARCHAR(200) NULL DEFAULT '' COMMENT '备注',
         `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:停用,1:正常',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -37,7 +37,7 @@ CREATE TABLE
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`),
-        NIQUE KEY `uk_username` (`username`) USING BTREE
+        UNIQUE KEY `uk_username` (`username`) USING BTREE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户';
 
 -- 用户角色关联表
@@ -72,7 +72,7 @@ CREATE TABLE
         `permission` VARCHAR(200) NULL DEFAULT '' COMMENT '权限标识',
         `hidden` TINYINT(1) NULL DEFAULT 1 COMMENT '是否隐藏,0:显示,1:隐藏',
         `always_show` TINYINT(1) NULL DEFAULT 1 COMMENT '始终显示根菜单,0:显示,1:隐藏',
-        `sort` UNSIGNED INT(11) NULL DEFAULT 0 COMMENT '排序',
+        `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
         `note` VARCHAR(200) NULL DEFAULT '' COMMENT '备注',
         `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:停用,1:启用',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -98,7 +98,7 @@ CREATE TABLE
 CREATE TRIGGER trigger_update_user
 AFTER
 UPDATE
-ON `user` FOR EACH ROW BEGIN
+ON `perm_user` FOR EACH ROW BEGIN
 
 IF NEW.nickname != OLD.nickname THEN 
 -- 更新 perm_user_api_token.nickname 字段
@@ -127,35 +127,35 @@ CREATE TABLE
         PRIMARY KEY (`id`)
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户Token令牌表, 一般openapi服务';
 
--- 用户地理位置 - 待定
+/*用户地理位置 - 待定
 CREATE TABLE
-    _perm_user_location (
-        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '位置ID',
-        `user_id` VARCHAR(10) NOT NULL COMMENT '用户ID',
-        `province_code` VARCHAR(10) NULL DEFAULT '' COMMENT '省',
-        `city_code` VARCHAR(10) NULL DEFAULT '' COMMENT '市',
-        `district_code` VARCHAR(10) NULL DEFAULT '' COMMENT '区',
-        `address` VARCHAR(200) NULL DEFAULT '' COMMENT '居住地址',
-        `ad_code` VARCHAR(10) NULL DEFAULT '' COMMENT '地理编号',
-        `lng` VARCHAR(20) NULL DEFAULT '' COMMENT '城市坐标中心点经度 （ * 1e6 ） ： 如果是中国 ， 此值是 1e7',
-        `lat` VARCHAR(20) NULL DEFAULT '' COMMENT '城市坐标中心点纬度 （ * 1e6 ）',
-        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-        `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-        PRIMARY KEY (`id`),
-        CONSTRAINT `perm_user_location_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户地理位置';
-
--- 用户头像表 - 待定, 可上传至服务器中
+_perm_user_location (
+`id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '位置ID',
+`user_id` VARCHAR(10) NOT NULL COMMENT '用户ID',
+`province_code` VARCHAR(10) NULL DEFAULT '' COMMENT '省',
+`city_code` VARCHAR(10) NULL DEFAULT '' COMMENT '市',
+`district_code` VARCHAR(10) NULL DEFAULT '' COMMENT '区',
+`address` VARCHAR(200) NULL DEFAULT '' COMMENT '居住地址',
+`ad_code` VARCHAR(10) NULL DEFAULT '' COMMENT '地理编号',
+`lng` VARCHAR(20) NULL DEFAULT '' COMMENT '城市坐标中心点经度 （ * 1e6 ） ： 如果是中国 ， 此值是 1e7',
+`lat` VARCHAR(20) NULL DEFAULT '' COMMENT '城市坐标中心点纬度 （ * 1e6 ）',
+`created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+`updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+PRIMARY KEY (`id`),
+CONSTRAINT `perm_user_location_user_id` FOREIGN KEY (`user_id`) REFERENCES `perm_user` (`id`) ON DELETE CASCADE
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户地理位置';
+ */
+/*用户头像表 - 待定, 可上传至服务器中
 CREATE TABLE
-    _perm_user_avatar (
-        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '头像ID',
-        `user_id` VARCHAR(10) NOT NULL COMMENT '用户ID',
-        `data` LONGBLOB NOT NULL COMMENT '头像数据',
-        `hash` VARCHAR(50) NOT NULL COMMENT '头像hash值',
-        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-        PRIMARY KEY (`id`)
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户头像';
-
+_perm_user_avatar (
+`id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '头像ID',
+`user_id` VARCHAR(10) NOT NULL COMMENT '用户ID',
+`data` LONGBLOB NOT NULL COMMENT '头像数据',
+`hash` VARCHAR(50) NOT NULL COMMENT '头像hash值',
+`created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+PRIMARY KEY (`id`)
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户头像';
+ */
 /* 待定
 - 岗位 职级
  */
@@ -166,7 +166,7 @@ CREATE TABLE
         `pid` BIGINT DEFAULT NULL DEFAULT 0 COMMENT '上级部门ID',
         `pids` VARCHAR(200) DEFAULT NULL DEFAULT '' COMMENT '所有上级部门ID, 用逗号分开',
         `name` VARCHAR(20) UNIQUE NOT NULL COMMENT '部门名称',
-        `sort` UNSIGNED INT(11) NULL DEFAULT 0 COMMENT '排序',
+        `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
         `note` VARCHAR(200) NULL DEFAULT '' COMMENT '备注',
         `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:停用,1:正常',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

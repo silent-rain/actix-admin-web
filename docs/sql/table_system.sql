@@ -19,12 +19,12 @@ CREATE TABLE
 CREATE TABLE
     sys_config (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '配置ID',
-        `pid` INT(11) DEFAULT NULL COMMENT '父节点ID',
+        `pid` INT(11) DEFAULT 0 COMMENT '父节点ID',
         `name` VARCHAR(64) NOT NULL COMMENT '配置名称',
-        `code` VARCHAR(64) NOT NULL UNIQUE COMMENT '配置编码(英文)',
-        `value` TEXT COMMENT '配置值',
-        `sort` UNSIGNED INT(11) NULL DEFAULT 0 COMMENT '排序',
-        `desc` VARCHAR(200) DEFAULT NULL COMMENT '配置描述',
+        `code` VARCHAR(64) UNIQUE NOT NULL COMMENT '配置编码(英文)',
+        `value` TEXT NULL COMMENT '配置值',
+        `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
+        `desc` VARCHAR(200) DEFAULT '' COMMENT '配置描述',
         `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:停用,1:正常',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -35,10 +35,10 @@ CREATE TABLE
 CREATE TABLE
     sys_icon (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '图标ID',
-        `name` VARCHAR(32) NOT NULL UNIQUE COMMENT '图标名称',
+        `name` VARCHAR(32) UNIQUE NOT NULL COMMENT '图标名称',
         `base_img` LONGBLOB NOT NULL COMMENT 'Base64图片',
         `category` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '图标类型,1:element,2:custom',
-        `note` VARCHAR(200) DEFAULT NULL COMMENT '备注',
+        `note` VARCHAR(200) DEFAULT '' COMMENT '备注',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`)
@@ -48,10 +48,10 @@ CREATE TABLE
 CREATE TABLE
     sys_dict_dim (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '字典维度ID',
-        `name` VARCHAR(64) NOT NULL UNIQUE COMMENT '字典维度名称',
-        `code` VARCHAR(64) NOT NULL UNIQUE COMMENT '字典维度编码',
-        `sort` UNSIGNED INT(11) NULL DEFAULT 0 COMMENT '排序',
-        `note` VARCHAR(200) NULL COMMENT '备注',
+        `name` VARCHAR(64) UNIQUE NOT NULL COMMENT '字典维度名称',
+        `code` VARCHAR(64) UNIQUE NOT NULL COMMENT '字典维度编码',
+        `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
+        `note` VARCHAR(200) NULL DEFAULT '' COMMENT '备注',
         `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:停用,1:正常',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -66,8 +66,8 @@ CREATE TABLE
         `dim_code` VARCHAR(64) NOT NULL COMMENT '字典维度编码',
         `lable` VARCHAR(64) NOT NULL COMMENT '字典标签',
         `value` TEXT NOT NULL COMMENT '字典键值',
-        `sort` UNSIGNED INT(11) NULL DEFAULT 0 COMMENT '排序',
-        `note` VARCHAR(200) NULL COMMENT '备注',
+        `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
+        `note` VARCHAR(200) NULL DEFAULT '' COMMENT '备注',
         `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:停用,1:正常',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',

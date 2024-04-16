@@ -34,8 +34,8 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::CaptchaId)
                             .string()
                             .string_len(40)
-                            .not_null()
                             .unique_key()
+                            .not_null()
                             .comment("验证码ID"),
                     )
                     .col(
@@ -75,6 +75,7 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::UpdatedAt)
                             .date_time()
                             .not_null()
+                            .default(Expr::current_timestamp())
                             .comment("更新时间"),
                     )
                     .to_owned(),

@@ -5,7 +5,7 @@ use entity::{prelude::ScheduleJobLog, schedule_job_log::Column};
 use sea_orm_migration::{
     async_trait,
     sea_orm::DeriveMigrationName,
-    sea_query::{ColumnDef, Table},
+    sea_query::{ColumnDef, Expr, Table},
     DbErr, MigrationTrait, SchemaManager,
 };
 
@@ -50,7 +50,8 @@ impl MigrationTrait for Migration {
                     )
                     .col(
                         ColumnDef::new(Column::Cost)
-                            .integer()
+                            .decimal()
+                            .decimal_len(10, 2)
                             .not_null()
                             .comment("耗时(单位：毫秒)"),
                     )
@@ -65,8 +66,7 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::CreatedAt)
                             .date_time()
                             .not_null()
-                            .timestamp_with_time_zone()
-                            .extra("DEFAULT CURRENT_TIMESTAMP")
+                            .default(Expr::current_timestamp())
                             .comment("创建时间"),
                     )
                     .to_owned(),

@@ -5,7 +5,7 @@ use entity::{log_user_login::Column, prelude::LogUserLogin};
 use sea_orm_migration::{
     async_trait,
     sea_orm::DeriveMigrationName,
-    sea_query::{ColumnDef, Table},
+    sea_query::{ColumnDef, Expr, Table},
     DbErr, MigrationTrait, SchemaManager,
 };
 
@@ -54,6 +54,7 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(64)
                             .null()
+                            .default("")
                             .comment("登录IP"),
                     )
                     .col(
@@ -61,6 +62,7 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(256)
                             .null()
+                            .default("")
                             .comment("用户代理"),
                     )
                     .col(
@@ -81,7 +83,6 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::CreatedAt)
                             .date_time()
                             .not_null()
-                            .timestamp_with_time_zone()
                             .extra("DEFAULT CURRENT_TIMESTAMP")
                             .comment("创建时间"),
                     )
@@ -89,9 +90,9 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::UpdatedAt)
                             .date_time()
                             .not_null()
-                            .timestamp_with_time_zone()
                             // Sqlite3 不支持 ON UPDATE CURRENT_TIMESTAMP
                             // .extra("DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+                            .default(Expr::current_timestamp())
                             .comment("更新时间"),
                     )
                     .to_owned(),

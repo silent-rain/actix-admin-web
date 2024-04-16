@@ -5,7 +5,7 @@ use entity::{prelude::SysConfig, sys_config::Column};
 use sea_orm_migration::{
     async_trait,
     sea_orm::DeriveMigrationName,
-    sea_query::{ColumnDef, Table},
+    sea_query::{ColumnDef, Expr, Table},
     DbErr, MigrationTrait, SchemaManager,
 };
 
@@ -34,6 +34,7 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::Pid)
                             .integer()
                             .null()
+                            .default(0)
                             .comment("父节点ID"),
                     )
                     .col(
@@ -47,8 +48,8 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::Code)
                             .string()
                             .string_len(64)
-                            .not_null()
                             .unique_key()
+                            .not_null()
                             .comment("配置编码(英文)"),
                     )
                     .col(
@@ -60,7 +61,6 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(Column::Sort)
                             .integer()
-                            .unsigned()
                             .null()
                             .default(0)
                             .comment("排序"),
@@ -70,6 +70,7 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(200)
                             .null()
+                            .default("")
                             .comment("配置描述"),
                     )
                     .col(
@@ -83,12 +84,14 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::CreatedAt)
                             .date_time()
                             .not_null()
+                            .default(Expr::current_timestamp())
                             .comment("创建时间"),
                     )
                     .col(
                         ColumnDef::new(Column::UpdatedAt)
                             .date_time()
                             .not_null()
+                            .default(Expr::current_timestamp())
                             .comment("更新时间"),
                     )
                     .to_owned(),

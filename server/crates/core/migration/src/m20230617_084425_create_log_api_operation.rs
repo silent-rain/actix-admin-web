@@ -5,7 +5,7 @@ use entity::{log_api_operation::Column, prelude::LogApiOperation};
 use sea_orm_migration::{
     async_trait,
     sea_orm::DeriveMigrationName,
-    sea_query::{ColumnDef, Table},
+    sea_query::{ColumnDef, Expr, Table},
     DbErr, MigrationTrait, SchemaManager,
 };
 
@@ -33,6 +33,7 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::UserId)
                             .integer()
                             .null()
+                            .default(0)
                             .comment("用户ID"),
                     )
                     .col(
@@ -40,6 +41,7 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(32)
                             .null()
+                            .default("")
                             .comment("用户名称"),
                     )
                     .col(
@@ -47,6 +49,7 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(32)
                             .null()
+                            .default("")
                             .comment("请求ID"),
                     )
                     .col(
@@ -74,6 +77,7 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(500)
                             .null()
+                            .default("")
                             .comment("请求参数"),
                     )
                     .col(
@@ -87,6 +91,7 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(64)
                             .null()
+                            .default("")
                             .comment("请求IP"),
                     )
                     .col(
@@ -94,11 +99,13 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(256)
                             .null()
+                            .default("")
                             .comment("用户代理"),
                     )
                     .col(
                         ColumnDef::new(Column::Cost)
-                            .double()
+                            .decimal()
+                            .decimal_len(10, 2)
                             .not_null()
                             .comment("耗时,纳秒"),
                     )
@@ -112,7 +119,8 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(Column::Note)
                             .string()
-                            .string_len(255)
+                            .string_len(200)
+                            .default("")
                             .null()
                             .comment("备注"),
                     )
@@ -120,8 +128,7 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::CreatedAt)
                             .date_time()
                             .not_null()
-                            .timestamp_with_time_zone()
-                            .extra("DEFAULT CURRENT_TIMESTAMP")
+                            .default(Expr::current_timestamp())
                             .comment("创建时间"),
                     )
                     .to_owned(),

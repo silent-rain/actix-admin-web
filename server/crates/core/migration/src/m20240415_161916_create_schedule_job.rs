@@ -5,7 +5,7 @@ use entity::{prelude::ScheduleJob, schedule_job::Column};
 use sea_orm_migration::{
     async_trait,
     sea_orm::DeriveMigrationName,
-    sea_query::{ColumnDef, Table},
+    sea_query::{ColumnDef, Expr, Table},
     DbErr, MigrationTrait, SchemaManager,
 };
 
@@ -48,18 +48,21 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(100)
                             .null()
+                            .default("")
                             .comment("cron表达式"),
                     )
                     .col(
                         ColumnDef::new(Column::Interval)
                             .integer()
                             .null()
+                            .default(0)
                             .comment("间隔时间,秒"),
                     )
                     .col(
                         ColumnDef::new(Column::Note)
                             .string()
                             .string_len(200)
+                            .default("")
                             .null()
                             .comment("配置描述"),
                     )
@@ -74,12 +77,14 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::CreatedAt)
                             .date_time()
                             .not_null()
+                            .default(Expr::current_timestamp())
                             .comment("创建时间"),
                     )
                     .col(
                         ColumnDef::new(Column::UpdatedAt)
                             .date_time()
                             .not_null()
+                            .default(Expr::current_timestamp())
                             .comment("更新时间"),
                     )
                     .to_owned(),
