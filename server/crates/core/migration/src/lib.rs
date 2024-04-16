@@ -10,6 +10,7 @@ mod m20240218_145453_create_perm_dept;
 mod m20240218_145453_create_perm_dept_role_rel;
 mod m20240218_145453_create_perm_menu;
 mod m20240218_145453_create_perm_menu_role_rel;
+mod m20240218_145453_create_perm_user_token;
 mod m20240218_161916_create_sys_captcha;
 mod m20240218_161916_create_sys_config;
 mod m20240218_161916_create_sys_dict_data;
@@ -35,6 +36,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20240218_145453_create_perm_dept_role_rel::Migration),
             Box::new(m20240218_145453_create_perm_menu::Migration),
             Box::new(m20240218_145453_create_perm_menu_role_rel::Migration),
+            Box::new(m20240218_145453_create_perm_user_token::Migration),
             Box::new(m20240218_161916_create_sys_captcha::Migration),
             Box::new(m20240218_161916_create_sys_config::Migration),
             Box::new(m20240218_161916_create_sys_dict_dim::Migration),
