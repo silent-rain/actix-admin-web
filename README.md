@@ -108,6 +108,7 @@
 - 细化登陆设备/浏览器
 - sql 日志？
 - 定时任务调研与集成；
+- 完善部门的 pids 字段
 
 https://github.com/actix/actix-extras/tree/master/actix-identity
 https://crates.io/crates/actix-ws
