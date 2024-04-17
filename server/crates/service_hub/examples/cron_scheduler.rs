@@ -3,10 +3,8 @@ use std::time::Duration;
 
 use tokio_cron_scheduler::{Job, JobScheduler, JobSchedulerError};
 
-// interval
-// expression
-
-async fn demo() -> Result<(), JobSchedulerError> {
+#[tokio::main]
+async fn main() -> Result<(), JobSchedulerError> {
     let mut sched = JobScheduler::new().await?;
 
     // 添加基本cron作业
@@ -17,20 +15,21 @@ async fn demo() -> Result<(), JobSchedulerError> {
         .await?;
 
     // 添加异步作业
-    sched
-        .add(Job::new_async("1/7 * * * * *", |uuid, mut l| {
-            Box::pin(async move {
-                println!("I run async every 7 seconds");
+    let job = Job::new_async("1/7 * * * * *", |uuid, mut l| {
+        Box::pin(async move {
+            println!("I run async every 7 seconds");
 
-                // Query the next execution time for this job
-                let next_tick = l.next_tick_for_job(uuid).await;
-                match next_tick {
-                    Ok(Some(ts)) => println!("Next time for 7s job is {:?}", ts),
-                    _ => println!("Could not get next tick for 7s job"),
-                }
-            })
-        })?)
-        .await?;
+            // Query the next execution time for this job
+            let next_tick = l.next_tick_for_job(uuid).await;
+            match next_tick {
+                Ok(Some(ts)) => println!("Next time for 7s job is {:?}", ts),
+                _ => println!("Could not get next tick for 7s job"),
+            }
+        })
+    })?;
+    let job_id = job.guid();
+
+    sched.add(job).await?;
 
     // 添加具有给定持续时间的一次性作业
     sched
@@ -85,8 +84,6 @@ async fn demo() -> Result<(), JobSchedulerError> {
     .await?;
     sched.add(jj).await?;
 
-    // sched.remove(to_be_removed);
-
     // Feature 'signal' must be enabled
     // sched.shutdown_on_ctrl_c();
 
@@ -101,8 +98,12 @@ async fn demo() -> Result<(), JobSchedulerError> {
     println!("start done");
     sched.start().await?;
 
+    tokio::time::sleep(Duration::from_secs(20)).await;
+    sched.remove(&job_id).await?;
+    // sched.add(job)
+
     // Wait while the jobs run
-    // tokio::time::sleep(Duration::from_secs(100)).await;
+    tokio::time::sleep(Duration::from_secs(100)).await;
 
     Ok(())
 }
