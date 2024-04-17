@@ -42,3 +42,23 @@ pub enum DeptStatus {
     /// 正常
     Enabled = 1,
 }
+
+/// OpenApi接口状态
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[repr(i8)]
+pub enum OpenApiStatus {
+    /// 停用
+    Disabled = 0,
+    /// 正常
+    Enabled = 1,
+}
+
+/// OpenApi接口类别
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[repr(i8)]
+pub enum OpenApiCategory {
+    /// 目录
+    Directory = 0,
+    /// 接口
+    Interface = 1,
+}
