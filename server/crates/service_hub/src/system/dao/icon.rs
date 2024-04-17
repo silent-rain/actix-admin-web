@@ -1,4 +1,4 @@
-//! ICON图标
+//! ICON图片
 use crate::system::dto::icon::GetIconListReq;
 
 use database::{DbRepo, Pagination};
@@ -30,9 +30,6 @@ impl<'a> IconDao<'a> {
             })
             .apply_if(req.name, |query, v| {
                 query.filter(sys_icon::Column::Name.like(format!("{v}%")))
-            })
-            .apply_if(req.category, |query, v| {
-                query.filter(sys_icon::Column::Category.eq(v))
             });
 
         let total = states.clone().count(self.db.rdb()).await?;

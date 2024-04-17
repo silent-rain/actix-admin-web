@@ -1,4 +1,4 @@
-//! ICON图标
+//! ICON图片
 
 use crate::system::IconController;
 
@@ -8,7 +8,7 @@ use actix_web::{web, Scope};
 pub struct IconRouter;
 
 impl IconRouter {
-    /// 注册`ICON图标管理`路由
+    /// 注册`ICON图片管理`路由
     pub fn admin_register() -> Scope {
         web::scope("/icons")
             .route("", web::get().to(IconController::list))

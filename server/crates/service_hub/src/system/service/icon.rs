@@ -1,4 +1,4 @@
-//! ICON图标
+//! ICON图片
 
 use crate::system::{
     dao::icon::IconDao,
@@ -23,10 +23,10 @@ impl<'a> IconService<'a> {
     /// 获取列表数据
     pub async fn list(&self, req: GetIconListReq) -> Result<(Vec<sys_icon::Model>, u64), ErrorMsg> {
         let (mut results, total) = self.icon_dao.list(req).await.map_err(|err| {
-            error!("查询ICON图标列表失败, err: {:#?}", err);
+            error!("查询ICON图片列表失败, err: {:#?}", err);
             Error::DbQueryError
                 .into_msg()
-                .with_msg("查询ICON图标列表失败")
+                .with_msg("查询ICON图片列表失败")
         })?;
 
         // 屏蔽图片内容
@@ -44,25 +44,25 @@ impl<'a> IconService<'a> {
             .info(id)
             .await
             .map_err(|err| {
-                error!("查询ICON图标信息失败, err: {:#?}", err);
+                error!("查询ICON图片信息失败, err: {:#?}", err);
                 Error::DbQueryError
                     .into_msg()
-                    .with_msg("查询ICON图标信息失败")
+                    .with_msg("查询ICON图片信息失败")
             })?
             .ok_or_else(|| {
-                error!("ICON图标不存在");
+                error!("ICON图片不存在");
                 Error::DbQueryEmptyError
                     .into_msg()
-                    .with_msg("ICON图标不存在")
+                    .with_msg("ICON图片不存在")
             })?;
 
         let base_img = String::from_utf8_lossy(&result.base_img.clone()).to_string();
 
         let mut result: GetIconRsp = struct_to_struct(&result).map_err(|err| {
-            error!("ICON图标列表转换失败, err: {:#?}", err);
+            error!("ICON图片列表转换失败, err: {:#?}", err);
             Error::JsonConvert
                 .into_msg()
-                .with_msg("ICON图标列表转换失败")
+                .with_msg("ICON图片列表转换失败")
         })?;
 
         result.base_img = base_img;
@@ -74,16 +74,17 @@ impl<'a> IconService<'a> {
     pub async fn add(&self, req: AddIconReq) -> Result<sys_icon::Model, ErrorMsg> {
         let model = sys_icon::ActiveModel {
             name: Set(req.name),
+            hash_name: Set(req.hash_name),
             base_img: Set(req.base_img.as_bytes().to_vec()),
-            category: Set(req.category),
+            icon_type: Set(req.icon_type),
             note: Set(req.note),
             ..Default::default()
         };
         let result = self.icon_dao.add(model).await.map_err(|err| {
-            error!("添加ICON图标信息失败, err: {:#?}", err);
+            error!("添加ICON图片信息失败, err: {:#?}", err);
             Error::DbAddError
                 .into_msg()
-                .with_msg("添加ICON图标信息失败")
+                .with_msg("添加ICON图片信息失败")
         })?;
 
         Ok(result)
@@ -94,15 +95,16 @@ impl<'a> IconService<'a> {
         let model = sys_icon::ActiveModel {
             id: Set(id),
             name: Set(req.name),
+            hash_name: Set(req.hash_name),
             base_img: Set(req.base_img.as_bytes().to_vec()),
-            category: Set(req.category),
+            icon_type: Set(req.icon_type),
             note: Set(req.note),
             ..Default::default()
         };
 
         let result = self.icon_dao.update(model).await.map_err(|err| {
-            error!("更新ICON图标失败, err: {:#?}", err);
-            Error::DbUpdateError.into_msg().with_msg("更新ICON图标失败")
+            error!("更新ICON图片失败, err: {:#?}", err);
+            Error::DbUpdateError.into_msg().with_msg("更新ICON图片失败")
         })?;
 
         Ok(result)
@@ -111,10 +113,10 @@ impl<'a> IconService<'a> {
     /// 删除数据
     pub async fn delete(&self, id: i32) -> Result<u64, ErrorMsg> {
         let result = self.icon_dao.delete(id).await.map_err(|err| {
-            error!("删除ICON图标信息失败, err: {:#?}", err);
+            error!("删除ICON图片信息失败, err: {:#?}", err);
             Error::DbDeleteError
                 .into_msg()
-                .with_msg("删除ICON图标信息失败")
+                .with_msg("删除ICON图片信息失败")
         })?;
 
         Ok(result)
@@ -123,10 +125,10 @@ impl<'a> IconService<'a> {
     /// 批量删除
     pub async fn batch_delete(&self, ids: Vec<i32>) -> Result<u64, ErrorMsg> {
         let result = self.icon_dao.batch_delete(ids).await.map_err(|err| {
-            error!("批量删除ICON图标信息失败, err: {:#?}", err);
+            error!("批量删除ICON图片信息失败, err: {:#?}", err);
             Error::DbBatchDeleteError
                 .into_msg()
-                .with_msg("批量删除ICON图标信息失败")
+                .with_msg("批量删除ICON图片信息失败")
         })?;
 
         Ok(result)

@@ -1,4 +1,4 @@
-//! ICON图标
+//! ICON图片
 
 use crate::{
     inject::AInjectProvider,
@@ -20,7 +20,7 @@ use actix_web::{
 pub struct IconController;
 
 impl IconController {
-    /// 获取ICON图标列表
+    /// 获取ICON图片列表
     pub async fn list(
         provider: Data<AInjectProvider>,
         req: Query<GetIconListReq>,
@@ -33,7 +33,7 @@ impl IconController {
         }
     }
 
-    /// 获取ICON图标信息
+    /// 获取ICON图片信息
     pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
         let icon_service: IconService = provider.provide();
         let resp = icon_service.info(*id).await;
@@ -43,7 +43,7 @@ impl IconController {
         }
     }
 
-    /// 添加ICON图标
+    /// 添加ICON图片
     pub async fn add(provider: Data<AInjectProvider>, data: Json<AddIconReq>) -> impl Responder {
         let icon_service: IconService = provider.provide();
         let resp = icon_service.add(data.into_inner()).await;
@@ -53,7 +53,7 @@ impl IconController {
         }
     }
 
-    /// 更新ICON图标
+    /// 更新ICON图片
     pub async fn update(
         provider: Data<AInjectProvider>,
         id: Path<i32>,
@@ -67,7 +67,7 @@ impl IconController {
         }
     }
 
-    /// 删除ICON图标
+    /// 删除ICON图片
     pub async fn delete(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
         let icon_service: IconService = provider.provide();
         let resp = icon_service.delete(*id).await;
@@ -77,7 +77,7 @@ impl IconController {
         }
     }
 
-    /// 批量删除ICON图标
+    /// 批量删除ICON图片
     pub async fn batch_delete(
         provider: Data<AInjectProvider>,
         data: Json<BatchDeleteIconReq>,

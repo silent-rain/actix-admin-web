@@ -47,7 +47,7 @@ impl MigrationTrait for Migration {
                     )
                     .col(
                         ColumnDef::new(Column::BaseImg)
-                            .blob(BlobSize::Long)
+                            .blob(BlobSize::Medium)
                             .not_null()
                             .comment("Base64图片"),
                     )

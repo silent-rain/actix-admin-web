@@ -7,7 +7,7 @@ CREATE TABLE
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
         `captcha_id` VARCHAR(40) NOT NULL UNIQUE COMMENT '验证码ID',
         `captcha` VARCHAR(10) NOT NULL COMMENT '验证码',
-        `base_img` LONGBLOB NOT NULL COMMENT 'Base64图片',
+        `base_img` MEDIUMBLOB NOT NULL COMMENT 'Base64图片',
         `expire` INT(4) UNSIGNED NOT NULL DEFAULT 1 COMMENT '过期时间,秒',
         `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:无效,1:有效',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -31,18 +31,18 @@ CREATE TABLE
         PRIMARY KEY (`id`)
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '配置表';
 
--- ICON图标表
+-- ICON图片表
 CREATE TABLE
     `t_sys_icon` (
-        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '图标ID',
-        `name` VARCHAR(32) UNIQUE NOT NULL COMMENT '图标名称',
-        `base_img` LONGBLOB NOT NULL COMMENT 'Base64图片',
-        `category` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '图标类型,1:element,2:custom',
+        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '图片ID',
+        `name` VARCHAR(32) NOT NULL COMMENT '图片名称',
+        `hash_name` VARCHAR(32) UNIQUE NOT NULL COMMENT 'HASH名称',
+        `base_img` MEDIUMBLOB NOT NULL COMMENT 'Base64图片',
+        `icon_type` VARCHAR(10) NOT NULL COMMENT '扩展类型,svg,png',
         `note` VARCHAR(200) DEFAULT '' COMMENT '备注',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-        `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`)
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT 'ICON图标表';
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT 'ICON图片表';
 
 -- 字典维度表
 CREATE TABLE

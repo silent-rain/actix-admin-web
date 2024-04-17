@@ -40,3 +40,13 @@ pub enum CaptchaStatus {
     /// 有效验证码
     Valid = 1,
 }
+
+/// ICON图片扩展类型,svg,png
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[repr(i8)]
+pub enum IconType {
+    /// 无效验证码
+    Svg,
+    /// 有效验证码
+    Png,
+}

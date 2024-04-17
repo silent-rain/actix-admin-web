@@ -19,7 +19,7 @@ pub struct Model {
     /// 验证码
     pub captcha: String,
     /// Base64图片
-    #[sea_orm(column_type = "Binary(BlobSize::Long)")]
+    #[sea_orm(column_type = "Binary(BlobSize::Medium)")]
     pub base_img: Vec<u8>,
     /// 过期时间,秒
     pub expire: u32,
