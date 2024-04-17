@@ -1,6 +1,6 @@
 //! OpenApi接口表
-//! User Entity: [`entity::prelude::OpenApi`]
-use entity::{open_api::Column, prelude::OpenApi};
+//! User Entity: [`entity::prelude::PermOpenApi`]
+use entity::{perm_open_api::Column, prelude::PermOpenApi};
 
 use sea_orm_migration::{
     async_trait,
@@ -20,7 +20,7 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(OpenApi)
+                    .table(PermOpenApi)
                     .if_not_exists()
                     .col(
                         ColumnDef::new(Column::Id)
@@ -109,7 +109,7 @@ impl MigrationTrait for Migration {
         // Replace the sample below with your own migration scripts
 
         manager
-            .drop_table(Table::drop().table(OpenApi).to_owned())
+            .drop_table(Table::drop().table(PermOpenApi).to_owned())
             .await
     }
 }

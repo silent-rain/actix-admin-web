@@ -1,4 +1,4 @@
-//! OpenApi接口表
+//! OpenApi接口与角色关联表
 
 use sea_orm::{
     prelude::DateTimeLocal, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey,
@@ -6,33 +6,19 @@ use sea_orm::{
 };
 use serde::{Deserialize, Serialize};
 
-/// OpenApi接口表
+/// OpenApi接口与角色关联表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "t_open_api")]
+#[sea_orm(table_name = "t_perm_open_api_role_rel")]
 pub struct Model {
     /// 自增ID
     #[sea_orm(primary_key)]
     pub id: i32,
-    /// 父ID
-    pub pid: Option<i32>,
-    /// 类别,0:目录,1:接口
-    pub category: i8,
-    /// 接口名称
-    pub name: String,
-    /// 请求类型
-    pub method: String,
-    /// 资源路径
-    pub path: String,
-    /// 排序
-    pub sort: Option<i32>,
-    /// 备注
-    pub note: Option<String>,
-    /// 状态, 0:停用,1:正常
-    pub status: i8,
+    /// 接口ID
+    pub api_id: i32,
+    /// 角色ID
+    pub role_id: i32,
     /// 创建时间
     pub created_at: DateTimeLocal,
-    /// 更新时间
-    pub updated_at: DateTimeLocal,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

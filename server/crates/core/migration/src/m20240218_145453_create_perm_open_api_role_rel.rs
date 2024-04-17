@@ -1,6 +1,6 @@
 //! OpenApi接口与角色关联表
-//! User Entity: [`entity::prelude::OpenApiRoleRel`]
-use entity::{open_api_role_rel::Column, prelude::OpenApiRoleRel};
+//! User Entity: [`entity::prelude::PermOpenApiRoleRel`]
+use entity::{perm_open_api_role_rel::Column, prelude::PermOpenApiRoleRel};
 
 use sea_orm_migration::{
     async_trait,
@@ -19,7 +19,7 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(OpenApiRoleRel)
+                    .table(PermOpenApiRoleRel)
                     .if_not_exists()
                     .col(
                         ColumnDef::new(Column::Id)
@@ -56,7 +56,7 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
         manager
-            .drop_table(Table::drop().table(OpenApiRoleRel).to_owned())
+            .drop_table(Table::drop().table(PermOpenApiRoleRel).to_owned())
             .await
     }
 }
