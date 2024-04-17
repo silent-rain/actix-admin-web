@@ -2,7 +2,7 @@
 
 use sea_orm::{
     prelude::DateTimeLocal, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey,
-    DeriveRelation, EntityTrait, EnumIter, PrimaryKeyTrait,
+    DeriveRelation, EntityTrait, EnumIter, PrimaryKeyTrait, Related, RelationDef, RelationTrait,
 };
 use serde::{Deserialize, Serialize};
 
@@ -34,6 +34,15 @@ pub struct Model {
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
-pub enum Relation {}
+pub enum Relation {
+    #[sea_orm(has_many = "super::perm_user_token_role_rel::Entity")]
+    PermUserTokenRoleRel,
+}
+
+impl Related<super::perm_user_token_role_rel::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::PermUserTokenRoleRel.def()
+    }
+}
 
 impl ActiveModelBehavior for ActiveModel {}

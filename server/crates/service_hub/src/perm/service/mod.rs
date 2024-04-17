@@ -8,3 +8,5 @@ pub mod open_api_role_rel;
 pub mod role;
 pub mod user;
 pub mod user_role_rel;
+pub mod user_token;
+pub mod user_token_role_rel;

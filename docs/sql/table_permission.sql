@@ -136,6 +136,18 @@ CREATE TABLE
         PRIMARY KEY (`id`)
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户Token令牌表, 一般openapi服务';
 
+-- 用户Token令牌与角色关联表
+CREATE TABLE
+    t_perm_user_token_role_rel (
+        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
+        `token_id` INT(11) NOT NULL COMMENT '令牌ID',
+        `role_id` INT(11) NOT NULL COMMENT '角色ID',
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+        PRIMARY KEY (`id`),
+        CONSTRAINT `t_perm_user_token_role_rel_token_id` FOREIGN KEY (`token_id`) REFERENCES `t_perm_user_token` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+        CONSTRAINT `t_perm_user_token_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户Token令牌与角色关联表';
+
 -- OpenApi接口表
 CREATE TABLE
     t_perm_open_api (
