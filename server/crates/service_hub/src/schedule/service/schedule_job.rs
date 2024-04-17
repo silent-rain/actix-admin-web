@@ -58,7 +58,7 @@ impl<'a> ScheduleJobService<'a> {
 
     /// 添加数据
     pub async fn add(&self, req: AddcheduleJobReq) -> Result<schedule_job::Model, ErrorMsg> {
-        // 查询定时任务是否存在
+        // 查询定时任务是否已存在
         let job = self
             .schedule_job_dao
             .info_by_name(req.name.clone())

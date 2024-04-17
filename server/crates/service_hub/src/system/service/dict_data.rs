@@ -58,7 +58,7 @@ impl<'a> DictDataService<'a> {
 
     /// 添加数据
     pub async fn add(&self, req: AddDictDataReq) -> Result<sys_dict_data::Model, ErrorMsg> {
-        // 查询字典数据是否存在
+        // 查询字典数据是否已存在
         let dict_data = self
             .dict_data_dao
             .info_by_lable(req.dim_id, req.lable.clone())

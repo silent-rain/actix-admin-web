@@ -60,7 +60,7 @@ impl<'a> RoleService<'a> {
 
     /// 添加数据
     pub async fn add(&self, req: AddRoleReq) -> Result<perm_role::Model, ErrorMsg> {
-        // 查询角色是否存在
+        // 查询角色是否已存在
         let role = self
             .role_dao
             .info_by_name(req.name.clone())

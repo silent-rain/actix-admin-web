@@ -68,7 +68,7 @@ impl<'a> DictDimService<'a> {
 
     /// 添加数据
     pub async fn add(&self, req: AddDictDimReq) -> Result<sys_dict_dim::Model, ErrorMsg> {
-        // 查询字典维度名称是否存在
+        // 查询字典维度名称是否已存在
         let dict_dim = self
             .dict_dim_dao
             .info_by_name(req.name.clone())

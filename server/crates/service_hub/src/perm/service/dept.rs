@@ -73,7 +73,7 @@ impl<'a> DeptService<'a> {
 
     /// 添加数据
     pub async fn add(&self, req: AddDeptReq) -> Result<perm_dept::Model, ErrorMsg> {
-        // 查询部门是否存在
+        // 查询部门是否已存在
         let dept = self
             .dept_dao
             .info_by_name(req.name.clone())
@@ -172,14 +172,14 @@ impl<'a> DeptService<'a> {
 
     /// 删除数据
     pub async fn delete(&self, id: i32) -> Result<u64, ErrorMsg> {
-        let dept_children = self.dept_dao.children(id).await.map_err(|err| {
+        let children = self.dept_dao.children(id).await.map_err(|err| {
             error!("获取所有子列表失败, err: {:#?}", err);
             Error::DbQueryError
                 .into_msg()
                 .with_msg("获取所有子列表失败")
         })?;
-        if !dept_children.is_empty() {
-            error!("请先删除子列表, children count: {:#?}", dept_children.len());
+        if !children.is_empty() {
+            error!("请先删除子列表, children count: {:#?}", children.len());
             return Err(Error::DbDataExistChildrenError
                 .into_msg()
                 .with_msg("请先删除子列表"));
