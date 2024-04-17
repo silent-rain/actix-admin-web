@@ -27,8 +27,8 @@ impl OpenApiController {
         provider: Data<AInjectProvider>,
         req: Query<GetOpenApiListReq>,
     ) -> impl Responder {
-        let dept_service: OpenApiService = provider.provide();
-        let resp = dept_service.list(req.into_inner()).await;
+        let open_api_service: OpenApiService = provider.provide();
+        let resp = open_api_service.list(req.into_inner()).await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::err(err),
@@ -37,8 +37,8 @@ impl OpenApiController {
 
     /// 获取OpenApi接口树列表
     pub async fn tree(provider: Data<AInjectProvider>) -> impl Responder {
-        let dept_service: OpenApiService = provider.provide();
-        let resp = dept_service.tree().await;
+        let open_api_service: OpenApiService = provider.provide();
+        let resp = open_api_service.tree().await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::err(err),
@@ -47,8 +47,8 @@ impl OpenApiController {
 
     /// 获取OpenApi接口信息
     pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let dept_service: OpenApiService = provider.provide();
-        let resp = dept_service.info(*id).await;
+        let open_api_service: OpenApiService = provider.provide();
+        let resp = open_api_service.info(*id).await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::err(err),
@@ -57,8 +57,8 @@ impl OpenApiController {
 
     /// 添加OpenApi接口
     pub async fn add(provider: Data<AInjectProvider>, data: Json<AddOpenApiReq>) -> impl Responder {
-        let dept_service: OpenApiService = provider.provide();
-        let resp = dept_service.add(data.into_inner()).await;
+        let open_api_service: OpenApiService = provider.provide();
+        let resp = open_api_service.add(data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -71,8 +71,8 @@ impl OpenApiController {
         id: Path<i32>,
         data: Json<UpdateOpenApiReq>,
     ) -> impl Responder {
-        let dept_service: OpenApiService = provider.provide();
-        let resp = dept_service.update(*id, data.into_inner()).await;
+        let open_api_service: OpenApiService = provider.provide();
+        let resp = open_api_service.update(*id, data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -85,8 +85,8 @@ impl OpenApiController {
         id: Path<i32>,
         data: Json<UpdateOpenApiStatusReq>,
     ) -> impl Responder {
-        let dept_service: OpenApiService = provider.provide();
-        let resp = dept_service.status(*id, data.status).await;
+        let open_api_service: OpenApiService = provider.provide();
+        let resp = open_api_service.status(*id, data.status).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -95,8 +95,8 @@ impl OpenApiController {
 
     /// 删除OpenApi接口
     pub async fn delete(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let dept_service: OpenApiService = provider.provide();
-        let resp = dept_service.delete(*id).await;
+        let open_api_service: OpenApiService = provider.provide();
+        let resp = open_api_service.delete(*id).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

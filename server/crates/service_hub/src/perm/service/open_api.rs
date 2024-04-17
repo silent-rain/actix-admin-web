@@ -137,7 +137,7 @@ impl<'a> OpenApiService<'a> {
             path: Set(req.path),
             sort: Set(req.sort),
             note: Set(req.note),
-            status: Set(OpenApiStatus::Enabled as i8),
+            status: Set(req.status),
             ..Default::default()
         };
 

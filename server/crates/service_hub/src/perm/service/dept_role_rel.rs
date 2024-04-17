@@ -38,8 +38,8 @@ impl<'a> DeptRoleRelService<'a> {
         let mut models = Vec::new();
         for role_id in req.role_ids {
             let model = perm_dept_role_rel::ActiveModel {
-                role_id: Set(role_id),
                 dept_id: Set(req.dept_id),
+                role_id: Set(role_id),
                 ..Default::default()
             };
             models.push(model);

@@ -1,6 +1,8 @@
 //! 路由层
 pub mod dept;
 pub mod dept_role_rel;
+pub mod menu;
+pub mod menu_role_rel;
 pub mod open_api;
 pub mod open_api_role_rel;
 pub mod role;
@@ -26,5 +28,9 @@ impl PermissionRouter {
             .service(dept::DeptRouter::admin_register())
             // 部门角色关系管理
             .service(dept_role_rel::DeptRoleRelRouter::admin_register())
+            // 菜单管理
+            .service(menu::MenuRouter::admin_register())
+            // 菜单角色关系管理
+            .service(menu_role_rel::MenuRoleRelRouter::admin_register())
     }
 }

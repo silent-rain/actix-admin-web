@@ -62,3 +62,75 @@ pub enum OpenApiCategory {
     /// 接口
     Interface = 1,
 }
+
+/// 菜单状态
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[repr(i8)]
+pub enum MenuStatus {
+    /// 停用
+    Disabled = 0,
+    /// 正常
+    Enabled = 1,
+}
+
+/// 菜单类型
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[repr(i8)]
+pub enum MenuType {
+    /// 菜单
+    Menu = 0,
+    /// 按钮
+    Button = 1,
+}
+
+/// 菜单打开方式
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[repr(i8)]
+pub enum MenuOpenType {
+    /// 组件
+    Component = 0,
+    /// 内链
+    InternalLink = 1,
+    /// 外链
+    ExternalLink = 2,
+}
+
+/// 菜单链接类型
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum MenuLinkType {
+    /// 站内链地址
+    Internal,
+    /// 站外链地址
+    External,
+}
+
+/// 菜单链接跳转方式
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum MenuLinkTarget {
+    /// 新窗口中打开
+    #[serde(rename = "_blank")]
+    Blank,
+    /// 当前窗口中打开
+    #[serde(rename = "_self")]
+    Current,
+}
+
+/// 菜单是否隐藏
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[repr(i8)]
+pub enum MenuHidden {
+    /// 显示
+    Visible = 0,
+    /// 隐藏
+    Hidden = 1,
+}
+
+/// 始终显示根菜单
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[repr(i8)]
+pub enum MenuRootAlwaysShow {
+    /// 显示
+    Show = 0,
+    /// 隐藏
+    Hide = 1,
+}
