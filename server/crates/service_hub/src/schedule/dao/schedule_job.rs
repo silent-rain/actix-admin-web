@@ -32,7 +32,7 @@ impl<'a> ScheduleJobDao<'a> {
                 query.filter(schedule_job::Column::CreatedAt.lt(v))
             })
             .apply_if(req.name, |query, v| {
-                query.filter(schedule_job::Column::Name.like(format!("%{v}%")))
+                query.filter(schedule_job::Column::Name.like(format!("{v}%")))
             })
             .apply_if(req.job_type, |query, v| {
                 query.filter(schedule_job::Column::JobType.eq(v))

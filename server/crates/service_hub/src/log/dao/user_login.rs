@@ -37,7 +37,7 @@ impl<'a> UserLoginDao<'a> {
                 query.filter(log_user_login::Column::UserId.eq(v))
             })
             .apply_if(req.username, |query, v| {
-                query.filter(log_user_login::Column::Username.like(format!("%{v}%")))
+                query.filter(log_user_login::Column::Username.like(format!("{v}%")))
             });
 
         let total = states.clone().count(self.db.rdb()).await?;

@@ -42,10 +42,10 @@ impl<'a> DictDimDao<'a> {
                 query.filter(sys_dict_dim::Column::CreatedAt.lt(v))
             })
             .apply_if(req.name, |query, v| {
-                query.filter(sys_dict_dim::Column::Name.like(format!("%{v}%")))
+                query.filter(sys_dict_dim::Column::Name.like(format!("{v}%")))
             })
             .apply_if(req.code, |query, v| {
-                query.filter(sys_dict_dim::Column::Code.like(format!("%{v}%")))
+                query.filter(sys_dict_dim::Column::Code.like(format!("{v}%")))
             });
 
         let total = states.clone().count(self.db.rdb()).await?;

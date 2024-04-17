@@ -42,7 +42,7 @@ impl<'a> UserDao<'a> {
                 query.filter(perm_user::Column::CreatedAt.lt(v))
             })
             .apply_if(req.username, |query, v| {
-                query.filter(perm_user::Column::Username.like(format!("%{v}%")))
+                query.filter(perm_user::Column::Username.like(format!("{v}%")))
             });
 
         let total = states.clone().count(self.db.rdb()).await?;

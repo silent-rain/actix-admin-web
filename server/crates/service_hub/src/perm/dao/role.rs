@@ -39,7 +39,7 @@ impl<'a> RoleDao<'a> {
                 query.filter(perm_role::Column::CreatedAt.lt(v))
             })
             .apply_if(req.name, |query, v| {
-                query.filter(perm_role::Column::Name.like(format!("%{v}%")))
+                query.filter(perm_role::Column::Name.like(format!("{v}%")))
             });
 
         let total = states.clone().count(self.db.rdb()).await?;

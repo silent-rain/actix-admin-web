@@ -29,7 +29,7 @@ impl<'a> IconDao<'a> {
                 query.filter(sys_icon::Column::CreatedAt.lt(v))
             })
             .apply_if(req.name, |query, v| {
-                query.filter(sys_icon::Column::Name.like(format!("%{v}%")))
+                query.filter(sys_icon::Column::Name.like(format!("{v}%")))
             })
             .apply_if(req.category, |query, v| {
                 query.filter(sys_icon::Column::Category.eq(v))

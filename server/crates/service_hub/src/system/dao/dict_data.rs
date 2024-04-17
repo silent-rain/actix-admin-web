@@ -42,13 +42,13 @@ impl<'a> DictDataDao<'a> {
                 query.filter(sys_dict_data::Column::CreatedAt.lt(v))
             })
             .apply_if(req.lable, |query, v| {
-                query.filter(sys_dict_data::Column::Lable.like(format!("%{v}%")))
+                query.filter(sys_dict_data::Column::Lable.like(format!("{v}%")))
             })
             .apply_if(req.dim_id, |query, v| {
                 query.filter(sys_dict_data::Column::DimId.eq(v))
             })
             .apply_if(req.dim_code, |query, v| {
-                query.filter(sys_dict_data::Column::DimCode.like(format!("%{v}%")))
+                query.filter(sys_dict_data::Column::DimCode.like(format!("{v}%")))
             });
 
         let total = states.clone().count(self.db.rdb()).await?;

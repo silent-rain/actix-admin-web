@@ -45,7 +45,7 @@ impl<'a> OpenApiDao<'a> {
                 query.filter(perm_open_api::Column::Name.eq(v))
             })
             .apply_if(req.name, |query, v| {
-                query.filter(perm_open_api::Column::Name.like(format!("%{v}%")))
+                query.filter(perm_open_api::Column::Name.like(format!("{v}%")))
             });
 
         let total = states.clone().count(self.db.rdb()).await?;
