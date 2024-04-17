@@ -36,15 +36,38 @@ impl<T: GenericTreeTrait + Clone> GenericTree<T> {
 
 impl<T: GenericTreeTrait + Clone> GenericTree<T> {
     /// 将列表转换为树列表
-    pub fn to_tree(depts: &[T], pid: Option<i32>) -> Vec<GenericTree<T>> {
+    pub fn to_tree(data_list: &[T], pid: Option<i32>) -> Vec<GenericTree<T>> {
         let mut trees = Vec::new();
-        for dept in depts {
-            if dept.pid() == pid {
-                let mut tree = GenericTree::new(dept);
-                tree.children = Self::to_tree(depts, Some(dept.id()));
+        for data in data_list {
+            if data.pid() == pid {
+                let mut tree = GenericTree::new(data);
+                tree.children = Self::to_tree(data_list, Some(data.id()));
                 trees.push(tree);
             }
         }
         trees
+    }
+
+    /// 获取所有上级ID
+    pub fn get_pids(data_list: &[T], id: i32) -> Vec<i32> {
+        let mut ids = Vec::new();
+        if id == 0 {
+            return ids;
+        }
+        for data in data_list {
+            if data.id() != id {
+                continue;
+            }
+
+            let pid = match data.pid() {
+                Some(v) => v,
+                None => break,
+            };
+            ids.push(pid);
+            let inner_pids = Self::get_pids(data_list, pid);
+            ids.extend(inner_pids);
+            break;
+        }
+        ids
     }
 }
