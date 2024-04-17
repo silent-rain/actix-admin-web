@@ -1,4 +1,4 @@
-//! 接口权限表
+//! OpenApi接口表
 
 use sea_orm::{
     prelude::DateTimeLocal, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey,
@@ -6,21 +6,25 @@ use sea_orm::{
 };
 use serde::{Deserialize, Serialize};
 
-/// 接口权限表
+/// OpenApi接口表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "t_api_auth")]
+#[sea_orm(table_name = "t_open_api")]
 pub struct Model {
     /// 自增ID
     #[sea_orm(primary_key)]
     pub id: i32,
     /// 父ID
     pub pid: Option<i32>,
+    /// 类别,0:目录,1:接口
+    pub category: i8,
     /// 接口名称
     pub name: String,
     /// 请求类型
     pub method: String,
-    /// URI资源
-    pub uri: String,
+    /// 资源路径
+    pub path: String,
+    /// 排序
+    pub sort: Option<i32>,
     /// 备注
     pub note: Option<String>,
     /// 状态, 0:停用,1:正常

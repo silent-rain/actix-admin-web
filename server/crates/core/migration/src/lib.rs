@@ -18,6 +18,8 @@ mod m20240218_161916_create_sys_dict_dim;
 mod m20240218_161916_create_sys_icon;
 mod m20240415_161916_create_schedule_job;
 mod m20240415_161916_create_schedule_job_log;
+mod m20240417_145453_create_open_api;
+mod m20240417_145453_create_open_api_role_rel;
 
 pub struct Migrator;
 
@@ -26,7 +28,6 @@ impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
         vec![
             Box::new(m20230617_084425_create_log_api_operation::Migration),
-            Box::new(m20240415_161916_create_schedule_job_log::Migration),
             Box::new(m20230617_084425_create_log_system::Migration),
             Box::new(m20230617_084425_create_log_user_login::Migration),
             Box::new(m20240218_145452_create_perm_role::Migration),
@@ -42,6 +43,9 @@ impl MigratorTrait for Migrator {
             Box::new(m20240218_161916_create_sys_dict_dim::Migration),
             Box::new(m20240218_161916_create_sys_dict_data::Migration),
             Box::new(m20240415_161916_create_schedule_job::Migration),
+            Box::new(m20240415_161916_create_schedule_job_log::Migration),
+            Box::new(m20240417_145453_create_open_api::Migration),
+            Box::new(m20240417_145453_create_open_api_role_rel::Migration),
         ]
     }
 }

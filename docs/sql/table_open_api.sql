@@ -3,10 +3,12 @@
 CREATE TABLE
     t_open_api (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '接口ID',
-        `pid` INT(20) NULL COMMENT '父ID',
+        `pid` INT(20) NULL DEFAULT 0 COMMENT '父ID',
+        `category` VARCHAR(20) NOT NULL COMMENT '类别,0:目录,1:接口',
         `name` VARCHAR(50) NOT NULL COMMENT '接口名称',
         `method` VARCHAR(50) NOT NULL COMMENT '请求类型',
-        `path` VARCHAR(50) NOT NULL COMMENT '资源路径',
+        `path` VARCHAR(200) NOT NULL COMMENT '资源路径',
+        `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
         `note` VARCHAR(200) NULL DEFAULT '' COMMENT '备注',
         `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态, 0:停用,1:正常',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

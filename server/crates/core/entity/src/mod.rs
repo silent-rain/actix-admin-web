@@ -4,8 +4,8 @@ pub mod prelude;
 
 pub mod app_template;
 
-pub mod api_auth;
-pub mod api_role_rel;
+pub mod open_api;
+pub mod open_api_role_rel;
 pub mod log_api_operation;
 pub mod log_system;
 pub mod log_user_login;
