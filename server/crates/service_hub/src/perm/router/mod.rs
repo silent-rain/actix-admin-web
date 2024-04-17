@@ -34,6 +34,10 @@ impl PermissionRouter {
             .service(menu::MenuRouter::admin_register())
             // 菜单角色关系管理
             .service(menu_role_rel::MenuRoleRelRouter::admin_register())
+            // 用户Token令牌管理
+            .service(user_token::UserTokenRouter::admin_register())
+            // 用户Token令牌与角色关系管理
+            .service(user_token_role_rel::UserTokenRoleRelRouter::admin_register())
             // OpenApi接口管理
             .service(open_api::OpenApiRouter::admin_register())
             // OpenApi接口角色关系管理

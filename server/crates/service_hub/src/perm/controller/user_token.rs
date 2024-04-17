@@ -3,8 +3,10 @@
 use crate::{
     inject::AInjectProvider,
     perm::{
-        dto::dept::{AddDeptReq, GetDeptListReq, UpdateDeptReq, UpdateDeptStatusReq},
-        service::dept::DeptService,
+        dto::user_token::{
+            AddUserTokenReq, GetUserTokenListReq, UpdateUserTokenReq, UpdateUserTokenStatusReq,
+        },
+        service::user_token::UserTokenService,
     },
 };
 
@@ -17,84 +19,77 @@ use actix_web::{
 };
 
 /// 控制器
-pub struct DeptController;
+pub struct UserTokenController;
 
-impl DeptController {
-    /// 获取部门列表
+impl UserTokenController {
+    /// 获取用户令牌列表
     pub async fn list(
         provider: Data<AInjectProvider>,
-        req: Query<GetDeptListReq>,
+        req: Query<GetUserTokenListReq>,
     ) -> impl Responder {
-        let dept_service: DeptService = provider.provide();
-        let resp = dept_service.list(req.into_inner()).await;
+        let user_token_service: UserTokenService = provider.provide();
+        let resp = user_token_service.list(req.into_inner()).await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::err(err),
         }
     }
 
-    /// 获取部门树列表
-    pub async fn tree(provider: Data<AInjectProvider>) -> impl Responder {
-        let dept_service: DeptService = provider.provide();
-        let resp = dept_service.tree().await;
-        match resp {
-            Ok(v) => Response::ok().data(v),
-            Err(err) => Response::err(err),
-        }
-    }
-
-    /// 获取部门信息
+    /// 获取用户令牌信息
     pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let dept_service: DeptService = provider.provide();
-        let resp = dept_service.info(*id).await;
+        let user_token_service: UserTokenService = provider.provide();
+        let resp = user_token_service.info(*id).await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::err(err),
         }
     }
 
-    /// 添加部门
-    pub async fn add(provider: Data<AInjectProvider>, data: Json<AddDeptReq>) -> impl Responder {
-        let dept_service: DeptService = provider.provide();
-        let resp = dept_service.add(data.into_inner()).await;
+    /// 添加用户令牌
+    pub async fn add(
+        provider: Data<AInjectProvider>,
+        data: Json<AddUserTokenReq>,
+    ) -> impl Responder {
+        let user_token_service: UserTokenService = provider.provide();
+        let resp = user_token_service.add(data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
         }
     }
 
-    /// 更新部门
+    /// 更新用户令牌
     pub async fn update(
         provider: Data<AInjectProvider>,
         id: Path<i32>,
-        data: Json<UpdateDeptReq>,
+        data: Json<UpdateUserTokenReq>,
     ) -> impl Responder {
-        let dept_service: DeptService = provider.provide();
-        let resp = dept_service.update(*id, data.into_inner()).await;
+        let user_token_service: UserTokenService = provider.provide();
+        let resp = user_token_service.update(*id, data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
         }
     }
 
-    /// 更新部门状态
+    /// 更新用户令牌状态
     pub async fn status(
         provider: Data<AInjectProvider>,
         id: Path<i32>,
-        data: Json<UpdateDeptStatusReq>,
+        data: Json<UpdateUserTokenStatusReq>,
     ) -> impl Responder {
-        let dept_service: DeptService = provider.provide();
-        let resp = dept_service.status(*id, data.status).await;
+        let user_token_service: UserTokenService = provider.provide();
+        let resp = user_token_service.status(*id, data.status).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
         }
     }
 
-    /// 删除部门
+    /// 删除用户令牌
     pub async fn delete(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let dept_service: DeptService = provider.provide();
-        let resp = dept_service.delete(*id).await;
+        let user_token_service: UserTokenService = provider.provide();
+        let resp = user_token_service.delete(*id).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

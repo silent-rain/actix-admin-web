@@ -4,9 +4,9 @@ use actix_validator::Validate;
 
 use serde::{Deserialize, Serialize};
 
-/// 查询部门列表
+/// 查询用户令牌列表
 #[derive(Default, Deserialize, Validate)]
-pub struct GetDeptListReq {
+pub struct GetUserTokenListReq {
     /// 当前分页
     pub page: u64,
     /// 页面大小
@@ -15,49 +15,51 @@ pub struct GetDeptListReq {
     pub start_time: Option<String>,
     /// 结束时间
     pub end_time: Option<String>,
-    /// 角色名称
-    pub name: Option<String>,
-    /// 返回所有数据
-    pub all: Option<bool>,
+    /// 用户ID
+    pub user_id: Option<i32>,
+    /// 令牌
+    pub token: Option<String>,
 }
 
-/// 添加部门
+/// 添加用户令牌
 #[derive(Serialize, Deserialize, Validate)]
-pub struct AddDeptReq {
-    /// 上级部门ID
-    pub pid: Option<i32>,
-    /// 所有上级部门ID, 用逗号分开
-    pub pids: Option<String>,
-    /// 部门名称
-    #[validate(length(min = 2, message = "至少输入两个字符"))]
-    pub name: String,
-    /// 排序
-    pub sort: Option<i32>,
+pub struct AddUserTokenReq {
+    /// 用户ID
+    pub user_id: i32,
+    /// 令牌
+    pub token: String,
+    /// 权限范围:GET,POST,PUT,DELETE
+    /// Enum: [`crate::perm::enums::UserTokenPermission`]
+    pub permission: String,
+    /// 授权到期时间
+    pub expire: i32,
+    /// 状态,0:禁用,1:启用
+    /// Enum: [`crate::perm::enums::UserTokenStatus`]
+    pub status: i8,
     /// 备注
     pub note: Option<String>,
 }
 
 /// 更新数据
 #[derive(Default, Clone, Serialize, Deserialize, Validate)]
-pub struct UpdateDeptReq {
-    /// 上级部门ID
-    pub pid: Option<i32>,
-    /// 所有上级部门ID, 用逗号分开
-    pub pids: Option<String>,
-    /// 部门名称
-    pub name: String,
-    /// 排序
-    pub sort: Option<i32>,
+pub struct UpdateUserTokenReq {
+    /// 用户ID
+    pub user_id: i32,
+    /// 权限范围:GET,POST,PUT,DELETE
+    /// Enum: [`crate::perm::enums::UserTokenPermission`]
+    pub permission: String,
+    /// 授权到期时间
+    pub expire: i32,
+    /// 状态,0:禁用,1:启用
+    /// Enum: [`crate::perm::enums::UserTokenStatus`]
+    pub status: i8,
     /// 备注
     pub note: Option<String>,
-    /// 状态,0:停用,1:正常
-    /// Enum: [`crate::perm::enums::DeptStatus`]
-    pub status: i8,
 }
 
-/// 更新数据状态
+/// 更新用户令牌状态
 #[derive(Default, Clone, Serialize, Deserialize, Validate)]
-pub struct UpdateDeptStatusReq {
+pub struct UpdateUserTokenStatusReq {
     /// 状态,0:停用,1:正常
     /// Enum: [`crate::perm::enums::DeptStatus`]
     pub status: i8,

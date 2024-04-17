@@ -134,3 +134,31 @@ pub enum MenuRootAlwaysShow {
     /// 隐藏
     Hide = 1,
 }
+
+/// 用户令牌状态
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[repr(i8)]
+pub enum UserTokenStatus {
+    /// 停用
+    Disabled = 0,
+    /// 正常
+    Enabled = 1,
+}
+
+/// 用户令牌权限范围
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[repr(i8)]
+pub enum UserTokenPermission {
+    /// 读取数据
+    #[serde(rename = "GET")]
+    GET,
+    /// 提交数据
+    #[serde(rename = "POST")]
+    POST,
+    /// 更新数据
+    #[serde(rename = "PUT")]
+    PUT,
+    /// 删除数据
+    #[serde(rename = "DELETE")]
+    DELETE,
+}

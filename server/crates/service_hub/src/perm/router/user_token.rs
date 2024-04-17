@@ -1,22 +1,21 @@
 //! 用户Token令牌管理
 
-use crate::perm::DeptController;
+use crate::perm::UserTokenController;
 
 use actix_web::{web, Scope};
 
 /// 路由器
-pub struct DeptRouter;
+pub struct UserTokenRouter;
 
-impl DeptRouter {
+impl UserTokenRouter {
     /// 注册`用户Token令牌管理`路由
     pub fn admin_register() -> Scope {
-        web::scope("/depts")
-            .route("", web::get().to(DeptController::list))
-            .route("/tree", web::get().to(DeptController::tree))
-            .route("/{id}", web::get().to(DeptController::info))
-            .route("", web::post().to(DeptController::add))
-            .route("/{id}", web::put().to(DeptController::update))
-            .route("/{id}/status", web::put().to(DeptController::status))
-            .route("/{id}", web::delete().to(DeptController::delete))
+        web::scope("/user-tokens")
+            .route("", web::get().to(UserTokenController::list))
+            .route("/{id}", web::get().to(UserTokenController::info))
+            .route("", web::post().to(UserTokenController::add))
+            .route("/{id}", web::put().to(UserTokenController::update))
+            .route("/{id}/status", web::put().to(UserTokenController::status))
+            .route("/{id}", web::delete().to(UserTokenController::delete))
     }
 }
