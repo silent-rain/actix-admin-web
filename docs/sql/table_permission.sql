@@ -125,7 +125,7 @@ CREATE TABLE
     `t_perm_user_token` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '令牌ID',
         `user_id` INT(20) NOT NULL COMMENT '用户ID',
-        `token` VARCHAR(50) NOT UNIQUE NULL COMMENT '令牌',
+        `token` VARCHAR(50) UNIQUE NOT  NULL COMMENT '令牌',
         `passphrase` VARCHAR(20) NOT NULL COMMENT '口令',
         `permission` VARCHAR(20) NOT NULL COMMENT '权限范围:GET,POST,PUT,DELETE',
         `expire` DATETIME NOT NULL COMMENT '授权到期时间',

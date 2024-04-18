@@ -22,7 +22,7 @@ pub struct Model {
     /// 权限范围:GET,POST,PUT,DELETE
     pub permission: String,
     /// 授权到期时间
-    pub expire: i32,
+    pub expire: DateTimeLocal,
     /// 状态,0:禁用,1:启用
     pub status: i8,
     /// 备注

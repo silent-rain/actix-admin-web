@@ -105,7 +105,7 @@
 - 路由匹配 open api 接口 rbac
 - sql 日志？
 - 定时任务调研与集成；
-- 验证 ICON 图标管理/菜单管理/用户令牌管理/openapi 管理
+- 验证 ICON 图标管理/用户令牌管理/openapi 管理
 - 数据库配置调优，配置解释
 - 枚举放置位置
 - 枚举序列化和反序
@@ -114,6 +114,9 @@
 - 初始化库表数据
   - https://www.sea-ql.org/SeaORM/docs/migration/writing-migration/#using-raw-sql
   - 需要手动执行脚本；
+  - 菜单
+  - 接口
+  - 默认角色
 
 https://github.com/actix/actix-extras/tree/master/actix-identity
 https://crates.io/crates/actix-ws

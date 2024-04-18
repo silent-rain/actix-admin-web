@@ -2,6 +2,7 @@
 
 use actix_validator::Validate;
 
+use sea_orm::prelude::DateTimeLocal;
 use serde::{Deserialize, Serialize};
 
 /// 查询用户令牌列表
@@ -32,7 +33,7 @@ pub struct AddUserTokenReq {
     /// Enum: [`crate::perm::enums::UserTokenPermission`]
     pub permission: String,
     /// 授权到期时间
-    pub expire: i32,
+    pub expire: DateTimeLocal,
     /// 状态,0:禁用,1:启用
     /// Enum: [`crate::perm::enums::UserTokenStatus`]
     pub status: i8,
@@ -49,7 +50,7 @@ pub struct UpdateUserTokenReq {
     /// Enum: [`crate::perm::enums::UserTokenPermission`]
     pub permission: String,
     /// 授权到期时间
-    pub expire: i32,
+    pub expire: DateTimeLocal,
     /// 状态,0:禁用,1:启用
     /// Enum: [`crate::perm::enums::UserTokenStatus`]
     pub status: i8,
