@@ -70,6 +70,7 @@ uuid = "1.7.0"
 time = "0.3"
 rust-embed = "8.3"
 tokio-cron-scheduler = "0.10"
+uap-rust = "0.0"
 
 # 其他
 futures = "0.3"

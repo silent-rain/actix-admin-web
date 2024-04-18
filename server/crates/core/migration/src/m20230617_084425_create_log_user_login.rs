@@ -66,6 +66,30 @@ impl MigrationTrait for Migration {
                             .comment("用户代理"),
                     )
                     .col(
+                        ColumnDef::new(Column::Device)
+                            .string()
+                            .string_len(20)
+                            .null()
+                            .default("")
+                            .comment("设备"),
+                    )
+                    .col(
+                        ColumnDef::new(Column::System)
+                            .string()
+                            .string_len(20)
+                            .null()
+                            .default("")
+                            .comment("系统"),
+                    )
+                    .col(
+                        ColumnDef::new(Column::Browser)
+                            .string()
+                            .string_len(20)
+                            .null()
+                            .default("")
+                            .comment("浏览器"),
+                    )
+                    .col(
                         ColumnDef::new(Column::Status)
                             .tiny_integer()
                             .not_null()

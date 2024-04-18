@@ -11,6 +11,7 @@ use entity::log_user_login;
 use nject::injectable;
 use sea_orm::Set;
 use tracing::error;
+use uap_rust::parser::Parser;
 
 /// 服务层
 #[injectable]
@@ -86,12 +87,29 @@ impl<'a> UserLoginService<'a> {
 
     /// 添加数据
     pub async fn add(&self, data: AddUserLoginInfoReq) -> Result<log_user_login::Model, ErrorMsg> {
+        let (device, system, browser) = match Parser::new() {
+            Ok(p) => {
+                let client = p.parse(data.user_agent.clone());
+                let device = client.device.family;
+                let system = client.os.family;
+                let browser = client.user_agent.family;
+                (device, system, browser)
+            }
+            Err(err) => {
+                error!("User-Agent解析错误, err: {:#?}", err);
+                ("".to_owned(), "".to_owned(), "".to_owned())
+            }
+        };
+
         let model = log_user_login::ActiveModel {
             user_id: Set(data.user_id),
             username: Set(data.username),
             token: Set(data.token),
             remote_addr: Set(data.remote_addr),
             user_agent: Set(data.user_agent),
+            device: Set(Some(device)),
+            system: Set(Some(system)),
+            browser: Set(Some(browser)),
             status: Set(data.status),
             disabled: Set(UserLoginDisabledStatus::Enabled as i8),
             ..Default::default()

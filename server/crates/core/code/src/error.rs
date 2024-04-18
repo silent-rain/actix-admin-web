@@ -107,6 +107,10 @@ pub enum Error {
     #[error("用户添加失败")]
     UserAddError = 10262,
 
+    // 工具箱
+    #[error("User-Agent解析错误")]
+    UserAgentParserError = 10281,
+
     #[error("未找到资源")]
     AssetNotFound = 10290,
 

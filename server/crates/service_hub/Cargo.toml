@@ -32,8 +32,8 @@ chrono = { workspace = true }
 uuid = { workspace = true, features = ["v4"] }
 serde = { workspace = true, features = ["derive"] }
 serde_json = { workspace = true }
-tokio-cron-scheduler = { workspace = true, features = [] }
-
+tokio-cron-scheduler = { workspace = true }
+uap-rust = { workspace = true }
 
 [dev-dependencies]
 tokio = { workspace = true, features = [

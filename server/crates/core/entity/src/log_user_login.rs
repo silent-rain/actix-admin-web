@@ -23,6 +23,12 @@ pub struct Model {
     pub remote_addr: String,
     /// 用户代理
     pub user_agent: String,
+    /// 设备
+    pub device: Option<String>,
+    /// 系统
+    pub system: Option<String>,
+    /// 浏览器
+    pub browser: Option<String>,
     /// 登录状态,0:失败,1:成功
     pub status: i8,
     /// 禁用状态,0:未禁用,1:禁用
