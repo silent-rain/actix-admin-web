@@ -69,17 +69,16 @@
   - [x] 登陆
     - [ ] 单点登录
 - [x] 用户中心
-- [ ] 权限管理
+- [x] 权限管理
   - [x] 角色管理
     - [ ] 同步配置菜单权限
     - [ ] openapi 接口权限
     - [ ] 菜单权限
   - [x] 用户管理
   - [x] 部门管理
-  - [ ] 菜单管理
-- [ ] OpenApi 管理
-  - [ ] OpenApi 接口管理
-  - [ ] OpenApi 权限管理
+  - [x] 菜单管理
+  - [x] 用户令牌管理
+  - [x] OpenApi 接口管理
 - [x] 系统管理
   - [x] 配置管理
   - [x] 验证码管理
@@ -104,11 +103,17 @@
 - doc 文档，细化为接口文档；
 - 用户权限封装；
 - 路由匹配 open api 接口 rbac
-- ICON 图标管理
-- 细化登陆设备/浏览器
 - sql 日志？
 - 定时任务调研与集成；
-- 完善部门的 pids 字段
+- 验证 ICON 图标管理/菜单管理/用户令牌管理/openapi 管理
+- 数据库配置调优，配置解释
+- 枚举放置位置
+- 枚举序列化和反序
+- db 链接超时
+- 缓存
+- 初始化库表数据
+  - https://www.sea-ql.org/SeaORM/docs/migration/writing-migration/#using-raw-sql
+  - 需要手动执行脚本；
 
 https://github.com/actix/actix-extras/tree/master/actix-identity
 https://crates.io/crates/actix-ws
