@@ -6,7 +6,7 @@ use crate::config::DbOptions;
 use code::Error;
 
 pub use sea_orm::DatabaseConnection;
-use sea_orm::{ConnectOptions, ConnectionTrait, Database};
+use sea_orm::{ConnectOptions, ConnectionTrait, Database, DatabaseBackend};
 
 /// 数据库特征
 pub trait DbRepo {
@@ -54,8 +54,8 @@ impl Pool {
             .await
             .map_err(|err| Error::DbConnectionAcquire(err.to_string()))?;
 
-        // 设置 Time Zone, 不支持SQLite3
-        // Self::set_time_zone(&db).await?;
+        // 设置 Time Zone
+        Self::set_time_zone(&db).await?;
 
         Ok(db)
     }
@@ -81,8 +81,12 @@ impl Pool {
     }
 
     /// 设置 Time Zone
+    /// 不支持SQLite3
     #[allow(unused)]
     async fn set_time_zone(db: &DatabaseConnection) -> Result<(), Error> {
+        if db.get_database_backend() == DatabaseBackend::Sqlite {
+            return Ok(());
+        }
         let stmt = sea_orm::Statement::from_string(
             db.get_database_backend(),
             "SET time_zone = '+08:00'".to_owned(),
