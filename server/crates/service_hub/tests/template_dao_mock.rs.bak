@@ -1,0 +1,133 @@
+//! 模板mock示例
+//! sea_orm 的 mock 特性会与生产环境的 DatabaseConnection 冲突
+//! cargo test --package service_hub --test template_dao_mock -- --nocapture
+
+use database::Pool;
+use entity::perm_dept_role_rel;
+use service_hub::perm::{dto::dept_role_rel::GetDeptRoleRelListReq, DeptRoleRelDao};
+
+use chrono::Local;
+use sea_orm::{ActiveValue::NotSet, DatabaseBackend, DbErr, Set};
+use sea_orm::MockDatabase;
+use sea_orm::MockExecResult;
+
+
+async fn test_list() -> Result<(), DbErr> {
+    let data_list = vec![
+        perm_dept_role_rel::Model {
+            id: 1,
+            role_id: 1,
+            dept_id: 1,
+            created_at: Local::now(),
+        },
+        perm_dept_role_rel::Model {
+            id: 2,
+            role_id: 2,
+            dept_id: 2,
+            created_at: Local::now(),
+        },
+    ];
+    let wdb = MockDatabase::new(DatabaseBackend::MySql).into_connection();
+    let rdb = MockDatabase::new(DatabaseBackend::MySql)
+        // query count
+        .append_query_results([vec![maplit::btreemap! {
+            "num_items" => Into::<sea_orm::Value>::into(data_list.len() as i32),
+        }]])
+        .append_query_results([data_list])
+        // query list
+        .append_exec_results([MockExecResult {
+            last_insert_id: 3,
+            rows_affected: 1,
+        }])
+        .into_connection();
+    let pool = Pool::form_connect(rdb, wdb);
+    let dao = DeptRoleRelDao::new(&pool);
+    let req = GetDeptRoleRelListReq {
+        page: 1,
+        page_size: 20,
+        start_time: None,
+        end_time: None,
+        dept_id: None,
+    };
+    let (results, total) = dao.list(req).await?;
+    println!("{:#?}", results);
+    println!("{:#?}", total);
+    Ok(())
+}
+
+async fn test_add() -> Result<(), DbErr> {
+    let data_list = vec![
+        perm_dept_role_rel::Model {
+            id: 1,
+            role_id: 1,
+            dept_id: 1,
+            created_at: Local::now(),
+        },
+        perm_dept_role_rel::Model {
+            id: 2,
+            role_id: 2,
+            dept_id: 2,
+            created_at: Local::now(),
+        },
+    ];
+    let wdb = MockDatabase::new(DatabaseBackend::MySql)
+        // insert data
+        .append_exec_results([MockExecResult {
+            last_insert_id: 3,
+            rows_affected: 1,
+        }])
+        // insert return
+        .append_query_results([vec![perm_dept_role_rel::Model {
+            id: 3,
+            role_id: 3,
+            dept_id: 3,
+            created_at: Local::now(),
+        }]])
+        .into_connection();
+    let rdb = MockDatabase::new(DatabaseBackend::MySql).into_connection();
+    let pool = Pool::form_connect(rdb, wdb);
+    let dao = DeptRoleRelDao::new(&pool);
+
+    let model = perm_dept_role_rel::ActiveModel {
+        id: NotSet,
+        role_id: Set(3),
+        dept_id: Set(3),
+        created_at: Set(Local::now()),
+    };
+    let result = dao.add(model).await?;
+    println!("result: \n{:#?}", result);
+
+    Ok(())
+}
+
+async fn test_delete() -> Result<(), DbErr> {
+    let data_list = vec![
+        perm_dept_role_rel::Model {
+            id: 1,
+            role_id: 1,
+            dept_id: 1,
+            created_at: Local::now(),
+        },
+        perm_dept_role_rel::Model {
+            id: 2,
+            role_id: 2,
+            dept_id: 2,
+            created_at: Local::now(),
+        },
+    ];
+    let wdb = MockDatabase::new(DatabaseBackend::MySql)
+        // delete
+        .append_exec_results([MockExecResult {
+            last_insert_id: 3,
+            rows_affected: 1,
+        }])
+        .into_connection();
+    let rdb = MockDatabase::new(DatabaseBackend::MySql).into_connection();
+    let pool = Pool::form_connect(rdb, wdb);
+    let dao = DeptRoleRelDao::new(&pool);
+
+    let result = dao.delete(3).await?;
+    println!("result: \n{:#?}", result);
+
+    Ok(())
+}

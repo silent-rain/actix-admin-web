@@ -18,6 +18,9 @@ pub struct DeptRoleRelDao<'a> {
 }
 
 impl<'a> DeptRoleRelDao<'a> {
+    pub fn new(db: &'a dyn DbRepo) -> Self {
+        DeptRoleRelDao { db }
+    }
     /// 获取数据列表
     pub async fn list(
         &self,
