@@ -39,6 +39,7 @@ CREATE TABLE
         `hash_name` VARCHAR(32) UNIQUE NOT NULL COMMENT 'HASH名称',
         `base_img` MEDIUMBLOB NOT NULL COMMENT 'Base64图片',
         `img_type` VARCHAR(10) NOT NULL COMMENT '扩展类型,svg,png',
+        `img_size` INT(10) NOT NULL COMMENT '图片大小',
         `note` VARCHAR(200) DEFAULT '' COMMENT '备注',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         PRIMARY KEY (`id`)

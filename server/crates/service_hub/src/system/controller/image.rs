@@ -1,26 +1,29 @@
-//! ICON图片
+//! 图片
 
 use crate::{
     inject::AInjectProvider,
     system::{
-        dto::icon::{AddIconReq, BatchDeleteIconReq, GetIconListReq, UpdateIconReq},
+        dto::image::{
+            BatchDeleteIconReq, GetIconListReq, UpdateIconReq, UploadFileForm, UploadFilesForm,
+        },
         service::image::ImageService,
     },
 };
 
+use actix_multipart::form::MultipartForm;
 use actix_validator::{Json, Query};
 use response::Response;
 
 use actix_web::{
     web::{Data, Path},
-    Responder,
+    HttpResponse, Responder,
 };
 
 /// 控制器
 pub struct ImageController;
 
 impl ImageController {
-    /// 获取ICON图片列表
+    /// 获取图片列表
     pub async fn list(
         provider: Data<AInjectProvider>,
         req: Query<GetIconListReq>,
@@ -33,27 +36,60 @@ impl ImageController {
         }
     }
 
-    /// 获取ICON图片信息
+    /// 获取图片信息
     pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
         let icon_service: ImageService = provider.provide();
         let resp = icon_service.info(*id).await;
         match resp {
-            Ok(v) => Response::ok().data(v),
-            Err(err) => Response::err(err),
+            Ok(v) => HttpResponse::Ok()
+                .insert_header(("Content-Type", v.img_type))
+                .body(v.base_img),
+            Err(_err) => HttpResponse::BadRequest().finish(),
         }
     }
 
-    /// 添加ICON图片
-    pub async fn add(provider: Data<AInjectProvider>, data: Json<AddIconReq>) -> impl Responder {
+    /// 通过hash值获取详情数据
+    pub async fn info_by_hash(
+        provider: Data<AInjectProvider>,
+        hash: Path<String>,
+    ) -> impl Responder {
         let icon_service: ImageService = provider.provide();
-        let resp = icon_service.add(data.into_inner()).await;
+        let resp = icon_service.info_by_hash(hash.to_string()).await;
+        match resp {
+            Ok(v) => HttpResponse::Ok()
+                .insert_header(("Content-Type", v.img_type))
+                .body(v.base_img),
+            Err(_err) => HttpResponse::BadRequest().finish(),
+        }
+    }
+
+    /// 上传图片
+    pub async fn upload_file(
+        provider: Data<AInjectProvider>,
+        MultipartForm(form): MultipartForm<UploadFileForm>,
+    ) -> impl Responder {
+        let icon_service: ImageService = provider.provide();
+        let resp = icon_service.upload_file(form).await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::err(err),
         }
     }
 
-    /// 更新ICON图片
+    /// 批量上传图片
+    pub async fn upload_files(
+        provider: Data<AInjectProvider>,
+        MultipartForm(form): MultipartForm<UploadFilesForm>,
+    ) -> impl Responder {
+        let icon_service: ImageService = provider.provide();
+        let resp = icon_service.upload_files(form).await;
+        match resp {
+            Ok(v) => Response::ok().data(v),
+            Err(err) => Response::err(err),
+        }
+    }
+
+    /// 更新图片
     pub async fn update(
         provider: Data<AInjectProvider>,
         id: Path<i32>,
@@ -67,7 +103,7 @@ impl ImageController {
         }
     }
 
-    /// 删除ICON图片
+    /// 删除图片
     pub async fn delete(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
         let icon_service: ImageService = provider.provide();
         let resp = icon_service.delete(*id).await;
@@ -77,7 +113,7 @@ impl ImageController {
         }
     }
 
-    /// 批量删除ICON图片
+    /// 批量删除图片
     pub async fn batch_delete(
         provider: Data<AInjectProvider>,
         data: Json<BatchDeleteIconReq>,

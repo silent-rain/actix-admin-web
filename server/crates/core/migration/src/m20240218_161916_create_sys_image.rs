@@ -59,6 +59,12 @@ impl MigrationTrait for Migration {
                             .comment("扩展类型,svg,png"),
                     )
                     .col(
+                        ColumnDef::new(Column::ImgSize)
+                            .integer()
+                            .not_null()
+                            .comment("图片大小"),
+                    )
+                    .col(
                         ColumnDef::new(Column::Note)
                             .string()
                             .string_len(200)

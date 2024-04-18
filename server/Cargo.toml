@@ -47,6 +47,7 @@ sqlx = "0.7"
 # WEB
 actix-web = "4.5"
 actix-http = "3.6"
+actix-multipart = "0.6"
 validator_derive = "0.18"
 validator = "0.18"
 actix-cors = "0.7"
@@ -73,6 +74,7 @@ rust-embed = "8.3"
 tokio-cron-scheduler = "0.10"
 uap-rust = "0.0"
 maplit = "1.0"
+futures-util = "0.3"
 
 # 其他
 futures = "0.3"

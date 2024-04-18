@@ -1,5 +1,5 @@
-//! ICON图片
-use crate::system::dto::icon::GetIconListReq;
+//! 图片
+use crate::system::dto::image::GetIconListReq;
 
 use database::{DbRepo, Pagination};
 use entity::{prelude::SysImage, sys_image};
@@ -54,12 +54,31 @@ impl<'a> ImageDao<'a> {
             .await
     }
 
+    /// 通过hash值获取详情数据
+    pub async fn info_by_hash(&self, hash_name: String) -> Result<Option<sys_image::Model>, DbErr> {
+        SysImage::find()
+            .filter(sys_image::Column::HashName.eq(hash_name))
+            .one(self.db.rdb())
+            .await
+    }
+
     /// 添加详情信息
     pub async fn add(
         &self,
         active_model: sys_image::ActiveModel,
     ) -> Result<sys_image::Model, DbErr> {
         active_model.insert(self.db.wdb()).await
+    }
+
+    /// 批量添加数据
+    pub async fn batch_add(
+        &self,
+        active_models: Vec<sys_image::ActiveModel>,
+    ) -> Result<i32, DbErr> {
+        let result = SysImage::insert_many(active_models)
+            .exec(self.db.wdb())
+            .await?;
+        Ok(result.last_insert_id)
     }
 
     /// 更新信息

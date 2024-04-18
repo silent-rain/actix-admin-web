@@ -24,6 +24,8 @@ pub struct Model {
     pub base_img: Vec<u8>,
     /// 扩展类型:svg,png
     pub img_type: String,
+    /// 图片大小
+    pub img_size: i32,
     /// 备注
     pub note: Option<String>,
     /// 创建时间
