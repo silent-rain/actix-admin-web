@@ -14,3 +14,4 @@ utils = { path = "../utils" }
 serde = { workspace = true, features = ["derive"] }
 serde_json = { workspace = true }
 sea-orm = { workspace = true }
+chrono = { workspace = true }

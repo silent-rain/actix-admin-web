@@ -89,3 +89,34 @@ async fn main() -> Result<(), DbErr> {
     Ok(())
 }
 ```
+
+## 数据库更新字段自动更新时间
+
+- sqlite 时间更新依旧是一个问题，要么在迁移中对更新时间字段做指定后端屏蔽`ON UPDATE CURRENT_TIMESTAMP`，但 sqlite 依旧不会自动更新；
+
+```rust
+.col(
+    ColumnDef::new(Column::UpdatedAt)
+        .date_time()
+        .not_null()
+        // Sqlite3 不支持 ON UPDATE CURRENT_TIMESTAMP
+        .extra("DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+        .default(Expr::current_timestamp())
+        .comment("更新时间"),
+)
+```
+
+- 在实体中更新的钩子中，对该字段进行设置为当前时间，支持其他后端的框架；
+
+```rust
+#[async_trait]
+impl ActiveModelBehavior for ActiveModel {
+    async fn before_save<C>(mut self, _db: &C, _insert: bool) -> Result<Self, DbErr>
+    where
+        C: ConnectionTrait,
+    {
+        self.updated_at = Set(Local::now());
+        Ok(self)
+    }
+}
+```
