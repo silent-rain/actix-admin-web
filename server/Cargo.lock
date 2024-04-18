@@ -2174,6 +2174,7 @@ dependencies = [
  "entity",
  "logger",
  "sea-orm-migration",
+ "sqlx",
  "tokio",
  "tracing",
 ]

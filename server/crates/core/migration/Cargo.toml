@@ -27,6 +27,7 @@ sea-orm-migration = { workspace = true, features = [
 database = { path = "../database" }
 logger = { path = "../logger" }
 
+sqlx = { workspace = true }
 dotenv = { workspace = true }
 tracing = { workspace = true }
 tokio = { workspace = true, features = [

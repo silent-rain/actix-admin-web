@@ -42,6 +42,7 @@ color-eyre = "0.6"
 # 数据库
 sea-orm = "0.12"
 sea-orm-migration = "0.12"
+sqlx = "0.7"
 
 # WEB
 actix-web = "4.5"
