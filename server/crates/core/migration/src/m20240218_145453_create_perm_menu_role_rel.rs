@@ -20,6 +20,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(PermMenuRoleRel)
+                    .comment("菜单角色关联表")
                     .if_not_exists()
                     .col(
                         ColumnDef::new(Column::Id)

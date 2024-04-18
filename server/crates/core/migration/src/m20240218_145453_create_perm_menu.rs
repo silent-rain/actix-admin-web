@@ -21,6 +21,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(PermMenu)
+                    .comment("菜单表")
                     .if_not_exists()
                     .col(
                         ColumnDef::new(Column::Id)

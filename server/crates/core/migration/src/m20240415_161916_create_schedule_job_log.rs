@@ -20,6 +20,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(ScheduleJobLog)
+                    .comment("定时任务日志表")
                     .if_not_exists()
                     .col(
                         ColumnDef::new(Column::Id)

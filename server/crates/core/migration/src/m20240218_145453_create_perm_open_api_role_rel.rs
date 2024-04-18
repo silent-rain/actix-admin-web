@@ -20,6 +20,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(PermOpenApiRoleRel)
+                    .comment("OpenApi接口与角色关联表")
                     .if_not_exists()
                     .col(
                         ColumnDef::new(Column::Id)

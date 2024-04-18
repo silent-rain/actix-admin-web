@@ -21,6 +21,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(PermOpenApi)
+                    .comment("OpenApi接口表")
                     .if_not_exists()
                     .col(
                         ColumnDef::new(Column::Id)

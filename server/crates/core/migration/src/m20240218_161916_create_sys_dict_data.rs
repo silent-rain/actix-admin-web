@@ -21,6 +21,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(SysDictData)
+                    .comment("字典数据表")
                     .if_not_exists()
                     .col(
                         ColumnDef::new(Column::Id)

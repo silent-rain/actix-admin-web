@@ -20,6 +20,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(PermUserRoleRel)
+                    .comment("用户角色关联表")
                     .if_not_exists()
                     .col(
                         ColumnDef::new(Column::Id)

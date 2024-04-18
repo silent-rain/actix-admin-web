@@ -21,6 +21,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(SysConfig)
+                    .comment("配置表")
                     .if_not_exists()
                     .col(
                         ColumnDef::new(Column::Id)
