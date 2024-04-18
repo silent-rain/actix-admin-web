@@ -4,7 +4,7 @@ use crate::{
     inject::AInjectProvider,
     system::{
         dto::icon::{AddIconReq, BatchDeleteIconReq, GetIconListReq, UpdateIconReq},
-        service::icon::IconService,
+        service::image::ImageService,
     },
 };
 
@@ -17,15 +17,15 @@ use actix_web::{
 };
 
 /// 控制器
-pub struct IconController;
+pub struct ImageController;
 
-impl IconController {
+impl ImageController {
     /// 获取ICON图片列表
     pub async fn list(
         provider: Data<AInjectProvider>,
         req: Query<GetIconListReq>,
     ) -> impl Responder {
-        let icon_service: IconService = provider.provide();
+        let icon_service: ImageService = provider.provide();
         let resp = icon_service.list(req.into_inner()).await;
         match resp {
             Ok((results, total)) => Response::ok().data_list(results, total),
@@ -35,7 +35,7 @@ impl IconController {
 
     /// 获取ICON图片信息
     pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let icon_service: IconService = provider.provide();
+        let icon_service: ImageService = provider.provide();
         let resp = icon_service.info(*id).await;
         match resp {
             Ok(v) => Response::ok().data(v),
@@ -45,7 +45,7 @@ impl IconController {
 
     /// 添加ICON图片
     pub async fn add(provider: Data<AInjectProvider>, data: Json<AddIconReq>) -> impl Responder {
-        let icon_service: IconService = provider.provide();
+        let icon_service: ImageService = provider.provide();
         let resp = icon_service.add(data.into_inner()).await;
         match resp {
             Ok(v) => Response::ok().data(v),
@@ -59,7 +59,7 @@ impl IconController {
         id: Path<i32>,
         data: Json<UpdateIconReq>,
     ) -> impl Responder {
-        let icon_service: IconService = provider.provide();
+        let icon_service: ImageService = provider.provide();
         let resp = icon_service.update(*id, data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
@@ -69,7 +69,7 @@ impl IconController {
 
     /// 删除ICON图片
     pub async fn delete(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let icon_service: IconService = provider.provide();
+        let icon_service: ImageService = provider.provide();
         let resp = icon_service.delete(*id).await;
         match resp {
             Ok(_v) => Response::ok(),
@@ -82,7 +82,7 @@ impl IconController {
         provider: Data<AInjectProvider>,
         data: Json<BatchDeleteIconReq>,
     ) -> impl Responder {
-        let icon_service: IconService = provider.provide();
+        let icon_service: ImageService = provider.provide();
         let resp = icon_service.batch_delete(data.ids.clone()).await;
         match resp {
             Ok(_v) => Response::ok(),

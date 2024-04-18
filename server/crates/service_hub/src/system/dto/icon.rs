@@ -40,8 +40,8 @@ pub struct AddIconReq {
     /// Base64图片
     pub base_img: String,
     /// 扩展类型,svg,png
-    /// Enum: [`crate::system::enums::IconType`]
-    pub icon_type: String,
+    /// Enum: [`crate::system::enums::ImageType`]
+    pub img_type: String,
     /// 备注
     pub note: Option<String>,
 }
@@ -56,8 +56,8 @@ pub struct UpdateIconReq {
     /// Base64图片
     pub base_img: String,
     /// 扩展类型,svg,png
-    /// Enum: [`crate::system::enums::IconType`]
-    pub icon_type: String,
+    /// Enum: [`crate::system::enums::ImageType`]
+    pub img_type: String,
     /// 备注
     pub note: Option<String>,
 }

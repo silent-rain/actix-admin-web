@@ -1,7 +1,7 @@
 //! ICON图片
 
 use crate::system::{
-    dao::icon::IconDao,
+    dao::image::ImageDao,
     dto::icon::{AddIconReq, GetIconListReq, GetIconRsp, UpdateIconReq},
 };
 
@@ -15,13 +15,16 @@ use tracing::error;
 
 /// 服务层
 #[injectable]
-pub struct IconService<'a> {
-    icon_dao: IconDao<'a>,
+pub struct ImageService<'a> {
+    icon_dao: ImageDao<'a>,
 }
 
-impl<'a> IconService<'a> {
+impl<'a> ImageService<'a> {
     /// 获取列表数据
-    pub async fn list(&self, req: GetIconListReq) -> Result<(Vec<sys_image::Model>, u64), ErrorMsg> {
+    pub async fn list(
+        &self,
+        req: GetIconListReq,
+    ) -> Result<(Vec<sys_image::Model>, u64), ErrorMsg> {
         let (mut results, total) = self.icon_dao.list(req).await.map_err(|err| {
             error!("查询ICON图片列表失败, err: {:#?}", err);
             Error::DbQueryError
@@ -76,7 +79,7 @@ impl<'a> IconService<'a> {
             name: Set(req.name),
             hash_name: Set(req.hash_name),
             base_img: Set(req.base_img.as_bytes().to_vec()),
-            icon_type: Set(req.icon_type),
+            img_type: Set(req.img_type),
             note: Set(req.note),
             ..Default::default()
         };
@@ -97,7 +100,7 @@ impl<'a> IconService<'a> {
             name: Set(req.name),
             hash_name: Set(req.hash_name),
             base_img: Set(req.base_img.as_bytes().to_vec()),
-            icon_type: Set(req.icon_type),
+            img_type: Set(req.img_type),
             note: Set(req.note),
             ..Default::default()
         };
