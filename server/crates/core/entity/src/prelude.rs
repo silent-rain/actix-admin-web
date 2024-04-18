@@ -23,4 +23,4 @@ pub use super::sys_captcha::Entity as SysCaptcha;
 pub use super::sys_config::Entity as SysConfig;
 pub use super::sys_dict_data::Entity as SysDictData;
 pub use super::sys_dict_dim::Entity as SysDictDim;
-pub use super::sys_icon::Entity as SysIcon;
+pub use super::sys_image::Entity as SysImage;

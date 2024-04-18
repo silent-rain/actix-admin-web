@@ -25,4 +25,4 @@ pub mod sys_captcha;
 pub mod sys_config;
 pub mod sys_dict_data;
 pub mod sys_dict_dim;
-pub mod sys_icon;
+pub mod sys_image;

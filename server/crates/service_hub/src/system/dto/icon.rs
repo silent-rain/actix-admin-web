@@ -1,6 +1,6 @@
 //! ICON图片
 
-use entity::sys_icon;
+use entity::sys_image;
 
 use actix_validator::Validate;
 
@@ -25,7 +25,7 @@ pub struct GetIconListReq {
 #[derive(Default, Deserialize, Serialize)]
 pub struct GetIconRsp {
     #[serde(flatten)]
-    pub data: sys_icon::Model,
+    pub data: sys_image::Model,
     /// Base64图片
     pub base_img: String,
 }

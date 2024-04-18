@@ -6,7 +6,7 @@ use crate::system::{
 };
 
 use code::{Error, ErrorMsg};
-use entity::sys_icon;
+use entity::sys_image;
 use utils::json::struct_to_struct;
 
 use nject::injectable;
@@ -21,7 +21,7 @@ pub struct IconService<'a> {
 
 impl<'a> IconService<'a> {
     /// 获取列表数据
-    pub async fn list(&self, req: GetIconListReq) -> Result<(Vec<sys_icon::Model>, u64), ErrorMsg> {
+    pub async fn list(&self, req: GetIconListReq) -> Result<(Vec<sys_image::Model>, u64), ErrorMsg> {
         let (mut results, total) = self.icon_dao.list(req).await.map_err(|err| {
             error!("查询ICON图片列表失败, err: {:#?}", err);
             Error::DbQueryError
@@ -71,8 +71,8 @@ impl<'a> IconService<'a> {
     }
 
     /// 添加数据
-    pub async fn add(&self, req: AddIconReq) -> Result<sys_icon::Model, ErrorMsg> {
-        let model = sys_icon::ActiveModel {
+    pub async fn add(&self, req: AddIconReq) -> Result<sys_image::Model, ErrorMsg> {
+        let model = sys_image::ActiveModel {
             name: Set(req.name),
             hash_name: Set(req.hash_name),
             base_img: Set(req.base_img.as_bytes().to_vec()),
@@ -92,7 +92,7 @@ impl<'a> IconService<'a> {
 
     /// 更新配置
     pub async fn update(&self, id: i32, req: UpdateIconReq) -> Result<u64, ErrorMsg> {
-        let model = sys_icon::ActiveModel {
+        let model = sys_image::ActiveModel {
             id: Set(id),
             name: Set(req.name),
             hash_name: Set(req.hash_name),

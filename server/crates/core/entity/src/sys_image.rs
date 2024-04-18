@@ -1,4 +1,4 @@
-//! ICON图片表
+//! 图片资源表
 
 use sea_orm::{
     prelude::{BlobSize, DateTimeLocal},
@@ -7,9 +7,9 @@ use sea_orm::{
 };
 use serde::{Deserialize, Serialize};
 
-/// ICON图片表
+/// 图片资源表
 #[derive(Clone, Debug, Default, PartialEq, Eq, Deserialize, Serialize, DeriveEntityModel)]
-#[sea_orm(table_name = "t_sys_icon")]
+#[sea_orm(table_name = "t_sys_image")]
 pub struct Model {
     /// 图片ID
     #[sea_orm(primary_key)]
@@ -23,7 +23,7 @@ pub struct Model {
     #[sea_orm(column_type = "Binary(BlobSize::Medium)")]
     pub base_img: Vec<u8>,
     /// 扩展类型:svg,png
-    pub icon_type: String,
+    pub img_type: String,
     /// 备注
     pub note: Option<String>,
     /// 创建时间

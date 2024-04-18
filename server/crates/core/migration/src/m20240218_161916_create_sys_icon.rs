@@ -1,6 +1,6 @@
-//! ICON图片表
-//! User Entity: [`entity::prelude::SysIcon`]
-use entity::{prelude::SysIcon, sys_icon::Column};
+//! 图片资源表
+//! User Entity: [`entity::prelude::SysImage`]
+use entity::{prelude::SysImage, sys_image::Column};
 
 use sea_orm_migration::{
     async_trait,
@@ -19,8 +19,8 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(SysIcon)
-                    .comment("ICON图片表")
+                    .table(SysImage)
+                    .comment("图片资源表")
                     .if_not_exists()
                     .col(
                         ColumnDef::new(Column::Id)
@@ -52,7 +52,7 @@ impl MigrationTrait for Migration {
                             .comment("Base64图片"),
                     )
                     .col(
-                        ColumnDef::new(Column::IconType)
+                        ColumnDef::new(Column::ImgType)
                             .string()
                             .string_len(10)
                             .not_null()
@@ -81,7 +81,7 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
         manager
-            .drop_table(Table::drop().table(SysIcon).to_owned())
+            .drop_table(Table::drop().table(SysImage).to_owned())
             .await
     }
 }

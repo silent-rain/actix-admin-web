@@ -31,18 +31,18 @@ CREATE TABLE
         PRIMARY KEY (`id`)
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '配置表';
 
--- ICON图片表
+-- 图片资源表
 CREATE TABLE
-    `t_sys_icon` (
+    `t_sys_image` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '图片ID',
         `name` VARCHAR(32) NOT NULL COMMENT '图片名称',
         `hash_name` VARCHAR(32) UNIQUE NOT NULL COMMENT 'HASH名称',
         `base_img` MEDIUMBLOB NOT NULL COMMENT 'Base64图片',
-        `icon_type` VARCHAR(10) NOT NULL COMMENT '扩展类型,svg,png',
+        `img_type` VARCHAR(10) NOT NULL COMMENT '扩展类型,svg,png',
         `note` VARCHAR(200) DEFAULT '' COMMENT '备注',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         PRIMARY KEY (`id`)
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT 'ICON图片表';
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '图片资源表';
 
 -- 字典维度表
 CREATE TABLE
