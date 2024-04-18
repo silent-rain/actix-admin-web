@@ -18,7 +18,7 @@ mod m20240218_161916_create_sys_captcha;
 mod m20240218_161916_create_sys_config;
 mod m20240218_161916_create_sys_dict_data;
 mod m20240218_161916_create_sys_dict_dim;
-mod m20240218_161916_create_sys_icon;
+mod m20240218_161916_create_sys_image;
 mod m20240415_161916_create_schedule_job;
 mod m20240415_161916_create_schedule_job_log;
 
@@ -46,6 +46,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20240218_161916_create_sys_config::Migration),
             Box::new(m20240218_161916_create_sys_dict_dim::Migration),
             Box::new(m20240218_161916_create_sys_dict_data::Migration),
+            Box::new(m20240218_161916_create_sys_image::Migration),
             Box::new(m20240415_161916_create_schedule_job::Migration),
             Box::new(m20240415_161916_create_schedule_job_log::Migration),
         ]
