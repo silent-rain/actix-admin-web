@@ -277,6 +277,7 @@ dependencies = [
  "actix-web",
  "app_state",
  "code",
+ "colored",
  "context",
  "database",
  "dotenv",
