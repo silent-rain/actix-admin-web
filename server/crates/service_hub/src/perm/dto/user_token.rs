@@ -1,6 +1,7 @@
 //! 用户Token令牌管理
 
 use actix_validator::Validate;
+use utils::time::{default_local_date_time, str_to_local_date_time};
 
 use sea_orm::prelude::DateTimeLocal;
 use serde::{Deserialize, Serialize};
@@ -29,12 +30,15 @@ pub struct GetUserTokenListReq {
 pub struct AddUserTokenReq {
     /// 用户ID
     pub user_id: i32,
-    /// 令牌
-    pub token: String,
     /// 权限范围:GET,POST,PUT,DELETE
     /// Enum: [`crate::perm::enums::UserTokenPermission`]
     pub permission: String,
     /// 授权到期时间
+    #[serde(
+        rename = "expire",
+        deserialize_with = "str_to_local_date_time",
+        default = "default_local_date_time"
+    )]
     pub expire: DateTimeLocal,
     /// 状态,0:禁用,1:启用
     pub status: UserTokenStatus,
@@ -51,6 +55,11 @@ pub struct UpdateUserTokenReq {
     /// Enum: [`crate::perm::enums::UserTokenPermission`]
     pub permission: String,
     /// 授权到期时间
+    #[serde(
+        rename = "expire",
+        deserialize_with = "str_to_local_date_time",
+        default = "default_local_date_time"
+    )]
     pub expire: DateTimeLocal,
     /// 状态,0:禁用,1:启用
     pub status: UserTokenStatus,

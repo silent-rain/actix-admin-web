@@ -49,6 +49,10 @@ pub enum Error {
     /// A possible error value when converting a String from a UTF-8 byte vector.
     #[error("A possible error value when converting a String from a UTF-8 byte vector, {0}")]
     FromUtf8Error(std::string::FromUtf8Error) = 10155,
+    #[error("{0}")]
+    DeserializerError(String) = 10156,
+    #[error("{0}")]
+    DateTimeParseError(String) = 10157,
 
     #[error("数据库初始化失败, {0}")]
     DbInitError(String) = 10200,
@@ -127,8 +131,6 @@ pub enum Error {
     FsCreateFileError(String) = 10305,
     #[error("写入文件失败, {0}")]
     FsWriterFileError(String) = 10306,
-    #[error("内置资源读取失败")]
-    AssetReadError = 10307,
 
     // 内部框架错误
     #[error("日志初始化失败, {0}")]
@@ -186,16 +188,6 @@ impl From<std::string::FromUtf8Error> for Error {
 mod tests {
     use super::*;
     use code_msg_derive::CodeMessage;
-
-    #[test]
-    fn test_error_msg() {
-        let err = Error::AssetReadError;
-        println!("== {}", err);
-        println!("== {:?}", err);
-        println!("== {:#?}", err);
-        assert!(err.to_string() == "内置资源读取失败");
-        assert!(err.msg() == "内置资源读取失败");
-    }
 
     #[test]
     fn test_error_code() {

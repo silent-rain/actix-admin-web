@@ -21,7 +21,7 @@ impl Pagination {
     }
     /// 页数
     pub fn page(&self) -> u64 {
-        let page = self.page.unwrap_or(1);
+        let page = self.page.map_or(1, |v| v);
         if page == 0 {
             return 0;
         }
@@ -29,7 +29,7 @@ impl Pagination {
     }
     /// 页面数据大小, 默认 100 条数据
     pub fn page_size(&self) -> u64 {
-        self.page_size.unwrap_or(100)
+        self.page_size.map_or(100, |v| v)
     }
     /// 偏移大小
     pub fn offset(&self) -> u64 {
