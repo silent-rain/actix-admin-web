@@ -70,7 +70,7 @@ impl<'a> UserService<'a> {
         let result = ProfileRsp {
             id,
             username: user.username,
-            gender: user.gender,
+            gender: user.gender as i8,
             age: user.age,
             birthday: user.birthday,
             avatar: user.avatar,
@@ -194,7 +194,7 @@ impl<'a> UserService<'a> {
         let model = perm_user::ActiveModel {
             username: Set(data.username),
             real_name: Set(data.real_name),
-            gender: Set(data.gender),
+            gender: Set(data.gender as i8),
             age: Set(Some(data.age)),
             birthday: Set(data.birthday),
             avatar: Set(data.avatar),
@@ -237,7 +237,7 @@ impl<'a> UserService<'a> {
             id: Set(id),
             username: Set(data.username),
             real_name: Set(data.real_name),
-            gender: Set(data.gender),
+            gender: Set(data.gender as i8),
             age: Set(Some(data.age)),
             birthday: Set(data.birthday),
             avatar: Set(data.avatar),
@@ -246,7 +246,7 @@ impl<'a> UserService<'a> {
             password: Set(data.password),
             intro: Set(data.intro),
             note: Set(data.note),
-            status: Set(data.status),
+            status: Set(data.status as i8),
             ..Default::default()
         };
         self.user_dao

@@ -1,5 +1,7 @@
 //! API操作日志
 
+use crate::log::enums::HttpType;
+
 use actix_validator::Validate;
 
 use serde::{Deserialize, Serialize};
@@ -43,8 +45,7 @@ pub struct AddApiOperationReq {
     /// 耗时,纳秒
     pub cost: f64,
     /// 请求类型:REQ/RSP
-    /// Enum: [`crate::log::enums::HttpType`]
-    pub http_type: String,
+    pub http_type: HttpType,
     /// 备注
     pub note: Option<String>,
 }

@@ -1,5 +1,7 @@
 //! 字典维度管理
 
+use crate::system::enums::DictDimStatus;
+
 use actix_validator::Validate;
 
 use serde::{Deserialize, Serialize};
@@ -52,14 +54,12 @@ pub struct UpdateDictDimReq {
     /// 备注
     pub note: Option<String>,
     /// 状态,0:停用,1:正常
-    /// Enum: [`crate::system::enums::DictDimStatus`]
-    pub status: i8,
+    pub status: DictDimStatus,
 }
 
 /// 更新字典维度状态
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
 pub struct UpdateDictDimStatusReq {
     /// 状态,0:停用,1:正常
-    /// Enum: [`crate::system::enums::DictDimStatus`]
-    pub status: i8,
+    pub status: DictDimStatus,
 }

@@ -96,7 +96,7 @@ impl<'a> RoleService<'a> {
             name: Set(req.name),
             sort: Set(req.sort),
             note: Set(req.note),
-            status: Set(req.status),
+            status: Set(req.status as i8),
             ..Default::default()
         };
 
@@ -132,19 +132,5 @@ impl<'a> RoleService<'a> {
         })?;
 
         Ok(result)
-    }
-}
-
-#[cfg(test)]
-mod tests {
-
-    #[test]
-    fn test_if_option() {
-        let some_option = Some(true);
-        if let Some(true) = some_option {
-            println!("The option is true!");
-        } else {
-            println!("The option is not true!");
-        }
     }
 }

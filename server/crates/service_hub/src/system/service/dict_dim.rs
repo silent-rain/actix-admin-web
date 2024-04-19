@@ -130,7 +130,7 @@ impl<'a> DictDimService<'a> {
             code: Set(req.code),
             sort: Set(req.sort),
             note: Set(req.note),
-            status: Set(req.status),
+            status: Set(req.status as i8),
             ..Default::default()
         };
 

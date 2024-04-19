@@ -1,5 +1,7 @@
 //! 用户管理
 
+use crate::perm::enums::{Gender, UserStatus};
+
 use actix_validator::Validate;
 
 use serde::{Deserialize, Serialize};
@@ -27,8 +29,7 @@ pub struct AddUserReq {
     /// 真实姓名
     pub real_name: Option<String>,
     /// 性别, 0:男,1:女,2:保密
-    /// Enum: [`crate::perm::enums::Gender`]
-    pub gender: i8,
+    pub gender: Gender,
     /// 年龄
     pub age: i32,
     /// 出生日期
@@ -53,8 +54,7 @@ pub struct UpdateUserReq {
     /// 真实姓名
     pub real_name: Option<String>,
     /// 性别, 0:男,1:女,2:保密
-    /// Enum: [`crate::perm::enums::Gender`]
-    pub gender: i8,
+    pub gender: Gender,
     /// 年龄
     pub age: i32,
     /// 出生日期
@@ -72,29 +72,26 @@ pub struct UpdateUserReq {
     /// 备注
     pub note: Option<String>,
     /// 状态,0:停用,1:正常
-    /// Enum: [`crate::perm::enums::UserStatus`]
-    pub status: i8,
+    pub status: UserStatus,
     /// 角色ID列表
     pub role_ids: Vec<i32>,
 }
 
 /// 更新数据状态
-#[derive(Default, Clone, Serialize, Deserialize, Validate)]
+#[derive(Clone, Serialize, Deserialize, Validate)]
 pub struct UpdateUserStatusReq {
     /// 用户状态
-    /// Enum: [`crate::perm::enums::UserStatus`]
-    pub status: i8,
+    pub status: UserStatus,
 }
 
 /// 获取用户个人信息
-#[derive(Default, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct ProfileRsp {
     /// 用户ID
     pub id: i32,
     /// 用户名称
     pub username: String,
-    /// 性别, 0:男,1:女,2:保密
-    /// Enum: [`crate::perm::enums::Gender`]
+    /// 性别
     pub gender: i8,
     /// 年龄
     pub age: Option<i32>,

@@ -84,7 +84,7 @@ impl ConfigController {
         data: Json<UpdateConfigStatusReq>,
     ) -> impl Responder {
         let config_service: ConfigService = provider.provide();
-        let resp = config_service.status(*id, data.status).await;
+        let resp = config_service.status(*id, data.status.clone() as i8).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

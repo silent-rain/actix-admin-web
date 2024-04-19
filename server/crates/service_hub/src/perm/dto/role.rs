@@ -1,5 +1,7 @@
 //! 角色管理
 
+use crate::perm::enums::RoleStatus;
+
 use actix_validator::Validate;
 
 use serde::{Deserialize, Serialize};
@@ -43,27 +45,27 @@ pub struct UpdateRoleReq {
     /// 备注
     pub note: Option<String>,
     /// 状态,0:停用,1:正常
-    /// Enum: [`crate::perm::enums::RoleStatus`]
-    pub status: i8,
+    pub status: RoleStatus,
 }
 
 /// 更新数据状态
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
 pub struct UpdateRoleStatusReq {
     /// 状态,0:停用,1:正常
-    /// Enum: [`crate::perm::enums::RoleStatus`]
-    pub status: i8,
+    pub status: RoleStatus,
 }
 
 #[cfg(test)]
 mod tests {
-    use super::UpdateRoleStatusReq;
+    use super::*;
 
     use serde_json::json;
 
     #[test]
     fn test_status() {
-        let expected = UpdateRoleStatusReq { status: 1 };
+        let expected = UpdateRoleStatusReq {
+            status: RoleStatus::Enabled,
+        };
         let json_data = json!({ "status":1 });
         let result: UpdateRoleStatusReq = serde_json::from_value(json_data).unwrap();
         assert!(expected == result);

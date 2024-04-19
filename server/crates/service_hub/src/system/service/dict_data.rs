@@ -102,7 +102,7 @@ impl<'a> DictDataService<'a> {
             value: Set(req.value),
             sort: Set(req.sort),
             note: Set(req.note),
-            status: Set(req.status),
+            status: Set(req.status as i8),
             ..Default::default()
         };
 

@@ -1,11 +1,13 @@
 //! OpenApi接口管理
 
+use crate::perm::enums::{OpenApiCategory, OpenApiStatus};
+
 use actix_validator::Validate;
 
 use serde::{Deserialize, Serialize};
 
 /// 查询OpenApi接口列表
-#[derive(Default, Deserialize, Validate)]
+#[derive(Clone, Deserialize, Validate)]
 pub struct GetOpenApiListReq {
     /// 当前分页
     pub page: u64,
@@ -15,9 +17,6 @@ pub struct GetOpenApiListReq {
     pub start_time: Option<String>,
     /// 结束时间
     pub end_time: Option<String>,
-    /// 类别,0:目录,1:接口
-    /// Enum: [`crate::perm::enums::OpenApiStatus`]
-    pub category: Option<i8>,
     /// 接口名称
     pub name: Option<String>,
     /// 返回所有数据
@@ -25,13 +24,12 @@ pub struct GetOpenApiListReq {
 }
 
 /// 添加OpenApi接口
-#[derive(Serialize, Deserialize, Validate)]
+#[derive(Clone, Serialize, Deserialize, Validate)]
 pub struct AddOpenApiReq {
     /// 父ID
     pub pid: Option<i32>,
     /// 类别,0:目录,1:接口
-    /// Enum: [`crate::perm::enums::OpenApiCategory`]
-    pub category: i8,
+    pub category: OpenApiCategory,
     /// 接口名称
     pub name: String,
     /// 请求类型
@@ -43,18 +41,16 @@ pub struct AddOpenApiReq {
     /// 备注
     pub note: Option<String>,
     /// 状态, 0:停用,1:正常
-    /// Enum: [`crate::perm::enums::OpenApiStatus`]
-    pub status: i8,
+    pub status: OpenApiStatus,
 }
 
 /// 更新数据
-#[derive(Default, Clone, Serialize, Deserialize, Validate)]
+#[derive(Clone, Serialize, Deserialize, Validate)]
 pub struct UpdateOpenApiReq {
     /// 父ID
     pub pid: Option<i32>,
     /// 类别,0:目录,1:接口
-    /// Enum: [`crate::perm::enums::OpenApiCategory`]
-    pub category: i8,
+    pub category: OpenApiCategory,
     /// 接口名称
     pub name: String,
     /// 请求类型
@@ -66,14 +62,12 @@ pub struct UpdateOpenApiReq {
     /// 备注
     pub note: Option<String>,
     /// 状态,0:停用,1:正常
-    /// Enum: [`crate::perm::enums::OpenApiStatus`]
-    pub status: i8,
+    pub status: OpenApiStatus,
 }
 
 /// 更新数据状态
-#[derive(Default, Clone, Serialize, Deserialize, Validate)]
+#[derive(Clone, Serialize, Deserialize, Validate)]
 pub struct UpdateOpenApiStatusReq {
     /// 状态,0:停用,1:正常
-    /// Enum: [`crate::perm::enums::OpenApiStatus`]
-    pub status: i8,
+    pub status: OpenApiStatus,
 }

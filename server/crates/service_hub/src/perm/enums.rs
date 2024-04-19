@@ -1,8 +1,9 @@
 //! 枚举
 use serde::{Deserialize, Serialize};
+use serde_repr::{Deserialize_repr, Serialize_repr};
 
 /// 角色状态
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
 #[repr(i8)]
 pub enum RoleStatus {
     /// 停用
@@ -12,7 +13,7 @@ pub enum RoleStatus {
 }
 
 /// 用户状态
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
 #[repr(i8)]
 pub enum UserStatus {
     /// 停用
@@ -22,7 +23,7 @@ pub enum UserStatus {
 }
 
 /// 性别
-#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
 #[repr(i8)]
 pub enum Gender {
     /// 男
@@ -34,7 +35,7 @@ pub enum Gender {
 }
 
 /// 部门状态
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
 #[repr(i8)]
 pub enum DeptStatus {
     /// 停用
@@ -44,7 +45,7 @@ pub enum DeptStatus {
 }
 
 /// OpenApi接口状态
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
 #[repr(i8)]
 pub enum OpenApiStatus {
     /// 停用
@@ -54,7 +55,7 @@ pub enum OpenApiStatus {
 }
 
 /// OpenApi接口类别
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
 #[repr(i8)]
 pub enum OpenApiCategory {
     /// 目录
@@ -64,7 +65,7 @@ pub enum OpenApiCategory {
 }
 
 /// 菜单状态
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
 #[repr(i8)]
 pub enum MenuStatus {
     /// 停用
@@ -74,7 +75,7 @@ pub enum MenuStatus {
 }
 
 /// 菜单类型
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
 #[repr(i8)]
 pub enum MenuType {
     /// 菜单
@@ -84,7 +85,7 @@ pub enum MenuType {
 }
 
 /// 菜单打开方式
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
 #[repr(i8)]
 pub enum MenuOpenType {
     /// 组件
@@ -93,15 +94,6 @@ pub enum MenuOpenType {
     InternalLink = 1,
     /// 外链
     ExternalLink = 2,
-}
-
-/// 菜单链接类型
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub enum MenuLinkType {
-    /// 站内链地址
-    Internal,
-    /// 站外链地址
-    External,
 }
 
 /// 菜单链接跳转方式
@@ -115,8 +107,17 @@ pub enum MenuLinkTarget {
     Current,
 }
 
+impl From<MenuLinkTarget> for String {
+    fn from(value: MenuLinkTarget) -> Self {
+        match value {
+            MenuLinkTarget::Blank => "_blank".to_owned(),
+            MenuLinkTarget::Current => "_self".to_owned(),
+        }
+    }
+}
+
 /// 菜单是否隐藏
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
 #[repr(i8)]
 pub enum MenuHidden {
     /// 显示
@@ -126,7 +127,7 @@ pub enum MenuHidden {
 }
 
 /// 始终显示根菜单
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
 #[repr(i8)]
 pub enum MenuRootAlwaysShow {
     /// 显示
@@ -136,7 +137,7 @@ pub enum MenuRootAlwaysShow {
 }
 
 /// 用户令牌状态
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
 #[repr(i8)]
 pub enum UserTokenStatus {
     /// 停用
@@ -147,7 +148,6 @@ pub enum UserTokenStatus {
 
 /// 用户令牌权限范围
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[repr(i8)]
 pub enum UserTokenPermission {
     /// 读取数据
     #[serde(rename = "GET")]

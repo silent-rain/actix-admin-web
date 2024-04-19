@@ -41,9 +41,6 @@ impl<'a> OpenApiDao<'a> {
             .apply_if(req.end_time, |query, v| {
                 query.filter(perm_open_api::Column::CreatedAt.lt(v))
             })
-            .apply_if(req.category, |query, v| {
-                query.filter(perm_open_api::Column::Name.eq(v))
-            })
             .apply_if(req.name, |query, v| {
                 query.filter(perm_open_api::Column::Name.like(format!("{v}%")))
             });

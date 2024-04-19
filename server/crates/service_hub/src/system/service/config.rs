@@ -116,7 +116,7 @@ impl<'a> ConfigService<'a> {
             value: Set(req.value),
             sort: Set(req.sort),
             desc: Set(req.desc),
-            status: Set(req.status),
+            status: Set(req.status as i8),
             ..Default::default()
         };
 

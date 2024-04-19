@@ -101,7 +101,7 @@ impl<'a> UserTokenService<'a> {
             permission: Set(req.permission),
             expire: Set(req.expire),
             note: Set(req.note),
-            status: Set(req.status),
+            status: Set(req.status as i8),
             ..Default::default()
         };
 

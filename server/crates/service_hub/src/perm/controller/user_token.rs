@@ -79,7 +79,9 @@ impl UserTokenController {
         data: Json<UpdateUserTokenStatusReq>,
     ) -> impl Responder {
         let user_token_service: UserTokenService = provider.provide();
-        let resp = user_token_service.status(*id, data.status).await;
+        let resp = user_token_service
+            .status(*id, data.status.clone() as i8)
+            .await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

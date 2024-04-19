@@ -86,7 +86,9 @@ impl OpenApiController {
         data: Json<UpdateOpenApiStatusReq>,
     ) -> impl Responder {
         let open_api_service: OpenApiService = provider.provide();
-        let resp = open_api_service.status(*id, data.status).await;
+        let resp = open_api_service
+            .status(*id, data.status.clone() as i8)
+            .await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

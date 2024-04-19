@@ -78,11 +78,11 @@ impl<'a> ScheduleJobService<'a> {
 
         let model = schedule_job::ActiveModel {
             name: Set(req.name),
-            job_type: Set(req.job_type),
+            job_type: Set(req.job_type as i8),
             expression: Set(req.expression),
             interval: Set(req.interval),
             note: Set(req.note),
-            status: Set(req.status),
+            status: Set(req.status as i8),
             ..Default::default()
         };
         let result = self.schedule_job_dao.add(model).await.map_err(|err| {
@@ -100,11 +100,11 @@ impl<'a> ScheduleJobService<'a> {
         let model = schedule_job::ActiveModel {
             id: Set(id),
             name: Set(req.name),
-            job_type: Set(req.job_type),
+            job_type: Set(req.job_type as i8),
             expression: Set(req.expression),
             interval: Set(req.interval),
             note: Set(req.note),
-            status: Set(req.status),
+            status: Set(req.status as i8),
             ..Default::default()
         };
 

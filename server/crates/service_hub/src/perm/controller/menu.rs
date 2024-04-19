@@ -94,7 +94,7 @@ impl MenuController {
         data: Json<UpdateMenuStatusReq>,
     ) -> impl Responder {
         let menu_service: MenuService = provider.provide();
-        let resp = menu_service.status(*id, data.status).await;
+        let resp = menu_service.status(*id, data.status.clone() as i8).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

@@ -1,5 +1,7 @@
 //! 字典数据管理
 
+use crate::system::enums::DictDataStatus;
+
 use actix_validator::Validate;
 
 use serde::{Deserialize, Serialize};
@@ -54,14 +56,12 @@ pub struct UpdateDictDataReq {
     /// 备注
     pub note: Option<String>,
     /// 状态,0:停用,1:正常
-    /// Enum: [`crate::system::enums::DictDataStatus`]
-    pub status: i8,
+    pub status: DictDataStatus,
 }
 
 /// 更新字典数据状态
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
 pub struct UpdateDictDataStatusReq {
     /// 状态,0:停用,1:正常
-    /// Enum: [`crate::system::enums::DictDataStatus`]
-    pub status: i8,
+    pub status: DictDataStatus,
 }

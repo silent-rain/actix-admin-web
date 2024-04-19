@@ -103,7 +103,7 @@ impl<'a> OpenApiService<'a> {
 
         let model = perm_open_api::ActiveModel {
             pid: Set(req.pid),
-            category: Set(req.category),
+            category: Set(req.category as i8),
             name: Set(req.name),
             method: Set(req.method),
             path: Set(req.path),
@@ -131,13 +131,13 @@ impl<'a> OpenApiService<'a> {
         let model = perm_open_api::ActiveModel {
             id: Set(id),
             pid: Set(req.pid),
-            category: Set(req.category),
+            category: Set(req.category as i8),
             name: Set(req.name),
             method: Set(req.method),
             path: Set(req.path),
             sort: Set(req.sort),
             note: Set(req.note),
-            status: Set(req.status),
+            status: Set(req.status as i8),
             ..Default::default()
         };
 

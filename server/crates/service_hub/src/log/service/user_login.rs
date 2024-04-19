@@ -110,7 +110,7 @@ impl<'a> UserLoginService<'a> {
             device: Set(Some(device)),
             system: Set(Some(system)),
             browser: Set(Some(browser)),
-            status: Set(data.status),
+            status: Set(data.status as i8),
             disabled: Set(UserLoginDisabledStatus::Enabled as i8),
             ..Default::default()
         };
