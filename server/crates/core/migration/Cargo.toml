@@ -36,4 +36,4 @@ tokio = { workspace = true, features = [
     "rt-multi-thread",
     "test-util",
 ] }
-colored = "2.1"
+colored = { workspace = true }
