@@ -6,7 +6,7 @@ use tokio_cron_scheduler::{Job, JobScheduler, JobSchedulerError};
 // interval
 // expression
 
-async fn demo() -> Result<(), JobSchedulerError> {
+pub async fn demo() -> Result<(), JobSchedulerError> {
     let mut sched = JobScheduler::new().await?;
 
     // 添加基本cron作业
