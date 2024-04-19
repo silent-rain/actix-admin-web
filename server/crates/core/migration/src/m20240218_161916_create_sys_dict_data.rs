@@ -1,13 +1,11 @@
 //! 字典数据表
-//! User Entity: [`entity::prelude::SysDictData`]
-use entity::{prelude::SysDictData, sys_dict_data::Column};
+use crate::m20240218_161916_create_sys_dict_dim::SysDictDim;
 
-use sea_orm_migration::{
-    async_trait,
-    sea_orm::{DatabaseBackend, DeriveMigrationName},
-    sea_query::{ColumnDef, Expr, Table},
-    DbErr, MigrationTrait, SchemaManager,
+use sea_orm::{
+    sea_query::{ColumnDef, Expr, ForeignKey, Index, Table},
+    DatabaseBackend, DeriveIden, DeriveMigrationName, Iden,
 };
+use sea_orm_migration::{async_trait, DbErr, MigrationTrait, SchemaManager};
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
@@ -20,11 +18,11 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(SysDictData)
+                    .table(SysDictData::Table)
                     .comment("字典数据表")
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(Column::Id)
+                        ColumnDef::new(SysDictData::Id)
                             .integer()
                             .primary_key()
                             .auto_increment()
@@ -32,40 +30,40 @@ impl MigrationTrait for Migration {
                             .comment("字典项ID"),
                     )
                     .col(
-                        ColumnDef::new(Column::DimId)
+                        ColumnDef::new(SysDictData::DimId)
                             .integer()
                             .not_null()
                             .comment("字典维度ID"),
                     )
                     .col(
-                        ColumnDef::new(Column::DimCode)
+                        ColumnDef::new(SysDictData::DimCode)
                             .string()
                             .string_len(64)
                             .not_null()
                             .comment("字典维度编码"),
                     )
                     .col(
-                        ColumnDef::new(Column::Lable)
+                        ColumnDef::new(SysDictData::Lable)
                             .string()
                             .string_len(64)
                             .not_null()
                             .comment("字典标签"),
                     )
                     .col(
-                        ColumnDef::new(Column::Value)
+                        ColumnDef::new(SysDictData::Value)
                             .text()
                             .not_null()
                             .comment("字典键值"),
                     )
                     .col(
-                        ColumnDef::new(Column::Sort)
+                        ColumnDef::new(SysDictData::Sort)
                             .integer()
                             .null()
                             .default(0)
                             .comment("排序"),
                     )
                     .col(
-                        ColumnDef::new(Column::Note)
+                        ColumnDef::new(SysDictData::Note)
                             .string()
                             .string_len(200)
                             .default("")
@@ -73,21 +71,21 @@ impl MigrationTrait for Migration {
                             .comment("备注"),
                     )
                     .col(
-                        ColumnDef::new(Column::Status)
+                        ColumnDef::new(SysDictData::Status)
                             .tiny_integer()
                             .not_null()
                             .default(1)
                             .comment("状态,0:停用,1:正常"),
                     )
                     .col(
-                        ColumnDef::new(Column::CreatedAt)
+                        ColumnDef::new(SysDictData::CreatedAt)
                             .date_time()
                             .not_null()
                             .default(Expr::current_timestamp())
                             .comment("创建时间"),
                     )
                     .col(
-                        ColumnDef::new(Column::UpdatedAt)
+                        ColumnDef::new(SysDictData::UpdatedAt)
                             .date_time()
                             .not_null()
                             .extra({
@@ -100,14 +98,63 @@ impl MigrationTrait for Migration {
                     )
                     .to_owned(),
             )
-            .await
+            .await?;
+
+        if !manager
+            .has_index(SysDictData::Table.to_string(), "idx_dim_id")
+            .await?
+        {
+            manager
+                .create_index(
+                    Index::create()
+                        .if_not_exists()
+                        .name("idx_dim_id")
+                        .table(SysDictData::Table)
+                        .col(SysDictData::DimId)
+                        .to_owned(),
+                )
+                .await?;
+        }
+
+        if !manager
+            .has_index(SysDictData::Table.to_string(), "fk_sys_dict_data_dim_id")
+            .await?
+        {
+            manager
+                .create_foreign_key(
+                    ForeignKey::create()
+                        .name("fk_t_sys_dict_data_dim_id")
+                        .from(SysDictData::Table, SysDictData::DimId)
+                        .to(SysDictDim::Table, SysDictDim::Id)
+                        .to_owned(),
+                )
+                .await?;
+        }
+
+        Ok(())
     }
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
 
         manager
-            .drop_table(Table::drop().table(SysDictData).to_owned())
+            .drop_table(Table::drop().table(SysDictData::Table).to_owned())
             .await
     }
+}
+
+#[derive(DeriveIden)]
+pub enum SysDictData {
+    #[sea_orm(iden = "t_sys_dict_data")]
+    Table,
+    Id,
+    DimId,
+    DimCode,
+    Lable,
+    Value,
+    Sort,
+    Note,
+    Status,
+    CreatedAt,
+    UpdatedAt,
 }

@@ -73,5 +73,5 @@ CREATE TABLE
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`),
-        CONSTRAINT `t_sys_dict_data_dim_id` FOREIGN KEY (`dim_id`) REFERENCES `t_sys_dict_dim` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+        CONSTRAINT `fk_sys_dict_data_dim_id` FOREIGN KEY (`dim_id`) REFERENCES `t_sys_dict_dim` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '字典数据表';

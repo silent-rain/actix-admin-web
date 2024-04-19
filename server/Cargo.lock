@@ -2212,6 +2212,7 @@ dependencies = [
  "dotenv",
  "entity",
  "logger",
+ "sea-orm",
  "sea-orm-migration",
  "sqlx",
  "tokio",

@@ -1,13 +1,10 @@
 //! 字典维度表
-//! User Entity: [`entity::prelude::SysDictDim`]
-use entity::{prelude::SysDictDim, sys_dict_dim::Column};
 
-use sea_orm_migration::{
-    async_trait,
-    sea_orm::{DatabaseBackend, DeriveMigrationName},
-    sea_query::{ColumnDef, Expr, Table},
-    DbErr, MigrationTrait, SchemaManager,
+use sea_orm::{
+    sea_query::{ColumnDef, Expr, Index, Table},
+    DatabaseBackend, DeriveIden, DeriveMigrationName, Iden,
 };
+use sea_orm_migration::{async_trait, DbErr, MigrationTrait, SchemaManager};
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
@@ -20,11 +17,11 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(SysDictDim)
+                    .table(SysDictDim::Table)
                     .comment("字典维度表")
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(Column::Id)
+                        ColumnDef::new(SysDictDim::Id)
                             .integer()
                             .primary_key()
                             .auto_increment()
@@ -32,7 +29,7 @@ impl MigrationTrait for Migration {
                             .comment("字典维度ID"),
                     )
                     .col(
-                        ColumnDef::new(Column::Name)
+                        ColumnDef::new(SysDictDim::Name)
                             .string()
                             .string_len(64)
                             .unique_key()
@@ -40,7 +37,7 @@ impl MigrationTrait for Migration {
                             .comment("字典维度名称"),
                     )
                     .col(
-                        ColumnDef::new(Column::Code)
+                        ColumnDef::new(SysDictDim::Code)
                             .string()
                             .string_len(64)
                             .unique_key()
@@ -48,14 +45,14 @@ impl MigrationTrait for Migration {
                             .comment("字典维度编码"),
                     )
                     .col(
-                        ColumnDef::new(Column::Sort)
+                        ColumnDef::new(SysDictDim::Sort)
                             .integer()
                             .null()
                             .default(0)
                             .comment("排序"),
                     )
                     .col(
-                        ColumnDef::new(Column::Note)
+                        ColumnDef::new(SysDictDim::Note)
                             .string()
                             .string_len(200)
                             .default("")
@@ -63,21 +60,21 @@ impl MigrationTrait for Migration {
                             .comment("备注"),
                     )
                     .col(
-                        ColumnDef::new(Column::Status)
+                        ColumnDef::new(SysDictDim::Status)
                             .tiny_integer()
                             .not_null()
                             .default(1)
                             .comment("状态,0:停用,1:正常"),
                     )
                     .col(
-                        ColumnDef::new(Column::CreatedAt)
+                        ColumnDef::new(SysDictDim::CreatedAt)
                             .date_time()
                             .not_null()
                             .default(Expr::current_timestamp())
                             .comment("创建时间"),
                     )
                     .col(
-                        ColumnDef::new(Column::UpdatedAt)
+                        ColumnDef::new(SysDictDim::UpdatedAt)
                             .date_time()
                             .not_null()
                             .extra({
@@ -90,14 +87,62 @@ impl MigrationTrait for Migration {
                     )
                     .to_owned(),
             )
-            .await
+            .await?;
+
+        if !manager
+            .has_index(SysDictDim::Table.to_string(), "uk_name")
+            .await?
+        {
+            manager
+                .create_index(
+                    Index::create()
+                        .if_not_exists()
+                        .name("uk_name")
+                        .table(SysDictDim::Table)
+                        .col(SysDictDim::Name)
+                        .to_owned(),
+                )
+                .await?;
+        }
+
+        if !manager
+            .has_index(SysDictDim::Table.to_string(), "uk_code")
+            .await?
+        {
+            manager
+                .create_index(
+                    Index::create()
+                        .if_not_exists()
+                        .name("uk_code")
+                        .table(SysDictDim::Table)
+                        .col(SysDictDim::Code)
+                        .to_owned(),
+                )
+                .await?;
+        }
+
+        Ok(())
     }
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
 
         manager
-            .drop_table(Table::drop().table(SysDictDim).to_owned())
+            .drop_table(Table::drop().table(SysDictDim::Table).to_owned())
             .await
     }
+}
+
+#[derive(DeriveIden)]
+pub enum SysDictDim {
+    #[sea_orm(iden = "t_sys_dict_dim")]
+    Table,
+    Id,
+    Name,
+    Code,
+    Sort,
+    Note,
+    Status,
+    CreatedAt,
+    UpdatedAt,
 }

@@ -109,7 +109,7 @@ where
 
             // 添加响应操作日志
             data.cost = start_time.elapsed().as_millis() as f64;
-            data.http_type = HttpType::Rsp.into();
+            data.http_type = HttpType::Rsp;
             // TODO 添加字符限制, 如果太大则进行省略
             data.body = Some(body);
             data.status_code = resp.status().as_u16() as i32;
@@ -207,7 +207,7 @@ impl<S> ApiOperationMiddlewareService<S> {
             remote_addr,
             user_agent,
             cost: 0.0,
-            http_type: HttpType::Req.into(),
+            http_type: HttpType::Req,
             note: None,
         }
     }
