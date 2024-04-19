@@ -67,7 +67,7 @@ impl<'a> UserTokenService<'a> {
     /// 添加数据
     pub async fn add(&self, req: AddUserTokenReq) -> Result<perm_user_token::Model, ErrorMsg> {
         let token = Uuid::new_v4().to_string();
-        let passphrase = Uuid::new_v4().to_string().replace("-", "");
+        let passphrase = Uuid::new_v4().to_string().replace('-', "");
         let model = perm_user_token::ActiveModel {
             user_id: Set(req.user_id),
             token: Set(token),
