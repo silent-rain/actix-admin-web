@@ -58,6 +58,19 @@ impl<'a> UserTokenDao<'a> {
         PermUserToken::find_by_id(id).one(self.db.rdb()).await
     }
 
+    /// 通过Token获取详情信息
+    pub async fn info_by_token(
+        &self,
+        token: String,
+        passphrase: String,
+    ) -> Result<Option<perm_user_token::Model>, DbErr> {
+        PermUserToken::find()
+            .filter(perm_user_token::Column::Token.eq(token))
+            .filter(perm_user_token::Column::Passphrase.eq(passphrase))
+            .one(self.db.rdb())
+            .await
+    }
+
     /// 添加详情信息
     pub async fn add(
         &self,

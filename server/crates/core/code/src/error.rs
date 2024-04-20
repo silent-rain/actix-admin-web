@@ -100,9 +100,9 @@ pub enum Error {
     TokenEncode = 10256,
     #[error("解析密匙异常, {0}")]
     TokenDecode(String) = 10257,
-    #[error("非法请求")]
+    #[error("获取鉴权标识失败")]
     HeadersNotAuthorization = 10258,
-    #[error("非法请求")]
+    #[error("获取鉴权前缀失败")]
     HeadersNotAuthorizationBearer = 10259,
     #[error("获取服务实例失败")]
     InjectAproviderObj = 10260,
@@ -110,6 +110,8 @@ pub enum Error {
     LoginStatusDisabled = 10261,
     #[error("用户添加失败")]
     UserAddError = 10262,
+    #[error("获取鉴权标识失败")]
+    HeadersNotAuthorizationPassphrase = 10263,
 
     // 工具箱
     #[error("User-Agent解析错误")]

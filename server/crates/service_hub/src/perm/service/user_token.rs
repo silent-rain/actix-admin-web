@@ -64,6 +64,34 @@ impl<'a> UserTokenService<'a> {
         Ok(result)
     }
 
+    /// 通过Token获取详情信息
+    pub async fn info_by_token(
+        &self,
+        token: String,
+        passphrase: String,
+    ) -> Result<perm_user_token::Model, ErrorMsg> {
+        let mut result = self
+            .user_token_dao
+            .info_by_token(token, passphrase)
+            .await
+            .map_err(|err| {
+                error!("查询用户令牌信息失败, err: {:#?}", err);
+                Error::DbQueryError
+                    .into_msg()
+                    .with_msg("查询用户令牌信息失败")
+            })?
+            .ok_or_else(|| {
+                error!("用户令牌不存在");
+                Error::DbQueryEmptyError
+                    .into_msg()
+                    .with_msg("用户令牌不存在")
+            })?;
+
+        // 屏蔽口令
+        result.passphrase = "".to_string();
+        Ok(result)
+    }
+
     /// 添加数据
     pub async fn add(&self, req: AddUserTokenReq) -> Result<perm_user_token::Model, ErrorMsg> {
         let token = Uuid::new_v4().to_string();

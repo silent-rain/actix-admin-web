@@ -2196,6 +2196,7 @@ dependencies = [
  "actix-web",
  "code",
  "context",
+ "entity",
  "futures",
  "jwt",
  "response",

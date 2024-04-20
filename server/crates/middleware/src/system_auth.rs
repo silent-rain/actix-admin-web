@@ -123,7 +123,7 @@ where
             ctx.set_user_id(user_id);
             ctx.set_user_name(user_name.clone());
         }
-        info!("user req, user_id: {user_id}, user_name: {user_name}");
+        info!("system auth user req, user_id: {user_id}, user_name: {user_name}");
 
         let provider = match req.app_data::<Data<AInjectProvider>>() {
             Some(v) => v.as_ref().clone(),
