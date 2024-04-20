@@ -46,7 +46,7 @@ impl ImageController {
                 .insert_header((HEADERS_X_IMG, "true"))
                 .content_type(v.img_type)
                 .body(v.base_img.to_vec()),
-            Err(_err) => HttpResponse::BadRequest().finish(),
+            Err(_err) => HttpResponse::NotFound().finish(),
         }
     }
 
@@ -62,7 +62,7 @@ impl ImageController {
                 .insert_header((HEADERS_X_IMG, "true"))
                 .content_type(v.img_type)
                 .body(v.base_img.to_vec()),
-            Err(_err) => HttpResponse::BadRequest().finish(),
+            Err(_err) => HttpResponse::NotFound().finish(),
         }
     }
 

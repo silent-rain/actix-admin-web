@@ -21,7 +21,7 @@ mysql:
     acquire_timeout: 10 # 设置等待获取连接所花费的最大时间
     idle_timeout: 10 # 在关闭连接之前设置空闲持续时间
     max_lifetime: 10 # 设置单个连接的最大使用寿命
-    logging_enable: true # 启用日志记录
+    logging_enable: false # 启用日志记录
     logging_level: "warn" # 日志记录级别（默认error）off/trace/debug/info/warn/error
 
   read: # 只读数据库

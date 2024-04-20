@@ -89,7 +89,7 @@ impl<'a> LoggerLayer<'a> {
             return self;
         }
 
-        let (layer, guard) = layer::db::layer(self.config.db.clone());
+        let (layer, guard) = layer::db::non_blocking_layer(self.config.db.clone());
         self.layers.push(layer);
         self.guards.push(guard);
         self
