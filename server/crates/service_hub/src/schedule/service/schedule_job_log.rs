@@ -65,7 +65,7 @@ impl<'a> ScheduleJobLogService<'a> {
             job_name: Set(req.job_name),
             error: Set(req.error),
             cost: Set(req.cost),
-            status: Set(req.status),
+            status: Set(req.status as i8),
             ..Default::default()
         };
         let result = self.schedule_job_log_dao.add(data).await.map_err(|err| {

@@ -1,5 +1,7 @@
 //! 定时任务
 
+use crate::schedule::enums::ScheduleJobLogStatus;
+
 use actix_validator::Validate;
 
 use serde::{Deserialize, Serialize};
@@ -22,7 +24,7 @@ pub struct GetScheduleJobLogListReq {
 }
 
 /// 添加定时任务日志
-#[derive(Debug, Clone, Serialize, Deserialize, Validate)]
+#[derive(Clone, Serialize, Deserialize, Validate)]
 pub struct AddScheduleJobLogReq {
     /// 任务ID
     pub job_id: i32,
@@ -33,6 +35,5 @@ pub struct AddScheduleJobLogReq {
     /// 耗时(单位：毫秒)
     pub cost: f64,
     /// 任务状态,0:失败,1:成功'
-    /// Enum: [`crate::schedule::enums::ScheduleJobStatus`]
-    pub status: i8,
+    pub status: ScheduleJobLogStatus,
 }

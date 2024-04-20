@@ -28,8 +28,8 @@ impl<'a> DeptService<'a> {
         // 获取所有数据
         if let Some(true) = req.all {
             return self.dept_dao.all().await.map_err(|err| {
-                error!("查询部门列表失败, err: {:#?}", err);
-                Error::DbQueryError.into_msg().with_msg("查询部门列表失败")
+                error!("查询所有部门失败, err: {:#?}", err);
+                Error::DbQueryError.into_msg().with_msg("查询所有部门失败")
             });
         }
 
@@ -73,7 +73,7 @@ impl<'a> DeptService<'a> {
 
     /// 添加数据
     pub async fn add(&self, req: AddDeptReq) -> Result<perm_dept::Model, ErrorMsg> {
-        // 查询部门是否存在
+        // 查询部门是否已存在
         let dept = self
             .dept_dao
             .info_by_name(req.name.clone())
@@ -87,35 +87,68 @@ impl<'a> DeptService<'a> {
             return Err(Error::DbDataExistError.into_msg().with_msg("部门已存在"));
         }
 
-        // TODO pids 待处理
         let model = perm_dept::ActiveModel {
             pid: Set(req.pid),
-            // pids: Set(req.pids),
             name: Set(req.name),
             sort: Set(req.sort),
             note: Set(req.note),
             status: Set(DeptStatus::Enabled as i8),
             ..Default::default()
         };
-        let result = self.dept_dao.add(model).await.map_err(|err| {
-            error!("添加部门信息失败, err: {:#?}", err);
-            Error::DbAddError.into_msg().with_msg("添加部门信息失败")
+        let mut dept = self
+            .dept_dao
+            .add(model)
+            .await
+            .map_err(|err: sea_orm::prelude::DbErr| {
+                error!("添加部门信息失败, err: {:#?}", err);
+                Error::DbAddError.into_msg().with_msg("添加部门信息失败")
+            })?;
+
+        // 获取所有部门数据
+        let (depts, _) = self.dept_dao.all().await.map_err(|err| {
+            error!("查询所有部门失败, err: {:#?}", err);
+            Error::DbQueryError.into_msg().with_msg("查询所有部门失败")
+        })?;
+        // 获取所有上级ID
+        let pids = GenericTree::get_pids(&depts, dept.id)
+            .iter()
+            .map(|v| v.to_string())
+            .collect::<Vec<String>>()
+            .join(",");
+
+        dept.pids = Some(pids);
+        // 更新PID
+        let model: perm_dept::ActiveModel = dept.clone().into();
+        let _result = self.dept_dao.update(model).await.map_err(|err| {
+            error!("更新部门Pids失败, err: {:#?}", err);
+            Error::DbUpdateError.into_msg().with_msg("更新部门Pids失败")
         })?;
 
-        Ok(result)
+        Ok(dept)
     }
 
     /// 更新数据
     pub async fn update(&self, id: i32, req: UpdateDeptReq) -> Result<u64, ErrorMsg> {
-        // TODO pids 待处理
+        // 获取所有部门数据
+        let (depts, _) = self.dept_dao.all().await.map_err(|err| {
+            error!("查询所有部门失败, err: {:#?}", err);
+            Error::DbQueryError.into_msg().with_msg("查询所有部门失败")
+        })?;
+        // 获取所有上级ID
+        let pids = GenericTree::get_pids(&depts, id)
+            .iter()
+            .map(|v| v.to_string())
+            .collect::<Vec<String>>()
+            .join(",");
+
         let model = perm_dept::ActiveModel {
             id: Set(id),
             pid: Set(req.pid),
-            // pids: Set(req.pids),
+            pids: Set(Some(pids)),
             name: Set(req.name),
             sort: Set(req.sort),
             note: Set(req.note),
-            status: Set(req.status),
+            status: Set(req.status as i8),
             ..Default::default()
         };
 
@@ -139,17 +172,14 @@ impl<'a> DeptService<'a> {
 
     /// 删除数据
     pub async fn delete(&self, id: i32) -> Result<u64, ErrorMsg> {
-        let dept_children = self.dept_dao.children(id).await.map_err(|err| {
+        let children = self.dept_dao.children(id).await.map_err(|err| {
             error!("获取所有子列表失败, err: {:#?}", err);
             Error::DbQueryError
                 .into_msg()
                 .with_msg("获取所有子列表失败")
         })?;
-        if !dept_children.is_empty() {
-            error!(
-                "请先删除子列表, children count: {:#?}",
-                dept_children.len()
-            );
+        if !children.is_empty() {
+            error!("请先删除子列表, children count: {:#?}", children.len());
             return Err(Error::DbDataExistChildrenError
                 .into_msg()
                 .with_msg("请先删除子列表"));

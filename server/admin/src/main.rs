@@ -1,21 +1,20 @@
 //! 程序入口
 
+use std::sync::{Arc, Mutex};
+
 mod asset;
 mod config;
 mod router;
 mod server;
 
-use std::sync::{Arc, Mutex};
+use crate::asset::{AssetAdminWebDist, AssetConfigFile, AssetDbDataFile};
 
 use app_state::{AppState, AssetState};
 use service_hub::inject::InjectProvider;
 
-// use migration::{Migrator, MigratorTrait};
-
+use colored::Colorize;
 use dotenv::dotenv;
 use tracing::warn;
-
-use crate::asset::{AssetAdminWebDist, AssetConfigFile, AssetDbDataFile};
 
 /// 程序入口
 #[actix_web::main]
@@ -74,6 +73,6 @@ async fn main() -> std::io::Result<()> {
     // 关闭数据库
     let _ = db.close().await;
 
-    warn!("See you again~");
+    warn!("{}", "See you again~".yellow());
     Ok(())
 }

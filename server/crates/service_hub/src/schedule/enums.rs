@@ -1,9 +1,10 @@
 //! 枚举
 
-use serde::{Deserialize, Serialize};
+use serde_repr::{Deserialize_repr, Serialize_repr};
 
 /// 定时任务状态
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
+#[repr(i8)]
 pub enum ScheduleJobStatus {
     /// 暂停
     Paused = 0,
@@ -12,7 +13,8 @@ pub enum ScheduleJobStatus {
 }
 
 /// 定时任务类型
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
+#[repr(i8)]
 pub enum ScheduleJobType {
     /// 定时任务
     Timer = 0,
@@ -20,7 +22,8 @@ pub enum ScheduleJobType {
     Interval = 1,
 }
 /// 定时任务来源
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
+#[repr(i8)]
 pub enum ScheduleJobSource {
     /// 系统内部
     System = 0,
@@ -29,7 +32,8 @@ pub enum ScheduleJobSource {
 }
 
 /// 定时任务运行状态
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
+#[repr(i8)]
 pub enum ScheduleJobLogStatus {
     /// 失败
     Failed = 0,

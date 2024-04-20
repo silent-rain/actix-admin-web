@@ -4,7 +4,7 @@ use entity::{log_user_login::Column, prelude::LogUserLogin};
 
 use sea_orm_migration::{
     async_trait,
-    sea_orm::DeriveMigrationName,
+    sea_orm::{DatabaseBackend, DeriveMigrationName},
     sea_query::{ColumnDef, Expr, Table},
     DbErr, MigrationTrait, SchemaManager,
 };
@@ -20,6 +20,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(LogUserLogin)
+                    .comment("用户登录日志表")
                     .if_not_exists()
                     .col(
                         ColumnDef::new(Column::Id)
@@ -66,6 +67,30 @@ impl MigrationTrait for Migration {
                             .comment("用户代理"),
                     )
                     .col(
+                        ColumnDef::new(Column::Device)
+                            .string()
+                            .string_len(20)
+                            .null()
+                            .default("")
+                            .comment("设备"),
+                    )
+                    .col(
+                        ColumnDef::new(Column::System)
+                            .string()
+                            .string_len(20)
+                            .null()
+                            .default("")
+                            .comment("系统"),
+                    )
+                    .col(
+                        ColumnDef::new(Column::Browser)
+                            .string()
+                            .string_len(20)
+                            .null()
+                            .default("")
+                            .comment("浏览器"),
+                    )
+                    .col(
                         ColumnDef::new(Column::Status)
                             .tiny_integer()
                             .not_null()
@@ -83,16 +108,19 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::CreatedAt)
                             .date_time()
                             .not_null()
-                            .extra("DEFAULT CURRENT_TIMESTAMP")
+                            .default(Expr::current_timestamp())
                             .comment("创建时间"),
                     )
                     .col(
                         ColumnDef::new(Column::UpdatedAt)
                             .date_time()
                             .not_null()
-                            // Sqlite3 不支持 ON UPDATE CURRENT_TIMESTAMP
-                            // .extra("DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
-                            .default(Expr::current_timestamp())
+                            .extra({
+                                match manager.get_database_backend() {
+                                    DatabaseBackend::Sqlite => "DEFAULT CURRENT_TIMESTAMP",
+                                    _ => "DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
+                                }
+                            })
                             .comment("更新时间"),
                     )
                     .to_owned(),

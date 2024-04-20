@@ -141,7 +141,7 @@ mod tests {
             .build(DbBackend::MySql)
             .to_string();
 
-        let sql = r#"SELECT `app_template`.`id`, `app_template`.`user_id`, `app_template`.`status`, `app_template`.`created_at`, `app_template`.`updated_at` FROM `app_template` ORDER BY `app_template`.`id` ASC"#;
+        let sql = r#"SELECT `t_app_template`.`id`, `t_app_template`.`user_id`, `t_app_template`.`status`, `t_app_template`.`created_at`, `t_app_template`.`updated_at` FROM `t_app_template` ORDER BY `t_app_template`.`id` ASC"#;
 
         assert_eq!(result, sql);
     }
@@ -155,7 +155,7 @@ mod tests {
             .build(DbBackend::MySql)
             .to_string();
 
-        let sql = r#"SELECT `app_template`.`id`, `app_template`.`user_id`, `app_template`.`status`, `app_template`.`created_at`, `app_template`.`updated_at` FROM `app_template` WHERE `app_template`.`id` = 1"#;
+        let sql = r#"SELECT `t_app_template`.`id`, `t_app_template`.`user_id`, `t_app_template`.`status`, `t_app_template`.`created_at`, `t_app_template`.`updated_at` FROM `t_app_template` WHERE `t_app_template`.`id` = 1"#;
 
         assert_eq!(result, sql);
     }
@@ -172,7 +172,7 @@ mod tests {
             .build(DbBackend::MySql)
             .to_string();
 
-        let sql = r#"INSERT INTO `app_template` (`id`, `user_id`, `status`) VALUES (1, 11, 1)"#;
+        let sql = r#"INSERT INTO `t_app_template` (`id`, `user_id`, `status`) VALUES (1, 11, 1)"#;
 
         assert_eq!(result, sql);
     }
@@ -196,7 +196,7 @@ mod tests {
             .build(DbBackend::MySql)
             .to_string();
 
-        let sql = r#"INSERT INTO `app_template` (`id`, `user_id`, `status`) VALUES (1, 11, 1), (2, 22, 0)"#;
+        let sql = r#"INSERT INTO `t_app_template` (`id`, `user_id`, `status`) VALUES (1, 11, 1), (2, 22, 0)"#;
 
         assert_eq!(result, sql);
     }
@@ -216,7 +216,7 @@ mod tests {
             .build(DbBackend::MySql)
             .to_string();
 
-        let sql = r#"UPDATE `app_template` SET `id` = 1, `user_id` = 11, `status` = 1 WHERE `app_template`.`id` = 1"#;
+        let sql = r#"UPDATE `t_app_template` SET `id` = 1, `user_id` = 11, `status` = 1 WHERE `t_app_template`.`id` = 1"#;
 
         assert_eq!(result, sql);
     }
@@ -232,7 +232,7 @@ mod tests {
             .build(DbBackend::MySql)
             .to_string();
 
-        let sql = r#"UPDATE `app_template` SET `status` = 0 WHERE `app_template`.`id` = 1"#;
+        let sql = r#"UPDATE `t_app_template` SET `status` = 0 WHERE `t_app_template`.`id` = 1"#;
 
         assert_eq!(result, sql);
     }
@@ -243,7 +243,7 @@ mod tests {
             .build(DbBackend::MySql)
             .to_string();
 
-        let sql = r#"DELETE FROM `app_template` WHERE `app_template`.`id` = 1"#;
+        let sql = r#"DELETE FROM `t_app_template` WHERE `t_app_template`.`id` = 1"#;
 
         assert_eq!(result, sql);
     }
@@ -256,7 +256,7 @@ mod tests {
             .build(DbBackend::MySql)
             .to_string();
 
-        let sql = r#"DELETE FROM `app_template` WHERE `app_template`.`id` IN (1, 2, 3, 4)"#;
+        let sql = r#"DELETE FROM `t_app_template` WHERE `t_app_template`.`id` IN (1, 2, 3, 4)"#;
 
         assert_eq!(result, sql);
     }

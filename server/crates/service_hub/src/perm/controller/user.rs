@@ -89,7 +89,7 @@ impl UserController {
         data: Json<UpdateUserStatusReq>,
     ) -> impl Responder {
         let user_service: UserService = provider.provide();
-        let resp = user_service.status(*id, data.status).await;
+        let resp = user_service.status(*id, data.status.clone() as i8).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

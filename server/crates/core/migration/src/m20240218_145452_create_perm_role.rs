@@ -4,7 +4,7 @@ use entity::{perm_role::Column, prelude::PermRole};
 
 use sea_orm_migration::{
     async_trait,
-    sea_orm::DeriveMigrationName,
+    sea_orm::{DatabaseBackend, DeriveMigrationName},
     sea_query::{ColumnDef, Expr, Table},
     DbErr, MigrationTrait, SchemaManager,
 };
@@ -21,6 +21,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(PermRole)
+                    .comment("角色表")
                     .if_not_exists()
                     .col(
                         ColumnDef::new(Column::Id)
@@ -71,7 +72,12 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::UpdatedAt)
                             .date_time()
                             .not_null()
-                            .default(Expr::current_timestamp())
+                            .extra({
+                                match manager.get_database_backend() {
+                                    DatabaseBackend::Sqlite => "DEFAULT CURRENT_TIMESTAMP",
+                                    _ => "DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
+                                }
+                            })
                             .comment("更新时间"),
                     )
                     .to_owned(),

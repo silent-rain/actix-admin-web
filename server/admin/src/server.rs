@@ -5,6 +5,7 @@ use std::sync::Arc;
 use crate::{config::AppConfig, router};
 
 use app_state::{AppState, AssetState};
+use colored::Colorize;
 use service_hub::{inject::AInjectProvider, public::AdminWebSiteRouter};
 
 use actix_web::{http::KeepAlive, web, App, HttpServer};
@@ -48,7 +49,11 @@ pub async fn start(
     };
 
     // 打印服务地址
-    warn!("Starting server at http://{server_url}");
+    warn!(
+        "Starting server at {}{}",
+        "http://".yellow(),
+        server_url.yellow()
+    );
 
     // 启动服务
     if let Err(e) = server.run().await {

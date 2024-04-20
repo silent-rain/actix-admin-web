@@ -5,7 +5,7 @@ use entity::sys_captcha::Column;
 
 use sea_orm_migration::{
     async_trait,
-    sea_orm::DeriveMigrationName,
+    sea_orm::{DatabaseBackend, DeriveMigrationName},
     sea_query::{BlobSize, ColumnDef, Expr, Table},
     DbErr, MigrationTrait, SchemaManager,
 };
@@ -21,6 +21,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(SysCaptcha)
+                    .comment("验证码表")
                     .if_not_exists()
                     .col(
                         ColumnDef::new(Column::Id)
@@ -47,7 +48,7 @@ impl MigrationTrait for Migration {
                     )
                     .col(
                         ColumnDef::new(Column::BaseImg)
-                            .blob(BlobSize::Long)
+                            .blob(BlobSize::Medium)
                             .not_null()
                             .comment("Base64图片"),
                     )
@@ -75,7 +76,12 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::UpdatedAt)
                             .date_time()
                             .not_null()
-                            .default(Expr::current_timestamp())
+                            .extra({
+                                match manager.get_database_backend() {
+                                    DatabaseBackend::Sqlite => "DEFAULT CURRENT_TIMESTAMP",
+                                    _ => "DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
+                                }
+                            })
                             .comment("更新时间"),
                     )
                     .to_owned(),

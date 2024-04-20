@@ -26,7 +26,9 @@ ADD CONSTRAINT minor_order_trade_history_PK PRIMARY KEY (user_id, minor_order_id
 ALTER TABLE 数据表名
 DROP 字段名;
 
-/*备份数据库
-mysqldump -uxx -pxxxx actix_admin_web > actix_admin_web.sql -- 恢复数据库
-mysql -uroot -proot密码 actix_admin_web < actix_admin_web.sql
+/*
+# 备份数据库
+mysqldump -uxxx -pxxx actix_admin_web > actix_admin_web.sql
+# 恢复数据库
+mysql -uxxx -pxxx actix_admin_web < actix_admin_web.sql
  */

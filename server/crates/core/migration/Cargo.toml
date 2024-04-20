@@ -12,6 +12,7 @@ path = "src/lib.rs"
 entity = { path = "../entity" }
 
 async-std = { workspace = true, features = ["attributes", "tokio1"] }
+sea-orm = { workspace = true }
 sea-orm-migration = { workspace = true, features = [
     # Enable at least one `ASYNC_RUNTIME` and `DATABASE_DRIVER` feature if you want to run migration via CLI.
     # View the list of supported features at https://www.sea-ql.org/SeaORM/docs/install-and-config/database-and-async-runtime.
@@ -27,6 +28,7 @@ sea-orm-migration = { workspace = true, features = [
 database = { path = "../database" }
 logger = { path = "../logger" }
 
+sqlx = { workspace = true }
 dotenv = { workspace = true }
 tracing = { workspace = true }
 tokio = { workspace = true, features = [
@@ -34,4 +36,4 @@ tokio = { workspace = true, features = [
     "rt-multi-thread",
     "test-util",
 ] }
-colored = "2.1"
+colored = { workspace = true }

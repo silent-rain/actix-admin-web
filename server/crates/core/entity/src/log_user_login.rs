@@ -1,8 +1,10 @@
 //! 用户登录日志表
 
+use chrono::Local;
 use sea_orm::{
-    prelude::DateTimeLocal, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey,
-    DeriveRelation, EntityTrait, EnumIter, PrimaryKeyTrait,
+    prelude::{async_trait::async_trait, DateTimeLocal},
+    ActiveModelBehavior, ConnectionTrait, DbErr, DeriveEntityModel, DerivePrimaryKey,
+    DeriveRelation, EntityTrait, EnumIter, PrimaryKeyTrait, Set,
 };
 use serde::{Deserialize, Serialize};
 
@@ -23,6 +25,12 @@ pub struct Model {
     pub remote_addr: String,
     /// 用户代理
     pub user_agent: String,
+    /// 设备
+    pub device: Option<String>,
+    /// 系统
+    pub system: Option<String>,
+    /// 浏览器
+    pub browser: Option<String>,
     /// 登录状态,0:失败,1:成功
     pub status: i8,
     /// 禁用状态,0:未禁用,1:禁用
@@ -36,4 +44,13 @@ pub struct Model {
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {}
 
-impl ActiveModelBehavior for ActiveModel {}
+#[async_trait]
+impl ActiveModelBehavior for ActiveModel {
+    async fn before_save<C>(mut self, _db: &C, _insert: bool) -> Result<Self, DbErr>
+    where
+        C: ConnectionTrait,
+    {
+        self.updated_at = Set(Local::now());
+        Ok(self)
+    }
+}

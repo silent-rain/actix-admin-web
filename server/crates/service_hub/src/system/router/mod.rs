@@ -3,7 +3,7 @@ pub mod captcha;
 pub mod config;
 pub mod dict_data;
 pub mod dict_dim;
-pub mod icon;
+pub mod image;
 
 use actix_web::{web, Scope};
 
@@ -16,7 +16,7 @@ impl SystemRouter {
         web::scope("/system")
             .service(captcha::CaptchaRouter::admin_register())
             .service(config::ConfigRouter::admin_register())
-            .service(icon::IconRouter::admin_register())
+            .service(image::ImageRouter::admin_register())
             .service(dict_dim::DictDimRouter::admin_register())
             .service(dict_data::DictDataRouter::admin_register())
     }

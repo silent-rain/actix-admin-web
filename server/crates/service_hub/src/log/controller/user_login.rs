@@ -65,7 +65,9 @@ impl UserLoginController {
         data: Json<UpdateUserLoginStatusReq>,
     ) -> impl Responder {
         let user_login_service: UserLoginService = provider.provide();
-        let resp = user_login_service.status(*id, data.status).await;
+        let resp = user_login_service
+            .status(*id, data.status.clone() as i8)
+            .await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -79,7 +81,9 @@ impl UserLoginController {
         data: Json<UpdateUserLoginDisabledStatusReq>,
     ) -> impl Responder {
         let user_login_service: UserLoginService = provider.provide();
-        let resp = user_login_service.disabled(*id, data.disabled).await;
+        let resp = user_login_service
+            .disabled(*id, data.disabled.clone() as i8)
+            .await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

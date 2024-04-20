@@ -2,8 +2,6 @@
 
 pub use super::app_template::Entity as AppTemplate;
 
-pub use super::api_auth::Entity as ApiAuth;
-pub use super::api_role_rel::Entity as ApiRoleRel;
 pub use super::log_api_operation::Entity as LogApiOperation;
 pub use super::log_system::Entity as LogSystem;
 pub use super::log_user_login::Entity as LogUserLogin;
@@ -12,14 +10,17 @@ pub use super::perm_dept::Entity as PermDept;
 pub use super::perm_dept_role_rel::Entity as PermDeptRoleRel;
 pub use super::perm_menu::Entity as PermMenu;
 pub use super::perm_menu_role_rel::Entity as PermMenuRoleRel;
+pub use super::perm_open_api::Entity as PermOpenApi;
+pub use super::perm_open_api_role_rel::Entity as PermOpenApiRoleRel;
 pub use super::perm_role::Entity as PermRole;
 pub use super::perm_user::Entity as PermUser;
 pub use super::perm_user_role_rel::Entity as PermUserRoleRel;
 pub use super::perm_user_token::Entity as PermUserToken;
+pub use super::perm_user_token_role_rel::Entity as PermUserTokenRoleRel;
 pub use super::schedule_job::Entity as ScheduleJob;
 pub use super::schedule_job_log::Entity as ScheduleJobLog;
 pub use super::sys_captcha::Entity as SysCaptcha;
 pub use super::sys_config::Entity as SysConfig;
 pub use super::sys_dict_data::Entity as SysDictData;
 pub use super::sys_dict_dim::Entity as SysDictDim;
-pub use super::sys_icon::Entity as SysIcon;
+pub use super::sys_image::Entity as SysImage;

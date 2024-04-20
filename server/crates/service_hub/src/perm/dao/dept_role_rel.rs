@@ -18,6 +18,9 @@ pub struct DeptRoleRelDao<'a> {
 }
 
 impl<'a> DeptRoleRelDao<'a> {
+    pub fn new(db: &'a dyn DbRepo) -> Self {
+        DeptRoleRelDao { db }
+    }
     /// 获取数据列表
     pub async fn list(
         &self,
@@ -33,7 +36,7 @@ impl<'a> DeptRoleRelDao<'a> {
                 query.filter(perm_dept_role_rel::Column::CreatedAt.lt(v))
             })
             .apply_if(req.dept_id, |query, v| {
-                query.filter(perm_dept_role_rel::Column::DeptId.like(format!("%{v}%")))
+                query.filter(perm_dept_role_rel::Column::DeptId.eq(v))
             });
 
         let total = states.clone().count(self.db.rdb()).await?;

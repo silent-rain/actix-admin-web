@@ -4,8 +4,6 @@ pub mod prelude;
 
 pub mod app_template;
 
-pub mod api_auth;
-pub mod api_role_rel;
 pub mod log_api_operation;
 pub mod log_system;
 pub mod log_user_login;
@@ -14,14 +12,17 @@ pub mod perm_dept;
 pub mod perm_dept_role_rel;
 pub mod perm_menu;
 pub mod perm_menu_role_rel;
+pub mod perm_open_api;
+pub mod perm_open_api_role_rel;
 pub mod perm_role;
 pub mod perm_user;
 pub mod perm_user_role_rel;
 pub mod perm_user_token;
+pub mod perm_user_token_role_rel;
 pub mod schedule_job;
 pub mod schedule_job_log;
 pub mod sys_captcha;
 pub mod sys_config;
 pub mod sys_dict_data;
 pub mod sys_dict_dim;
-pub mod sys_icon;
+pub mod sys_image;

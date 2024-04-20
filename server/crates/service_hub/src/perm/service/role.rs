@@ -60,7 +60,7 @@ impl<'a> RoleService<'a> {
 
     /// 添加数据
     pub async fn add(&self, req: AddRoleReq) -> Result<perm_role::Model, ErrorMsg> {
-        // 查询角色是否存在
+        // 查询角色是否已存在
         let role = self
             .role_dao
             .info_by_name(req.name.clone())
@@ -96,7 +96,7 @@ impl<'a> RoleService<'a> {
             name: Set(req.name),
             sort: Set(req.sort),
             note: Set(req.note),
-            status: Set(req.status),
+            status: Set(req.status as i8),
             ..Default::default()
         };
 
@@ -132,19 +132,5 @@ impl<'a> RoleService<'a> {
         })?;
 
         Ok(result)
-    }
-}
-
-#[cfg(test)]
-mod tests {
-
-    #[test]
-    fn test_if_option() {
-        let some_option = Some(true);
-        if let Some(true) = some_option {
-            println!("The option is true!");
-        } else {
-            println!("The option is not true!");
-        }
     }
 }

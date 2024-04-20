@@ -67,7 +67,7 @@ impl<'a> ApiOperationService<'a> {
             remote_addr: Set(req.remote_addr),
             user_agent: Set(req.user_agent),
             cost: Set(req.cost),
-            http_type: Set(req.http_type),
+            http_type: Set(req.http_type.into()),
             note: Set(req.note),
             ..Default::default()
         };

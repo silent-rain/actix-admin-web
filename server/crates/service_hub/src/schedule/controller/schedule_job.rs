@@ -79,7 +79,9 @@ impl ScheduleJobController {
         data: Json<UpdatecheduleJobStatusReq>,
     ) -> impl Responder {
         let schedule_job_service: ScheduleJobService = provider.provide();
-        let resp = schedule_job_service.status(*id, data.status).await;
+        let resp = schedule_job_service
+            .status(*id, data.status.clone() as i8)
+            .await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

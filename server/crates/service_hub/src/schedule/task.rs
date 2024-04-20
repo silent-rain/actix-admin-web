@@ -1,13 +1,12 @@
 //! 定时任务管理
 use std::time::Duration;
 
-use chrono::TimeZone;
-use tokio_cron_scheduler::{Job, JobBuilder, JobScheduler, JobSchedulerError};
+use tokio_cron_scheduler::{Job, JobScheduler, JobSchedulerError};
 
 // interval
 // expression
 
-async fn demo() -> Result<(), JobSchedulerError> {
+pub async fn demo() -> Result<(), JobSchedulerError> {
     let mut sched = JobScheduler::new().await?;
 
     // 添加基本cron作业
@@ -106,14 +105,4 @@ async fn demo() -> Result<(), JobSchedulerError> {
     // tokio::time::sleep(Duration::from_secs(100)).await;
 
     Ok(())
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[tokio::test]
-    async fn test_log() {
-        demo().await;
-    }
 }

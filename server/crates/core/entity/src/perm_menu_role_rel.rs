@@ -13,10 +13,10 @@ pub struct Model {
     /// 自增ID
     #[sea_orm(primary_key)]
     pub id: i32,
-    /// 角色ID
-    pub role_id: i32,
     /// 菜单ID
     pub menu_id: i32,
+    /// 角色ID
+    pub role_id: i32,
     /// 创建时间
     pub created_at: DateTimeLocal,
 }

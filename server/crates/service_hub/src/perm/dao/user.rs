@@ -42,7 +42,7 @@ impl<'a> UserDao<'a> {
                 query.filter(perm_user::Column::CreatedAt.lt(v))
             })
             .apply_if(req.username, |query, v| {
-                query.filter(perm_user::Column::Username.like(format!("%{v}%")))
+                query.filter(perm_user::Column::Username.like(format!("{v}%")))
             });
 
         let total = states.clone().count(self.db.rdb()).await?;
@@ -302,7 +302,7 @@ mod tests {
             .build(DbBackend::Postgres)
             .to_string();
 
-        let sql = r#"SELECT "perm_role"."id" FROM "perm_role" INNER JOIN "perm_user_role_rel" ON "perm_user_role_rel"."role_id" = "perm_role"."id" WHERE "perm_user_role_rel"."user_id" = 10 ORDER BY "perm_user"."id" ASC"#;
+        let sql = r#"SELECT "t_perm_role"."id" FROM "t_perm_role" INNER JOIN "t_perm_user_role_rel" ON "t_perm_user_role_rel"."role_id" = "t_perm_role"."id" WHERE "t_perm_user_role_rel"."user_id" = 10 ORDER BY "t_perm_user"."id" ASC"#;
         assert_eq!(result, sql);
     }
 }

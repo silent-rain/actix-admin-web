@@ -1,8 +1,8 @@
-//! 用户Token令牌表
+//! 用户Token令牌表, 一般openapi服务
 
 use sea_orm::{
     prelude::DateTimeLocal, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey,
-    DeriveRelation, EntityTrait, EnumIter, PrimaryKeyTrait,
+    DeriveRelation, EntityTrait, EnumIter, PrimaryKeyTrait, Related, RelationDef, RelationTrait,
 };
 use serde::{Deserialize, Serialize};
 
@@ -19,8 +19,10 @@ pub struct Model {
     pub token: String,
     /// 口令
     pub passphrase: String,
+    /// 权限范围:GET,POST,PUT,DELETE
+    pub permission: String,
     /// 授权到期时间
-    pub expire: i32,
+    pub expire: DateTimeLocal,
     /// 状态,0:禁用,1:启用
     pub status: i8,
     /// 备注
@@ -32,6 +34,15 @@ pub struct Model {
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
-pub enum Relation {}
+pub enum Relation {
+    #[sea_orm(has_many = "super::perm_user_token_role_rel::Entity")]
+    PermUserTokenRoleRel,
+}
+
+impl Related<super::perm_user_token_role_rel::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::PermUserTokenRoleRel.def()
+    }
+}
 
 impl ActiveModelBehavior for ActiveModel {}

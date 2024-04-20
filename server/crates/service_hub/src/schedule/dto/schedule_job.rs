@@ -1,5 +1,7 @@
 //! 定时任务管理
 
+use crate::schedule::enums::{ScheduleJobSource, ScheduleJobStatus, ScheduleJobType};
+
 use actix_validator::Validate;
 
 use serde::{Deserialize, Serialize};
@@ -29,11 +31,9 @@ pub struct AddcheduleJobReq {
     /// 任务名称
     pub name: String,
     /// 任务来源,0:系统内部,1:用户定义
-    /// Enum: [`crate::schedule::enums::ScheduleJobSource`]
-    pub source: i8,
+    pub source: ScheduleJobSource,
     /// 任务类型,0:定时任务,1:即时任务
-    /// Enum: [`crate::schedule::enums::ScheduleJobType`]
-    pub job_type: i8,
+    pub job_type: ScheduleJobType,
     /// cron表达式
     pub expression: Option<String>,
     /// 间隔时间,秒
@@ -41,8 +41,7 @@ pub struct AddcheduleJobReq {
     /// 备注
     pub note: Option<String>,
     /// 状态,0:停用,1:正常
-    /// Enum: [`crate::schedule::enums::ScheduleJobStatus`]
-    pub status: i8,
+    pub status: ScheduleJobStatus,
 }
 
 /// 更新数据 请求体
@@ -51,11 +50,9 @@ pub struct UpdatecheduleJobReq {
     /// 任务名称
     pub name: String,
     /// 任务来源,0:系统内部,1:用户定义
-    /// Enum: [`crate::schedule::enums::ScheduleJobSource`]
-    pub source: i8,
+    pub source: ScheduleJobSource,
     /// 任务类型,0:定时任务,1:即时任务
-    /// Enum: [`crate::schedule::enums::ScheduleJobType`]
-    pub job_type: i8,
+    pub job_type: ScheduleJobType,
     /// cron表达式
     pub expression: Option<String>,
     /// 间隔时间,秒
@@ -63,14 +60,12 @@ pub struct UpdatecheduleJobReq {
     /// 备注
     pub note: Option<String>,
     /// 状态,0:停用,1:正常
-    /// Enum: [`crate::schedule::enums::ScheduleJobStatus`]
-    pub status: i8,
+    pub status: ScheduleJobStatus,
 }
 
 /// 更新数据状态
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
 pub struct UpdatecheduleJobStatusReq {
     /// 状态,0:停用,1:正常
-    /// Enum: [`crate::schedule::enums::ScheduleJobStatus`]
-    pub status: i8,
+    pub status: ScheduleJobStatus,
 }

@@ -1,9 +1,11 @@
 //! 枚举
 
 use serde::{Deserialize, Serialize};
+use serde_repr::{Deserialize_repr, Serialize_repr};
 
 /// 用户登陆状态
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
+#[repr(i8)]
 pub enum UserLoginStatus {
     /// 失败
     Failed = 0,
@@ -12,7 +14,8 @@ pub enum UserLoginStatus {
 }
 
 /// 用户登陆禁用状态
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
+#[repr(i8)]
 pub enum UserLoginDisabledStatus {
     /// 停用
     Disabled = 0,

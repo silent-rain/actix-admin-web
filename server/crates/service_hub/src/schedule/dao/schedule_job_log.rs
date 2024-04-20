@@ -37,7 +37,7 @@ impl<'a> ScheduleJobLogDao<'a> {
                 query.filter(schedule_job_log::Column::JobId.eq(v))
             })
             .apply_if(req.job_name, |query, v| {
-                query.filter(schedule_job_log::Column::JobName.like(format!("%{v}%")))
+                query.filter(schedule_job_log::Column::JobName.like(format!("{v}%")))
             });
 
         let total = states.clone().count(self.db.rdb()).await?;

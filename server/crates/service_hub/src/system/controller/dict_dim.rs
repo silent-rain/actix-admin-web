@@ -76,7 +76,9 @@ impl DictDimController {
         data: Json<UpdateDictDimStatusReq>,
     ) -> impl Responder {
         let dict_dim_service: DictDimService = provider.provide();
-        let resp = dict_dim_service.status(*id, data.status).await;
+        let resp = dict_dim_service
+            .status(*id, data.status.clone() as i8)
+            .await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
