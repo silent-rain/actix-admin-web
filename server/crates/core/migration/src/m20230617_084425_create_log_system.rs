@@ -53,7 +53,7 @@ impl MigrationTrait for Migration {
                             .comment("日志记录器名称"),
                     )
                     .col(
-                        ColumnDef::new(Column::ParentSpanId)
+                        ColumnDef::new(Column::SpanPid)
                             .integer()
                             .null()
                             .default(0)

@@ -70,10 +70,10 @@ where
 
         // 输出日志
         let span_id = Some(id.into_u64());
+        let span_pid = span.parent().map(|v| v.id().into_u64());
         let metadata = span.metadata();
-        let parent_id = span.parent().map(|v| v.id().into_u64());
 
-        let output = self.get_output_log(parent_id, span_id, metadata, &fields, "new_span");
+        let output = self.get_output_log(span_pid, span_id, metadata, &fields, "new_span");
 
         self.emit(output);
     }
@@ -103,10 +103,10 @@ where
 
         // 输出日志
         let span_id = Some(id.into_u64());
+        let span_pid = span.parent().map(|v| v.id().into_u64());
         let metadata = span.metadata();
-        let parent_id = span.parent().map(|v| v.id().into_u64());
 
-        let output = self.get_output_log(parent_id, span_id, metadata, fields, "record");
+        let output = self.get_output_log(span_pid, span_id, metadata, fields, "record");
 
         self.emit(output);
     }
@@ -128,10 +128,10 @@ where
         event.record(&mut visitor);
 
         // 输出日志
+        let span_pid = event.parent().map(|v| v.into_u64());
         let metadata = event.metadata();
-        let parent_id = event.parent().map(|v| v.into_u64());
 
-        let output = self.get_output_log(parent_id, None, metadata, &fields, "event");
+        let output = self.get_output_log(span_pid, None, metadata, &fields, "event");
 
         self.emit(output);
     }
@@ -151,15 +151,10 @@ where
 
         // 输出日志
         let span_id = Some(id.into_u64());
+        let span_pid = span.parent().map(|v| v.id().into_u64());
         let metadata = span.metadata();
-        let parent_id = span.parent().map(|v| v.id().into_u64());
 
-        // 日志级别过滤
-        if self.filter_level(metadata.level()) {
-            return;
-        }
-
-        let output = self.get_output_log(parent_id, span_id, metadata, fields, "enter");
+        let output = self.get_output_log(span_pid, span_id, metadata, fields, "enter");
 
         self.emit(output);
     }
@@ -186,11 +181,6 @@ where
         let span_id = Some(id.into_u64());
         let metadata = span.metadata();
         let parent_id = span.parent().map(|v| v.id().into_u64());
-
-        // 日志级别过滤
-        if self.filter_level(metadata.level()) {
-            return;
-        }
 
         let output = self.get_output_log(parent_id, span_id, metadata, fields, "exit");
         self.emit(output);
@@ -288,6 +278,7 @@ impl JsonLayer {
             || target == "sea_orm::driver::sqlx_sqlite"
             || target == "sea_orm::driver::sqlx_mysql"
             || target == "sea_orm::database::db_connection"
+            || target == "tracing_actix_web::root_span_builder"
         // || target == "actix_server::worker"
         {
             return true;
@@ -298,7 +289,7 @@ impl JsonLayer {
     /// 获取输出日志
     fn get_output_log(
         &self,
-        parent_span_id: Option<u64>,
+        span_pid: Option<u64>,
         span_id: Option<u64>,
         metadata: &Metadata,
         fields: &BTreeMap<String, Value>,
@@ -330,7 +321,7 @@ impl JsonLayer {
         let output = Model {
             // user_id: todo!(),
             // username: todo!(),
-            parent_span_id: parent_span_id.map(|v| v as u32),
+            span_pid: span_pid.map(|v| v as u32),
             span_id: span_id.map(|v| v as u32),
             name: self.name.to_owned(),
             module_path: metadata.module_path().map(|v| v.to_string()),

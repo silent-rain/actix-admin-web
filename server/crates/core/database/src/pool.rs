@@ -43,7 +43,7 @@ impl Pool {
     /// 6. max_lifetime: 设置连接的最大生命周期（以秒为单位）。即使连接仍在使用中，超过这个时间后，它也会被关闭并从连接池中移除。
     /// 7. sqlx_logging: 启用或禁用 SQLx 日志记录。SQLx 是 SeaORM 底层使用的数据库驱动，这个选项控制是否记录 SQLx 的日志信息。
     /// 8. sqlx_logging_level: 设置 SQLx 日志记录的级别。这个选项决定了记录哪些级别的日志信息，例如错误、警告、信息或调试信息。
-    /// 
+    ///
     /// 查看最大连接数：
     /// ```sql
     /// SHOW VARIABLES LIKE 'max_connections';

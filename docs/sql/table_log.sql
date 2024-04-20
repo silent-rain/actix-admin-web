@@ -48,7 +48,7 @@ CREATE TABLE
         `user_id` INT(20) NULL DEFAULT 0 COMMENT '请求用户ID',
         `username` VARCHAR(32) NULL DEFAULT '' COMMENT '用户名称',
         `name` VARCHAR(50) NOT NULL COMMENT '日志记录器名称',
-        `parent_span_id` INT(20) NULL DEFAULT 0 COMMENT 'Parent Span Id',
+        `span_pid` INT(20) NULL DEFAULT 0 COMMENT 'Span Parent Id',
         `span_id` INT(20) NULL DEFAULT 0 COMMENT 'Span Id',
         `module_path` VARCHAR(100) NULL DEFAULT '' COMMENT '模块路径',
         `target` VARCHAR(100) NULL DEFAULT '' COMMENT '描述发生此元数据所描述的跨度或事件的系统部分',

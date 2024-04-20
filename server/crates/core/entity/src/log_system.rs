@@ -24,7 +24,7 @@ pub struct Model {
     pub name: String,
     /// Parent Span Id
     #[serde(default)]
-    pub parent_span_id: Option<u32>,
+    pub span_pid: Option<u32>,
     /// Span Id
     #[serde(default)]
     pub span_id: Option<u32>,
