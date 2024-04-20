@@ -14,7 +14,7 @@ use service_hub::inject::InjectProvider;
 
 use colored::Colorize;
 use dotenv::dotenv;
-use tracing::warn;
+use tracing::{info, warn};
 
 /// 程序入口
 #[actix_web::main]
@@ -69,9 +69,11 @@ async fn main() -> std::io::Result<()> {
     if let Err(e) = server::start(app_state, asset_state, provider, conf).await {
         panic!("server start faild. err: {e}");
     }
+    info!("close service...");
 
     // 关闭数据库
     let _ = db.close().await;
+    info!("close database...");
 
     warn!("{}", "See you again~".yellow());
     Ok(())

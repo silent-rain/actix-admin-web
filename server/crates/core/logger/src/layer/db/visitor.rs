@@ -34,6 +34,15 @@ impl Storage {
     fn add_code(&mut self, code: &code::Error) {
         self.code = Some(code.code());
         self.code_msg = Some(code.msg());
+
+        self.add_filed(StorageFiled {
+            name: "code".to_owned(),
+            value: sea_orm::JsonValue::String(code.code().to_string()),
+        });
+        self.add_filed(StorageFiled {
+            name: "code_msg".to_owned(),
+            value: sea_orm::JsonValue::String(code.msg()),
+        });
     }
 
     pub fn fileds_to_string(&self) -> Option<String> {
@@ -128,7 +137,6 @@ impl tracing::field::Visit for StorageVisitor {
         field: &tracing::field::Field,
         value: &(dyn std::error::Error + 'static),
     ) {
-        // TODO 待完善，指定存储字段
         if let Some(err) = value.downcast_ref::<code::Error>() {
             self.storage.add_code(err);
             return;

@@ -14,7 +14,7 @@ use tokio::sync::{
     Mutex,
 };
 
-use tracing::Metadata;
+use tracing::{info, Metadata};
 use tracing_error::SpanTraceStatus;
 
 pub struct DbWriter {
@@ -65,6 +65,7 @@ impl DbWriter {
             rt.block_on(async move {
                 tx.closed().await;
                 _ = db.close().await;
+                info!("close database log channel");
             })
         })
         .join()
