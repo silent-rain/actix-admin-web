@@ -38,12 +38,12 @@ const WHITE_LIST: [&str; 4] = [
 
 /// 接口鉴权
 #[derive(Default)]
-pub struct Auth {}
+pub struct SystemAuth {}
 
 // Middleware factory is `Transform` trait
 // `S` - type of the next service
 // `B` - type of response's body
-impl<S, B> Transform<S, ServiceRequest> for Auth
+impl<S, B> Transform<S, ServiceRequest> for SystemAuth
 where
     S: Service<ServiceRequest, Response = ServiceResponse<B>, Error = Error>,
     S::Future: 'static,
@@ -52,19 +52,19 @@ where
     type Response = ServiceResponse<B>;
     type Error = Error;
     type InitError = ();
-    type Transform = AuthMiddleware<S>;
+    type Transform = SystemAuthService<S>;
     type Future = Ready<Result<Self::Transform, Self::InitError>>;
 
     fn new_transform(&self, service: S) -> Self::Future {
-        ready(Ok(AuthMiddleware { service }))
+        ready(Ok(SystemAuthService { service }))
     }
 }
 
-pub struct AuthMiddleware<S> {
+pub struct SystemAuthService<S> {
     service: S,
 }
 
-impl<S, B> Service<ServiceRequest> for AuthMiddleware<S>
+impl<S, B> Service<ServiceRequest> for SystemAuthService<S>
 where
     S: Service<ServiceRequest, Response = ServiceResponse<B>, Error = Error>,
     S::Future: 'static,
@@ -89,9 +89,8 @@ where
 
         let inner_req = req.request();
 
-        let openapi_token = Self::get_openapi_token(inner_req.clone());
         // 存在 Openapi key 时, 则直接通过
-        if openapi_token.is_ok() {
+        if req.headers().get(HEADERS_OPEN_API_AUTHORIZATION).is_some() {
             let fut = self.service.call(req);
             return Box::pin(async move {
                 let resp = fut.await?;
@@ -99,15 +98,13 @@ where
             });
         }
 
-        // TODO API 鉴权
-
         // 获取系统鉴权标识Token
         let system_token = match Self::get_system_token(inner_req.clone()) {
             Ok(v) => v,
             Err(err) => {
                 return Box::pin(async move {
                     error!("获取系统鉴权标识 Token 失败");
-                    Err(Response::code(err).into())
+                    Err(Response::err(err).into())
                 })
             }
         };
@@ -147,7 +144,6 @@ where
                 return Err(Response::err(err).into());
             }
 
-            // TODO 待完善
             // 验证当前登陆的用户是否被禁用
             if let Err(err) = Self::verify_user_login_disabled(provider, system_token).await {
                 return Err(Response::err(err).into());
@@ -159,7 +155,7 @@ where
     }
 }
 
-impl<S> AuthMiddleware<S> {
+impl<S> SystemAuthService<S> {
     /// 检查系统鉴权
     fn check_system_auth(token: String) -> Result<(i32, String), code::Error> {
         // 解码 Token
@@ -169,21 +165,25 @@ impl<S> AuthMiddleware<S> {
     }
 
     /// 获取系统鉴权标识Token
-    fn get_system_token(req: HttpRequest) -> Result<String, code::Error> {
+    fn get_system_token(req: HttpRequest) -> Result<String, code::ErrorMsg> {
         let authorization = req
             .headers()
             .get(HEADERS_AUTHORIZATION)
             .map_or("", |v| v.to_str().map_or("", |v| v));
 
         if authorization.is_empty() {
-            error!("用户请求标识未空, 非法请求");
-            return Err(code::Error::HeadersNotAuthorization);
+            error!("鉴权标识为空");
+            return Err(code::Error::HeadersNotAuthorization
+                .into_msg()
+                .with_msg("鉴权标识为空"));
         }
         if !authorization.starts_with(HEADERS_AUTHORIZATION_BEARER) {
             error!(
                 "用户请求参数缺失 {HEADERS_AUTHORIZATION_BEARER}, 非法请求, authorization: {authorization}"
             );
-            return Err(code::Error::HeadersNotAuthorizationBearer);
+            return Err(code::Error::HeadersNotAuthorizationBearer
+                .into_msg()
+                .with_msg("非法请求"));
         }
 
         let token = authorization.replace(HEADERS_AUTHORIZATION_BEARER, "");
@@ -202,7 +202,7 @@ impl<S> AuthMiddleware<S> {
             error!("user_id: {}, 用户已被禁用", user.id);
             return Err(code::Error::LoginStatusDisabled
                 .into_msg()
-                .with_msg("当前登陆态已失效, 请重新登陆"));
+                .with_msg("用户已被禁用"));
         }
         Ok(())
     }
@@ -222,20 +222,5 @@ impl<S> AuthMiddleware<S> {
                 .with_msg("当前登陆态已被禁用, 请重新登陆"));
         }
         Ok(())
-    }
-
-    /// 获取OPEN API鉴权标识Token
-    fn get_openapi_token(req: HttpRequest) -> Result<String, code::ErrorMsg> {
-        let open_api_authorization = req
-            .headers()
-            .get(HEADERS_OPEN_API_AUTHORIZATION)
-            .map_or("default", |v| v.to_str().map_or("", |v| v));
-
-        if !open_api_authorization.is_empty() {
-            return Err(code::Error::HeadersNotAuthorization
-                .into_msg()
-                .with_msg("非法请求"));
-        }
-        Ok(open_api_authorization.to_string())
     }
 }
