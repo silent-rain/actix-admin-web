@@ -17,6 +17,8 @@ pub struct Storage {
     fileds: Vec<String>,
     metadata: BTreeMap<String, Value>,
     message: String,
+    code: Option<u16>,
+    code_msg: Option<String>,
 }
 
 impl Storage {
@@ -29,6 +31,11 @@ impl Storage {
         }
     }
 
+    fn add_code(&mut self, code: &code::Error) {
+        self.code = Some(code.code());
+        self.code_msg = Some(code.msg());
+    }
+
     pub fn fileds_to_string(&self) -> Option<String> {
         serde_json::to_string(&self.fileds).ok()
     }
@@ -39,6 +46,12 @@ impl Storage {
 
     pub fn message(&self) -> String {
         self.message.clone()
+    }
+    pub fn code(&self) -> Option<u16> {
+        self.code
+    }
+    pub fn code_msg(&self) -> Option<String> {
+        self.code_msg.clone()
     }
 }
 
@@ -116,13 +129,10 @@ impl tracing::field::Visit for StorageVisitor {
         value: &(dyn std::error::Error + 'static),
     ) {
         // TODO 待完善，指定存储字段
-        // if let Some(v) = value.downcast_ref::<code::Error>() {
-        //     self.0
-        //         .insert("code".to_string(), serde_json::json!(v.code()));
-        //     self.0
-        //         .insert("code_msg".to_string(), serde_json::json!(v.msg()));
-        //     return;
-        // }
+        if let Some(err) = value.downcast_ref::<code::Error>() {
+            self.storage.add_code(err);
+            return;
+        }
 
         self.storage.add_filed(StorageFiled {
             name: field.name().to_string(),

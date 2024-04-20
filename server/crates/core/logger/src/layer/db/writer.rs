@@ -78,13 +78,16 @@ impl DbWriter {
         let max_level: tracing::Level = self.config.level.clone().into();
         max_level.lt(level)
     }
+
     /// 过滤target日志数据
+    ///
+    /// 当日志数据库分离后, 将不会再次产生循环日志，因此可进行选择性的忽略日志
     fn filter_target(&self, target: &str) -> bool {
-        if target == "sqlx::query"
+        if target == "tracing_actix_web::root_span_builder"
+            // || target == "sqlx::query"
             || target == "sea_orm::driver::sqlx_sqlite"
             || target == "sea_orm::driver::sqlx_mysql"
             || target == "sea_orm::database::db_connection"
-            || target == "tracing_actix_web::root_span_builder"
         // || target == "actix_server::worker"
         {
             return true;
@@ -134,8 +137,8 @@ impl DbWriter {
             field_data: storage.metadata_to_string(),
             message: Some(storage.message()),
             stack,
-            // code: todo!(),
-            // code_msg: todo!(),
+            code: storage.code().map(|v| v as i32),
+            code_msg: storage.code_msg(),
             created_at: Some(Local::now()),
             ..Default::default()
         };
