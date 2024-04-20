@@ -82,11 +82,10 @@ impl<'a> ImageService<'a> {
         let img_type = form
             .file
             .content_type
-            .and_then(|m| m.suffix().map(|v| v.to_string()))
             .map_or("".to_owned(), |v| v.to_string());
         let base_img = form.file.file.bytes().map(|v| v.unwrap()).collect();
         let img_size = form.file.size as i32;
-        let hash_name = Uuid::new_v4().to_string();
+        let hash_name = Uuid::new_v4().to_string().replace('-', "");
 
         let model = sys_image::ActiveModel {
             name: Set(name),
@@ -110,13 +109,10 @@ impl<'a> ImageService<'a> {
         let mut models = Vec::new();
         for file in form.files {
             let name = file.file_name.map_or("".to_owned(), |v| v);
-            let img_type = file
-                .content_type
-                .and_then(|m| m.suffix().map(|v| v.to_string()))
-                .map_or("".to_owned(), |v| v.to_string());
+            let img_type = file.content_type.map_or("".to_owned(), |v| v.to_string());
             let base_img = file.file.bytes().map(|v| v.unwrap()).collect();
             let img_size = file.size as i32;
-            let hash_name = Uuid::new_v4().to_string();
+            let hash_name = Uuid::new_v4().to_string().replace('-', "");
 
             let model = sys_image::ActiveModel {
                 name: Set(name),

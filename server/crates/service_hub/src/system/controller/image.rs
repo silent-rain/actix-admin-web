@@ -1,6 +1,7 @@
 //! 图片
 
 use crate::{
+    constant::HEADERS_X_IMG,
     inject::AInjectProvider,
     system::{
         dto::image::{
@@ -42,13 +43,14 @@ impl ImageController {
         let resp = icon_service.info(*id).await;
         match resp {
             Ok(v) => HttpResponse::Ok()
-                .insert_header(("Content-Type", v.img_type))
-                .body(v.base_img),
+                .insert_header((HEADERS_X_IMG, "true"))
+                .content_type(v.img_type)
+                .body(v.base_img.to_vec()),
             Err(_err) => HttpResponse::BadRequest().finish(),
         }
     }
 
-    /// 通过hash值获取详情数据
+    /// 通过hash值获取图片
     pub async fn info_by_hash(
         provider: Data<AInjectProvider>,
         hash: Path<String>,
@@ -57,8 +59,9 @@ impl ImageController {
         let resp = icon_service.info_by_hash(hash.to_string()).await;
         match resp {
             Ok(v) => HttpResponse::Ok()
-                .insert_header(("Content-Type", v.img_type))
-                .body(v.base_img),
+                .insert_header((HEADERS_X_IMG, "true"))
+                .content_type(v.img_type)
+                .body(v.base_img.to_vec()),
             Err(_err) => HttpResponse::BadRequest().finish(),
         }
     }
@@ -71,7 +74,7 @@ impl ImageController {
         let icon_service: ImageService = provider.provide();
         let resp = icon_service.upload_file(form).await;
         match resp {
-            Ok(v) => Response::ok().data(v),
+            Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
         }
     }

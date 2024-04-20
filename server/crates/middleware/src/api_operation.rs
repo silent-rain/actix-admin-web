@@ -7,6 +7,7 @@ use std::{
 
 use code::ErrorMsg;
 use service_hub::{
+    constant::HEADERS_X_IMG,
     inject::AInjectProvider,
     log::{dto::api_operation::AddApiOperationReq, enums::HttpType, ApiOperationService},
 };
@@ -81,18 +82,20 @@ where
 
         // 解析请求信息
         let mut data = Self::parse_req(inner_req);
-
+        let content_type = req.content_type().to_uppercase();
         Box::pin(async move {
-            // EXTRACT THE BODY OF REQUES
             let mut request_body = BytesMut::new();
-            while let Some(chunk) = req.take_payload().next().await {
-                request_body.extend_from_slice(&chunk?);
-            }
+            if content_type != "multipart/form-data".to_uppercase() {
+                // EXTRACT THE BODY OF REQUES
+                while let Some(chunk) = req.take_payload().next().await {
+                    request_body.extend_from_slice(&chunk?);
+                }
 
-            // 重新设置body
-            let (_, mut orig_payload) = Payload::create(true);
-            orig_payload.unread_data(request_body.clone().freeze());
-            req.set_payload(actix_http::Payload::from(orig_payload));
+                // 重新设置body
+                let (_, mut orig_payload) = Payload::create(true);
+                orig_payload.unread_data(request_body.clone().freeze());
+                req.set_payload(actix_http::Payload::from(orig_payload));
+            }
 
             // 添加请求操作日志
             data.cost = start_time.elapsed().as_millis() as f64;
@@ -104,21 +107,32 @@ where
             }
 
             // 响应
-            let fut = service.call(req).await?;
-            let (resp, body) = Self::response_manipulate_body(fut).await;
+            let mut fut = service.call(req).await?;
+            let mut body = "".to_owned();
+            // 图片body数据不入库
+            if fut
+                .response_mut()
+                .headers_mut()
+                .get(HEADERS_X_IMG)
+                .is_some()
+            {
+                fut.response_mut().headers_mut().remove(HEADERS_X_IMG);
+            } else {
+                (fut, body) = Self::response_manipulate_body(fut).await;
+            }
 
             // 添加响应操作日志
             data.cost = start_time.elapsed().as_millis() as f64;
             data.http_type = HttpType::Rsp;
             // TODO 添加字符限制, 如果太大则进行省略
             data.body = Some(body);
-            data.status_code = resp.status().as_u16() as i32;
+            data.status_code = fut.status().as_u16() as i32;
 
             if let Err(err) = Self::add_api_operation_log(provider.clone(), data).await {
                 return Err(Response::err(err).into());
             }
 
-            Ok(resp)
+            Ok(fut)
         })
     }
 }
@@ -156,7 +170,7 @@ impl<S> ApiOperationMiddlewareService<S> {
         let (req, res) = res.into_parts();
 
         let (res, body) = res.into_parts();
-
+        // TODO body 最大值限制, 防止日志刺穿
         let body_bytes = to_bytes(body).await.unwrap();
         let body = String::from_utf8_lossy(&body_bytes).to_string();
 

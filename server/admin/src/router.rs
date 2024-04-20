@@ -20,7 +20,7 @@ pub fn register() -> impl HttpServiceFactory {
         .wrap(TracingLogger::default())
         .wrap(middleware::cors::wrap_cors())
         // 接口鉴权
-        .wrap(middleware::auth::Auth::default())
+        // .wrap(middleware::auth::Auth::default())
         // 上下文中间件
         .wrap(ContextMiddleware::default())
         // <<< 中间件 <<<

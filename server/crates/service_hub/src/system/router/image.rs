@@ -14,9 +14,9 @@ impl ImageRouter {
             .route("", web::get().to(ImageController::list))
             .route("/{id}", web::get().to(ImageController::info))
             .route("/img/{hash}", web::get().to(ImageController::info_by_hash))
-            .route("/upload", web::get().to(ImageController::upload_file))
-            .route("/uploads", web::get().to(ImageController::upload_files))
-            .route("", web::put().to(ImageController::update))
+            .route("/upload", web::post().to(ImageController::upload_file))
+            .route("/uploads", web::post().to(ImageController::upload_files))
+            .route("/{id}", web::put().to(ImageController::update))
             .route("/batch", web::delete().to(ImageController::batch_delete))
             .route("/{id}", web::delete().to(ImageController::delete))
     }
