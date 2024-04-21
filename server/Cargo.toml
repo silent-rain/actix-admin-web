@@ -13,6 +13,7 @@ members = [
     "crates/core/actix_validator",
     "crates/core/utils",
     "crates/core/jwt",
+    "crates/core/scheduler",
 
     # 中间件
     "crates/middleware",

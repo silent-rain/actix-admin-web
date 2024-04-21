@@ -134,6 +134,11 @@ pub enum Error {
     #[error("写入文件失败, {0}")]
     FsWriterFileError(String) = 10306,
 
+    #[error("{0}")]
+    SchedulerInitError(String) = 10401,
+    #[error("获取实例错误")]
+    SchedulerInstanceError = 10402,
+
     // 内部框架错误
     #[error("日志初始化失败, {0}")]
     LoggerInitError(String) = 10351,
