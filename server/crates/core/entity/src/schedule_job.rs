@@ -25,7 +25,7 @@ pub struct Model {
     pub interval: Option<i32>,
     /// 备注
     pub note: Option<String>,
-    /// 任务状态,0:暂停,1:正常
+    /// 任务状态,0:下线,1:上线
     pub status: i8,
     /// 创建时间
     pub created_at: DateTimeLocal,

@@ -15,13 +15,11 @@ pub struct Model {
     pub id: i32,
     /// 任务ID
     pub job_id: i32,
-    /// 任务名称
-    pub job_name: String,
     /// 失败信息
     pub error: Option<String>,
     /// 耗时(单位：毫秒)
-    pub cost: f64,
-    /// 任务状态,0:失败,1:成功'
+    pub cost: i64,
+    /// 任务状态,0:待执行,1:运行中,2:成功,3:失败,4:移除
     pub status: i8,
     /// 创建时间
     pub created_at: DateTimeLocal,

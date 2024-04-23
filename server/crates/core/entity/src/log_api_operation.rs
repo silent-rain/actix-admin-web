@@ -34,7 +34,7 @@ pub struct Model {
     pub remote_addr: String,
     /// 用户代理
     pub user_agent: String,
-    /// 耗时,纳秒
+    /// 耗时,毫秒
     pub cost: f64,
     /// 请求类型:REQ/RSP
     pub http_type: String,

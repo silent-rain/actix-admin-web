@@ -1,7 +1,9 @@
 //! 定时任务调度
-use std::sync::OnceLock;
+use std::{future::Future, pin::Pin, sync::OnceLock};
 
 use crate::job::XJob;
+
+use database::DbRepo;
 
 use tokio_cron_scheduler::{JobScheduler, JobSchedulerError};
 use tracing::info;
@@ -35,7 +37,17 @@ impl XJobScheduler {
     }
 
     /// 将job添加到定时器中
-    pub async fn add_job(&self, mut xjob: XJob) -> Result<Uuid, JobSchedulerError> {
+    pub async fn add_job<JobRun, DB>(
+        &self,
+        mut xjob: XJob<JobRun, DB>,
+    ) -> Result<Uuid, JobSchedulerError>
+    where
+        JobRun: FnMut(Uuid, JobScheduler) -> Pin<Box<dyn Future<Output = ()> + Send>>
+            + Send
+            + Sync
+            + 'static,
+        DB: DbRepo + Send + Sync + 'static,
+    {
         xjob.set_job_notification(self.sched.clone()).await?;
         self.sched.add(xjob.job()).await
     }

@@ -8,11 +8,14 @@ edition = "2021"
 [dependencies]
 code = { path = "../code" }
 logger = { path = "../logger" }
+entity = { path = "../entity" }
+database = { path = "../database" }
 
 uuid = { workspace = true }
 chrono = { workspace = true }
 tokio-cron-scheduler = { workspace = true }
 tracing = { workspace = true }
+sea-orm = { workspace = true }
 
 [dev-dependencies]
 tokio = { workspace = true, features = [

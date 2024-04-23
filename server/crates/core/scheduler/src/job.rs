@@ -1,61 +1,112 @@
 //! 作业
-use std::time::Duration;
+//! ```rust,ignore
+//! |_uuid: Uuid, _jobs: JobScheduler| -> Pin<Box<dyn Future<Output = ()> + Send>> + 'static {
+//!     Box::pin(async move {})
+//! }
+//! ```
+use std::{
+    future::Future,
+    marker::PhantomData,
+    pin::Pin,
+    sync::{
+        atomic::{
+            AtomicI64,
+            Ordering::{self, SeqCst},
+        },
+        Arc,
+    },
+    time::Duration,
+};
+
+use crate::{dao::Dao, enums::ScheduleJobLogStatus};
+
+use database::DbRepo;
+use entity::schedule_job_log;
 
 use chrono::Local;
+use sea_orm::Set;
 use tokio_cron_scheduler::{Job, JobBuilder, JobScheduler, JobSchedulerError};
+use tracing::{error, trace};
 use uuid::Uuid;
 
-pub struct XJob {
+#[derive(Clone)]
+pub struct XJob<JobRun, DB>
+where
+    JobRun: FnMut(Uuid, JobScheduler) -> Pin<Box<dyn Future<Output = ()> + Send>>
+        + Send
+        + Sync
+        + 'static,
+    DB: DbRepo + Send + Sync + 'static,
+{
+    id: i32,
     job: Job,
+    dao: Arc<Dao<DB>>,
+    start_time: Arc<AtomicI64>,
+    job_run: PhantomData<JobRun>,
 }
 
-impl XJob {
-    /// 添加定时任务作业
-    pub fn cron_job(schedule: &str) -> Result<Self, JobSchedulerError> {
-        let job = Job::new_async_tz(schedule, Local, |uuid, mut _jl| {
-            Box::pin(async move {
-                println!("I run async every 7 seconds uuid: {uuid}");
-            })
-        })?;
+impl<JobRun, DB> XJob<JobRun, DB>
+where
+    JobRun: FnMut(Uuid, JobScheduler) -> Pin<Box<dyn Future<Output = ()> + Send>>
+        + Send
+        + Sync
+        + 'static,
+    DB: DbRepo + Send + Sync + 'static,
+{
+    pub fn new(id: i32, db: DB) -> Result<Self, JobSchedulerError> {
+        let job = XJob {
+            id,
+            job: Job::new_one_shot(Duration::from_secs(0), |_uuid, _jobs| {})?,
+            dao: Arc::new(Dao::new(db)),
+            start_time: Arc::new(AtomicI64::new(0)),
+            job_run: std::marker::PhantomData,
+        };
 
-        Ok(XJob { job })
+        Ok(job)
+    }
+
+    /// 添加定时任务作业
+    pub fn with_cron_job(mut self, schedule: &str, run: JobRun) -> Result<Self, JobSchedulerError> {
+        let job = Job::new_async_tz(schedule, Local, run)?;
+
+        self.job = job;
+
+        Ok(self)
     }
 
     /// 添加即时任务作业
-    pub fn interval_job(secs: u64) -> Result<Self, JobSchedulerError> {
-        let job = Job::new_repeated_async(Duration::from_secs(secs), move |uuid, _jl| {
-            let secs1 = secs;
+    pub fn witch_interval_job(mut self, secs: u64, run: JobRun) -> Result<Self, JobSchedulerError> {
+        let job = Job::new_repeated_async(Duration::from_secs(secs), run)?;
 
-            Box::pin(async move {
-                println!(
-                    "{:?} I'm repeated every {secs1} seconds uuid: {uuid}",
-                    chrono::Local::now()
-                );
-            })
-        })?;
+        self.job = job;
 
-        Ok(XJob { job })
-    }
-
-    pub fn form_job(job: Job) -> Self {
-        XJob { job }
+        Ok(self)
     }
 
     /// 重置已有定时任务
-    pub fn form_cron_uuid(uuid: &str, schedule: &str) -> Result<Self, JobSchedulerError> {
+    pub fn witch_cron_uuid(
+        mut self,
+        uuid: &str,
+        schedule: &str,
+        run: JobRun,
+    ) -> Result<Self, JobSchedulerError> {
         let job_id = Uuid::parse_str(uuid).map_err(|_err| JobSchedulerError::ErrorLoadingJob)?;
         let job = JobBuilder::new()
             .with_timezone(Local)
             .with_cron_job_type()
             .with_job_id(job_id.into())
             .with_schedule(schedule)?
-            .with_run_async(Box::new(|uuid, mut _l| {
-                Box::pin(async move {
-                    println!("form_cron_uuid JHB run async every 2 seconds id {:?}", uuid);
-                })
-            }))
+            .with_run_async(Box::new(run))
             .build()?;
-        Ok(XJob { job })
+        self.job = job;
+
+        Ok(self)
+    }
+
+    /// 添加指定定时任务
+    pub fn form_job(mut self, job: Job) -> Self {
+        self.job = job;
+        self
     }
 
     /// 返回 UUID
@@ -73,35 +124,37 @@ impl XJob {
         &mut self,
         sched: JobScheduler,
     ) -> Result<(), JobSchedulerError> {
+        let dao = self.dao.clone();
+        let start_time = self.start_time.clone();
+        let id = self.id;
         self.job
             .on_start_notification_add(
                 &sched,
-                Box::new(|job_id, notification_id, type_of_notification| {
+                Box::new(move |job_id, notification_id, type_of_notification| {
+                    let dao = dao.clone();
+                    let start_time = start_time.clone();
                     Box::pin(async move {
-                        println!(
-                            "Job {:?} was started, notification {:?} ran ({:?})",
-                            job_id, notification_id, type_of_notification
-                        );
-                    })
-                }),
-            )
-            .await?;
-        Ok(())
-    }
+                        let dao = dao.clone();
+                        let start_time = start_time.clone();
+                        start_time.fetch_add(Local::now().timestamp_millis(), SeqCst);
 
-    // 添加作业停止时要执行的操作
-    pub async fn on_stop_notification(
-        &mut self,
-        sched: JobScheduler,
-    ) -> Result<(), JobSchedulerError> {
-        self.job
-            .on_stop_notification_add(
-                &sched,
-                Box::new(|job_id, notification_id, type_of_notification| {
-                    Box::pin(async move {
-                        println!(
-                            "Job {:?} was stop, notification {:?} ran ({:?})",
-                            job_id, notification_id, type_of_notification
+                        let model = schedule_job_log::ActiveModel {
+                            job_id: Set(id),
+                            cost: Set(0),
+                            status: Set(ScheduleJobLogStatus::Running as i8),
+                            ..Default::default()
+                        };
+
+                        if let Err(err) = dao.add_schedule_job_log(model).await {
+                            error!("Job {:?} was started, err: {:?}", job_id, err);
+                            return;
+                        };
+
+                        trace!(
+                            "Job {:?} was started, notification {:?} ran ({:?})",
+                            job_id,
+                            notification_id,
+                            type_of_notification
                         );
                     })
                 }),
@@ -115,14 +168,39 @@ impl XJob {
         &mut self,
         sched: JobScheduler,
     ) -> Result<(), JobSchedulerError> {
+        let dao = self.dao.clone();
+        let start_time = self.start_time.clone();
+        let id = self.id;
+
         self.job
             .on_done_notification_add(
                 &sched,
-                Box::new(|job_id, notification_id, type_of_notification| {
+                Box::new(move |job_id, notification_id, type_of_notification| {
+                    let dao = dao.clone();
+                    let start_time = start_time.clone();
+
                     Box::pin(async move {
-                        println!(
-                            "Job {:?} was done, notification {:?} ran ({:?})",
-                            job_id, notification_id, type_of_notification
+                        let dao = dao.clone();
+                        let start_time = start_time.clone();
+                        let cost =
+                            Local::now().timestamp_millis() - start_time.load(Ordering::Relaxed);
+
+                        let model = schedule_job_log::ActiveModel {
+                            job_id: Set(id),
+                            cost: Set(cost),
+                            status: Set(ScheduleJobLogStatus::Success as i8),
+                            ..Default::default()
+                        };
+
+                        if let Err(err) = dao.add_schedule_job_log(model).await {
+                            error!("Job {:?} was success, err: {:?}", job_id, err);
+                            return;
+                        };
+                        trace!(
+                            "Job {:?} was success, notification {:?} ran ({:?})",
+                            job_id,
+                            notification_id,
+                            type_of_notification
                         );
                     })
                 }),
@@ -136,14 +214,40 @@ impl XJob {
         &mut self,
         sched: JobScheduler,
     ) -> Result<(), JobSchedulerError> {
+        let dao = self.dao.clone();
+        let start_time = self.start_time.clone();
+        let id = self.id;
+
         self.job
             .on_removed_notification_add(
                 &sched,
-                Box::new(|job_id, notification_id, type_of_notification| {
+                Box::new(move |job_id, notification_id, type_of_notification| {
+                    let dao = dao.clone();
+                    let start_time = start_time.clone();
+
                     Box::pin(async move {
-                        println!(
+                        let dao = dao.clone();
+                        let start_time = start_time.clone();
+                        let cost =
+                            Local::now().timestamp_millis() - start_time.load(Ordering::Relaxed);
+
+                        let model = schedule_job_log::ActiveModel {
+                            job_id: Set(id),
+                            cost: Set(cost),
+                            status: Set(ScheduleJobLogStatus::Removed as i8),
+                            ..Default::default()
+                        };
+
+                        if let Err(err) = dao.add_schedule_job_log(model).await {
+                            error!("Job {:?} was removed, err: {:?}", job_id, err);
+                            return;
+                        };
+
+                        trace!(
                             "Job {:?} was removed, notification {:?} ran ({:?})",
-                            job_id, notification_id, type_of_notification
+                            job_id,
+                            notification_id,
+                            type_of_notification
                         );
                     })
                 }),
@@ -158,7 +262,6 @@ impl XJob {
         sched: JobScheduler,
     ) -> Result<(), JobSchedulerError> {
         self.on_start_notification(sched.clone()).await?;
-        self.on_stop_notification(sched.clone()).await?;
         self.on_done_notification(sched.clone()).await?;
         self.on_removed_notification(sched.clone()).await?;
         Ok(())

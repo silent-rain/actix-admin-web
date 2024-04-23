@@ -25,7 +25,7 @@ CREATE TABLE
     `job_name` VARCHAR(200) NOT NULL COMMENT '任务名称',
     `error` TEXT COMMENT '失败信息',
     `cost` DECIMAL(10, 2) NOT NULL COMMENT '耗时(单位：毫秒)',
-    `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '任务状态,0:失败,1:成功',
+    `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '任务状态,0:待运行,1:运行中,2:停止,3:成功,4:移除任务',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '创建时间',
     PRIMARY KEY (`id`) USING BTREE,
     KEY `idx_job_id` (`job_id`) USING BTREE

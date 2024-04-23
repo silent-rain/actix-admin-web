@@ -19,8 +19,6 @@ pub struct GetScheduleJobLogListReq {
     pub end_time: Option<String>,
     /// 任务ID
     pub job_id: Option<i32>,
-    /// 任务名称
-    pub job_name: Option<String>,
 }
 
 /// 添加定时任务日志
@@ -28,12 +26,10 @@ pub struct GetScheduleJobLogListReq {
 pub struct AddScheduleJobLogReq {
     /// 任务ID
     pub job_id: i32,
-    /// 任务名称
-    pub job_name: String,
     /// 失败信息
     pub error: Option<String>,
     /// 耗时(单位：毫秒)
-    pub cost: f64,
+    pub cost: i64,
     /// 任务状态,0:失败,1:成功'
     pub status: ScheduleJobLogStatus,
 }

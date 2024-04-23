@@ -78,7 +78,7 @@ impl MigrationTrait for Migration {
                             .tiny_integer()
                             .not_null()
                             .default(1)
-                            .comment("任务状态,0:暂停,1:正常"),
+                            .comment("任务状态,0:下线,1:上线"),
                     )
                     .col(
                         ColumnDef::new(Column::CreatedAt)

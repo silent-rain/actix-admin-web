@@ -3212,7 +3212,10 @@ version = "0.1.0"
 dependencies = [
  "chrono",
  "code",
+ "database",
+ "entity",
  "logger",
+ "sea-orm",
  "tokio",
  "tokio-cron-scheduler",
  "tracing",
@@ -3503,6 +3506,7 @@ dependencies = [
  "regex 1.10.4",
  "response",
  "rust-embed",
+ "scheduler",
  "sea-orm",
  "serde",
  "serde_json",

@@ -62,7 +62,6 @@ impl<'a> ScheduleJobLogService<'a> {
     ) -> Result<schedule_job_log::Model, ErrorMsg> {
         let data = schedule_job_log::ActiveModel {
             job_id: Set(req.job_id),
-            job_name: Set(req.job_name),
             error: Set(req.error),
             cost: Set(req.cost),
             status: Set(req.status as i8),

@@ -37,13 +37,6 @@ impl MigrationTrait for Migration {
                             .comment("任务ID"),
                     )
                     .col(
-                        ColumnDef::new(Column::JobName)
-                            .string()
-                            .string_len(200)
-                            .not_null()
-                            .comment("任务名称"),
-                    )
-                    .col(
                         ColumnDef::new(Column::Error)
                             .text()
                             .null()
@@ -51,8 +44,7 @@ impl MigrationTrait for Migration {
                     )
                     .col(
                         ColumnDef::new(Column::Cost)
-                            .decimal()
-                            .decimal_len(10, 2)
+                            .integer()
                             .not_null()
                             .comment("耗时(单位：毫秒)"),
                     )
@@ -61,7 +53,7 @@ impl MigrationTrait for Migration {
                             .tiny_integer()
                             .not_null()
                             .default(1)
-                            .comment("任务状态,0:失败,1:成功"),
+                            .comment("任务状态,0:待执行,1:运行中,2:成功,3:失败,4:移除"),
                     )
                     .col(
                         ColumnDef::new(Column::CreatedAt)
