@@ -1,5 +1,5 @@
 //! 定时任务调度
-use std::{future::Future, pin::Pin, sync::OnceLock};
+use std::sync::OnceLock;
 
 use crate::job::XJob;
 
@@ -29,23 +29,16 @@ impl XJobScheduler {
     }
 
     /// 获取任务调度对象
-    pub fn instance() -> Result<JobScheduler, code::Error> {
+    pub fn instance() -> Result<JobScheduler, JobSchedulerError> {
         GLOBAL_SCHED
             .get()
             .cloned()
-            .ok_or(code::Error::SchedulerInstanceError)
+            .ok_or(JobSchedulerError::ParseSchedule)
     }
 
     /// 将job添加到定时器中
-    pub async fn add_job<JobRun, DB>(
-        &self,
-        mut xjob: XJob<JobRun, DB>,
-    ) -> Result<Uuid, JobSchedulerError>
+    pub async fn add_job<DB>(&self, mut xjob: XJob<DB>) -> Result<Uuid, JobSchedulerError>
     where
-        JobRun: FnMut(Uuid, JobScheduler) -> Pin<Box<dyn Future<Output = ()> + Send>>
-            + Send
-            + Sync
-            + 'static,
         DB: DbRepo + Send + Sync + 'static,
     {
         xjob.set_job_notification(self.sched.clone()).await?;

@@ -6,7 +6,6 @@
 //! ```
 use std::{
     future::Future,
-    marker::PhantomData,
     pin::Pin,
     sync::{
         atomic::{
@@ -30,27 +29,18 @@ use tracing::{error, trace};
 use uuid::Uuid;
 
 #[derive(Clone)]
-pub struct XJob<JobRun, DB>
+pub struct XJob<DB>
 where
-    JobRun: FnMut(Uuid, JobScheduler) -> Pin<Box<dyn Future<Output = ()> + Send>>
-        + Send
-        + Sync
-        + 'static,
     DB: DbRepo + Send + Sync + 'static,
 {
+    dao: Arc<Dao<DB>>,
     id: i32,
     job: Job,
-    dao: Arc<Dao<DB>>,
     start_time: Arc<AtomicI64>,
-    job_run: PhantomData<JobRun>,
 }
 
-impl<JobRun, DB> XJob<JobRun, DB>
+impl<DB> XJob<DB>
 where
-    JobRun: FnMut(Uuid, JobScheduler) -> Pin<Box<dyn Future<Output = ()> + Send>>
-        + Send
-        + Sync
-        + 'static,
     DB: DbRepo + Send + Sync + 'static,
 {
     pub fn new(id: i32, db: DB) -> Result<Self, JobSchedulerError> {
@@ -59,14 +49,23 @@ where
             job: Job::new_one_shot(Duration::from_secs(0), |_uuid, _jobs| {})?,
             dao: Arc::new(Dao::new(db)),
             start_time: Arc::new(AtomicI64::new(0)),
-            job_run: std::marker::PhantomData,
         };
 
         Ok(job)
     }
 
     /// 添加定时任务作业
-    pub fn with_cron_job(mut self, schedule: &str, run: JobRun) -> Result<Self, JobSchedulerError> {
+    pub fn with_cron_job<JobRun>(
+        mut self,
+        schedule: &str,
+        run: JobRun,
+    ) -> Result<Self, JobSchedulerError>
+    where
+        JobRun: FnMut(Uuid, JobScheduler) -> Pin<Box<dyn Future<Output = ()> + Send>>
+            + Send
+            + Sync
+            + 'static,
+    {
         let job = Job::new_async_tz(schedule, Local, run)?;
 
         self.job = job;
@@ -75,7 +74,17 @@ where
     }
 
     /// 添加即时任务作业
-    pub fn witch_interval_job(mut self, secs: u64, run: JobRun) -> Result<Self, JobSchedulerError> {
+    pub fn witch_interval_job<JobRun>(
+        mut self,
+        secs: u64,
+        run: JobRun,
+    ) -> Result<Self, JobSchedulerError>
+    where
+        JobRun: FnMut(Uuid, JobScheduler) -> Pin<Box<dyn Future<Output = ()> + Send>>
+            + Send
+            + Sync
+            + 'static,
+    {
         let job = Job::new_repeated_async(Duration::from_secs(secs), run)?;
 
         self.job = job;
@@ -84,12 +93,18 @@ where
     }
 
     /// 重置已有定时任务
-    pub fn witch_cron_uuid(
+    pub fn witch_cron_uuid<JobRun>(
         mut self,
         uuid: &str,
         schedule: &str,
         run: JobRun,
-    ) -> Result<Self, JobSchedulerError> {
+    ) -> Result<Self, JobSchedulerError>
+    where
+        JobRun: FnMut(Uuid, JobScheduler) -> Pin<Box<dyn Future<Output = ()> + Send>>
+            + Send
+            + Sync
+            + 'static,
+    {
         let job_id = Uuid::parse_str(uuid).map_err(|_err| JobSchedulerError::ErrorLoadingJob)?;
         let job = JobBuilder::new()
             .with_timezone(Local)

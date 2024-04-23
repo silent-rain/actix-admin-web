@@ -77,8 +77,11 @@ impl<'a> ScheduleJobService<'a> {
         }
 
         let model = schedule_job::ActiveModel {
+            uuid: Set(req.uuid),
             name: Set(req.name),
+            source: Set(req.source as i8),
             job_type: Set(req.job_type as i8),
+            sys_code: Set(req.sys_code),
             expression: Set(req.expression),
             interval: Set(req.interval),
             note: Set(req.note),
@@ -99,8 +102,8 @@ impl<'a> ScheduleJobService<'a> {
     pub async fn update(&self, id: i32, req: UpdatecheduleJobReq) -> Result<u64, ErrorMsg> {
         let model = schedule_job::ActiveModel {
             id: Set(id),
+            uuid: Set(req.uuid),
             name: Set(req.name),
-            job_type: Set(req.job_type as i8),
             expression: Set(req.expression),
             interval: Set(req.interval),
             note: Set(req.note),

@@ -26,10 +26,10 @@ pub enum ScheduleJobType {
 #[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
 #[repr(i8)]
 pub enum ScheduleJobSource {
-    /// 系统内部
-    System = 0,
     /// 用户定义
-    User = 1,
+    User = 0,
+    /// 系统内部
+    System = 1,
 }
 
 /// 定时任务运行状态

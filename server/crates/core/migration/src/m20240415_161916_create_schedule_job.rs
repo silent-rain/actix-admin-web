@@ -29,7 +29,14 @@ impl MigrationTrait for Migration {
                             .primary_key()
                             .auto_increment()
                             .not_null()
-                            .comment("定时任务ID"),
+                            .comment("自增ID"),
+                    )
+                    .col(
+                        ColumnDef::new(Column::Uuid)
+                            .string()
+                            .string_len(200)
+                            .default("")
+                            .comment("任务ID"),
                     )
                     .col(
                         ColumnDef::new(Column::Name)
@@ -42,13 +49,20 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Column::Source)
                             .integer()
                             .not_null()
-                            .comment("任务来源,0:系统内部,1:用户定义"),
+                            .comment("任务来源,0:用户定义,1:系统内部"),
                     )
                     .col(
                         ColumnDef::new(Column::JobType)
                             .integer()
                             .not_null()
                             .comment("任务类型,0:定时任务,1:即时任务"),
+                    )
+                    .col(
+                        ColumnDef::new(Column::SysCode)
+                            .string()
+                            .string_len(50)
+                            .not_null()
+                            .comment("系统任务编码"),
                     )
                     .col(
                         ColumnDef::new(Column::Expression)

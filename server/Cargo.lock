@@ -3494,6 +3494,7 @@ dependencies = [
  "actix_validator",
  "app_state",
  "async-stream",
+ "async-trait",
  "bytes",
  "chrono",
  "code",
