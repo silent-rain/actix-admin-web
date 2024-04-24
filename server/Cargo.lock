@@ -290,6 +290,7 @@ dependencies = [
  "serde_json",
  "serde_yaml",
  "service_hub",
+ "tokio",
  "tracing",
  "tracing-actix-web",
  "utils",
@@ -431,6 +432,7 @@ dependencies = [
 name = "app_state"
 version = "0.1.0"
 dependencies = [
+ "tokio",
  "utils",
 ]
 

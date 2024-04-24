@@ -1,14 +1,13 @@
 //! 应用状态
 
-use std::sync::Mutex;
-
+use tokio::sync::RwLock;
 use utils::asset::EmbedAssetTrait;
 
 /// 内部资源共享状态
 pub struct AssetState {
-    pub admin_web_dist: Mutex<Box<dyn EmbedAssetTrait>>,
-    pub config_file: Mutex<Box<dyn EmbedAssetTrait>>,
-    pub db_data_file: Mutex<Box<dyn EmbedAssetTrait>>,
+    pub admin_web_dist: RwLock<Box<dyn EmbedAssetTrait + Send + Sync + 'static>>,
+    pub config_file: RwLock<Box<dyn EmbedAssetTrait + Send + Sync + 'static>>,
+    pub db_data_file: RwLock<Box<dyn EmbedAssetTrait + Send + Sync + 'static>>,
 }
 
 /// 应用共享状态

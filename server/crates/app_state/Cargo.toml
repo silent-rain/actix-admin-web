@@ -5,3 +5,5 @@ edition = "2021"
 
 [dependencies]
 utils = { path = "../core/utils" }
+
+tokio = { workspace = true }

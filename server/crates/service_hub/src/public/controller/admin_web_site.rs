@@ -21,18 +21,9 @@ impl AdminWebSiteController {
             filename = "index.html"
         }
         warn!("req filename: {filename}");
-
-        let asset = { asset_state.admin_web_dist.lock().unwrap().data(filename)? };
-        let mimetype = {
-            asset_state
-                .admin_web_dist
-                .lock()
-                .unwrap()
-                .mimetype(filename)?
-        };
-
-        // let asset = AssetWebDist::to_bytes(filename.to_string())?;
-        // let mimetype = AssetWebDist::mimetype(filename.to_string())?;
+        let r = asset_state.admin_web_dist.read().await;
+        let asset = r.data(filename)?;
+        let mimetype = r.mimetype(filename)?;
 
         let content_type = format!("{mimetype}; charset=utf-8");
         let resp = HttpResponse::Ok()
