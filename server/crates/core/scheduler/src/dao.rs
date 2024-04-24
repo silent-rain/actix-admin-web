@@ -36,7 +36,10 @@ where
     }
 
     /// 更新任务
-    pub async fn update(&self, active_model: schedule_job::ActiveModel) -> Result<u64, DbErr> {
+    pub async fn update_schedule_job(
+        &self,
+        active_model: schedule_job::ActiveModel,
+    ) -> Result<u64, DbErr> {
         let id: i32 = *(active_model.id.clone().as_ref());
         let result = ScheduleJob::update_many()
             .set(active_model)

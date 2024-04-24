@@ -1,27 +1,27 @@
-//! 定时任务示例
+//! 定时任务示例2
 use database::DbRepo;
 use scheduler::{Job, JobSchedulerError};
 
 use super::TaskTrait;
 
-pub struct DemoTask<DB>
+pub struct DemoTask2<DB>
 where
     DB: DbRepo + Clone + Send + Sync + 'static,
 {
     db: DB,
 }
 
-impl<DB> TaskTrait<DB> for DemoTask<DB>
+impl<DB> TaskTrait<DB> for DemoTask2<DB>
 where
     DB: DbRepo + Clone + Send + Sync + 'static,
     Self: Sized,
 {
     fn new(db: DB) -> Box<dyn TaskTrait<DB>> {
-        Box::new(DemoTask { db })
+        Box::new(DemoTask2 { db })
     }
 
     fn sys_code(&self) -> String {
-        "task_demo".to_owned()
+        "task_demo2".to_owned()
     }
 
     fn task(&self) -> Result<Job<DB>, JobSchedulerError> {

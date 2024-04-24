@@ -13,7 +13,7 @@ pub struct Model {
     /// 自增ID
     #[sea_orm(primary_key)]
     pub id: i32,
-    /// 任务ID
+    /// 任务ID, 每次任务动态变化
     #[sea_orm(unique)]
     pub uuid: Option<String>,
     /// 任务名称
