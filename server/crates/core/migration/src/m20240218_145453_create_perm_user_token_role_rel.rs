@@ -2,12 +2,11 @@
 //! User Entity: [`entity::prelude::PermUserTokenRoleRel`]
 use entity::{perm_user_token_role_rel::Column, prelude::PermUserTokenRoleRel};
 
-use sea_orm_migration::{
-    async_trait,
-    sea_orm::DeriveMigrationName,
-    sea_query::{ColumnDef, Expr, Table},
-    DbErr, MigrationTrait, SchemaManager,
+use sea_orm::{
+    sea_query::{ColumnDef, Expr, ForeignKey, ForeignKeyAction, Index, Table},
+    DeriveIden, DeriveMigrationName, Iden,
 };
+use sea_orm_migration::{async_trait, DbErr, MigrationTrait, SchemaManager};
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
@@ -60,4 +59,14 @@ impl MigrationTrait for Migration {
             .drop_table(Table::drop().table(PermUserTokenRoleRel).to_owned())
             .await
     }
+}
+
+#[derive(DeriveIden)]
+pub enum PermUserRoleRel {
+    #[sea_orm(iden = "t_perm_user_role_rel")]
+    Table,
+    Id,
+    UserId,
+    RoleId,
+    CreatedAt,
 }

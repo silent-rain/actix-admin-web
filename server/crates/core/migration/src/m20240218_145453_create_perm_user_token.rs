@@ -1,13 +1,12 @@
 //! 用户Token令牌表
 //! User Entity: [`entity::prelude::PermUserToken`]
-use entity::{perm_user_token::Column, prelude::PermUserToken};
+// use entity::{perm_user_token::PermUserToken, prelude::PermUserToken};
 
-use sea_orm_migration::{
-    async_trait,
-    sea_orm::{DatabaseBackend, DeriveMigrationName},
+use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},
-    DbErr, MigrationTrait, SchemaManager,
+    DatabaseBackend, DeriveIden, DeriveMigrationName,
 };
+use sea_orm_migration::{async_trait, DbErr, MigrationTrait, SchemaManager};
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
@@ -24,7 +23,7 @@ impl MigrationTrait for Migration {
                     .comment("用户Token令牌表")
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(Column::Id)
+                        ColumnDef::new(PermUserToken::Id)
                             .integer()
                             .primary_key()
                             .auto_increment()
@@ -32,13 +31,13 @@ impl MigrationTrait for Migration {
                             .comment("令牌ID"),
                     )
                     .col(
-                        ColumnDef::new(Column::UserId)
+                        ColumnDef::new(PermUserToken::UserId)
                             .integer()
                             .not_null()
                             .comment("用户ID"),
                     )
                     .col(
-                        ColumnDef::new(Column::Token)
+                        ColumnDef::new(PermUserToken::Token)
                             .string()
                             .string_len(50)
                             .unique_key()
@@ -46,27 +45,27 @@ impl MigrationTrait for Migration {
                             .comment("令牌"),
                     )
                     .col(
-                        ColumnDef::new(Column::Passphrase)
+                        ColumnDef::new(PermUserToken::Passphrase)
                             .string()
                             .string_len(20)
                             .not_null()
                             .comment("口令"),
                     )
                     .col(
-                        ColumnDef::new(Column::Permission)
+                        ColumnDef::new(PermUserToken::Permission)
                             .string()
                             .string_len(20)
                             .not_null()
                             .comment("权限范围:GET,POST,PUT,DELETE"),
                     )
                     .col(
-                        ColumnDef::new(Column::Expire)
+                        ColumnDef::new(PermUserToken::Expire)
                             .date_time()
                             .not_null()
                             .comment("授权到期时间"),
                     )
                     .col(
-                        ColumnDef::new(Column::Note)
+                        ColumnDef::new(PermUserToken::Note)
                             .string()
                             .string_len(200)
                             .null()
@@ -74,21 +73,21 @@ impl MigrationTrait for Migration {
                             .comment("备注"),
                     )
                     .col(
-                        ColumnDef::new(Column::Status)
+                        ColumnDef::new(PermUserToken::Status)
                             .tiny_integer()
                             .not_null()
                             .default(1)
                             .comment("状态,0:停用,1:正常"),
                     )
                     .col(
-                        ColumnDef::new(Column::CreatedAt)
+                        ColumnDef::new(PermUserToken::CreatedAt)
                             .date_time()
                             .not_null()
                             .default(Expr::current_timestamp())
                             .comment("创建时间"),
                     )
                     .col(
-                        ColumnDef::new(Column::UpdatedAt)
+                        ColumnDef::new(PermUserToken::UpdatedAt)
                             .date_time()
                             .not_null()
                             .extra({
@@ -111,4 +110,20 @@ impl MigrationTrait for Migration {
             .drop_table(Table::drop().table(PermUserToken).to_owned())
             .await
     }
+}
+
+#[derive(DeriveIden)]
+pub enum PermUserToken {
+    #[sea_orm(iden = "t_perm_user_token")]
+    Table,
+    Id,
+    UserId,
+    Token,
+    Passphrase,
+    Permission,
+    Expire,
+    Status,
+    Note,
+    CreatedAt,
+    UpdatedAt,
 }
