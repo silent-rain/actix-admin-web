@@ -19,10 +19,20 @@ members = [
     "crates/middleware",
     # 插件
     "crates/plugins",
+    # 依赖注入
+    "crates/inject",
     # 应用状态
     "crates/app_state",
+
     # 服务集
     "crates/service_hub",
+    "crates/service_hub/public",
+    "crates/service_hub/template",
+    "crates/service_hub/auth",
+    "crates/service_hub/perm",
+    "crates/service_hub/system",
+    "crates/service_hub/schedule",
+    "crates/service_hub/log",
 
     # 应用服务
     "admin",

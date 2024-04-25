@@ -9,9 +9,9 @@ use code::ErrorMsg;
 use context::Context;
 use response::Response;
 use service_hub::{
-    constant::HEADERS_X_IMG,
     inject::AInjectProvider,
     log::{dto::api_operation::AddApiOperationReq, enums::HttpType, ApiOperationService},
+    system::constant::HEADERS_X_IMG,
 };
 
 use actix_http::h1::Payload;

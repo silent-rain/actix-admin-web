@@ -35,7 +35,7 @@ dependencies = [
  "actix-web",
  "derive_more",
  "futures-util",
- "log",
+ "log 0.4.21",
  "once_cell",
  "smallvec",
 ]
@@ -104,7 +104,7 @@ dependencies = [
  "futures-util",
  "httparse",
  "local-waker",
- "log",
+ "log 0.4.21",
  "memchr 2.7.2",
  "mime",
  "serde",
@@ -214,7 +214,7 @@ dependencies = [
  "futures-util",
  "itoa",
  "language-tags",
- "log",
+ "log 0.4.21",
  "mime",
  "once_cell",
  "pin-project-lite",
@@ -525,7 +525,7 @@ dependencies = [
  "cfg-if",
  "concurrent-queue",
  "futures-lite 1.13.0",
- "log",
+ "log 0.4.21",
  "parking",
  "polling 2.8.0",
  "rustix 0.37.27",
@@ -591,7 +591,7 @@ dependencies = [
  "futures-lite 1.13.0",
  "gloo-timers",
  "kv-log-macro",
- "log",
+ "log 0.4.21",
  "memchr 2.7.2",
  "once_cell",
  "pin-project-lite",
@@ -653,6 +653,43 @@ name = "atomic-waker"
 version = "1.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1505bd5d3d116872e7271a6d4e16d81d0c8570876c8de68093a09ac269d8aac0"
+
+[[package]]
+name = "auth"
+version = "0.1.0"
+dependencies = [
+ "actix-multipart",
+ "actix-web",
+ "actix_validator",
+ "async-stream",
+ "bytes",
+ "chrono",
+ "code",
+ "context",
+ "database",
+ "entity",
+ "futures-util",
+ "inject",
+ "jwt",
+ "log 0.1.0",
+ "nject",
+ "perm",
+ "regex 1.10.4",
+ "response",
+ "rust-embed",
+ "scheduler",
+ "sea-orm",
+ "serde",
+ "serde_json",
+ "serde_repr",
+ "system",
+ "tokio-cron-scheduler",
+ "tracing",
+ "uap-rust",
+ "utils",
+ "uuid",
+ "validator",
+]
 
 [[package]]
 name = "autocfg"
@@ -875,7 +912,7 @@ dependencies = [
  "base64 0.21.7",
  "image",
  "imageproc",
- "log",
+ "log 0.4.21",
  "rand 0.8.5",
  "rusttype",
 ]
@@ -1227,7 +1264,7 @@ version = "0.1.0"
 dependencies = [
  "async-trait",
  "code",
- "log",
+ "log 0.4.21",
  "sea-orm",
  "serde",
  "tokio",
@@ -1673,7 +1710,7 @@ checksum = "57da3b9b5b85bd66f31093f8c408b90a74431672542466497dcbdfdc02034be1"
 dependencies = [
  "aho-corasick 1.1.3",
  "bstr",
- "log",
+ "log 0.4.21",
  "regex-automata 0.4.6",
  "regex-syntax 0.8.3",
 ]
@@ -1912,6 +1949,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "inject"
+version = "0.1.0"
+dependencies = [
+ "database",
+ "nject",
+]
+
+[[package]]
 name = "instant"
 version = "0.1.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2019,7 +2064,7 @@ version = "1.0.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0de8b303297635ad57c9f5059fd9cee7a47f8e8daa09df0fcd07dd39fb22977f"
 dependencies = [
- "log",
+ "log 0.4.21",
 ]
 
 [[package]]
@@ -2112,6 +2157,40 @@ dependencies = [
 
 [[package]]
 name = "log"
+version = "0.1.0"
+dependencies = [
+ "actix-multipart",
+ "actix-web",
+ "actix_validator",
+ "async-stream",
+ "bytes",
+ "chrono",
+ "code",
+ "context",
+ "database",
+ "entity",
+ "futures-util",
+ "inject",
+ "jwt",
+ "nject",
+ "regex 1.10.4",
+ "response",
+ "rust-embed",
+ "scheduler",
+ "sea-orm",
+ "serde",
+ "serde_json",
+ "serde_repr",
+ "tokio-cron-scheduler",
+ "tracing",
+ "uap-rust",
+ "utils",
+ "uuid",
+ "validator",
+]
+
+[[package]]
+name = "log"
 version = "0.4.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "90ed8c1e510134f979dbc4f070f87d4313098b704861a105fe34231c70a3901c"
@@ -2129,7 +2208,7 @@ dependencies = [
  "database",
  "entity",
  "futures",
- "log",
+ "log 0.4.21",
  "once_cell",
  "sea-orm",
  "serde",
@@ -2262,7 +2341,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a4a650543ca06a924e8b371db273b2756685faae30f8487da1b56505a8f78b0c"
 dependencies = [
  "libc",
- "log",
+ "log 0.4.21",
  "wasi 0.11.0+wasi-snapshot-preview1",
  "windows-sys 0.48.0",
 ]
@@ -2593,6 +2672,40 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e3148f5046208a5d56bcfc03053e3ca6334e51da8dfb19b6cdc8b306fae3283e"
 
 [[package]]
+name = "perm"
+version = "0.1.0"
+dependencies = [
+ "actix-multipart",
+ "actix-web",
+ "actix_validator",
+ "async-stream",
+ "bytes",
+ "chrono",
+ "code",
+ "context",
+ "database",
+ "entity",
+ "futures-util",
+ "inject",
+ "jwt",
+ "nject",
+ "regex 1.10.4",
+ "response",
+ "rust-embed",
+ "scheduler",
+ "sea-orm",
+ "serde",
+ "serde_json",
+ "serde_repr",
+ "tokio-cron-scheduler",
+ "tracing",
+ "uap-rust",
+ "utils",
+ "uuid",
+ "validator",
+]
+
+[[package]]
 name = "pin-project"
 version = "1.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2680,7 +2793,7 @@ dependencies = [
  "cfg-if",
  "concurrent-queue",
  "libc",
- "log",
+ "log 0.4.21",
  "pin-project-lite",
  "windows-sys 0.48.0",
 ]
@@ -2772,6 +2885,41 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 1.0.109",
+]
+
+[[package]]
+name = "public"
+version = "0.1.0"
+dependencies = [
+ "actix-multipart",
+ "actix-web",
+ "actix_validator",
+ "app_state",
+ "async-stream",
+ "bytes",
+ "chrono",
+ "code",
+ "context",
+ "database",
+ "entity",
+ "futures-util",
+ "inject",
+ "jwt",
+ "nject",
+ "regex 1.10.4",
+ "response",
+ "rust-embed",
+ "scheduler",
+ "sea-orm",
+ "serde",
+ "serde_json",
+ "serde_repr",
+ "tokio-cron-scheduler",
+ "tracing",
+ "uap-rust",
+ "utils",
+ "uuid",
+ "validator",
 ]
 
 [[package]]
@@ -3209,6 +3357,40 @@ dependencies = [
 ]
 
 [[package]]
+name = "schedule"
+version = "0.1.0"
+dependencies = [
+ "actix-multipart",
+ "actix-web",
+ "actix_validator",
+ "async-stream",
+ "bytes",
+ "chrono",
+ "code",
+ "context",
+ "database",
+ "entity",
+ "futures-util",
+ "inject",
+ "jwt",
+ "nject",
+ "regex 1.10.4",
+ "response",
+ "rust-embed",
+ "scheduler",
+ "sea-orm",
+ "serde",
+ "serde_json",
+ "serde_repr",
+ "tokio-cron-scheduler",
+ "tracing",
+ "uap-rust",
+ "utils",
+ "uuid",
+ "validator",
+]
+
+[[package]]
 name = "scheduler"
 version = "0.1.0"
 dependencies = [
@@ -3265,7 +3447,7 @@ dependencies = [
  "bigdecimal",
  "chrono",
  "futures",
- "log",
+ "log 0.4.21",
  "ouroboros",
  "rust_decimal",
  "sea-orm-macros",
@@ -3492,35 +3674,15 @@ dependencies = [
 name = "service_hub"
 version = "0.1.0"
 dependencies = [
- "actix-multipart",
- "actix-web",
- "actix_validator",
- "app_state",
- "async-stream",
- "bytes",
- "chrono",
- "code",
- "context",
- "database",
- "entity",
- "futures-util",
- "jwt",
- "nject",
- "regex 1.10.4",
- "response",
- "rust-embed",
- "scheduler",
- "sea-orm",
- "serde",
- "serde_json",
- "serde_repr",
+ "auth",
+ "inject",
+ "log 0.1.0",
+ "perm",
+ "public",
+ "schedule",
+ "system",
+ "template",
  "tokio",
- "tokio-cron-scheduler",
- "tracing",
- "uap-rust",
- "utils",
- "uuid",
- "validator",
 ]
 
 [[package]]
@@ -3712,7 +3874,7 @@ dependencies = [
  "hashlink",
  "hex",
  "indexmap",
- "log",
+ "log 0.4.21",
  "memchr 2.7.2",
  "once_cell",
  "paste",
@@ -3800,7 +3962,7 @@ dependencies = [
  "hkdf",
  "hmac",
  "itoa",
- "log",
+ "log 0.4.21",
  "md-5",
  "memchr 2.7.2",
  "once_cell",
@@ -3845,7 +4007,7 @@ dependencies = [
  "hmac",
  "home",
  "itoa",
- "log",
+ "log 0.4.21",
  "md-5",
  "memchr 2.7.2",
  "num-bigint",
@@ -3880,7 +4042,7 @@ dependencies = [
  "futures-intrusive",
  "futures-util",
  "libsqlite3-sys",
- "log",
+ "log 0.4.21",
  "percent-encoding",
  "serde",
  "sqlx-core",
@@ -3967,6 +4129,40 @@ dependencies = [
 ]
 
 [[package]]
+name = "system"
+version = "0.1.0"
+dependencies = [
+ "actix-multipart",
+ "actix-web",
+ "actix_validator",
+ "async-stream",
+ "bytes",
+ "chrono",
+ "code",
+ "context",
+ "database",
+ "entity",
+ "futures-util",
+ "inject",
+ "jwt",
+ "nject",
+ "regex 1.10.4",
+ "response",
+ "rust-embed",
+ "scheduler",
+ "sea-orm",
+ "serde",
+ "serde_json",
+ "serde_repr",
+ "tokio-cron-scheduler",
+ "tracing",
+ "uap-rust",
+ "utils",
+ "uuid",
+ "validator",
+]
+
+[[package]]
 name = "tap"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3982,6 +4178,40 @@ dependencies = [
  "fastrand 2.0.2",
  "rustix 0.38.34",
  "windows-sys 0.52.0",
+]
+
+[[package]]
+name = "template"
+version = "0.1.0"
+dependencies = [
+ "actix-multipart",
+ "actix-web",
+ "actix_validator",
+ "async-stream",
+ "bytes",
+ "chrono",
+ "code",
+ "context",
+ "database",
+ "entity",
+ "futures-util",
+ "inject",
+ "jwt",
+ "nject",
+ "regex 1.10.4",
+ "response",
+ "rust-embed",
+ "scheduler",
+ "sea-orm",
+ "serde",
+ "serde_json",
+ "serde_repr",
+ "tokio-cron-scheduler",
+ "tracing",
+ "uap-rust",
+ "utils",
+ "uuid",
+ "validator",
 ]
 
 [[package]]
@@ -4174,7 +4404,7 @@ version = "0.1.40"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c3523ab5a71916ccf420eebdf5521fcef02141234bbc0b8a49f2fdc4544364ef"
 dependencies = [
- "log",
+ "log 0.4.21",
  "pin-project-lite",
  "tracing-attributes",
  "tracing-core",
@@ -4224,7 +4454,7 @@ checksum = "b5c266b9ac83dedf0e0385ad78514949e6d89491269e7065bee51d2bb8ec7373"
 dependencies = [
  "ahash 0.8.11",
  "gethostname",
- "log",
+ "log 0.4.21",
  "serde",
  "serde_json",
  "time",
@@ -4270,7 +4500,7 @@ version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f751112709b4e791d8ce53e32c4ed2d353565a795ce84da2285393f41557bdf2"
 dependencies = [
- "log",
+ "log 0.4.21",
  "once_cell",
  "tracing-core",
 ]
@@ -4281,7 +4511,7 @@ version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ee855f1f400bd0e5c02d150ae5de3840039a3f54b025156404e34c23c03f47c3"
 dependencies = [
- "log",
+ "log 0.4.21",
  "once_cell",
  "tracing-core",
 ]
@@ -4549,7 +4779,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "614d787b966d3989fa7bb98a654e369c762374fd3213d212cfc0251257e747da"
 dependencies = [
  "bumpalo",
- "log",
+ "log 0.4.21",
  "once_cell",
  "proc-macro2",
  "quote",
