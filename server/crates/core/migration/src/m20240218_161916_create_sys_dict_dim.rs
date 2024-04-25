@@ -1,5 +1,5 @@
 //! 字典维度表
-
+//! User Entity: [`entity::prelude::SysDictDim`]
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Index, Table},
     DatabaseBackend, DeriveIden, DeriveMigrationName, Iden,
@@ -97,8 +97,9 @@ impl MigrationTrait for Migration {
                 .create_index(
                     Index::create()
                         .if_not_exists()
-                        .name("uk_name")
                         .table(SysDictDim::Table)
+                        .name("uk_name")
+                        .unique()
                         .col(SysDictDim::Name)
                         .to_owned(),
                 )
@@ -114,6 +115,7 @@ impl MigrationTrait for Migration {
                     Index::create()
                         .if_not_exists()
                         .name("uk_code")
+                        .unique()
                         .table(SysDictDim::Table)
                         .col(SysDictDim::Code)
                         .to_owned(),

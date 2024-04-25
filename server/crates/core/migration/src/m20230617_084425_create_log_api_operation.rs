@@ -1,13 +1,11 @@
 //! API操作日志表
 //! User Entity: [`entity::prelude::LogApiOperation`]
-use entity::{log_api_operation::Column, prelude::LogApiOperation};
 
-use sea_orm_migration::{
-    async_trait,
-    sea_orm::DeriveMigrationName,
+use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},
-    DbErr, MigrationTrait, SchemaManager,
+    DeriveIden, DeriveMigrationName,
 };
+use sea_orm_migration::{async_trait, DbErr, MigrationTrait, SchemaManager};
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
@@ -19,11 +17,11 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(LogApiOperation)
+                    .table(LogApiOperation::Table)
                     .comment("API操作日志表")
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(Column::Id)
+                        ColumnDef::new(LogApiOperation::Id)
                             .integer()
                             .primary_key()
                             .auto_increment()
@@ -31,14 +29,14 @@ impl MigrationTrait for Migration {
                             .comment("自增ID"),
                     )
                     .col(
-                        ColumnDef::new(Column::UserId)
+                        ColumnDef::new(LogApiOperation::UserId)
                             .integer()
                             .null()
                             .default(0)
                             .comment("用户ID"),
                     )
                     .col(
-                        ColumnDef::new(Column::Username)
+                        ColumnDef::new(LogApiOperation::Username)
                             .string()
                             .string_len(32)
                             .null()
@@ -46,7 +44,7 @@ impl MigrationTrait for Migration {
                             .comment("用户名称"),
                     )
                     .col(
-                        ColumnDef::new(Column::RequestId)
+                        ColumnDef::new(LogApiOperation::RequestId)
                             .string()
                             .string_len(32)
                             .null()
@@ -54,27 +52,27 @@ impl MigrationTrait for Migration {
                             .comment("请求ID"),
                     )
                     .col(
-                        ColumnDef::new(Column::StatusCode)
+                        ColumnDef::new(LogApiOperation::StatusCode)
                             .integer()
                             .not_null()
                             .comment("请求状态码"),
                     )
                     .col(
-                        ColumnDef::new(Column::Method)
+                        ColumnDef::new(LogApiOperation::Method)
                             .string()
                             .string_len(10)
                             .not_null()
                             .comment("请求方法"),
                     )
                     .col(
-                        ColumnDef::new(Column::Path)
+                        ColumnDef::new(LogApiOperation::Path)
                             .string()
                             .string_len(500)
                             .not_null()
                             .comment("请求地址路径"),
                     )
                     .col(
-                        ColumnDef::new(Column::Query)
+                        ColumnDef::new(LogApiOperation::Query)
                             .string()
                             .string_len(500)
                             .null()
@@ -82,13 +80,13 @@ impl MigrationTrait for Migration {
                             .comment("请求参数"),
                     )
                     .col(
-                        ColumnDef::new(Column::Body)
+                        ColumnDef::new(LogApiOperation::Body)
                             .text()
                             .null()
                             .comment("请求体/响应体"),
                     )
                     .col(
-                        ColumnDef::new(Column::RemoteAddr)
+                        ColumnDef::new(LogApiOperation::RemoteAddr)
                             .string()
                             .string_len(64)
                             .null()
@@ -96,7 +94,7 @@ impl MigrationTrait for Migration {
                             .comment("请求IP"),
                     )
                     .col(
-                        ColumnDef::new(Column::UserAgent)
+                        ColumnDef::new(LogApiOperation::UserAgent)
                             .string()
                             .string_len(256)
                             .null()
@@ -104,21 +102,21 @@ impl MigrationTrait for Migration {
                             .comment("用户代理"),
                     )
                     .col(
-                        ColumnDef::new(Column::Cost)
+                        ColumnDef::new(LogApiOperation::Cost)
                             .decimal()
                             .decimal_len(10, 2)
                             .not_null()
                             .comment("耗时,毫秒"),
                     )
                     .col(
-                        ColumnDef::new(Column::HttpType)
+                        ColumnDef::new(LogApiOperation::HttpType)
                             .string()
                             .string_len(10)
                             .not_null()
                             .comment("请求类型:REQ/RSP"),
                     )
                     .col(
-                        ColumnDef::new(Column::Note)
+                        ColumnDef::new(LogApiOperation::Note)
                             .string()
                             .string_len(200)
                             .default("")
@@ -126,7 +124,7 @@ impl MigrationTrait for Migration {
                             .comment("备注"),
                     )
                     .col(
-                        ColumnDef::new(Column::CreatedAt)
+                        ColumnDef::new(LogApiOperation::CreatedAt)
                             .date_time()
                             .not_null()
                             .default(Expr::current_timestamp())
@@ -140,7 +138,28 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
         manager
-            .drop_table(Table::drop().table(LogApiOperation).to_owned())
+            .drop_table(Table::drop().table(LogApiOperation::Table).to_owned())
             .await
     }
+}
+
+#[derive(DeriveIden)]
+pub enum LogApiOperation {
+    #[sea_orm(iden = "t_log_api_operation")]
+    Table,
+    Id,
+    UserId,
+    Username,
+    RequestId,
+    StatusCode,
+    Method,
+    Path,
+    Query,
+    Body,
+    RemoteAddr,
+    UserAgent,
+    Cost,
+    HttpType,
+    Note,
+    CreatedAt,
 }
