@@ -1,0 +1,26 @@
+[package]
+name = "scheduler"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+code = { path = "../code" }
+logger = { path = "../logger" }
+entity = { path = "../entity" }
+database = { path = "../database" }
+
+uuid = { workspace = true }
+chrono = { workspace = true }
+tokio-cron-scheduler = { workspace = true }
+tracing = { workspace = true }
+sea-orm = { workspace = true }
+async-trait = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true, features = [
+    "macros",
+    "rt-multi-thread",
+    "test-util",
+] }

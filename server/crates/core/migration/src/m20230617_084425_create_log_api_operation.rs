@@ -108,7 +108,7 @@ impl MigrationTrait for Migration {
                             .decimal()
                             .decimal_len(10, 2)
                             .not_null()
-                            .comment("耗时,纳秒"),
+                            .comment("耗时,毫秒"),
                     )
                     .col(
                         ColumnDef::new(Column::HttpType)

@@ -12,6 +12,7 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 code = { path = "../core/code" }
 response = { path = "../core/response" }
 context = { path = "../core/context" }
+entity = { path = "../core/entity" }
 jwt = { path = "../core/jwt" }
 service_hub = { path = "../service_hub" }
 

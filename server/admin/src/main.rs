@@ -1,6 +1,6 @@
 //! 程序入口
 
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
 
 mod asset;
 mod config;
@@ -14,7 +14,8 @@ use service_hub::inject::InjectProvider;
 
 use colored::Colorize;
 use dotenv::dotenv;
-use tracing::warn;
+use tokio::sync::RwLock;
+use tracing::{info, warn};
 
 /// 程序入口
 #[actix_web::main]
@@ -57,9 +58,9 @@ async fn main() -> std::io::Result<()> {
     // 共享状态
     let app_state = AppState {};
     let asset_state = Arc::new(AssetState {
-        admin_web_dist: Mutex::new(Box::new(AssetAdminWebDist)),
-        config_file: Mutex::new(Box::new(AssetConfigFile)),
-        db_data_file: Mutex::new(Box::new(AssetDbDataFile)),
+        admin_web_dist: RwLock::new(Box::new(AssetAdminWebDist)),
+        config_file: RwLock::new(Box::new(AssetConfigFile)),
+        db_data_file: RwLock::new(Box::new(AssetDbDataFile)),
     });
 
     // Using an Arc to share the provider across multiple threads.
@@ -69,9 +70,11 @@ async fn main() -> std::io::Result<()> {
     if let Err(e) = server::start(app_state, asset_state, provider, conf).await {
         panic!("server start faild. err: {e}");
     }
+    info!("close service...");
 
     // 关闭数据库
     let _ = db.close().await;
+    info!("close database...");
 
     warn!("{}", "See you again~".yellow());
     Ok(())

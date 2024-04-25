@@ -13,15 +13,26 @@ members = [
     "crates/core/actix_validator",
     "crates/core/utils",
     "crates/core/jwt",
+    "crates/core/scheduler",
 
     # 中间件
     "crates/middleware",
     # 插件
     "crates/plugins",
+    # 依赖注入
+    "crates/inject",
     # 应用状态
     "crates/app_state",
+
     # 服务集
     "crates/service_hub",
+    "crates/service_hub/public",
+    "crates/service_hub/template",
+    "crates/service_hub/auth",
+    "crates/service_hub/perm",
+    "crates/service_hub/system",
+    "crates/service_hub/schedule",
+    "crates/service_hub/log",
 
     # 应用服务
     "admin",
@@ -52,7 +63,7 @@ validator_derive = "0.18"
 validator = "0.18"
 actix-cors = "0.7"
 actix-web-requestid = "2.1"
-actix-request-identifier = "4.1"
+actix-request-identifier = "4.2"
 tracing-actix-web = "0.7"
 listenfd = "1.0"
 
@@ -64,12 +75,12 @@ serde_json = "1.0"
 serde_yaml = "0.9"
 
 # 工具
-jsonwebtoken = "9.2"
+jsonwebtoken = "9.3"
 chrono = "0.4"
 captcha-rs = "0.2"
 sha2 = "0.10"
 regex = "1.10"
-uuid = "1.7.0"
+uuid = "1.8"
 time = "0.3"
 rust-embed = "8.3"
 tokio-cron-scheduler = "0.10"
