@@ -107,7 +107,8 @@
   - open api 接口 rbac
   - 系统用户接口鉴权
 - 定时任务调研与集成；
-- 缓存
+  - 任务初始化
+- 内存缓存
 - 初始化库表数据
   - https://www.sea-ql.org/SeaORM/docs/migration/writing-migration/#using-raw-sql
   - 需要手动执行脚本；
@@ -115,7 +116,6 @@
   - 接口
   - 默认角色
 - 数据库 mock 单元测试
-- 迁移补全关系表的关联关系
 
 https://github.com/actix/actix-extras/tree/master/actix-identity
 https://crates.io/crates/actix-ws
