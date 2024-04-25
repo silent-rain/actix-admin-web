@@ -16,6 +16,7 @@ chrono = { workspace = true }
 tokio-cron-scheduler = { workspace = true }
 tracing = { workspace = true }
 sea-orm = { workspace = true }
+async-trait = { workspace = true }
 
 [dev-dependencies]
 tokio = { workspace = true, features = [

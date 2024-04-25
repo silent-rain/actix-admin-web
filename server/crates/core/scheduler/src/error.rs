@@ -6,4 +6,6 @@ pub enum Error {
     JobSchedulerError(String),
     /// 更新数据库任务信息失败
     DbUpdateScheduleJobError(String),
+    /// 未配置定时任务Expression
+    NotExpressionError,
 }

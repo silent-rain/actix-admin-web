@@ -15,7 +15,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut sched = JobScheduler::new().await?;
 
     // 任务1
-    let job1 = Job::new(1, db.clone())?.witch_interval_job(8, |uuid, _jobs| {
+    let job1 = Job::new(1, db.clone())?.with_interval_job(8, |uuid, _jobs| {
         Box::pin(async move {
             println!("I run async every 8 seconds uuid: {uuid} job1");
         })
@@ -25,7 +25,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // 任务1重置
     let xjob =
-        Job::new(1, db.clone())?.witch_cron_uuid(&job1_uuid, "1/5 * * * * *", |uuid, _jobs| {
+        Job::new(1, db.clone())?.with_cron_uuid(&job1_uuid, "1/5 * * * * *", |uuid, _jobs| {
             Box::pin(async move {
                 println!("I run async every 5 seconds uuid: {uuid} job11");
             })
@@ -37,7 +37,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 动态添加任务2
     let sched_c = JobScheduler::instance()?;
     let sched2 = JobScheduler::from(sched_c);
-    let job2 = Job::new(1, db)?.witch_interval_job(5, |uuid, _jobs| {
+    let job2 = Job::new(1, db)?.with_interval_job(5, |uuid, _jobs| {
         Box::pin(async move {
             println!("I run async every 5 seconds uuid: {uuid} job2");
         })

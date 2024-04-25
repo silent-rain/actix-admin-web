@@ -74,7 +74,7 @@ where
     }
 
     /// 添加即时任务作业
-    pub fn witch_interval_job<JobRun>(
+    pub fn with_interval_job<JobRun>(
         mut self,
         secs: u64,
         run: JobRun,
@@ -93,7 +93,7 @@ where
     }
 
     /// 重置已有定时任务
-    pub fn witch_cron_uuid<JobRun>(
+    pub fn with_cron_uuid<JobRun>(
         mut self,
         uuid: &str,
         schedule: &str,
