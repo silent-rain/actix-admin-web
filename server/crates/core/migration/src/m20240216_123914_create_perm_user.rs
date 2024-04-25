@@ -1,13 +1,11 @@
 //! 创建用户表
 //! User Entity: [`entity::prelude::PermUser`]
-use entity::{perm_user::Column, prelude::PermUser};
 
-use sea_orm_migration::{
-    async_trait,
-    sea_orm::{DatabaseBackend, DeriveMigrationName},
+use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},
-    DbErr, MigrationTrait, SchemaManager,
+    DatabaseBackend, DeriveIden, DeriveMigrationName,
 };
+use sea_orm_migration::{async_trait, DbErr, MigrationTrait, SchemaManager};
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
@@ -19,11 +17,11 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(PermUser)
+                    .table(PermUser::Table)
                     .comment("用户表")
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(Column::Id)
+                        ColumnDef::new(PermUser::Id)
                             .integer()
                             .primary_key()
                             .auto_increment()
@@ -31,14 +29,14 @@ impl MigrationTrait for Migration {
                             .comment("用户ID"),
                     )
                     .col(
-                        ColumnDef::new(Column::Username)
+                        ColumnDef::new(PermUser::Username)
                             .string()
                             .string_len(32)
                             .not_null()
                             .comment("用户名称"),
                     )
                     .col(
-                        ColumnDef::new(Column::RealName)
+                        ColumnDef::new(PermUser::RealName)
                             .string()
                             .string_len(32)
                             .null()
@@ -46,15 +44,20 @@ impl MigrationTrait for Migration {
                             .comment("真实姓名"),
                     )
                     .col(
-                        ColumnDef::new(Column::Gender)
+                        ColumnDef::new(PermUser::Gender)
                             .tiny_integer()
                             .null()
                             .default(1)
                             .comment("性别;1:男,2:女,3:保密"),
                     )
-                    .col(ColumnDef::new(Column::Age).integer().null().comment("年龄"))
                     .col(
-                        ColumnDef::new(Column::Birthday)
+                        ColumnDef::new(PermUser::Age)
+                            .integer()
+                            .null()
+                            .comment("年龄"),
+                    )
+                    .col(
+                        ColumnDef::new(PermUser::Birthday)
                             .string()
                             .string_len(20)
                             .null()
@@ -62,7 +65,7 @@ impl MigrationTrait for Migration {
                             .comment("出生日期"),
                     )
                     .col(
-                        ColumnDef::new(Column::Avatar)
+                        ColumnDef::new(PermUser::Avatar)
                             .string()
                             .string_len(200)
                             .null()
@@ -70,7 +73,7 @@ impl MigrationTrait for Migration {
                             .comment("头像URL"),
                     )
                     .col(
-                        ColumnDef::new(Column::Phone)
+                        ColumnDef::new(PermUser::Phone)
                             .string()
                             .string_len(20)
                             .null()
@@ -78,7 +81,7 @@ impl MigrationTrait for Migration {
                             .comment("手机号码"),
                     )
                     .col(
-                        ColumnDef::new(Column::Email)
+                        ColumnDef::new(PermUser::Email)
                             .string()
                             .string_len(100)
                             .null()
@@ -86,7 +89,7 @@ impl MigrationTrait for Migration {
                             .comment("邮箱"),
                     )
                     .col(
-                        ColumnDef::new(Column::Intro)
+                        ColumnDef::new(PermUser::Intro)
                             .string()
                             .string_len(200)
                             .null()
@@ -94,7 +97,7 @@ impl MigrationTrait for Migration {
                             .comment("介绍"),
                     )
                     .col(
-                        ColumnDef::new(Column::Note)
+                        ColumnDef::new(PermUser::Note)
                             .string()
                             .string_len(200)
                             .default("")
@@ -103,35 +106,35 @@ impl MigrationTrait for Migration {
                             .comment("备注"),
                     )
                     .col(
-                        ColumnDef::new(Column::Password)
+                        ColumnDef::new(PermUser::Password)
                             .string()
                             .string_len(64)
                             .not_null()
                             .comment("密码"),
                     )
                     .col(
-                        ColumnDef::new(Column::Status)
+                        ColumnDef::new(PermUser::Status)
                             .tiny_integer()
                             .not_null()
                             .default(1)
                             .comment("状态,0:停用,1:正常"),
                     )
                     .col(
-                        ColumnDef::new(Column::DeptId)
+                        ColumnDef::new(PermUser::DeptId)
                             .integer()
                             .null()
                             .default(0)
                             .comment("部门ID"),
                     )
                     .col(
-                        ColumnDef::new(Column::CreatedAt)
+                        ColumnDef::new(PermUser::CreatedAt)
                             .date_time()
                             .not_null()
                             .default(Expr::current_timestamp())
                             .comment("创建时间"),
                     )
                     .col(
-                        ColumnDef::new(Column::UpdatedAt)
+                        ColumnDef::new(PermUser::UpdatedAt)
                             .date_time()
                             .not_null()
                             .extra({
@@ -150,7 +153,29 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
         manager
-            .drop_table(Table::drop().table(PermUser).to_owned())
+            .drop_table(Table::drop().table(PermUser::Table).to_owned())
             .await
     }
+}
+
+#[derive(DeriveIden)]
+pub enum PermUser {
+    #[sea_orm(iden = "t_perm_user")]
+    Table,
+    Id,
+    Username,
+    RealName,
+    Gender,
+    Age,
+    Birthday,
+    Avatar,
+    Phone,
+    Email,
+    Intro,
+    Note,
+    Password,
+    Status,
+    DeptId,
+    CreatedAt,
+    UpdatedAt,
 }

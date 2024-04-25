@@ -1,5 +1,5 @@
 //! 字典维度表
-
+//! User Entity: [`entity::prelude::SysDictDim`]
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Index, Table},
     DatabaseBackend, DeriveIden, DeriveMigrationName, Iden,

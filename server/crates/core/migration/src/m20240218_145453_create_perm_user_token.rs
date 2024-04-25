@@ -1,6 +1,5 @@
 //! 用户Token令牌表
 //! User Entity: [`entity::prelude::PermUserToken`]
-// use entity::{perm_user_token::PermUserToken, prelude::PermUserToken};
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},
@@ -19,7 +18,7 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(PermUserToken)
+                    .table(PermUserToken::Table)
                     .comment("用户Token令牌表")
                     .if_not_exists()
                     .col(
@@ -107,7 +106,7 @@ impl MigrationTrait for Migration {
         // Replace the sample below with your own migration scripts
 
         manager
-            .drop_table(Table::drop().table(PermUserToken).to_owned())
+            .drop_table(Table::drop().table(PermUserToken::Table).to_owned())
             .await
     }
 }

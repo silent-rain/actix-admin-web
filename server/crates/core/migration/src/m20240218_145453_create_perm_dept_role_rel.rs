@@ -125,10 +125,10 @@ impl MigrationTrait for Migration {
 
 #[derive(DeriveIden)]
 pub enum PermDeptRoleRel {
-    #[sea_orm(iden = "t_perm_dept")]
+    #[sea_orm(iden = "t_perm_dept_role_rel")]
     Table,
     Id,
-    RoleId,
     DeptId,
+    RoleId,
     CreatedAt,
 }

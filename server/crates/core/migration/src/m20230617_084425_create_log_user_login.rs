@@ -1,13 +1,11 @@
 //! 用户登录日志表
 //! User Entity: [`entity::prelude::LogUserLogin`]
-use entity::{log_user_login::Column, prelude::LogUserLogin};
 
-use sea_orm_migration::{
-    async_trait,
-    sea_orm::{DatabaseBackend, DeriveMigrationName},
+use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},
-    DbErr, MigrationTrait, SchemaManager,
+    DatabaseBackend, DeriveIden, DeriveMigrationName,
 };
+use sea_orm_migration::{async_trait, DbErr, MigrationTrait, SchemaManager};
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
@@ -19,11 +17,11 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(LogUserLogin)
+                    .table(LogUserLogin::Table)
                     .comment("用户登录日志表")
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(Column::Id)
+                        ColumnDef::new(LogUserLogin::Id)
                             .integer()
                             .primary_key()
                             .auto_increment()
@@ -31,27 +29,27 @@ impl MigrationTrait for Migration {
                             .comment("自增ID"),
                     )
                     .col(
-                        ColumnDef::new(Column::UserId)
+                        ColumnDef::new(LogUserLogin::UserId)
                             .integer()
                             .not_null()
                             .comment("用户ID"),
                     )
                     .col(
-                        ColumnDef::new(Column::Username)
+                        ColumnDef::new(LogUserLogin::Username)
                             .string()
                             .string_len(32)
                             .not_null()
                             .comment("用户名称"),
                     )
                     .col(
-                        ColumnDef::new(Column::Token)
+                        ColumnDef::new(LogUserLogin::Token)
                             .string()
                             .string_len(250)
                             .not_null()
                             .comment("登陆令牌"),
                     )
                     .col(
-                        ColumnDef::new(Column::RemoteAddr)
+                        ColumnDef::new(LogUserLogin::RemoteAddr)
                             .string()
                             .string_len(64)
                             .null()
@@ -59,7 +57,7 @@ impl MigrationTrait for Migration {
                             .comment("登录IP"),
                     )
                     .col(
-                        ColumnDef::new(Column::UserAgent)
+                        ColumnDef::new(LogUserLogin::UserAgent)
                             .string()
                             .string_len(256)
                             .null()
@@ -67,7 +65,7 @@ impl MigrationTrait for Migration {
                             .comment("用户代理"),
                     )
                     .col(
-                        ColumnDef::new(Column::Device)
+                        ColumnDef::new(LogUserLogin::Device)
                             .string()
                             .string_len(20)
                             .null()
@@ -75,7 +73,7 @@ impl MigrationTrait for Migration {
                             .comment("设备"),
                     )
                     .col(
-                        ColumnDef::new(Column::System)
+                        ColumnDef::new(LogUserLogin::System)
                             .string()
                             .string_len(20)
                             .null()
@@ -83,7 +81,7 @@ impl MigrationTrait for Migration {
                             .comment("系统"),
                     )
                     .col(
-                        ColumnDef::new(Column::Browser)
+                        ColumnDef::new(LogUserLogin::Browser)
                             .string()
                             .string_len(20)
                             .null()
@@ -91,28 +89,28 @@ impl MigrationTrait for Migration {
                             .comment("浏览器"),
                     )
                     .col(
-                        ColumnDef::new(Column::Status)
+                        ColumnDef::new(LogUserLogin::Status)
                             .tiny_integer()
                             .not_null()
                             .default(1)
                             .comment("登录状态,0:失败,1:成功"),
                     )
                     .col(
-                        ColumnDef::new(Column::Disabled)
+                        ColumnDef::new(LogUserLogin::Disabled)
                             .tiny_integer()
                             .not_null()
                             .default(0)
                             .comment("禁用状态,0:未禁用,1:禁用"),
                     )
                     .col(
-                        ColumnDef::new(Column::CreatedAt)
+                        ColumnDef::new(LogUserLogin::CreatedAt)
                             .date_time()
                             .not_null()
                             .default(Expr::current_timestamp())
                             .comment("创建时间"),
                     )
                     .col(
-                        ColumnDef::new(Column::UpdatedAt)
+                        ColumnDef::new(LogUserLogin::UpdatedAt)
                             .date_time()
                             .not_null()
                             .extra({
@@ -131,7 +129,26 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
         manager
-            .drop_table(Table::drop().table(LogUserLogin).to_owned())
+            .drop_table(Table::drop().table(LogUserLogin::Table).to_owned())
             .await
     }
+}
+
+#[derive(DeriveIden)]
+pub enum LogUserLogin {
+    #[sea_orm(iden = "t_log_user_login")]
+    Table,
+    Id,
+    UserId,
+    Username,
+    Token,
+    RemoteAddr,
+    UserAgent,
+    Device,
+    System,
+    Browser,
+    Status,
+    Disabled,
+    CreatedAt,
+    UpdatedAt,
 }

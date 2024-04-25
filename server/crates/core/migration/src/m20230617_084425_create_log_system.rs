@@ -1,13 +1,11 @@
 //! 系统日志表
 //! User Entity: [`entity::prelude::LogSystem`]
-use entity::{log_system::Column, prelude::LogSystem};
 
-use sea_orm_migration::{
-    async_trait,
-    sea_orm::DeriveMigrationName,
+use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},
-    DbErr, MigrationTrait, SchemaManager,
+    DeriveIden, DeriveMigrationName,
 };
+use sea_orm_migration::{async_trait, DbErr, MigrationTrait, SchemaManager};
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
@@ -19,11 +17,11 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(LogSystem)
+                    .table(LogSystem::Table)
                     .comment("系统日志表")
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(Column::Id)
+                        ColumnDef::new(LogSystem::Id)
                             .integer()
                             .primary_key()
                             .auto_increment()
@@ -31,14 +29,14 @@ impl MigrationTrait for Migration {
                             .comment("自增ID"),
                     )
                     .col(
-                        ColumnDef::new(Column::UserId)
+                        ColumnDef::new(LogSystem::UserId)
                             .integer()
                             .null()
                             .default(0)
                             .comment("请求用户ID"),
                     )
                     .col(
-                        ColumnDef::new(Column::Username)
+                        ColumnDef::new(LogSystem::Username)
                             .string()
                             .string_len(32)
                             .null()
@@ -46,28 +44,28 @@ impl MigrationTrait for Migration {
                             .comment("自增ID"),
                     )
                     .col(
-                        ColumnDef::new(Column::Name)
+                        ColumnDef::new(LogSystem::Name)
                             .string()
                             .string_len(50)
                             .not_null()
                             .comment("日志记录器名称"),
                     )
                     .col(
-                        ColumnDef::new(Column::SpanPid)
+                        ColumnDef::new(LogSystem::SpanPid)
                             .integer()
                             .null()
                             .default(0)
                             .comment("Parent Span Id"),
                     )
                     .col(
-                        ColumnDef::new(Column::SpanId)
+                        ColumnDef::new(LogSystem::SpanId)
                             .integer()
                             .null()
                             .default(0)
                             .comment("Span Id"),
                     )
                     .col(
-                        ColumnDef::new(Column::ModulePath)
+                        ColumnDef::new(LogSystem::ModulePath)
                             .string()
                             .string_len(100)
                             .null()
@@ -75,14 +73,14 @@ impl MigrationTrait for Migration {
                             .comment("模块路径"),
                     )
                     .col(
-                        ColumnDef::new(Column::Target)
+                        ColumnDef::new(LogSystem::Target)
                             .string()
                             .string_len(100)
                             .not_null()
                             .comment("描述发生此元数据所描述的跨度或事件的系统部分"),
                     )
                     .col(
-                        ColumnDef::new(Column::File)
+                        ColumnDef::new(LogSystem::File)
                             .string()
                             .string_len(500)
                             .null()
@@ -90,40 +88,40 @@ impl MigrationTrait for Migration {
                             .comment("文件"),
                     )
                     .col(
-                        ColumnDef::new(Column::Line)
+                        ColumnDef::new(LogSystem::Line)
                             .integer()
                             .null()
                             .default(0)
                             .comment("报错行数"),
                     )
                     .col(
-                        ColumnDef::new(Column::Level)
+                        ColumnDef::new(LogSystem::Level)
                             .string()
                             .string_len(10)
                             .not_null()
                             .comment("日志级别"),
                     )
                     .col(
-                        ColumnDef::new(Column::Kind)
+                        ColumnDef::new(LogSystem::Kind)
                             .string()
                             .string_len(10)
                             .not_null()
                             .comment("事件类型"),
                     )
                     .col(
-                        ColumnDef::new(Column::IsEvent)
+                        ColumnDef::new(LogSystem::IsEvent)
                             .tiny_integer()
                             .not_null()
                             .comment("是否为事件"),
                     )
                     .col(
-                        ColumnDef::new(Column::IsSpan)
+                        ColumnDef::new(LogSystem::IsSpan)
                             .tiny_integer()
                             .not_null()
                             .comment("是否为 span"),
                     )
                     .col(
-                        ColumnDef::new(Column::Fields)
+                        ColumnDef::new(LogSystem::Fields)
                             .string()
                             .string_len(500)
                             .null()
@@ -131,26 +129,26 @@ impl MigrationTrait for Migration {
                             .comment("日志字段名称列表"),
                     )
                     .col(
-                        ColumnDef::new(Column::FieldData)
+                        ColumnDef::new(LogSystem::FieldData)
                             .text()
                             .null()
                             .comment("fields 日志数据集"),
                     )
                     .col(
-                        ColumnDef::new(Column::Message)
+                        ColumnDef::new(LogSystem::Message)
                             .text()
                             .null()
                             .comment("日志信息"),
                     )
                     .col(
-                        ColumnDef::new(Column::Code)
+                        ColumnDef::new(LogSystem::Code)
                             .integer()
                             .null()
                             .default(0)
                             .comment("业务误码"),
                     )
                     .col(
-                        ColumnDef::new(Column::CodeMsg)
+                        ColumnDef::new(LogSystem::CodeMsg)
                             .string()
                             .string_len(500)
                             .null()
@@ -158,13 +156,13 @@ impl MigrationTrait for Migration {
                             .comment("业务误码信息"),
                     )
                     .col(
-                        ColumnDef::new(Column::Stack)
+                        ColumnDef::new(LogSystem::Stack)
                             .text()
                             .null()
                             .comment("堆栈信息"),
                     )
                     .col(
-                        ColumnDef::new(Column::Note)
+                        ColumnDef::new(LogSystem::Note)
                             .string()
                             .string_len(200)
                             .null()
@@ -172,7 +170,7 @@ impl MigrationTrait for Migration {
                             .comment("备注"),
                     )
                     .col(
-                        ColumnDef::new(Column::CreatedAt)
+                        ColumnDef::new(LogSystem::CreatedAt)
                             .date_time()
                             .not_null()
                             .default(Expr::current_timestamp())
@@ -186,7 +184,35 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
         manager
-            .drop_table(Table::drop().table(LogSystem).to_owned())
+            .drop_table(Table::drop().table(LogSystem::Table).to_owned())
             .await
     }
+}
+
+#[derive(DeriveIden)]
+pub enum LogSystem {
+    #[sea_orm(iden = "t_log_system")]
+    Table,
+    Id,
+    UserId,
+    Username,
+    Name,
+    SpanPid,
+    SpanId,
+    ModulePath,
+    Target,
+    File,
+    Line,
+    Level,
+    Kind,
+    IsEvent,
+    IsSpan,
+    Fields,
+    FieldData,
+    Message,
+    Code,
+    CodeMsg,
+    Stack,
+    Note,
+    CreatedAt,
 }
