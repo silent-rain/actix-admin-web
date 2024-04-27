@@ -6,7 +6,6 @@ edition = "2021"
 [dependencies]
 database = { path = "../../core/database" }
 entity = { path = "../../core/entity" }
-scheduler = { path = "../../core/scheduler" }
 code = { path = "../../core/code" }
 response = { path = "../../core/response" }
 context = { path = "../../core/context" }
@@ -36,6 +35,5 @@ uuid = { workspace = true, features = ["v4"] }
 serde = { workspace = true, features = ["derive"] }
 serde_json = { workspace = true }
 serde_repr = { workspace = true }
-tokio-cron-scheduler = { workspace = true }
 uap-rust = { workspace = true }
 futures-util = { workspace = true }

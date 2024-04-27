@@ -4,8 +4,6 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-code = { path = "../code" }
-
 actix-web = { workspace = true }
 tracing-actix-web = { workspace = true }
 futures = { workspace = true }

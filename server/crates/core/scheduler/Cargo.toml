@@ -7,7 +7,6 @@ edition = "2021"
 
 [dependencies]
 code = { path = "../code" }
-logger = { path = "../logger" }
 entity = { path = "../entity" }
 database = { path = "../database" }
 
