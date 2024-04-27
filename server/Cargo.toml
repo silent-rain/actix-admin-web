@@ -27,6 +27,7 @@ members = [
     # 服务集
     "crates/service_hub",
     "crates/service_hub/public",
+    "crates/service_hub/initialize",
     "crates/service_hub/template",
     "crates/service_hub/auth",
     "crates/service_hub/perm",
