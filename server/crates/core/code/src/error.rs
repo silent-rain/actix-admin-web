@@ -194,7 +194,6 @@ impl From<std::string::FromUtf8Error> for Error {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use code_msg_derive::CodeMessage;
 
     #[test]
     fn test_error_code() {
@@ -216,20 +215,5 @@ mod tests {
         let code = err.code();
         println!("== {}", code);
         assert!(code == 10351);
-    }
-
-    #[derive(CodeMessage)]
-    enum Error2 {
-        #[status(code = 0, msg = "ok")]
-        OK,
-        /// 未知错误
-        #[status(code = 10001, msg = "unknown error")]
-        UnknownError,
-    }
-
-    #[test]
-    fn test_error_code_message() {
-        assert!(Error2::UnknownError.code() == 10001);
-        assert!(Error2::OK.code() == 0);
     }
 }

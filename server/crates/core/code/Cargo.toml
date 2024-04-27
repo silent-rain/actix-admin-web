@@ -10,7 +10,6 @@ name = "code"
 path = "src/lib.rs"
 
 [dependencies]
-code_msg_derive = { path = "../code_msg_derive" }
 
 serde = { workspace = true, features = ["derive"] }
 thiserror = { workspace = true }
