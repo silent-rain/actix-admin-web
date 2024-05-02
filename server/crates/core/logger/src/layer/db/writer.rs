@@ -167,8 +167,7 @@ impl DbWriter {
 
         // 尝试获取当前的 tokio 运行时的句柄。
         // 如果能够获取到句柄，那么我们就可以认为当前是在 tokio 运行时的上下文中。
-        if let Err(err) = tokio::runtime::Handle::try_current() {
-            println!("tokio::runtim::Handle, err: {:#?}", err);
+        if tokio::runtime::Handle::try_current().is_err() {
             return;
         }
         tokio::spawn(async move {

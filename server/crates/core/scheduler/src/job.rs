@@ -17,36 +17,37 @@ use std::{
     time::Duration,
 };
 
-use crate::{dao::Dao, enums::ScheduleJobLogStatus};
+use crate::{dao::Dao, enums::ScheduleJobLogStatus, error::Error};
 
 use database::DbRepo;
 use entity::schedule_job_log;
 
 use chrono::Local;
 use sea_orm::Set;
-use tokio_cron_scheduler::{Job, JobBuilder, JobScheduler, JobSchedulerError};
+use tokio_cron_scheduler::{Job as TokioJob, JobBuilder, JobScheduler, JobSchedulerError};
 use tracing::{error, trace};
 use uuid::Uuid;
 
 #[derive(Clone)]
-pub struct XJob<DB>
+pub struct Job<DB>
 where
     DB: DbRepo + Send + Sync + 'static,
 {
     dao: Arc<Dao<DB>>,
     id: i32,
-    job: Job,
+    job: TokioJob,
     start_time: Arc<AtomicI64>,
 }
 
-impl<DB> XJob<DB>
+impl<DB> Job<DB>
 where
     DB: DbRepo + Send + Sync + 'static,
 {
-    pub fn new(id: i32, db: DB) -> Result<Self, JobSchedulerError> {
-        let job = XJob {
+    pub fn new(id: i32, db: DB) -> Result<Self, Error> {
+        let job = Job {
             id,
-            job: Job::new_one_shot(Duration::from_secs(0), |_uuid, _jobs| {})?,
+            job: TokioJob::new_one_shot(Duration::from_secs(0), |_uuid, _jobs| {})
+                .map_err(Error::JobSchedulerError)?,
             dao: Arc::new(Dao::new(db)),
             start_time: Arc::new(AtomicI64::new(0)),
         };
@@ -55,38 +56,29 @@ where
     }
 
     /// 添加定时任务作业
-    pub fn with_cron_job<JobRun>(
-        mut self,
-        schedule: &str,
-        run: JobRun,
-    ) -> Result<Self, JobSchedulerError>
+    pub fn with_cron_job<JobRun>(mut self, schedule: &str, run: JobRun) -> Result<Self, Error>
     where
         JobRun: FnMut(Uuid, JobScheduler) -> Pin<Box<dyn Future<Output = ()> + Send>>
             + Send
             + Sync
             + 'static,
     {
-        let job = Job::new_async_tz(schedule, Local, run)?;
-
+        let job = TokioJob::new_async_tz(schedule, Local, run).map_err(Error::JobSchedulerError)?;
         self.job = job;
 
         Ok(self)
     }
 
     /// 添加即时任务作业
-    pub fn with_interval_job<JobRun>(
-        mut self,
-        secs: u64,
-        run: JobRun,
-    ) -> Result<Self, JobSchedulerError>
+    pub fn with_interval_job<JobRun>(mut self, secs: u64, run: JobRun) -> Result<Self, Error>
     where
         JobRun: FnMut(Uuid, JobScheduler) -> Pin<Box<dyn Future<Output = ()> + Send>>
             + Send
             + Sync
             + 'static,
     {
-        let job = Job::new_repeated_async(Duration::from_secs(secs), run)?;
-
+        let job = TokioJob::new_repeated_async(Duration::from_secs(secs), run)
+            .map_err(Error::JobSchedulerError)?;
         self.job = job;
 
         Ok(self)
@@ -98,7 +90,7 @@ where
         uuid: &str,
         schedule: &str,
         run: JobRun,
-    ) -> Result<Self, JobSchedulerError>
+    ) -> Result<Self, Error>
     where
         JobRun: FnMut(Uuid, JobScheduler) -> Pin<Box<dyn Future<Output = ()> + Send>>
             + Send
@@ -112,14 +104,15 @@ where
             .with_job_id(job_id.into())
             .with_schedule(schedule)?
             .with_run_async(Box::new(run))
-            .build()?;
+            .build()
+            .map_err(Error::JobSchedulerError)?;
         self.job = job;
 
         Ok(self)
     }
 
     /// 添加指定定时任务
-    pub fn form_job(mut self, job: Job) -> Self {
+    pub fn form_job(mut self, job: TokioJob) -> Self {
         self.job = job;
         self
     }
@@ -130,15 +123,12 @@ where
     }
 
     /// 返回任务
-    pub fn job(&self) -> Job {
+    pub fn job(&self) -> TokioJob {
         self.job.clone()
     }
 
     // 添加作业启动时要执行的操作
-    pub async fn on_start_notification(
-        &mut self,
-        sched: JobScheduler,
-    ) -> Result<(), JobSchedulerError> {
+    pub async fn on_start_notification(&mut self, sched: JobScheduler) -> Result<(), Error> {
         let dao = self.dao.clone();
         let start_time = self.start_time.clone();
         let id = self.id;
@@ -161,12 +151,12 @@ where
                         };
 
                         if let Err(err) = dao.add_schedule_job_log(model).await {
-                            error!("Job {:?} was started, err: {:?}", job_id, err);
+                            error!("TokioJob {:?} was started, err: {:?}", job_id, err);
                             return;
                         };
 
                         trace!(
-                            "Job {:?} was started, notification {:?} ran ({:?})",
+                            "TokioJob {:?} was started, notification {:?} ran ({:?})",
                             job_id,
                             notification_id,
                             type_of_notification
@@ -174,15 +164,13 @@ where
                     })
                 }),
             )
-            .await?;
+            .await
+            .map_err(Error::JobSchedulerError)?;
         Ok(())
     }
 
     // 添加作业完成时要执行的操作
-    pub async fn on_done_notification(
-        &mut self,
-        sched: JobScheduler,
-    ) -> Result<(), JobSchedulerError> {
+    pub async fn on_done_notification(&mut self, sched: JobScheduler) -> Result<(), Error> {
         let dao = self.dao.clone();
         let start_time = self.start_time.clone();
         let id = self.id;
@@ -208,11 +196,11 @@ where
                         };
 
                         if let Err(err) = dao.add_schedule_job_log(model).await {
-                            error!("Job {:?} was success, err: {:?}", job_id, err);
+                            error!("TokioJob {:?} was success, err: {:?}", job_id, err);
                             return;
                         };
                         trace!(
-                            "Job {:?} was success, notification {:?} ran ({:?})",
+                            "TokioJob {:?} was success, notification {:?} ran ({:?})",
                             job_id,
                             notification_id,
                             type_of_notification
@@ -220,15 +208,13 @@ where
                     })
                 }),
             )
-            .await?;
+            .await
+            .map_err(Error::JobSchedulerError)?;
         Ok(())
     }
 
     // 添加作业移除时要执行的操作
-    pub async fn on_removed_notification(
-        &mut self,
-        sched: JobScheduler,
-    ) -> Result<(), JobSchedulerError> {
+    pub async fn on_removed_notification(&mut self, sched: JobScheduler) -> Result<(), Error> {
         let dao = self.dao.clone();
         let start_time = self.start_time.clone();
         let id = self.id;
@@ -254,12 +240,12 @@ where
                         };
 
                         if let Err(err) = dao.add_schedule_job_log(model).await {
-                            error!("Job {:?} was removed, err: {:?}", job_id, err);
+                            error!("TokioJob {:?} was removed, err: {:?}", job_id, err);
                             return;
                         };
 
                         trace!(
-                            "Job {:?} was removed, notification {:?} ran ({:?})",
+                            "TokioJob {:?} was removed, notification {:?} ran ({:?})",
                             job_id,
                             notification_id,
                             type_of_notification
@@ -267,15 +253,13 @@ where
                     })
                 }),
             )
-            .await?;
+            .await
+            .map_err(Error::JobSchedulerError)?;
         Ok(())
     }
 
     /// 设置任务消息通知事件
-    pub async fn set_job_notification(
-        &mut self,
-        sched: JobScheduler,
-    ) -> Result<(), JobSchedulerError> {
+    pub async fn set_job_notification(&mut self, sched: JobScheduler) -> Result<(), Error> {
         self.on_start_notification(sched.clone()).await?;
         self.on_done_notification(sched.clone()).await?;
         self.on_removed_notification(sched.clone()).await?;

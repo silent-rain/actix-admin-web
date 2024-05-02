@@ -6,6 +6,6 @@ pub mod job;
 pub mod job_scheduler;
 pub mod register;
 
-pub use job::XJob as Job;
-pub use job_scheduler::XJobScheduler as JobScheduler;
+pub use job::Job;
+pub use job_scheduler::JobScheduler;
 pub use tokio_cron_scheduler::JobSchedulerError;

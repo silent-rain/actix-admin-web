@@ -35,8 +35,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // 动态添加任务2
-    let sched_c = JobScheduler::instance()?;
-    let sched2 = JobScheduler::from(sched_c);
+    let sched2 = JobScheduler::new().await?;
     let job2 = Job::new(1, db)?.with_interval_job(5, |uuid, _jobs| {
         Box::pin(async move {
             println!("I run async every 5 seconds uuid: {uuid} job2");

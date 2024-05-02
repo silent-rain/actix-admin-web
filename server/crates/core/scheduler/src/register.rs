@@ -9,28 +9,28 @@
 use crate::{
     dao::Dao,
     enums::{ScheduleJobSource, ScheduleJobStatus, ScheduleJobType},
-    Job,
+    error::Error,
+    Job, JobScheduler,
 };
-
-use super::error::Error;
 
 use database::DbRepo;
 use entity::schedule_job;
-use sea_orm::Set;
 
 use async_trait::async_trait;
-use tokio_cron_scheduler::JobSchedulerError;
+use sea_orm::Set;
+use tracing::error;
 
 /// 系统定时任务 Trait
 #[async_trait]
 pub trait SysTaskTrait<DB>
 where
     DB: DbRepo + Clone + Send + Sync + 'static,
+    Self: Send + Sync + 'static,
 {
     /// 系统定时任务编码
     fn sys_code(&self) -> String;
     /// 执行的任务
-    fn task(&self) -> Result<Job<DB>, JobSchedulerError>;
+    fn task(&self, job_model: schedule_job::Model) -> Result<Job<DB>, Error>;
 }
 
 /// 系统定时任务注册
@@ -53,31 +53,78 @@ where
         }
     }
 
-    /// 统一注册任务的位置
-    // pub fn register(&mut self) {
-    //     self.add_task(Box::new(DemoTask::new(self.db.clone())));
-    //     self.add_task(Box::new(DemoTask2::new(self.db.clone())));
-    // }
-
     /// 注册任务
     pub async fn register(&mut self) -> Result<(), Error> {
         let sys_job_list = self.sys_job_list().await?;
 
-        for job in self.tasks.iter() {
+        for task in self.tasks.iter() {
             let job_model = sys_job_list
                 .iter()
-                .find(|v| v.sys_code != Some(job.sys_code()));
-            let job_task = job
-                .task()
-                .map_err(|err| Error::JobSchedulerError(err.to_string()))?;
-            let uuid = job_task.guid().to_string();
+                .find(|v| v.sys_code == Some(task.sys_code()));
+
+            // 更新数据库中的任务UUID
             let job_model = match job_model {
                 Some(v) => v,
                 None => continue,
             };
+
+            let sys_job = match task.task(job_model.clone()) {
+                Ok(v) => v,
+                Err(err) => {
+                    error!(
+                        "id:{} task name: {} sys_code: {:?}, err: {}",
+                        job_model.id,
+                        job_model.name,
+                        job_model.sys_code,
+                        err.to_string()
+                    );
+                    continue;
+                }
+            };
+            let uuid = sys_job.guid().to_string();
+
+            // 将任务添加到任务队列中
+            let sched = match JobScheduler::new().await {
+                Ok(v) => v,
+                Err(err) => {
+                    error!(
+                        "id:{} task name: {} sys_code: {:?}, err: {}",
+                        job_model.id,
+                        job_model.name,
+                        job_model.sys_code,
+                        err.to_string()
+                    );
+                    continue;
+                }
+            };
+            match sched.add_job(sys_job.clone()).await {
+                Ok(v) => v,
+                Err(err) => {
+                    error!(
+                        "id:{} task name: {} sys_code: {:?}, err: {}",
+                        job_model.id,
+                        job_model.name,
+                        job_model.sys_code,
+                        err.to_string()
+                    );
+                    continue;
+                }
+            };
+
             // 更新为当前任务的UUID
-            self.update_schedule_job_uuid(job_model.clone(), uuid)
-                .await?;
+            match self.update_schedule_job_uuid(job_model.clone(), uuid).await {
+                Ok(v) => v,
+                Err(err) => {
+                    error!(
+                        "id:{} task name: {} sys_code: {:?}, err: {}",
+                        job_model.id,
+                        job_model.name,
+                        job_model.sys_code,
+                        err.to_string()
+                    );
+                    continue;
+                }
+            };
         }
 
         Ok(())
@@ -99,7 +146,6 @@ where
             .filter(|v| v.status == ScheduleJobStatus::Online as i8)
             .filter(|v| v.source == ScheduleJobSource::System as i8)
             .collect::<Vec<schedule_job::Model>>();
-
         Ok(job_list)
     }
 
@@ -146,11 +192,42 @@ where
         let job_list = self.user_job_list().await?;
 
         for job_model in job_list.iter() {
-            let uuid = if job_model.job_type == ScheduleJobType::Interval as i8 {
+            let user_job = if job_model.job_type == ScheduleJobType::Interval as i8 {
                 self.init_interval_task(job_model)?
             } else {
                 self.init_cron_task(job_model)?
             };
+            let uuid = user_job.guid().to_string();
+
+            // 将任务添加到任务队列中
+            JobScheduler::new().await?.add_job(user_job.clone()).await?;
+            let sched = match JobScheduler::new().await {
+                Ok(v) => v,
+                Err(err) => {
+                    error!(
+                        "id:{} task name: {} sys_code: {:?}, err: {}",
+                        job_model.id,
+                        job_model.name,
+                        job_model.sys_code,
+                        err.to_string()
+                    );
+                    continue;
+                }
+            };
+            match sched.add_job(user_job.clone()).await {
+                Ok(v) => v,
+                Err(err) => {
+                    error!(
+                        "id:{} task name: {} sys_code: {:?}, err: {}",
+                        job_model.id,
+                        job_model.name,
+                        job_model.sys_code,
+                        err.to_string()
+                    );
+                    continue;
+                }
+            };
+
             // 更新为当前任务的UUID
             self.update_schedule_job_uuid(job_model.clone(), uuid)
                 .await?;
@@ -160,36 +237,28 @@ where
     }
 
     /// 初始化定时任务
-    fn init_cron_task(&self, model: &schedule_job::Model) -> Result<String, Error> {
+    fn init_cron_task(&self, model: &schedule_job::Model) -> Result<Job<DB>, Error> {
         let expression = model.expression.clone().ok_or(Error::NotExpressionError)?;
-        let xjob = Job::new(1, self.db.clone())
-            .map_err(|err| Error::JobSchedulerError(err.to_string()))?
-            .with_cron_job(&expression, |uuid, _jobs| {
-                Box::pin(async move {
-                    // TODO 执行脚本
-                    println!("I run async every 5 seconds uuid: {uuid} job11");
-                })
+        let job = Job::new(1, self.db.clone())?.with_cron_job(&expression, |uuid, _jobs| {
+            Box::pin(async move {
+                // TODO 执行脚本
+                println!("I run async every 5 seconds uuid: {uuid} job11");
             })
-            .map_err(|err| Error::JobSchedulerError(err.to_string()))?;
-        let uuid = xjob.guid().to_string();
-        Ok(uuid)
+        })?;
+        Ok(job)
     }
 
     /// 初始化即时任务
-    fn init_interval_task(&self, model: &schedule_job::Model) -> Result<String, Error> {
+    fn init_interval_task(&self, model: &schedule_job::Model) -> Result<Job<DB>, Error> {
         let interval = model.interval.ok_or(Error::NotExpressionError)? as u64;
-        let xjob = Job::new(1, self.db.clone())
-            .map_err(|err| Error::JobSchedulerError(err.to_string()))?
-            .with_interval_job(interval, |uuid, _jobs| {
-                Box::pin(async move {
-                    // TODO 执行脚本
-                    println!("I run async every 5 seconds uuid: {uuid} job11");
-                })
+        let job = Job::new(1, self.db.clone())?.with_interval_job(interval, |uuid, _jobs| {
+            Box::pin(async move {
+                // TODO 执行脚本
+                println!("I run async every 5 seconds uuid: {uuid} job11");
             })
-            .map_err(|err| Error::JobSchedulerError(err.to_string()))?;
+        })?;
 
-        let uuid = xjob.guid().to_string();
-        Ok(uuid)
+        Ok(job)
     }
 
     /// 获取所有的用户定时任务

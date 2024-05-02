@@ -1,11 +1,23 @@
 //! 定时任务错误类型
+use tokio_cron_scheduler::JobSchedulerError;
+
+#[derive(Debug, thiserror::Error)]
+#[repr(u16)]
 pub enum Error {
-    /// 获取任务列表失败
+    #[error("Get Schedule Instance Error")]
+    GetScheduleInstance,
+    #[error("Init Schedule Instance Error, {0}")]
+    InitScheduleInstance(String),
+    #[error("Schedule Job List Error, {0}")]
     ScheduleJobListError(String),
-    /// 获取Job任务失败
-    JobSchedulerError(String),
-    /// 更新数据库任务信息失败
+    #[error("Job Scheduler Error, {0}")]
+    JobSchedulerError(#[from] JobSchedulerError),
+    #[error("Db Update Schedule Job Error, {0}")]
     DbUpdateScheduleJobError(String),
-    /// 未配置定时任务Expression
+    #[error("Not Expression Error")]
     NotExpressionError,
+    #[error("Not Interval Error")]
+    NotIntervalError,
+    #[error("任务来源错误")]
+    ModelSourceError,
 }
