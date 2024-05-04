@@ -9,6 +9,7 @@ pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,
     pub user_id: i32,
+    #[sea_orm(default_value = 1)]
     pub status: i8,
 }
 
