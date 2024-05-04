@@ -19,6 +19,7 @@ perm = { path = "perm" }
 system = { path = "system" }
 schedule = { path = "schedule" }
 log = { path = "log" }
+initialize = { path = "initialize" }
 
 
 [dev-dependencies]

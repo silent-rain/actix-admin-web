@@ -2,7 +2,7 @@
 定时任务相关
  */
 -- 定时任务
-CREATE TABLE
+CREATE TABLE IF NOT EXISTS
   `t_schedule_job` (
     `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
     `uuid` VARCHAR(50) DEFAULT '' COMMENT '任务ID',
@@ -20,7 +20,7 @@ CREATE TABLE
   ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '定时任务';
 
 -- 定时任务日志
-CREATE TABLE
+CREATE TABLE IF NOT EXISTS
   `t_schedule_job_log` (
     `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '日志ID',
     `job_id` INT(11) NOT NULL COMMENT '任务ID',

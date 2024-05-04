@@ -1,3 +1,6 @@
+/*创建数据库*/
+CREATE DATABASE IF NOT EXISTS `actix_admin_web` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
 /*
 权限相关的表
  */
@@ -218,3 +221,204 @@ CONSTRAINT `fk_perm_user_location_user_id` FOREIGN KEY (`user_id`) REFERENCES `p
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户地理位置';
 
  */
+/*
+系统相关表
+ */
+-- 验证码表
+CREATE TABLE IF NOT EXISTS
+    `t_sys_captcha` (
+        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
+        `captcha_id` VARCHAR(40) NOT NULL UNIQUE COMMENT '验证码ID',
+        `captcha` VARCHAR(10) NOT NULL COMMENT '验证码',
+        `base_img` MEDIUMBLOB NOT NULL COMMENT 'Base64图片',
+        `expire` INT(4) UNSIGNED NOT NULL DEFAULT 1 COMMENT '过期时间,秒',
+        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:无效,1:有效',
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+        `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+        PRIMARY KEY (`id`)
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '验证码表';
+
+-- 配置表
+CREATE TABLE IF NOT EXISTS
+    `t_sys_config` (
+        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '配置ID',
+        `pid` INT(11) DEFAULT 0 COMMENT '父节点ID',
+        `name` VARCHAR(64) NOT NULL COMMENT '配置名称',
+        `code` VARCHAR(64) UNIQUE NOT NULL COMMENT '配置编码(英文)',
+        `value` TEXT NULL COMMENT '配置值',
+        `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
+        `desc` VARCHAR(200) DEFAULT '' COMMENT '配置描述',
+        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:停用,1:正常',
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+        `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+        PRIMARY KEY (`id`)
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '配置表';
+
+-- 图片资源表
+CREATE TABLE IF NOT EXISTS
+    `t_sys_image` (
+        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '图片ID',
+        `name` VARCHAR(32) NOT NULL COMMENT '图片名称',
+        `hash_name` VARCHAR(32) UNIQUE NOT NULL COMMENT 'HASH名称',
+        `base_img` MEDIUMBLOB NOT NULL COMMENT 'Base64图片',
+        `img_type` VARCHAR(10) NOT NULL COMMENT '扩展类型,svg,png',
+        `img_size` INT(10) NOT NULL COMMENT '图片大小',
+        `note` VARCHAR(200) DEFAULT '' COMMENT '备注',
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+        PRIMARY KEY (`id`)
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '图片资源表';
+
+-- 字典维度表
+CREATE TABLE IF NOT EXISTS
+    `t_sys_dict_dim` (
+        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '字典维度ID',
+        `name` VARCHAR(64) UNIQUE NOT NULL COMMENT '字典维度名称',
+        `code` VARCHAR(64) UNIQUE NOT NULL COMMENT '字典维度编码',
+        `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
+        `note` VARCHAR(200) NULL DEFAULT '' COMMENT '备注',
+        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:停用,1:正常',
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+        `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+        PRIMARY KEY (`id`)
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '字典维度表';
+
+-- 字典数据表
+CREATE TABLE IF NOT EXISTS
+    `t_sys_dict_data` (
+        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '字典项ID',
+        `dim_id` INT(11) NOT NULL COMMENT '字典维度ID',
+        `dim_code` VARCHAR(64) NOT NULL COMMENT '字典维度编码',
+        `lable` VARCHAR(64) NOT NULL COMMENT '字典标签',
+        `value` TEXT NOT NULL COMMENT '字典键值',
+        `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
+        `note` VARCHAR(200) NULL DEFAULT '' COMMENT '备注',
+        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:停用,1:正常',
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+        `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+        PRIMARY KEY (`id`),
+        CONSTRAINT `fk_sys_dict_data_dim_id` FOREIGN KEY (`dim_id`) REFERENCES `t_sys_dict_dim` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '字典数据表';
+
+/*
+定时任务相关
+ */
+-- 定时任务
+CREATE TABLE IF NOT EXISTS
+    `t_schedule_job` (
+        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
+        `uuid` VARCHAR(50) DEFAULT '' COMMENT '任务ID',
+        `name` VARCHAR(200) NOT NULL COMMENT '任务名称',
+        `source` TINYINT(1) NOT NULL COMMENT '任务来源,0:用户定义,1:系统内部',
+        `job_type` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '任务类型,0:定时任务,1:即时任务',
+        `sys_code` VARCHAR(200) NOT NULL COMMENT '系统任务编码',
+        `expression` VARCHAR(100) DEFAULT '' COMMENT 'cron表达式',
+        `interval` INT(11) DEFAULT 0 COMMENT '间隔时间,秒',
+        `note` VARCHAR(200) NULL DEFAULT '' COMMENT '备注',
+        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '任务状态,0:下线,1:上线',
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+        `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+        PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '定时任务';
+
+-- 定时任务日志
+CREATE TABLE IF NOT EXISTS
+    `t_schedule_job_log` (
+        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '日志ID',
+        `job_id` INT(11) NOT NULL COMMENT '任务ID',
+        `error` TEXT COMMENT '失败信息',
+        `cost` DECIMAL(10, 2) NOT NULL COMMENT '耗时(单位：毫秒)',
+        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '任务状态,0:待执行,1:运行中,2:成功,3:失败,4:移除',
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '创建时间',
+        PRIMARY KEY (`id`) USING BTREE,
+        KEY `idx_job_id` (`job_id`) USING BTREE
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '定时任务日志';
+
+/*
+日志相关表
+ */
+-- 用户登录日志表
+CREATE TABLE IF NOT EXISTS
+    `t_log_user_login` (
+        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
+        `user_id` INT(11) NOT NULL COMMENT '用户ID',
+        `username` VARCHAR(32) NOT NULL COMMENT '用户名称',
+        `token` VARCHAR(250) NOT NULL COMMENT '登陆令牌',
+        `remote_addr` VARCHAR(64) NULL DEFAULT '' COMMENT '登录IP',
+        `user_agent` VARCHAR(256) NULL DEFAULT '' COMMENT '用户代理',
+        `device` VARCHAR(20) NULL DEFAULT '' COMMENT '设备',
+        `system` VARCHAR(20) NULL DEFAULT '' COMMENT '系统',
+        `browser` VARCHAR(20) NULL DEFAULT '' COMMENT '浏览器',
+        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '登录状态,0:失败,1:成功',
+        `disabled` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '禁用状态,0:未禁用,1:禁用',
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+        `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+        PRIMARY KEY (`id`)
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户登录日志表';
+
+-- API操作日志表
+CREATE TABLE IF NOT EXISTS
+    `t_log_api_operation` (
+        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
+        `user_id` INT(11) NULL DEFAULT 0 COMMENT '用户ID',
+        `username` VARCHAR(32) NULL DEFAULT '' COMMENT '用户名称',
+        `request_id` VARCHAR(32) NULL DEFAULT '' COMMENT '请求ID',
+        `status_code` INT(10) NOT NULL COMMENT '请求状态码',
+        `method` VARCHAR(10) NOT NULL COMMENT '请求方法',
+        `path` VARCHAR(500) NOT NULL COMMENT '请求地址路径',
+        `query` VARCHAR(500) NULL DEFAULT '' COMMENT '请求参数',
+        `body` TEXT NULL COMMENT '请求体/响应体',
+        `remote_addr` VARCHAR(64) NULL DEFAULT '' COMMENT '请求IP',
+        `user_agent` VARCHAR(256) NULL DEFAULT '' COMMENT '用户代理',
+        `cost` DECIMAL(10, 2) NOT NULL COMMENT '耗时,毫秒',
+        `http_type` VARCHAR(10) NOT NULL COMMENT '请求类型:REQ/RSP',
+        `note` VARCHAR(200) NULL DEFAULT '' COMMENT '备注',
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+        PRIMARY KEY (`id`)
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT 'API操作日志表';
+
+-- 系统日志表
+CREATE TABLE IF NOT EXISTS
+    `t_log_system` (
+        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
+        `user_id` INT(20) NULL DEFAULT 0 COMMENT '请求用户ID',
+        `username` VARCHAR(32) NULL DEFAULT '' COMMENT '用户名称',
+        `name` VARCHAR(50) NOT NULL COMMENT '日志记录器名称',
+        `span_pid` INT(20) NULL DEFAULT 0 COMMENT 'Span Parent Id',
+        `span_id` INT(20) NULL DEFAULT 0 COMMENT 'Span Id',
+        `module_path` VARCHAR(100) NULL DEFAULT '' COMMENT '模块路径',
+        `target` VARCHAR(100) NULL DEFAULT '' COMMENT '描述发生此元数据所描述的跨度或事件的系统部分',
+        `file` VARCHAR(500) NULL DEFAULT '' COMMENT '文件',
+        `line` INT(10) NULL DEFAULT 0 COMMENT '报错行数',
+        `level` VARCHAR(10) NOT NULL DEFAULT '' COMMENT '日志级别',
+        `kind` VARCHAR(10) NOT NULL DEFAULT '' COMMENT '事件类型',
+        `is_event` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否为事件',
+        `is_span` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否为 span',
+        `fields` VARCHAR(500) NULL DEFAULT '' COMMENT '日志字段名称列表',
+        `field_data` TEXT NULL COMMENT 'fields 日志数据集',
+        `message` TEXT NULL COMMENT '日志信息',
+        `code` INT(10) NULL DEFAULT 0 COMMENT '业务误码',
+        `code_msg` VARCHAR(500) NULL DEFAULT '' COMMENT '业务误码信息',
+        `stack` TEXT NULL COMMENT '堆栈信息',
+        `note` VARCHAR(200) NULL DEFAULT '' COMMENT '备注',
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '创建时间',
+        PRIMARY KEY (`id`)
+    ) ENGINE = InnoDB AUTO_INCREMENT = 1485 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '系统日志';
+
+-- WEB日志表
+CREATE TABLE IF NOT EXISTS
+    `t_log_web` (
+        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
+        `user_id` INT(11) NULL DEFAULT 0 COMMENT '用户ID',
+        `username` VARCHAR(32) NULL DEFAULT '' COMMENT '用户名称',
+        `request_id` VARCHAR(32) NULL DEFAULT '' COMMENT '请求ID',
+        `os_type` TINYINT(2) NOT NULL DEFAULT 0 COMMENT '终端类型: 0: 未知,1: 安卓,2 :ios,3 :web',
+        `error_type` TINYINT(2) NOT NULL COMMENT '错误类型: 1:接口报错,2:代码报错',
+        `level` VARCHAR(10) NOT NULL COMMENT '日志级别',
+        `caller_line` VARCHAR(100) NOT NULL COMMENT '日发生位置',
+        `url` VARCHAR(500) NOT NULL COMMENT '错误页面',
+        `msg` TEXT NULL COMMENT '日志消息',
+        `stack` TEXT NULL COMMENT '堆栈信息',
+        `note` VARCHAR(200) NULL DEFAULT '' COMMENT '备注',
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+        PRIMARY KEY (`id`)
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT 'WEB日志表';

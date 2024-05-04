@@ -4,6 +4,7 @@
 pub use template;
 
 pub use auth;
+pub use initialize;
 pub use log;
 pub use perm;
 pub use public;

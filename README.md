@@ -19,7 +19,9 @@
 
 ## 框架功能列表
 
-### 后端
+### 后端框架
+
+后端框架功能列表。
 
 - [x] 热重启
 - [x] 内嵌 Web 服务
@@ -100,6 +102,7 @@
 ## 待办
 
 - 调研 log span 全局使用事件，放置在中间件中，这样日志中可以获取统一的 span 数据；
+- 定时器-用户任务
 - web 日志，接入框架；
 - doc 文档，细化为接口文档；
 - 用户权限封装；
@@ -108,19 +111,13 @@
   - open api 接口 rbac
   - 系统用户接口鉴权
 - 内存缓存
-- 初始化库表数据
-  - https://www.sea-ql.org/SeaORM/docs/migration/writing-migration/#using-raw-sql
-  - 需要手动执行脚本；
-  - 菜单
-  - 接口
-  - 默认角色
 - 数据库 mock 单元测试
 
-https://github.com/actix/actix-extras/tree/master/actix-identity
-https://crates.io/crates/actix-ws
-https://crates.io/crates/actix-session
-https://github.com/actix/actix-extras/tree/master/actix-limitation
-https://github.com/ddimaria/rust-actix-example
+<https://github.com/actix/actix-extras/tree/master/actix-identity>
+<https://crates.io/crates/actix-ws>
+<https://crates.io/crates/actix-session>
+<https://github.com/actix/actix-extras/tree/master/actix-limitation>
+<https://github.com/ddimaria/rust-actix-example>
 
 ## 开发文档
 

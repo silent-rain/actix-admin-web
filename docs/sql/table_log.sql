@@ -2,7 +2,7 @@
 日志相关表
  */
 -- 用户登录日志表
-CREATE TABLE
+CREATE TABLE IF NOT EXISTS
     `t_log_user_login` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
         `user_id` INT(11) NOT NULL COMMENT '用户ID',
@@ -21,7 +21,7 @@ CREATE TABLE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户登录日志表';
 
 -- API操作日志表
-CREATE TABLE
+CREATE TABLE IF NOT EXISTS
     `t_log_api_operation` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
         `user_id` INT(11) NULL DEFAULT 0 COMMENT '用户ID',
@@ -42,7 +42,7 @@ CREATE TABLE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT 'API操作日志表';
 
 -- 系统日志表
-CREATE TABLE
+CREATE TABLE IF NOT EXISTS
     `t_log_system` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
         `user_id` INT(20) NULL DEFAULT 0 COMMENT '请求用户ID',
@@ -70,7 +70,7 @@ CREATE TABLE
     ) ENGINE = InnoDB AUTO_INCREMENT = 1485 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '系统日志';
 
 -- WEB日志表
-CREATE TABLE
+CREATE TABLE IF NOT EXISTS
     `t_log_web` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
         `user_id` INT(11) NULL DEFAULT 0 COMMENT '用户ID',

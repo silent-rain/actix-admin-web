@@ -2,7 +2,7 @@
 系统相关表
  */
 -- 验证码表
-CREATE TABLE
+CREATE TABLE IF NOT EXISTS
     `t_sys_captcha` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
         `captcha_id` VARCHAR(40) NOT NULL UNIQUE COMMENT '验证码ID',
@@ -16,7 +16,7 @@ CREATE TABLE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '验证码表';
 
 -- 配置表
-CREATE TABLE
+CREATE TABLE IF NOT EXISTS
     `t_sys_config` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '配置ID',
         `pid` INT(11) DEFAULT 0 COMMENT '父节点ID',
@@ -32,7 +32,7 @@ CREATE TABLE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '配置表';
 
 -- 图片资源表
-CREATE TABLE
+CREATE TABLE IF NOT EXISTS
     `t_sys_image` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '图片ID',
         `name` VARCHAR(32) NOT NULL COMMENT '图片名称',
@@ -46,7 +46,7 @@ CREATE TABLE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '图片资源表';
 
 -- 字典维度表
-CREATE TABLE
+CREATE TABLE IF NOT EXISTS
     `t_sys_dict_dim` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '字典维度ID',
         `name` VARCHAR(64) UNIQUE NOT NULL COMMENT '字典维度名称',
@@ -60,7 +60,7 @@ CREATE TABLE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '字典维度表';
 
 -- 字典数据表
-CREATE TABLE
+CREATE TABLE IF NOT EXISTS
     `t_sys_dict_data` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '字典项ID',
         `dim_id` INT(11) NOT NULL COMMENT '字典维度ID',

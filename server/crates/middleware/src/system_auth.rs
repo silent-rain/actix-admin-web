@@ -8,7 +8,8 @@ use service_hub::{
 };
 
 use crate::constant::{
-    HEADERS_AUTHORIZATION, HEADERS_AUTHORIZATION_BEARER, HEADERS_OPEN_API_AUTHORIZATION,
+    AUTH_WHITE_LIST, HEADERS_AUTHORIZATION, HEADERS_AUTHORIZATION_BEARER,
+    HEADERS_OPEN_API_AUTHORIZATION,
 };
 
 use context::Context;
@@ -22,14 +23,6 @@ use actix_web::{
 };
 use futures::future::LocalBoxFuture;
 use tracing::{error, info};
-
-/// 白名单
-const WHITE_LIST: [&str; 4] = [
-    "/api/v1/health",
-    "/api/v1/auth/captcha",
-    "/api/v1/auth/login",
-    "/api/v1/auth/register",
-];
 
 // There are two steps in middleware processing.
 // 1. Middleware initialization, middleware factory gets called with
@@ -79,7 +72,7 @@ where
     fn call(&self, req: ServiceRequest) -> Self::Future {
         let path = req.path();
         // 白名单放行
-        if WHITE_LIST.contains(&path) {
+        if AUTH_WHITE_LIST.contains(&path) {
             let fut = self.service.call(req);
             return Box::pin(async move {
                 let resp = fut.await?;

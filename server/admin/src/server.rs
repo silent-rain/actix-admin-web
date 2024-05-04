@@ -6,7 +6,9 @@ use crate::{config::AppConfig, router};
 
 use app_state::{AppState, AssetState};
 use colored::Colorize;
-use service_hub::{inject::AInjectProvider, public::AdminWebSiteRouter};
+use service_hub::{
+    initialize::InitializeRouter, inject::AInjectProvider, public::AdminWebSiteRouter,
+};
 
 use actix_web::{http::KeepAlive, web, App, HttpServer};
 use listenfd::ListenFd;
@@ -30,6 +32,8 @@ pub async fn start(
             .app_data(web::Data::new(config_s.clone()))
             // API 服务
             .service(router::register())
+            // 初始化管理
+            .service(InitializeRouter::admin_register())
             // 后台管理 WEB 服务
             .service(AdminWebSiteRouter::register())
     })

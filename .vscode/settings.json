@@ -16,4 +16,5 @@
     // "RUSTUP_TOOLCHAIN": "nightly"
   },
   "rust-analyzer.checkOnSave": true,
+  "Prettier-SQL.SQLFlavourOverride": "mysql",
 }

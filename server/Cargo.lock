@@ -1960,6 +1960,7 @@ dependencies = [
  "futures-util",
  "inject",
  "nject",
+ "perm",
  "regex 1.10.4",
  "response",
  "rust-embed",
@@ -3682,6 +3683,7 @@ name = "service_hub"
 version = "0.1.0"
 dependencies = [
  "auth",
+ "initialize",
  "inject",
  "log 0.1.0",
  "perm",
