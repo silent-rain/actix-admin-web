@@ -1273,6 +1273,7 @@ dependencies = [
  "code",
  "log 0.4.21",
  "sea-orm",
+ "sea-orm-migration",
  "serde",
  "tokio",
  "tracing",

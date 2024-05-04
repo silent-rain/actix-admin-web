@@ -3,10 +3,11 @@ use std::env;
 
 use database::DbOptions;
 use logger::config::{ConsoleConfig, Level, Logger};
+use migration::Migrator;
 
 use colored::Colorize;
 use dotenv::dotenv;
-use migration::{Migrator, MigratorTrait};
+use sea_orm_migration::MigratorTrait;
 use sqlx::{mysql::MySqlPoolOptions, Executor};
 use tracing::info;
 

@@ -16,6 +16,7 @@ sea-orm = { workspace = true, features = [
 log = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
 async-trait = { workspace = true }
+sea-orm-migration = { workspace = true }
 
 [dev-dependencies]
 tokio = { workspace = true, features = ["full"] }

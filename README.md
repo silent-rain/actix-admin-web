@@ -34,6 +34,7 @@
 - [x] 数据库
   - [x] 迁移库表
   - [x] 读写数据库
+  - [x] mock 单元测试
 - [x] 依赖注入
 - [ ] 中间件
   - [x] 跨域
@@ -110,7 +111,6 @@
   - 路由匹配
   - open api 接口 rbac
   - 系统用户接口鉴权
-- 数据库 mock 单元测试
 
 <https://github.com/actix/actix-extras/tree/master/actix-identity>
 <https://crates.io/crates/actix-ws>

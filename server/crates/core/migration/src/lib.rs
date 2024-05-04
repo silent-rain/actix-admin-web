@@ -1,4 +1,4 @@
-pub use sea_orm_migration::prelude::*;
+use sea_orm_migration::{async_trait, MigrationTrait, MigratorTrait};
 
 mod m20230617_084425_create_log_api_operation;
 mod m20230617_084425_create_log_system;

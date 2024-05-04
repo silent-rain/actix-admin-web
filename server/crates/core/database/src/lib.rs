@@ -11,3 +11,5 @@ pub use pool::{DatabaseConnection, DbRepo, Pool};
 
 pub mod config;
 pub use config::DbOptions;
+
+pub mod mock;

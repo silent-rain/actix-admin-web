@@ -1,3 +1,4 @@
+#![allow(unused)]
 use database::{DbRepo, Pool};
 
 use sea_orm::{
