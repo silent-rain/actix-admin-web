@@ -55,7 +55,7 @@
   - [ ] [Swagger]接口文档, apipost 工具代替
   - [ ] 服务启动后打开浏览器
 - [ ] 动态 SEO 优化
-- [ ] 内存缓存
+- [x] 内存缓存
 - [ ] 订阅
 - [ ] cron定时任务
   - [x] 定时任务调度
@@ -110,7 +110,6 @@
   - 路由匹配
   - open api 接口 rbac
   - 系统用户接口鉴权
-- 内存缓存
 - 数据库 mock 单元测试
 
 <https://github.com/actix/actix-extras/tree/master/actix-identity>
