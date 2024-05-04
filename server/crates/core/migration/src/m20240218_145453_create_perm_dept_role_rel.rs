@@ -1,7 +1,7 @@
 //! 部门角色关联表
 //! User Entity: [`entity::prelude::PermDeptRoleRel`]
 use crate::{
-    m20240218_145452_create_perm_role::PermRole, m20240218_145453_create_perm_dept::PermDept,
+    m20240218_145453_create_perm_dept::PermDept, m20240218_145453_create_perm_role::PermRole,
 };
 
 use sea_orm::{

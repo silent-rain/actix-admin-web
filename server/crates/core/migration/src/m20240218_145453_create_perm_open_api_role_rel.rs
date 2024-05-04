@@ -1,7 +1,7 @@
 //! OpenApi接口与角色关联表
 //! User Entity: [`entity::prelude::PermOpenApiRoleRel`]
 use crate::{
-    m20240218_145452_create_perm_role::PermRole, m20240218_145453_create_perm_open_api::PermOpenApi,
+    m20240218_145453_create_perm_open_api::PermOpenApi, m20240218_145453_create_perm_role::PermRole,
 };
 
 use sea_orm::{

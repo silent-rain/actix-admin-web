@@ -2,7 +2,7 @@
 //! User Entity: [`entity::prelude::PermUserRoleRel`]
 
 use crate::{
-    m20240216_123914_create_perm_user::PermUser, m20240218_145452_create_perm_role::PermRole,
+    m20240218_145453_create_perm_role::PermRole, m20240218_145453_create_perm_user::PermUser,
 };
 
 use sea_orm::{
