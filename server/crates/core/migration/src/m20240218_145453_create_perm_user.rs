@@ -73,22 +73,6 @@ impl MigrationTrait for Migration {
                             .comment("头像URL"),
                     )
                     .col(
-                        ColumnDef::new(PermUser::Phone)
-                            .string()
-                            .string_len(20)
-                            .null()
-                            .default("")
-                            .comment("手机号码"),
-                    )
-                    .col(
-                        ColumnDef::new(PermUser::Email)
-                            .string()
-                            .string_len(100)
-                            .null()
-                            .default("")
-                            .comment("邮箱"),
-                    )
-                    .col(
                         ColumnDef::new(PermUser::Intro)
                             .string()
                             .string_len(200)
@@ -169,8 +153,6 @@ pub enum PermUser {
     Age,
     Birthday,
     Avatar,
-    Phone,
-    Email,
     Intro,
     Note,
     Password,

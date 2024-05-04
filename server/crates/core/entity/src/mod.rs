@@ -16,6 +16,8 @@ pub mod perm_open_api;
 pub mod perm_open_api_role_rel;
 pub mod perm_role;
 pub mod perm_user;
+pub mod perm_user_email;
+pub mod perm_user_phone;
 pub mod perm_user_role_rel;
 pub mod perm_user_token;
 pub mod perm_user_token_role_rel;

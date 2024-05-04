@@ -14,6 +14,8 @@ pub use super::perm_open_api::Entity as PermOpenApi;
 pub use super::perm_open_api_role_rel::Entity as PermOpenApiRoleRel;
 pub use super::perm_role::Entity as PermRole;
 pub use super::perm_user::Entity as PermUser;
+pub use super::perm_user_email::Entity as PermUserEmail;
+pub use super::perm_user_phone::Entity as PermUserPhone;
 pub use super::perm_user_role_rel::Entity as PermUserRoleRel;
 pub use super::perm_user_token::Entity as PermUserToken;
 pub use super::perm_user_token_role_rel::Entity as PermUserTokenRoleRel;

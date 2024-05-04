@@ -11,6 +11,8 @@ mod m20240218_145453_create_perm_open_api;
 mod m20240218_145453_create_perm_open_api_role_rel;
 mod m20240218_145453_create_perm_role;
 mod m20240218_145453_create_perm_user;
+mod m20240218_145453_create_perm_user_email;
+mod m20240218_145453_create_perm_user_phone;
 mod m20240218_145453_create_perm_user_role_rel;
 mod m20240218_145453_create_perm_user_token;
 mod m20240218_145453_create_perm_user_token_role_rel;
@@ -33,6 +35,8 @@ impl MigratorTrait for Migrator {
             Box::new(m20230617_084425_create_log_user_login::Migration),
             Box::new(m20240218_145453_create_perm_role::Migration),
             Box::new(m20240218_145453_create_perm_user::Migration),
+            Box::new(m20240218_145453_create_perm_user_email::Migration),
+            Box::new(m20240218_145453_create_perm_user_phone::Migration),
             Box::new(m20240218_145453_create_perm_user_role_rel::Migration),
             Box::new(m20240218_145453_create_perm_dept::Migration),
             Box::new(m20240218_145453_create_perm_dept_role_rel::Migration),

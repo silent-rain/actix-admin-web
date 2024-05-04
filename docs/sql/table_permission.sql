@@ -24,8 +24,6 @@ CREATE TABLE IF NOT EXISTS
         `age` INT(11) NULL DEFAULT 0 COMMENT '年龄',
         `birthday` VARCHAR(20) NULL DEFAULT '' COMMENT '出生日期',
         `avatar` VARCHAR(200) NULL DEFAULT '' COMMENT '头像URL',
-        `phone` VARCHAR(20) NULL DEFAULT '' COMMENT '手机号码',
-        `email` VARCHAR(100) NULL DEFAULT '' COMMENT '邮箱',
         `intro` VARCHAR(200) NULL DEFAULT '' COMMENT '介绍',
         `note` VARCHAR(200) NULL DEFAULT '' COMMENT '备注',
         `password` VARCHAR(64) NOT NULL COMMENT '密码',
@@ -36,6 +34,36 @@ CREATE TABLE IF NOT EXISTS
         PRIMARY KEY (`id`),
         UNIQUE KEY `uk_username` (`username`) USING BTREE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户';
+
+-- 用户邮箱表
+CREATE TABLE IF NOT EXISTS
+    `t_perm_user_email` (
+        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '邮箱ID',
+        `user_id` INT(10) NOT NULL COMMENT '用户ID',
+        `email` VARCHAR(50) NULL DEFAULT '' COMMENT '邮箱',
+        `note` VARCHAR(200) NULL DEFAULT '' COMMENT '备注',
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+        `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+        PRIMARY KEY (`id`),
+        UNIQUE KEY `uk_user_id` (`user_id`) USING BTREE,
+        UNIQUE KEY `uk_email` (`email`) USING BTREE,
+        CONSTRAINT `fk_perm_user_email_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_perm_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户邮箱';
+
+-- 用户手机号表
+CREATE TABLE IF NOT EXISTS
+    `t_perm_user_phone` (
+        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '手机号ID',
+        `user_id` INT(10) NOT NULL COMMENT '用户ID',
+        `phone` VARCHAR(16) NULL DEFAULT '' COMMENT '手机号码',
+        `note` VARCHAR(200) NULL DEFAULT '' COMMENT '备注',
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+        `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+        PRIMARY KEY (`id`),
+        UNIQUE KEY `uk_user_id` (`user_id`) USING BTREE,
+        UNIQUE KEY `uk_phone` (`phone`) USING BTREE,
+        CONSTRAINT `fk_perm_user_phone_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_perm_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户手机号';
 
 -- 用户角色关联表
 CREATE TABLE IF NOT EXISTS

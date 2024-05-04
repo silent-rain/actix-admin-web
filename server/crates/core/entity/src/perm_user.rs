@@ -25,10 +25,6 @@ pub struct Model {
     pub birthday: Option<String>,
     /// 头像URL
     pub avatar: Option<String>,
-    /// 手机号码
-    pub phone: Option<String>,
-    /// 邮箱
-    pub email: Option<String>,
     /// 介绍
     pub intro: Option<String>,
     /// 备注
@@ -49,11 +45,27 @@ pub struct Model {
 pub enum Relation {
     #[sea_orm(has_many = "super::perm_user_role_rel::Entity")]
     PermUserRoleRel,
+    #[sea_orm(has_many = "super::perm_user_phone::Entity")]
+    PermUserPhone,
+    #[sea_orm(has_many = "super::perm_user_email::Entity")]
+    PermUserEmail,
 }
 
 impl Related<super::perm_user_role_rel::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::PermUserRoleRel.def()
+    }
+}
+
+impl Related<super::perm_user_phone::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::PermUserPhone.def()
+    }
+}
+
+impl Related<super::perm_user_email::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::PermUserEmail.def()
     }
 }
 
