@@ -3,22 +3,12 @@ use std::{
     time::{Duration, Instant},
 };
 
-use async_trait::async_trait;
 use moka::future::Cache as MokaCache;
 use serde::Serialize;
 use serde_json::{json, Value};
 
 /// 全局调度对象，用于存储和管理缓存实例。
 static GLOBAL_SCHED: OnceLock<MokaCache<String, Entry>> = OnceLock::new();
-
-/// 缓存 Trait
-#[async_trait]
-pub trait CacheTrait {
-    async fn set(&self, key: &str, value: &str);
-    async fn get(&self, key: &str) -> Option<Value>;
-    async fn set_with_expiry(&self, key: &str, value: String, ttl: Duration);
-    async fn get_with_expiry(&self, key: &str) -> Option<Entry>;
-}
 
 /// 缓存条目结构体，包含一个值和一个可选的过期时间戳。
 #[derive(Debug, Clone, PartialEq)]
@@ -122,17 +112,18 @@ impl Default for Cache {
 }
 
 impl Cache {
+    /// 获取全局对象
     pub fn global() -> Option<Self> {
         GLOBAL_SCHED.get().map(|v| Cache { cache: v.clone() })
     }
 
     /// 设置缓存条目。
-    pub async fn set<T: Serialize>(&self, key: &str, value: T) {
+    async fn set<T: Serialize>(&self, key: &str, value: T) {
         self.cache.insert(key.to_string(), Entry::new(value)).await; // 插入新的缓存条目。
     }
 
     /// 获取缓存条目。
-    pub async fn get(&self, key: &str) -> Option<Value> {
+    async fn get(&self, key: &str) -> Option<Value> {
         self.cache
             .get(&key.to_string())
             .await
@@ -140,13 +131,13 @@ impl Cache {
     }
 
     /// 设置缓存条目并指定过期时间。
-    pub async fn set_with_expiry<T: Serialize>(&self, key: &str, value: T, ttl: Duration) {
+    async fn set_with_expiry<T: Serialize>(&self, key: &str, value: T, ttl: Duration) {
         let timed_entry = Entry::new_with_ttl(value, ttl); // 创建带有过期时间的缓存条目。
         self.cache.insert(key.to_string(), timed_entry).await; // 插入缓存条目。
     }
 
     /// 获取缓存条目，如果过期则移除。
-    pub async fn get_with_expiry(&self, key: &str) -> Option<Entry> {
+    async fn get_with_expiry(&self, key: &str) -> Option<Entry> {
         if let Some(entry) = self.cache.get(&key.to_string()).await {
             if entry.is_expired() {
                 self.cache.invalidate(&key.to_string()).await; // 如果过期，则移除缓存条目。
