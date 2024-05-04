@@ -14,6 +14,7 @@ members = [
     "crates/core/utils",
     "crates/core/jwt",
     "crates/core/scheduler",
+    "crates/core/cache",
 
     # 中间件
     "crates/middleware",
@@ -88,6 +89,7 @@ tokio-cron-scheduler = "0.10"
 uap-rust = "0.0"
 futures-util = "0.3"
 colored = "2.1"
+moka = "0.12"
 
 # 其他
 futures = "0.3"
