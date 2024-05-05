@@ -674,7 +674,7 @@ dependencies = [
  "jwt",
  "log 0.1.0",
  "nject",
- "perm",
+ "permission",
  "regex 1.10.4",
  "response",
  "rust-embed",
@@ -1970,7 +1970,7 @@ dependencies = [
  "futures-util",
  "inject",
  "nject",
- "perm",
+ "permission",
  "regex 1.10.4",
  "response",
  "rust-embed",
@@ -2733,7 +2733,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e3148f5046208a5d56bcfc03053e3ca6334e51da8dfb19b6cdc8b306fae3283e"
 
 [[package]]
-name = "perm"
+name = "permission"
 version = "0.1.0"
 dependencies = [
  "actix-web",
@@ -3750,7 +3750,7 @@ dependencies = [
  "initialize",
  "inject",
  "log 0.1.0",
- "perm",
+ "permission",
  "public",
  "schedule",
  "system",

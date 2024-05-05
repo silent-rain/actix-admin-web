@@ -15,7 +15,7 @@ actix_validator = { path = "../../core/actix_validator" }
 utils = { path = "../../core/utils" }
 
 inject = { path = "../../inject" }
-perm = { path = "../perm" }
+permission = { path = "../permission" }
 
 actix-web = { workspace = true }
 validator = { workspace = true, features = ["derive"] }

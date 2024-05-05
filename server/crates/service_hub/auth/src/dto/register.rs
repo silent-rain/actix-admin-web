@@ -23,7 +23,7 @@ pub struct RegisterReq {
     /// 真实姓名
     pub real_name: Option<String>,
     /// 性别, 0:男,1:女,2:保密
-    /// Enum: [`perm::enums::Gender`]
+    /// Enum: [`permission::enums::Gender`]
     #[validate(range(min = 0, max = 3, message = "性别, 0:男,1:女,2:保密"))]
     pub gender: i8,
     /// 年龄

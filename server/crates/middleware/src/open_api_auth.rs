@@ -15,7 +15,7 @@ use entity::perm_user;
 use response::Response;
 use service_hub::{
     inject::AInjectProvider,
-    perm::{
+    permission::{
         enums::{UserStatus, UserTokenStatus},
         UserService, UserTokenService,
     },

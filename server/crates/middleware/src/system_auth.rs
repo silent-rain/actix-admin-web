@@ -4,7 +4,7 @@ use std::future::{ready, Ready};
 use service_hub::{
     inject::AInjectProvider,
     log::{enums::UserLoginDisabledStatus, UserLoginService},
-    perm::{enums::UserStatus, UserService},
+    permission::{enums::UserStatus, UserService},
 };
 
 use crate::constant::{

@@ -4,7 +4,7 @@ use middleware::{
     api_operation::ApiOperation, open_api_auth::OpenApiAuth, system_auth::SystemAuth,
 };
 use service_hub::{
-    auth::AuthRouter, log::LogRouter, perm::PermissionRouter, public::HealthRouter,
+    auth::AuthRouter, log::LogRouter, permission::PermissionRouter, public::HealthRouter,
     schedule::ScheduleRouter, system::SystemRouter,
 };
 

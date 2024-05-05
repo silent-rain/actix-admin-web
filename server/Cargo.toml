@@ -31,7 +31,7 @@ members = [
     "crates/service_hub/initialize",
     "crates/service_hub/template",
     "crates/service_hub/auth",
-    "crates/service_hub/perm",
+    "crates/service_hub/permission",
     "crates/service_hub/system",
     "crates/service_hub/schedule",
     "crates/service_hub/log",

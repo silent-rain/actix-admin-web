@@ -4,7 +4,7 @@ use database::DbRepo;
 use entity::{perm_user, perm_user_email, perm_user_phone};
 
 use nject::injectable;
-use perm::enums::UserStatus;
+use permission::enums::UserStatus;
 use sea_orm::{ActiveModelTrait, DatabaseTransaction, DbErr, Set, TransactionTrait};
 
 use crate::dto::register::RegisterReq;

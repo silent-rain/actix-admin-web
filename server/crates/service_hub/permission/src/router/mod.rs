@@ -21,7 +21,7 @@ pub struct PermissionRouter;
 impl PermissionRouter {
     /// 注册`权限管理`路由
     pub fn admin_register() -> Scope {
-        web::scope("/perm")
+        web::scope("/permission")
             // 角色管理
             .service(role::RoleRouter::admin_register())
             // 用户管理

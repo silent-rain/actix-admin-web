@@ -4,7 +4,7 @@ use crate::{
     enums::UserRegisterType,
 };
 
-use perm::{UserEmailDao, UserPhoneDao};
+use permission::{UserEmailDao, UserPhoneDao};
 use system::CaptchaDao;
 
 use code::{Error, ErrorMsg};

@@ -10,7 +10,7 @@ use log::{
     enums::{UserLoginDisabledStatus, UserLoginStatus},
     UserLoginDao,
 };
-use perm::{enums::UserStatus, UserDao, UserEmailDao, UserPhoneDao};
+use permission::{enums::UserStatus, UserDao, UserEmailDao, UserPhoneDao};
 use system::CaptchaDao;
 
 use code::{Error, ErrorMsg};

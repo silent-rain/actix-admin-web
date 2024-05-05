@@ -15,7 +15,7 @@ jwt = { path = "../../core/jwt" }
 
 inject = { path = "../../inject" }
 
-perm = { path = "../perm" }
+permission = { path = "../permission" }
 system = { path = "../system" }
 log = { path = "../log" }
 

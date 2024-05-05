@@ -9,7 +9,7 @@ use entity::{
     perm_user_phone, perm_user_role_rel,
     prelude::{PermMenu, PermMenuRoleRel, PermOpenApi, PermOpenApiRoleRel, PermRole, PermUser},
 };
-use perm::enums::{Gender, UserStatus};
+use permission::enums::{Gender, UserStatus};
 
 use nject::injectable;
 use sea_orm::ConnectionTrait;
