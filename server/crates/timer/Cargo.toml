@@ -1,0 +1,16 @@
+[package]
+name = "timer"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+database = { path = "../core/database" }
+entity = { path = "../core/entity" }
+scheduler = { path = "../core/scheduler" }
+
+
+tracing = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+tokio-cron-scheduler = { workspace = true }
+tokio = { workspace = true }

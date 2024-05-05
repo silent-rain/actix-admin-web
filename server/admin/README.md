@@ -28,6 +28,16 @@ cd server/admin
 cargo build -p admin
 ```
 
+### 查询依赖
+
+```shell
+cd server/admin
+
+cargo +nightly udeps -p admin
+
+cargo +nightly udeps --workspace
+```
+
 ## 开发文档
 
 ```shell

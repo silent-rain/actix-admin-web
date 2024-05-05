@@ -20,6 +20,8 @@ members = [
     "crates/middleware",
     # 插件
     "crates/plugins",
+    # 定时器
+    "crates/timer",
     # 依赖注入
     "crates/inject",
     # 应用状态

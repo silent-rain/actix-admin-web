@@ -1,9 +1,7 @@
 //! 定时任务示例2
 use database::DbRepo;
 use entity::schedule_job;
-use scheduler::{error::Error, register::SysTaskTrait, Job};
-
-use crate::enums::ScheduleJobSource;
+use scheduler::{enums::ScheduleJobSource, error::Error, register::SysTaskTrait, Job};
 
 pub struct DemoTask2<DB>
 where
