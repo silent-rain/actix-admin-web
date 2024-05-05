@@ -111,6 +111,8 @@
   - 路由匹配
   - open api 接口 rbac
   - 系统用户接口鉴权
+- 用户分享码 share_code
+- 用户会员等级
 
 <https://github.com/actix/actix-extras/tree/master/actix-identity>
 <https://crates.io/crates/actix-ws>
