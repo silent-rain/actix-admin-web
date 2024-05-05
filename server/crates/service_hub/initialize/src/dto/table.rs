@@ -9,7 +9,7 @@ pub struct AddAdminUserReq {
     /// 用户名称
     pub username: String,
     /// 手机号码
-    pub phone: Option<String>,
+    pub phone: String,
     /// 邮箱
     pub email: Option<String>,
     /// 密码

@@ -54,11 +54,9 @@ impl<'a> TableDao<'a> {
         // 添加管理员
         let admin_user = self.txn_add_admin_user(&txn, req.clone()).await?;
         // 添加管理员手机号码
-        if let Some(phone) = req.phone {
-            let _ = self
-                .txn_add_admin_user_phone(&txn, admin_user.id, phone)
-                .await?;
-        }
+        let _ = self
+            .txn_add_admin_user_phone(&txn, admin_user.id, req.phone)
+            .await?;
         // 添加管理员邮箱
         if let Some(email) = req.email {
             let _ = self

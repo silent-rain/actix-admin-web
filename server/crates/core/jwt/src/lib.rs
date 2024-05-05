@@ -11,14 +11,21 @@ const NBF: usize = 1000 * 60 * 60 * 24; // 1 day
 /// Token 过期时间
 const EXPIRE: i64 = 1000 * 60 * 60 * 24; // 1 Day
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, thiserror::Error)]
+#[repr(u16)]
 pub enum Error {
     /// 发行人
+    #[error("Check Iss Error")]
     CheckIss,
     /// 不在此之前（作为UTC时间戳）
+    #[error("Check Nbf Error")]
     CheckNbf,
     /// 过期时间
+    #[error("Check Exp Error")]
     CheckExp,
+    /// JWT 错误
+    #[error("JWT Error, {0}")]
+    JwtError(#[from] errors::Error),
 }
 
 /// Our claims struct, it needs to derive `Serialize` and/or `Deserialize`
@@ -64,7 +71,7 @@ impl Claims {
 }
 
 /// 编码
-pub fn encode_token(user_id: i32, username: String) -> Result<String, errors::Error> {
+pub fn encode_token(user_id: i32, username: String) -> Result<String, Error> {
     let exp = Local::now().timestamp_millis() + EXPIRE;
     let claims = Claims {
         user_id,
@@ -75,18 +82,22 @@ pub fn encode_token(user_id: i32, username: String) -> Result<String, errors::Er
     };
     let mut header = Header::new(Algorithm::HS256);
     header.kid = Some(KID.to_owned());
-    let token = encode(&header, &claims, &EncodingKey::from_secret(SECRET.as_ref()))?;
+    let token = encode(&header, &claims, &EncodingKey::from_secret(SECRET.as_ref()))
+        .map_err(Error::JwtError)?;
     Ok(token)
 }
 
 /// 解码
-pub fn decode_token(token: &str) -> Result<Claims, errors::Error> {
+pub fn decode_token(token: &str) -> Result<Claims, Error> {
     let claims = decode::<Claims>(
         token,
         &DecodingKey::from_secret(SECRET.as_ref()),
         &Validation::default(),
-    )?
+    )
+    .map_err(Error::JwtError)?
     .claims;
+
+    claims.verify()?;
 
     Ok(claims)
 }

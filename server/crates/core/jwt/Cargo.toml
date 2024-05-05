@@ -7,3 +7,4 @@ edition = "2021"
 jsonwebtoken = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
 chrono = { workspace = true }
+thiserror = { workspace = true }

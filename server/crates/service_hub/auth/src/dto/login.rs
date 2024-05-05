@@ -11,8 +11,10 @@ use serde::{Deserialize, Serialize};
 pub struct LoginReq {
     /// 注册用户类型
     pub user_type: UserRegisterType,
-    /// 手机号码或邮箱
-    pub username: String,
+    /// 手机号码
+    pub phone: Option<String>,
+    /// 邮箱
+    pub email: Option<String>,
 
     /// 登陆密码
     pub password: String,

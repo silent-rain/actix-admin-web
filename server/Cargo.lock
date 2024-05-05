@@ -2088,6 +2088,7 @@ dependencies = [
  "chrono",
  "jsonwebtoken",
  "serde",
+ "thiserror",
 ]
 
 [[package]]
