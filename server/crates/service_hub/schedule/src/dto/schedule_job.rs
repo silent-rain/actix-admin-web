@@ -1,4 +1,4 @@
-//! 定时任务管理
+//! 调度任务管理
 
 use crate::enums::{ScheduleJobSource, ScheduleJobStatus, ScheduleJobType};
 
@@ -6,7 +6,7 @@ use actix_validator::Validate;
 
 use serde::{Deserialize, Serialize};
 
-/// 查询定时任务列表
+/// 查询调度任务列表
 #[derive(Default, Deserialize, Validate)]
 pub struct GetScheduleJobReq {
     /// 当前分页
@@ -25,7 +25,7 @@ pub struct GetScheduleJobReq {
     pub status: Option<i8>,
 }
 
-/// 添加定时任务
+/// 添加调度任务
 #[derive(Serialize, Deserialize, Validate)]
 pub struct AddcheduleJobReq {
     /// 任务ID
@@ -34,7 +34,7 @@ pub struct AddcheduleJobReq {
     pub name: String,
     /// 任务来源,0:用户定义,1:系统内部
     pub source: ScheduleJobSource,
-    /// 任务类型,0:定时任务,1:即时任务
+    /// 任务类型,0:调度任务,1:即时任务
     pub job_type: ScheduleJobType,
     /// 系统任务编码
     pub sys_code: Option<String>,

@@ -1,4 +1,4 @@
-//! 定时任务
+//! 调度任务日志管理
 
 use crate::enums::ScheduleJobLogStatus;
 
@@ -6,7 +6,7 @@ use actix_validator::Validate;
 
 use serde::{Deserialize, Serialize};
 
-/// 查询定时任务日志列表
+/// 查询调度任务日志列表
 #[derive(Default, Deserialize)]
 pub struct GetScheduleJobLogListReq {
     /// 当前分页
@@ -21,7 +21,7 @@ pub struct GetScheduleJobLogListReq {
     pub job_id: Option<i32>,
 }
 
-/// 添加定时任务日志
+/// 添加调度任务日志
 #[derive(Clone, Serialize, Deserialize, Validate)]
 pub struct AddScheduleJobLogReq {
     /// 任务ID

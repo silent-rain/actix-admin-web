@@ -1,4 +1,4 @@
-//! 定时任务
+//! 调度任务日志管理
 
 use crate::{
     dto::schedule_job_log::{AddScheduleJobLogReq, GetScheduleJobLogListReq},
@@ -17,7 +17,7 @@ use actix_web::{
 pub struct ScheduleJobLogController;
 
 impl ScheduleJobLogController {
-    /// 获取定时任务日志列表
+    /// 获取调度任务日志列表
     pub async fn list(
         provider: Data<AInjectProvider>,
         req: Query<GetScheduleJobLogListReq>,
@@ -30,7 +30,7 @@ impl ScheduleJobLogController {
         }
     }
 
-    /// 获取定时任务日志的详细信息
+    /// 获取调度任务日志的详细信息
     pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
         let schedule_job_log_service: ScheduleJobLogService = provider.provide();
         let resp = schedule_job_log_service.info(*id).await;
@@ -40,7 +40,7 @@ impl ScheduleJobLogController {
         }
     }
 
-    /// 添加定时任务日志
+    /// 添加调度任务日志
     pub async fn add(
         provider: Data<AInjectProvider>,
         data: Json<AddScheduleJobLogReq>,
@@ -54,7 +54,7 @@ impl ScheduleJobLogController {
         }
     }
 
-    /// 删除定时任务日志
+    /// 删除调度任务日志
     pub async fn delete(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
         let schedule_job_log_service: ScheduleJobLogService = provider.provide();
         let resp = schedule_job_log_service.delete(*id).await;

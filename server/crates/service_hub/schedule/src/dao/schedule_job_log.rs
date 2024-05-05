@@ -1,4 +1,4 @@
-//! 定时任务
+//! 调度任务日志管理
 
 use crate::dto::schedule_job_log::GetScheduleJobLogListReq;
 
