@@ -904,12 +904,10 @@ dependencies = [
 name = "cache"
 version = "0.1.0"
 dependencies = [
- "chrono",
  "moka",
  "serde",
  "serde_json",
  "tokio",
- "tracing",
 ]
 
 [[package]]
@@ -2333,7 +2331,6 @@ dependencies = [
  "colored",
  "database",
  "dotenv",
- "entity",
  "logger",
  "sea-orm",
  "sea-orm-migration",
