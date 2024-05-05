@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS
     `t_perm_user_email` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '邮箱ID',
         `user_id` INT(10) NOT NULL COMMENT '用户ID',
-        `email` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '邮箱',
+        `email` VARCHAR(50) NOT NULL COMMENT '邮箱',
         `note` VARCHAR(200) NULL DEFAULT '' COMMENT '备注',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS
     `t_perm_user_phone` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '手机号ID',
         `user_id` INT(10) NOT NULL COMMENT '用户ID',
-        `phone` VARCHAR(16) NOT NULL DEFAULT '' COMMENT '手机号码',
+        `phone` VARCHAR(16) NOT NULL COMMENT '手机号码',
         `note` VARCHAR(200) NULL DEFAULT '' COMMENT '备注',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -64,6 +64,24 @@ CREATE TABLE IF NOT EXISTS
         UNIQUE KEY `uk_phone` (`phone`) USING BTREE,
         CONSTRAINT `fk_perm_user_phone_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_perm_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户手机号';
+
+-- 用户区块链钱包
+CREATE TABLE IF NOT EXISTS
+    `t_perm_user_blockchain_wallet` (
+        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '手机号ID',
+        `user_id` INT(10) NOT NULL COMMENT '用户ID',
+        `wallet_address` VARCHAR(255) NOT NULL COMMENT '钱包地址',
+        `mnemonic` VARCHAR(255) NULL DEFAULT '' COMMENT '助记词',
+        `private_key` VARCHAR(255) NULL DEFAULT '' COMMENT '私钥',
+        `chain_id` INT(10) NULL DEFAULT 0 COMMENT '区块链ID',
+        `note` VARCHAR(200) NULL DEFAULT '' COMMENT '备注',
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+        `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+        PRIMARY KEY (`id`),
+        UNIQUE KEY `uk_user_id` (`user_id`) USING BTREE,
+        UNIQUE KEY `uk_wallet_address` (`wallet_address`) USING BTREE,
+        CONSTRAINT `fk_perm_user_blockchain_wallet_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_perm_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户区块链钱包';
 
 -- 用户角色关联表
 CREATE TABLE IF NOT EXISTS
