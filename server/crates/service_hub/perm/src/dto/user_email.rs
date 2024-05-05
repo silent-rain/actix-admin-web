@@ -27,6 +27,7 @@ pub struct AddUserEmailReq {
     /// 用户ID
     pub user_id: i32,
     /// 邮箱
+    #[validate(email)]
     pub email: String,
     /// 备注
     pub note: Option<String>,
@@ -36,6 +37,7 @@ pub struct AddUserEmailReq {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
 pub struct UpdateUserEmailReq {
     /// 邮箱
+    #[validate(email)]
     pub email: String,
     /// 备注
     pub note: Option<String>,

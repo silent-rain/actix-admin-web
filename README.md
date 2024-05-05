@@ -112,9 +112,10 @@
   - open api 接口 rbac
   - 系统用户接口鉴权
 - 调整为多用户体系鉴权
-  - 登陆
-  - 注册
-  - 变更与更新
+  - 登陆ok
+  - 注册ok
+  - 变更与更新ok
+  - 接口验证
 
 <https://github.com/actix/actix-extras/tree/master/actix-identity>
 <https://crates.io/crates/actix-ws>

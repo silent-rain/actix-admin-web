@@ -26,6 +26,10 @@ impl PermissionRouter {
             .service(role::RoleRouter::admin_register())
             // 用户管理
             .service(user::UserRouter::admin_register())
+            // 用户手机号管理
+            .service(user_phone::UserPhoneRouter::admin_register())
+            // 用户邮箱管理
+            .service(user_email::UserEmailRouter::admin_register())
             // 用户角色关系管理
             .service(user_role_rel::UserRoleRelRouter::admin_register())
             // 部门管理

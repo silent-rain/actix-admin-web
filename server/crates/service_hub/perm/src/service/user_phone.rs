@@ -58,7 +58,7 @@ impl<'a> UserPhoneService<'a> {
     /// 添加数据
     pub async fn add(&self, req: AddUserPhoneReq) -> Result<perm_user_phone::Model, ErrorMsg> {
         // 查询用户手机号是否已存在
-        let role = self
+        let phone = self
             .user_phone_dao
             .info_by_phone(req.phone.clone())
             .await
@@ -68,7 +68,7 @@ impl<'a> UserPhoneService<'a> {
                     .into_msg()
                     .with_msg("查询用户手机号信息失败")
             })?;
-        if role.is_some() {
+        if phone.is_some() {
             error!("用户手机号已存在");
             return Err(Error::DbDataExistError
                 .into_msg()
@@ -93,6 +93,24 @@ impl<'a> UserPhoneService<'a> {
 
     /// 更新用户手机号
     pub async fn update(&self, id: i32, req: UpdateUserPhoneReq) -> Result<u64, ErrorMsg> {
+        // 查询用户手机号是否已存在
+        let phone = self
+            .user_phone_dao
+            .info_by_phone(req.phone.clone())
+            .await
+            .map_err(|err| {
+                error!("查询用户手机号信息失败, err: {:#?}", err);
+                Error::DbQueryError
+                    .into_msg()
+                    .with_msg("查询用户手机号信息失败")
+            })?;
+        if phone.is_some() {
+            error!("用户手机号已存在");
+            return Err(Error::DbDataExistError
+                .into_msg()
+                .with_msg("用户手机号已存在"));
+        }
+
         let model = perm_user_phone::ActiveModel {
             id: Set(id),
             phone: Set(req.phone),

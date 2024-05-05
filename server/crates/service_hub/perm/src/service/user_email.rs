@@ -58,7 +58,7 @@ impl<'a> UserEmailService<'a> {
     /// 添加数据
     pub async fn add(&self, req: AddUserEmailReq) -> Result<perm_user_email::Model, ErrorMsg> {
         // 查询用户邮箱是否已存在
-        let role = self
+        let email = self
             .user_email_dao
             .info_by_email(req.email.clone())
             .await
@@ -68,7 +68,7 @@ impl<'a> UserEmailService<'a> {
                     .into_msg()
                     .with_msg("查询用户邮箱信息失败")
             })?;
-        if role.is_some() {
+        if email.is_some() {
             error!("用户邮箱已存在");
             return Err(Error::DbDataExistError
                 .into_msg()
@@ -93,6 +93,24 @@ impl<'a> UserEmailService<'a> {
 
     /// 更新用户邮箱
     pub async fn update(&self, id: i32, req: UpdateUserEmailReq) -> Result<u64, ErrorMsg> {
+        // 查询用户邮箱是否已存在
+        let email = self
+            .user_email_dao
+            .info_by_email(req.email.clone())
+            .await
+            .map_err(|err| {
+                error!("查询用户邮箱信息失败, err: {:#?}", err);
+                Error::DbQueryError
+                    .into_msg()
+                    .with_msg("查询用户邮箱信息失败")
+            })?;
+        if email.is_some() {
+            error!("用户邮箱已存在");
+            return Err(Error::DbDataExistError
+                .into_msg()
+                .with_msg("用户邮箱已存在"));
+        }
+
         let model = perm_user_email::ActiveModel {
             id: Set(id),
             email: Set(req.email),
