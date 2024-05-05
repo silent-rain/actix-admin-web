@@ -18,7 +18,7 @@ use entity::schedule_job;
 
 use async_trait::async_trait;
 use sea_orm::Set;
-use tracing::error;
+use tracing::{error, info};
 
 /// 系统定时任务 Trait
 #[async_trait]
@@ -112,7 +112,10 @@ where
             };
 
             // 更新为当前任务的UUID
-            match self.update_schedule_job_uuid(job_model.clone(), uuid).await {
+            match self
+                .update_schedule_job_uuid(job_model.clone(), uuid.clone())
+                .await
+            {
                 Ok(v) => v,
                 Err(err) => {
                     error!(
@@ -125,6 +128,11 @@ where
                     continue;
                 }
             };
+
+            info!(
+                "register sys task id:{} name: {} sys_code: {:?} uuid: {:?}",
+                job_model.id, job_model.name, job_model.sys_code, uuid
+            );
         }
 
         Ok(())
@@ -229,8 +237,13 @@ where
             };
 
             // 更新为当前任务的UUID
-            self.update_schedule_job_uuid(job_model.clone(), uuid)
+            self.update_schedule_job_uuid(job_model.clone(), uuid.clone())
                 .await?;
+
+            info!(
+                "register user task id:{} name: {} sys_code: {:?} uuid: {:?}",
+                job_model.id, job_model.name, job_model.sys_code, uuid
+            );
         }
 
         Ok(())

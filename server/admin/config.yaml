@@ -30,7 +30,7 @@ mysql:
     port: 3306 # 端口
     username: "one" # 账号
     password: "pass" # 密码
-    db_name: "actix_admin_web3" # 数据库名称
+    db_name: "actix_admin_web" # 数据库名称
   # 读写数据库
   write:
     key: "db"
@@ -38,7 +38,7 @@ mysql:
     port: 3306
     username: "one"
     password: "pass"
-    db_name: "actix_admin_web3"
+    db_name: "actix_admin_web"
 
 # sqlite3 数据库配置
 sqlite:
