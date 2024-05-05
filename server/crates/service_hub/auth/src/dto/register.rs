@@ -1,6 +1,6 @@
 //! 注册
 
-use crate::enums::RegisterType;
+use crate::enums::UserRegisterType;
 
 use actix_validator::Validate;
 
@@ -9,23 +9,25 @@ use serde::{Deserialize, Serialize};
 /// 注册用户
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
 pub struct RegisterReq {
+    /// 注册用户类型
+    pub register_type: UserRegisterType,
     /// 手机号码
-    // #[validate(custom(function = "validate_phone"))]
     pub phone: Option<String>,
     /// 邮箱
-    // #[validate(email)]
     pub email: Option<String>,
-    /// 注册用户类型
-    pub register_type: RegisterType,
+
+    // ==== 基础信息 ====
     /// 用户名称
     #[validate(length(min = 5, max = 20, message = "用户名必须在5到20个字符之间"))]
     pub username: String,
     /// 真实姓名
     pub real_name: Option<String>,
     /// 性别, 0:男,1:女,2:保密
+    /// Enum: [`perm::enums::Gender`]
     #[validate(range(min = 0, max = 3, message = "性别, 0:男,1:女,2:保密"))]
     pub gender: i8,
     /// 年龄
+    /// TODO 待定，可以自己计算出来
     #[validate(range(min = 18, max = 100, message = "年龄必须在18到100岁之间"))]
     pub age: Option<i32>,
     /// 出生日期
@@ -35,6 +37,8 @@ pub struct RegisterReq {
     pub password: String,
     /// 头像URL
     pub avatar: Option<String>,
+
+    // ==== 防止恶意注册 ====
     /// 验证码ID
     #[serde(default)]
     pub captcha_id: String,
@@ -55,7 +59,7 @@ mod tests {
         let expected = RegisterReq {
             phone: Some("phone".to_owned()),
             email: Some("email".to_owned()),
-            register_type: RegisterType::Phone,
+            register_type: UserRegisterType::Phone,
             username: "username".to_owned(),
             real_name: Some("real_name".to_owned()),
             gender: 11,
@@ -91,7 +95,7 @@ mod tests {
         let expected = RegisterReq {
             phone: Some("phone".to_owned()),
             email: None,
-            register_type: RegisterType::Phone,
+            register_type: UserRegisterType::Phone,
             username: "username".to_owned(),
             real_name: Some("real_name".to_owned()),
             gender: 1,
@@ -126,7 +130,7 @@ mod tests {
         let expected = RegisterReq {
             phone: Some("phone".to_owned()),
             email: None,
-            register_type: RegisterType::Phone,
+            register_type: UserRegisterType::Phone,
             username: "username".to_owned(),
             real_name: Some("real_name".to_owned()),
             gender: 11,

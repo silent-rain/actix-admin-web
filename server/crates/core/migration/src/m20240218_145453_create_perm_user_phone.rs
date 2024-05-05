@@ -39,9 +39,8 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(PermUserPhone::Phone)
                             .string()
-                            .string_len(20)
-                            .null()
-                            .default("")
+                            .string_len(16)
+                            .not_null()
                             .comment("手机号码"),
                     )
                     .col(

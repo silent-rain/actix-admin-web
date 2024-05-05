@@ -4,9 +4,9 @@ use crate::dto::table::AddAdminUserReq;
 use crate::dto::table::TableSql;
 
 use database::DbRepo;
-use entity::perm_role;
 use entity::{
-    perm_menu_role_rel, perm_open_api_role_rel, perm_user, perm_user_role_rel,
+    perm_menu_role_rel, perm_open_api_role_rel, perm_role, perm_user, perm_user_email,
+    perm_user_phone, perm_user_role_rel,
     prelude::{PermMenu, PermMenuRoleRel, PermOpenApi, PermOpenApiRoleRel, PermRole, PermUser},
 };
 use perm::enums::{Gender, UserStatus};
@@ -52,7 +52,20 @@ impl<'a> TableDao<'a> {
         let _ = self.txn_init_open_api(&txn, table_sql.open_api_sql).await?;
 
         // 添加管理员
-        let admin_user = self.txn_add_admin_user(&txn, req).await?;
+        let admin_user = self.txn_add_admin_user(&txn, req.clone()).await?;
+        // 添加管理员手机号码
+        if let Some(phone) = req.phone {
+            let _ = self
+                .txn_add_admin_user_phone(&txn, admin_user.id, phone)
+                .await?;
+        }
+        // 添加管理员邮箱
+        if let Some(email) = req.email {
+            let _ = self
+                .txn_add_admin_user_email(&txn, admin_user.id, email)
+                .await?;
+        }
+
         // 获取管理员角色
         if let Some(admin_role) = self.txn_admin_role(&txn).await? {
             // 添加用户与角色关系
@@ -86,10 +99,40 @@ impl<'a> TableDao<'a> {
         let active_model = perm_user::ActiveModel {
             username: Set(req.username),
             gender: Set(Gender::Confidential as i8),
-            phone: Set(req.phone),
-            email: Set(req.email),
             password: Set(req.password),
             status: Set(UserStatus::Enabled as i8),
+            ..Default::default()
+        };
+        let result = active_model.insert(txn).await?;
+        Ok(result)
+    }
+
+    /// 添加管理员手机号码
+    async fn txn_add_admin_user_phone(
+        &self,
+        txn: &DatabaseTransaction,
+        user_id: i32,
+        phone: String,
+    ) -> Result<perm_user_phone::Model, DbErr> {
+        let active_model = perm_user_phone::ActiveModel {
+            user_id: Set(user_id),
+            phone: Set(phone),
+            ..Default::default()
+        };
+        let result = active_model.insert(txn).await?;
+        Ok(result)
+    }
+
+    /// 添加管理员邮箱
+    async fn txn_add_admin_user_email(
+        &self,
+        txn: &DatabaseTransaction,
+        user_id: i32,
+        email: String,
+    ) -> Result<perm_user_email::Model, DbErr> {
+        let active_model = perm_user_email::ActiveModel {
+            user_id: Set(user_id),
+            email: Set(email),
             ..Default::default()
         };
         let result = active_model.insert(txn).await?;

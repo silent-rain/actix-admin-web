@@ -1,5 +1,7 @@
 //! 登陆
 
+use crate::enums::UserRegisterType;
+
 use actix_validator::Validate;
 
 use serde::{Deserialize, Serialize};
@@ -7,8 +9,11 @@ use serde::{Deserialize, Serialize};
 /// 登陆 请求体
 #[derive(Default, Clone, Deserialize, Validate)]
 pub struct LoginReq {
+    /// 注册用户类型
+    pub user_type: UserRegisterType,
     /// 手机号码或邮箱
     pub username: String,
+
     /// 登陆密码
     pub password: String,
     /// 验证码ID

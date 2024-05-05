@@ -16,7 +16,7 @@ pub struct Model {
     /// 用户ID
     pub user_id: i32,
     /// 手机号码
-    pub phone: Option<String>,
+    pub phone: String,
     /// 备注
     pub note: Option<String>,
     /// 创建时间

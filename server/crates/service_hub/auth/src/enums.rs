@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 
 /// 注册用户类型
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub enum RegisterType {
+pub enum UserRegisterType {
     /// 手机号码
     #[serde(rename = "phone")]
     Phone,
@@ -15,30 +15,30 @@ pub enum RegisterType {
     Email,
 }
 
-impl Default for RegisterType {
+impl Default for UserRegisterType {
     fn default() -> Self {
         Self::Phone
     }
 }
 
 /// 实现FromStr trait来定义如何从字符串解析为RegisterType
-impl FromStr for RegisterType {
+impl FromStr for UserRegisterType {
     type Err = ();
 
     fn from_str(input: &str) -> Result<Self, Self::Err> {
         match input {
-            "phone" => Ok(RegisterType::Phone),
-            "email" => Ok(RegisterType::Email),
+            "phone" => Ok(UserRegisterType::Phone),
+            "email" => Ok(UserRegisterType::Email),
             _ => Err(()),
         }
     }
 }
 
-impl From<RegisterType> for String {
-    fn from(value: RegisterType) -> Self {
+impl From<UserRegisterType> for String {
+    fn from(value: UserRegisterType) -> Self {
         match value {
-            RegisterType::Phone => "phone".to_owned(),
-            RegisterType::Email => "email".to_owned(),
+            UserRegisterType::Phone => "phone".to_owned(),
+            UserRegisterType::Email => "email".to_owned(),
         }
     }
 }

@@ -22,7 +22,7 @@ pub struct GetUserListReq {
 }
 
 /// 添加用户
-#[derive(Serialize, Clone, Deserialize, Validate)]
+#[derive(Clone, Serialize, Deserialize, Validate)]
 pub struct AddUserReq {
     /// 用户名称
     pub username: String,
@@ -34,10 +34,6 @@ pub struct AddUserReq {
     pub age: i32,
     /// 出生日期
     pub birthday: Option<String>,
-    /// 手机号码
-    pub phone: Option<String>,
-    /// 邮箱
-    pub email: Option<String>,
     /// 密码
     pub password: String,
     /// 头像URL
@@ -47,7 +43,7 @@ pub struct AddUserReq {
 }
 
 /// 更新用户
-#[derive(Serialize, Clone, Deserialize, Validate)]
+#[derive(Clone, Serialize, Deserialize, Validate)]
 pub struct UpdateUserReq {
     /// 用户名称
     pub username: String,
@@ -59,10 +55,6 @@ pub struct UpdateUserReq {
     pub age: i32,
     /// 出生日期
     pub birthday: Option<String>,
-    /// 手机号码
-    pub phone: Option<String>,
-    /// 邮箱
-    pub email: Option<String>,
     /// 密码
     pub password: String,
     /// 头像URL

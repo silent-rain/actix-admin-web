@@ -16,7 +16,7 @@ pub struct Model {
     /// 用户ID
     pub user_id: i32,
     /// 邮箱
-    pub email: Option<String>,
+    pub email: String,
     /// 备注
     pub note: Option<String>,
     /// 创建时间

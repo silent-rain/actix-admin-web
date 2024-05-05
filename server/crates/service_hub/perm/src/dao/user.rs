@@ -9,7 +9,7 @@ use entity::{
 
 use nject::injectable;
 use sea_orm::{
-    ActiveModelTrait, ColumnTrait, Condition, DatabaseTransaction, DbErr, EntityTrait, JoinType,
+    ActiveModelTrait, ColumnTrait, DatabaseTransaction, DbErr, EntityTrait, JoinType,
     PaginatorTrait, QueryFilter, QueryOrder, QuerySelect, QueryTrait, Set, TransactionTrait,
 };
 
@@ -62,37 +62,6 @@ impl<'a> UserDao<'a> {
     /// 获取详情信息
     pub async fn info(&self, id: i32) -> Result<Option<perm_user::Model>, DbErr> {
         PermUser::find_by_id(id).one(self.db.rdb()).await
-    }
-
-    /// 根据手机号码获取详情信息
-    pub async fn info_by_phone(&self, phone: String) -> Result<Option<perm_user::Model>, DbErr> {
-        PermUser::find()
-            .filter(perm_user::Column::Phone.contains(phone))
-            .one(self.db.rdb())
-            .await
-    }
-
-    /// 根据邮箱获取详情信息
-    pub async fn info_by_email(&self, email: String) -> Result<Option<perm_user::Model>, DbErr> {
-        PermUser::find()
-            .filter(perm_user::Column::Email.contains(email))
-            .one(self.db.rdb())
-            .await
-    }
-
-    /// 根据手机号/邮箱获取详情信息
-    pub async fn info_by_username(
-        &self,
-        username: String,
-    ) -> Result<Option<perm_user::Model>, DbErr> {
-        PermUser::find()
-            .filter(
-                Condition::any()
-                    .add(perm_user::Column::Phone.eq(username.clone()))
-                    .add(perm_user::Column::Email.eq(username)),
-            )
-            .one(self.db.rdb())
-            .await
     }
 
     /// 添加详情信息

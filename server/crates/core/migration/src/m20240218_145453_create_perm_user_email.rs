@@ -39,9 +39,8 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(PermUserEmail::Email)
                             .string()
-                            .string_len(100)
-                            .null()
-                            .default("")
+                            .string_len(50)
+                            .not_null()
                             .comment("邮箱"),
                     )
                     .col(

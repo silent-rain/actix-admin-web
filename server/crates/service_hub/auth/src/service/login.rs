@@ -3,13 +3,14 @@
 use crate::{
     common::captcha::check_captcha,
     dto::login::{BrowserInfo, LoginReq, LoginRsp},
+    enums::UserRegisterType,
 };
 
 use log::{
     enums::{UserLoginDisabledStatus, UserLoginStatus},
     UserLoginDao,
 };
-use perm::{enums::UserStatus, UserDao};
+use perm::{enums::UserStatus, UserDao, UserEmailDao, UserPhoneDao};
 use system::CaptchaDao;
 
 use code::{Error, ErrorMsg};
@@ -24,6 +25,8 @@ use tracing::error;
 #[injectable]
 pub struct LoginService<'a> {
     user_dao: UserDao<'a>,
+    user_email_dao: UserEmailDao<'a>,
+    user_phone_dao: UserPhoneDao<'a>,
     user_login_dao: UserLoginDao<'a>,
     captcha_dao: CaptchaDao<'a>,
 }
@@ -100,9 +103,49 @@ impl<'a> LoginService<'a> {
 
     /// 获取用户信息
     async fn get_username(&self, data: LoginReq) -> Result<perm_user::Model, ErrorMsg> {
+        let user_id = match data.user_type {
+            UserRegisterType::Phone => {
+                let user = self
+                    .user_phone_dao
+                    .info_by_phone(data.username.clone())
+                    .await
+                    .map_err(|err| {
+                        error!("查询用户信息失败, err: {:#?}", err);
+                        Error::DbQueryError.into_msg().with_msg("查询用户信息失败")
+                    })?
+                    .ok_or_else(|| {
+                        error!("该用户手机号不存在");
+                        Error::DbQueryEmptyError
+                            .into_msg()
+                            .with_msg("该用户手机号不存在")
+                    })?;
+
+                user.user_id
+            }
+            UserRegisterType::Email => {
+                let user = self
+                    .user_email_dao
+                    .info_by_email(data.username.clone())
+                    .await
+                    .map_err(|err| {
+                        error!("查询用户信息失败, err: {:#?}", err);
+                        Error::DbQueryError.into_msg().with_msg("查询用户信息失败")
+                    })?
+                    .ok_or_else(|| {
+                        error!("该用户邮箱不存在");
+                        Error::DbQueryEmptyError
+                            .into_msg()
+                            .with_msg("该用户邮箱不存在")
+                    })?;
+
+                user.user_id
+            }
+        };
+
+        // 查询用户
         let result = self
             .user_dao
-            .info_by_username(data.username.clone())
+            .info(user_id)
             .await
             .map_err(|err| {
                 error!("查询用户信息失败, err: {:#?}", err);

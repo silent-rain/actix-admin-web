@@ -78,60 +78,6 @@ impl<'a> UserService<'a> {
         Ok(result)
     }
 
-    /// 根据手机号/邮箱获取详情信息
-    pub async fn info_by_username(&self, username: String) -> Result<perm_user::Model, ErrorMsg> {
-        let result = self
-            .user_dao
-            .info_by_username(username)
-            .await
-            .map_err(|err| {
-                error!("查询用户信息失败, err: {:#?}", err);
-                Error::DbQueryError.into_msg().with_msg("查询用户信息失败")
-            })?
-            .ok_or_else(|| {
-                error!("用户不存在");
-                Error::DbQueryEmptyError.into_msg().with_msg("用户不存在")
-            })?;
-
-        Ok(result)
-    }
-
-    /// 获取详情数据
-    pub async fn info_by_phone(&self, phone: String) -> Result<perm_user::Model, ErrorMsg> {
-        let result = self
-            .user_dao
-            .info_by_phone(phone)
-            .await
-            .map_err(|err| {
-                error!("查询用户信息失败, err: {:#?}", err);
-                Error::DbQueryError.into_msg().with_msg("查询用户信息失败")
-            })?
-            .ok_or_else(|| {
-                error!("用户不存在");
-                Error::DbQueryEmptyError.into_msg().with_msg("用户不存在")
-            })?;
-
-        Ok(result)
-    }
-
-    /// 根据邮箱获取详情信息
-    pub async fn info_by_email(&self, email: String) -> Result<perm_user::Model, ErrorMsg> {
-        let result = self
-            .user_dao
-            .info_by_email(email)
-            .await
-            .map_err(|err| {
-                error!("查询用户信息失败, err: {:#?}", err);
-                Error::DbQueryError.into_msg().with_msg("查询用户信息失败")
-            })?
-            .ok_or_else(|| {
-                error!("用户不存在");
-                Error::DbQueryEmptyError.into_msg().with_msg("用户不存在")
-            })?;
-
-        Ok(result)
-    }
-
     /// 更新数据状态
     pub async fn status(&self, id: i32, status: i8) -> Result<(), ErrorMsg> {
         self.user_dao.status(id, status).await.map_err(|err| {
@@ -156,38 +102,6 @@ impl<'a> UserService<'a> {
 impl<'a> UserService<'a> {
     /// 后台添加用户及对应用户的角色
     pub async fn add(&self, data: AddUserReq) -> Result<perm_user::Model, ErrorMsg> {
-        // 检测是否已注册用户
-        if let Some(phone) = data.phone.clone() {
-            let user = self.user_dao.info_by_phone(phone).await.map_err(|err| {
-                error!("查询用户信息失败, err: {:#?}", err);
-                Error::DbQueryError.into_msg().with_msg("查询用户信息失败")
-            })?;
-            if user.is_some() {
-                {
-                    error!("该手机号码已注册");
-                    return Err(code::Error::DbDataExistError
-                        .into_msg()
-                        .with_msg("该手机号码已注册"));
-                };
-            }
-        }
-
-        // 检测是否已注册邮箱
-        if let Some(email) = data.email.clone() {
-            let user = self.user_dao.info_by_email(email).await.map_err(|err| {
-                error!("查询用户信息失败, err: {:#?}", err);
-                Error::DbQueryError.into_msg().with_msg("查询用户信息失败")
-            })?;
-            if user.is_some() {
-                {
-                    error!("该邮箱已注册");
-                    return Err(code::Error::DbDataExistError
-                        .into_msg()
-                        .with_msg("该邮箱已注册"));
-                };
-            }
-        }
-
         // 密码加密
         let password = sha2_256(&data.password);
 
@@ -198,8 +112,6 @@ impl<'a> UserService<'a> {
             age: Set(Some(data.age)),
             birthday: Set(data.birthday),
             avatar: Set(data.avatar),
-            phone: Set(data.phone),
-            email: Set(data.email),
             password: Set(password),
             status: Set(UserStatus::Enabled as i8),
             ..Default::default()
@@ -241,8 +153,6 @@ impl<'a> UserService<'a> {
             age: Set(Some(data.age)),
             birthday: Set(data.birthday),
             avatar: Set(data.avatar),
-            phone: Set(data.phone),
-            email: Set(data.email),
             password: Set(data.password),
             intro: Set(data.intro),
             note: Set(data.note),

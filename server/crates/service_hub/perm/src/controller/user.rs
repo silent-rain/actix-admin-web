@@ -6,7 +6,6 @@ use crate::{
 };
 
 use actix_validator::{Json, Query};
-use code::Error;
 use context::Context;
 use inject::AInjectProvider;
 use response::Response;
@@ -15,7 +14,7 @@ use actix_web::{
     web::{Data, Path},
     Responder,
 };
-use tracing::{error, warn};
+use tracing::warn;
 
 /// 控制器
 pub struct UserController;
@@ -46,20 +45,8 @@ impl UserController {
 
     /// 添加用户
     pub async fn add(provider: Data<AInjectProvider>, data: Json<AddUserReq>) -> impl Responder {
-        let data = data.into_inner();
-        // 检查用户
-        if data.phone.is_none() && data.email.is_none() {
-            error!("请求参数错误, phone/email 不能为空");
-            return Response::err(
-                Error::InvalidParameterError
-                    .into_msg()
-                    .with_msg("请求参数错误, phone/email 不能为空"),
-            );
-        }
-
         let user_service: UserService = provider.provide();
-
-        let resp = user_service.add(data).await;
+        let resp = user_service.add(data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

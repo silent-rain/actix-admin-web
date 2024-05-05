@@ -23,7 +23,7 @@ pub enum UserStatus {
 }
 
 /// 性别
-#[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize_repr, Deserialize_repr)]
 #[repr(i8)]
 pub enum Gender {
     /// 男
