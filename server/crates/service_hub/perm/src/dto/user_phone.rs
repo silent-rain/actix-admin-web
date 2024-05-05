@@ -2,7 +2,9 @@
 
 use actix_validator::Validate;
 
+use regex::Regex;
 use serde::{Deserialize, Serialize};
+use validator::ValidationError;
 
 /// 查询用户手机号列表
 #[derive(Default, Deserialize, Validate)]
@@ -27,6 +29,7 @@ pub struct AddUserPhoneReq {
     /// 用户ID
     pub user_id: i32,
     /// 手机号码
+    #[validate(custom(function = "validate_phone"))]
     pub phone: String,
     /// 备注
     pub note: Option<String>,
@@ -36,7 +39,19 @@ pub struct AddUserPhoneReq {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
 pub struct UpdateUserPhoneReq {
     /// 手机号码
+    #[validate(custom(function = "validate_phone"))]
     pub phone: String,
     /// 备注
     pub note: Option<String>,
+}
+
+// 自定义电话号码验证函数
+fn validate_phone(phone: &str) -> Result<(), ValidationError> {
+    let phone_regex =
+        Regex::new(r"^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$")
+            .map_err(|_err| ValidationError::new("invalid phone"))?;
+    if !phone_regex.is_match(phone) {
+        return Err(ValidationError::new("invalid phone"));
+    }
+    Ok(())
 }
