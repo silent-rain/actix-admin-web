@@ -63,10 +63,14 @@ where
     DB: DbRepo + Clone + Send + Sync + 'static,
 {
     pub fn start(db: DB) {
-        let current = Handle::current();
-        current.spawn(async {
-            let mut task = TimerRegister::new(db);
-            task.init().await.expect("定时任务初始化失败");
+        let handle = Handle::current();
+        // 创建一个新的操作系统线程来运行异步代码
+        std::thread::spawn(move || {
+            // 使用Tokio Runtime的handle运行异步代码
+            handle.block_on(async {
+                let mut task = TimerRegister::new(db);
+                task.init().await.expect("定时任务初始化失败");
+            });
         });
     }
 }

@@ -45,7 +45,7 @@ impl JobScheduler {
         DB: DbRepo + Send + Sync + 'static,
     {
         // 设置任务通知
-        // job.set_job_notification(self.sched.clone()).await?;
+        job.set_job_notification(self.sched.clone()).await?;
 
         self.sched
             .add(job.job())
