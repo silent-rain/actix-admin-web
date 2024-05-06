@@ -2,7 +2,7 @@
 
 use serde_repr::{Deserialize_repr, Serialize_repr};
 
-/// 定时任务状态
+/// 调度任务状态
 #[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
 #[repr(i8)]
 pub enum ScheduleJobStatus {
@@ -16,7 +16,7 @@ pub enum ScheduleJobStatus {
 #[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
 #[repr(i8)]
 pub enum ScheduleJobType {
-    /// 定时任务
+    /// 调度任务
     Timer = 0,
     /// 即时任务
     Interval = 1,
