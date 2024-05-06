@@ -330,8 +330,7 @@ CREATE TABLE IF NOT EXISTS
         `status` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '任务状态,0:开始,1:完成,2:停止,3:移除',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-        PRIMARY KEY (`id`) USING BTREE,
-        UNIQUE KEY `uk_uuid` (`uuid`) USING BTREE
+        PRIMARY KEY (`id`) USING BTREE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '调度任务状态日志';
 
 -- 调度任务事件日志
