@@ -113,6 +113,7 @@
   - 系统用户接口鉴权
 - 用户分享码 share_code
 - 用户会员等级
+- 调度任务接口验证
 
 <https://github.com/actix/actix-extras/tree/master/actix-identity>
 <https://crates.io/crates/actix-ws>

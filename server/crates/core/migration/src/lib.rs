@@ -22,7 +22,8 @@ mod m20240218_161916_create_sys_dict_data;
 mod m20240218_161916_create_sys_dict_dim;
 mod m20240218_161916_create_sys_image;
 mod m20240415_161916_create_schedule_job;
-mod m20240415_161916_create_schedule_job_log;
+mod m20240415_161916_create_schedule_job_event_log;
+mod m20240415_161916_create_schedule_job_status_log;
 
 pub struct Migrator;
 
@@ -52,7 +53,8 @@ impl MigratorTrait for Migrator {
             Box::new(m20240218_161916_create_sys_dict_data::Migration),
             Box::new(m20240218_161916_create_sys_image::Migration),
             Box::new(m20240415_161916_create_schedule_job::Migration),
-            Box::new(m20240415_161916_create_schedule_job_log::Migration),
+            Box::new(m20240415_161916_create_schedule_job_status_log::Migration),
+            Box::new(m20240415_161916_create_schedule_job_event_log::Migration),
         ]
     }
 }

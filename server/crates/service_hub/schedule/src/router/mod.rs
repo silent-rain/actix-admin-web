@@ -1,6 +1,7 @@
 //! 路由层
 pub mod schedule_job;
 pub mod schedule_job_event_log;
+pub mod schedule_job_status_log;
 
 use actix_web::{web, Scope};
 
@@ -12,6 +13,7 @@ impl ScheduleRouter {
     pub fn admin_register() -> Scope {
         web::scope("/schedule")
             .service(schedule_job::ScheduleJobRouter::admin_register())
+            .service(schedule_job_status_log::ScheduleJobStatusLogRouter::admin_register())
             .service(schedule_job_event_log::ScheduleJobEventLogRouter::admin_register())
     }
 }

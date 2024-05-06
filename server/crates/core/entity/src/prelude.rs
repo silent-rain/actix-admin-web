@@ -21,6 +21,7 @@ pub use super::perm_user_token::Entity as PermUserToken;
 pub use super::perm_user_token_role_rel::Entity as PermUserTokenRoleRel;
 pub use super::schedule_job::Entity as ScheduleJob;
 pub use super::schedule_job_event_log::Entity as ScheduleJobEventLog;
+pub use super::schedule_job_status_log::Entity as ScheduleJobStatusLog;
 pub use super::sys_captcha::Entity as SysCaptcha;
 pub use super::sys_config::Entity as SysConfig;
 pub use super::sys_dict_data::Entity as SysDictData;

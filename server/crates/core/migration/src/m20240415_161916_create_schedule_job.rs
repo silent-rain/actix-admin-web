@@ -30,16 +30,10 @@ impl MigrationTrait for Migration {
                             .comment("自增ID"),
                     )
                     .col(
-                        ColumnDef::new(ScheduleJob::Uuid)
-                            .string()
-                            .string_len(200)
-                            .default("")
-                            .comment("任务ID"),
-                    )
-                    .col(
                         ColumnDef::new(ScheduleJob::Name)
                             .string()
                             .string_len(200)
+                            .unique_key()
                             .not_null()
                             .comment("任务名称"),
                     )
@@ -130,7 +124,6 @@ pub enum ScheduleJob {
     #[sea_orm(iden = "t_schedule_job")]
     Table,
     Id,
-    Uuid,
     Name,
     Source,
     JobType,

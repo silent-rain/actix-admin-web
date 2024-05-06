@@ -28,8 +28,6 @@ pub struct GetScheduleJobReq {
 /// 添加调度任务
 #[derive(Serialize, Deserialize, Validate)]
 pub struct AddcheduleJobReq {
-    /// 任务ID
-    pub uuid: Option<String>,
     /// 任务名称
     pub name: String,
     /// 任务来源,0:用户定义,1:系统内部
@@ -51,8 +49,6 @@ pub struct AddcheduleJobReq {
 /// 更新数据 请求体
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
 pub struct UpdatecheduleJobReq {
-    /// 任务ID
-    pub uuid: Option<String>,
     /// 任务名称
     pub name: String,
     /// cron表达式
