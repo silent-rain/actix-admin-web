@@ -2,7 +2,6 @@
 use crate::{
     dao::menu::MenuDao,
     dto::menu::{AddMenuReq, GetMenuListReq, UpdateMenuReq},
-    enums::MenuStatus,
 };
 
 use code::{Error, ErrorMsg};
@@ -102,7 +101,7 @@ impl<'a> MenuService<'a> {
             permission: Set(req.permission),
             sort: Set(req.sort),
             note: Set(req.note),
-            status: Set(MenuStatus::Enabled as i8),
+            status: Set(perm_menu::enums::Status::Enabled as i8),
             ..Default::default()
         };
         let result = self

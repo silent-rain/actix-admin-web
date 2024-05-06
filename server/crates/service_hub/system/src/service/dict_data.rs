@@ -2,7 +2,6 @@
 use crate::{
     dao::dict_data::DictDataDao,
     dto::dict_data::{AddDictDataReq, GetDictDataListReq, UpdateDictDataReq},
-    enums::DictDataStatus,
 };
 
 use code::{Error, ErrorMsg};
@@ -81,7 +80,7 @@ impl<'a> DictDataService<'a> {
             value: Set(req.value),
             sort: Set(req.sort),
             note: Set(req.note),
-            status: Set(DictDataStatus::Enabled as i8),
+            status: Set(sys_dict_data::enums::Status::Enabled as i8),
             ..Default::default()
         };
         let result = self.dict_data_dao.add(model).await.map_err(|err| {

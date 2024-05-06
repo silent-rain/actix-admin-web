@@ -6,7 +6,7 @@
 //! ```
 use std::{future::Future, pin::Pin, sync::Arc, time::Duration};
 
-use crate::{dao::Dao, enums::ScheduleJobLogStatus, error::Error};
+use crate::{dao::Dao, error::Error};
 
 use database::DbRepo;
 use entity::schedule_job_event_log;
@@ -126,7 +126,7 @@ where
                     Box::pin(async move {
                         let model = schedule_job_event_log::ActiveModel {
                             job_id: Set(id),
-                            status: Set(ScheduleJobLogStatus::Start as i8),
+                            status: Set(schedule_job_event_log::enums::Status::Start as i8),
                             ..Default::default()
                         };
 
@@ -163,7 +163,7 @@ where
                     Box::pin(async move {
                         let model = schedule_job_event_log::ActiveModel {
                             job_id: Set(id),
-                            status: Set(ScheduleJobLogStatus::Done as i8),
+                            status: Set(schedule_job_event_log::enums::Status::Done as i8),
                             ..Default::default()
                         };
 
@@ -199,7 +199,7 @@ where
                     Box::pin(async move {
                         let model = schedule_job_event_log::ActiveModel {
                             job_id: Set(id),
-                            status: Set(ScheduleJobLogStatus::Removed as i8),
+                            status: Set(schedule_job_event_log::enums::Status::Stop as i8),
                             ..Default::default()
                         };
 
@@ -236,7 +236,7 @@ where
                     Box::pin(async move {
                         let model = schedule_job_event_log::ActiveModel {
                             job_id: Set(id),
-                            status: Set(ScheduleJobLogStatus::Removed as i8),
+                            status: Set(schedule_job_event_log::enums::Status::Removed as i8),
                             ..Default::default()
                         };
 

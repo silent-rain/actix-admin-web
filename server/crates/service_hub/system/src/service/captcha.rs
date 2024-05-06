@@ -5,7 +5,6 @@ use crate::{
     {
         dao::captcha::CaptchaDao,
         dto::captcha::{AddCaptchaResp, GetCaptchaListReq},
-        enums::CaptchaStatus,
     },
 };
 
@@ -82,7 +81,7 @@ impl<'a> CaptchaService<'a> {
 
         // 验证码在使用后将其状态更新为无效
         self.captcha_dao
-            .status(result.id, CaptchaStatus::Invalid as i8)
+            .status(result.id, sys_captcha::enums::Status::Invalid as i8)
             .await
             .map_err(|err| {
                 error!("更新验证码状态失败, err: {:#?}", err);

@@ -1,6 +1,6 @@
 //! OpenApi接口管理
 
-use crate::enums::{OpenApiCategory, OpenApiStatus};
+use entity::perm_open_api;
 
 use actix_validator::Validate;
 
@@ -29,7 +29,7 @@ pub struct AddOpenApiReq {
     /// 父ID
     pub pid: Option<i32>,
     /// 类别,0:目录,1:接口
-    pub category: OpenApiCategory,
+    pub category: perm_open_api::enums::Category,
     /// 接口名称
     pub name: String,
     /// 请求类型
@@ -41,7 +41,7 @@ pub struct AddOpenApiReq {
     /// 备注
     pub note: Option<String>,
     /// 状态, 0:停用,1:正常
-    pub status: OpenApiStatus,
+    pub status: perm_open_api::enums::Status,
 }
 
 /// 更新数据
@@ -50,7 +50,7 @@ pub struct UpdateOpenApiReq {
     /// 父ID
     pub pid: Option<i32>,
     /// 类别,0:目录,1:接口
-    pub category: OpenApiCategory,
+    pub category: perm_open_api::enums::Category,
     /// 接口名称
     pub name: String,
     /// 请求类型
@@ -62,12 +62,12 @@ pub struct UpdateOpenApiReq {
     /// 备注
     pub note: Option<String>,
     /// 状态,0:停用,1:正常
-    pub status: OpenApiStatus,
+    pub status: perm_open_api::enums::Status,
 }
 
 /// 更新数据状态
 #[derive(Clone, Serialize, Deserialize, Validate)]
 pub struct UpdateOpenApiStatusReq {
     /// 状态,0:停用,1:正常
-    pub status: OpenApiStatus,
+    pub status: perm_open_api::enums::Status,
 }

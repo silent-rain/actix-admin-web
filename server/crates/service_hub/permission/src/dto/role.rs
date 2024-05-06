@@ -1,6 +1,6 @@
 //! 角色管理
 
-use crate::enums::RoleStatus;
+use entity::perm_role;
 
 use actix_validator::Validate;
 
@@ -45,14 +45,14 @@ pub struct UpdateRoleReq {
     /// 备注
     pub note: Option<String>,
     /// 状态,0:停用,1:正常
-    pub status: RoleStatus,
+    pub status: perm_role::enums::Status,
 }
 
 /// 更新数据状态
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
 pub struct UpdateRoleStatusReq {
     /// 状态,0:停用,1:正常
-    pub status: RoleStatus,
+    pub status: perm_role::enums::Status,
 }
 
 #[cfg(test)]
@@ -64,7 +64,7 @@ mod tests {
     #[test]
     fn test_status() {
         let expected = UpdateRoleStatusReq {
-            status: RoleStatus::Enabled,
+            status: perm_role::enums::Status::Enabled,
         };
         let json_data = json!({ "status":1 });
         let result: UpdateRoleStatusReq = serde_json::from_value(json_data).unwrap();

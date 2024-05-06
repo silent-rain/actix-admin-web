@@ -1,12 +1,12 @@
 //! 用户Token令牌管理
 
+use entity::perm_user_token;
+
 use actix_validator::Validate;
 use utils::time::{default_local_date_time, str_to_local_date_time};
 
 use sea_orm::prelude::DateTimeLocal;
 use serde::{Deserialize, Serialize};
-
-use crate::enums::UserTokenStatus;
 
 /// 查询用户令牌列表
 #[derive(Default, Deserialize, Validate)]
@@ -31,7 +31,7 @@ pub struct AddUserTokenReq {
     /// 用户ID
     pub user_id: i32,
     /// 权限范围:GET,POST,PUT,DELETE
-    /// Enum: [`crate::enums::UserTokenPermission`]
+    /// Enum: [`perm_user_token::enums::Permission`]
     pub permission: String,
     /// 授权到期时间
     #[serde(
@@ -41,7 +41,7 @@ pub struct AddUserTokenReq {
     )]
     pub expire: DateTimeLocal,
     /// 状态,0:禁用,1:启用
-    pub status: UserTokenStatus,
+    pub status: perm_user_token::enums::Status,
     /// 备注
     pub note: Option<String>,
 }
@@ -62,7 +62,7 @@ pub struct UpdateUserTokenReq {
     )]
     pub expire: DateTimeLocal,
     /// 状态,0:禁用,1:启用
-    pub status: UserTokenStatus,
+    pub status: perm_user_token::enums::Status,
     /// 备注
     pub note: Option<String>,
 }
@@ -71,5 +71,5 @@ pub struct UpdateUserTokenReq {
 #[derive(Clone, Serialize, Deserialize, Validate)]
 pub struct UpdateUserTokenStatusReq {
     /// 状态,0:停用,1:正常
-    pub status: UserTokenStatus,
+    pub status: perm_user_token::enums::Status,
 }

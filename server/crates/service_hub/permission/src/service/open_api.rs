@@ -2,7 +2,6 @@
 use crate::{
     dao::open_api::OpenApiDao,
     dto::open_api::{AddOpenApiReq, GetOpenApiListReq, UpdateOpenApiReq},
-    enums::OpenApiStatus,
 };
 
 use code::{Error, ErrorMsg};
@@ -109,7 +108,7 @@ impl<'a> OpenApiService<'a> {
             path: Set(req.path),
             sort: Set(req.sort),
             note: Set(req.note),
-            status: Set(OpenApiStatus::Enabled as i8),
+            status: Set(perm_open_api::enums::Status::Enabled as i8),
             ..Default::default()
         };
         let result =

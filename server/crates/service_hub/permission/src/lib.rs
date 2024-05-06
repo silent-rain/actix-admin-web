@@ -1,6 +1,5 @@
 //! 权限管理
 pub mod dto;
-pub mod enums;
 
 pub(crate) mod dao;
 pub use dao::{

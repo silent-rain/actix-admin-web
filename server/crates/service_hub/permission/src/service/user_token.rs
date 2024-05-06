@@ -2,7 +2,6 @@
 use crate::{
     dao::user_token::UserTokenDao,
     dto::user_token::{AddUserTokenReq, GetUserTokenListReq, UpdateUserTokenReq},
-    enums::UserTokenStatus,
 };
 
 use code::{Error, ErrorMsg};
@@ -103,7 +102,7 @@ impl<'a> UserTokenService<'a> {
             permission: Set(req.permission),
             expire: Set(req.expire),
             note: Set(req.note),
-            status: Set(UserTokenStatus::Enabled as i8),
+            status: Set(perm_user_token::enums::Status::Enabled as i8),
             ..Default::default()
         };
         let result =

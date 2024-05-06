@@ -44,3 +44,18 @@ impl Related<super::sys_dict_data::Entity> for Entity {
 }
 
 impl ActiveModelBehavior for ActiveModel {}
+
+/// 枚举
+pub mod enums {
+    use serde_repr::{Deserialize_repr, Serialize_repr};
+
+    /// 字典维度状态
+    #[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
+    #[repr(i8)]
+    pub enum Status {
+        /// 停用
+        Disabled = 0,
+        /// 正常
+        Enabled = 1,
+    }
+}

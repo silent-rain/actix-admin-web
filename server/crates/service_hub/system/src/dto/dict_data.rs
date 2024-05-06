@@ -1,6 +1,6 @@
 //! 字典数据管理
 
-use crate::enums::DictDataStatus;
+use entity::sys_dict_data;
 
 use actix_validator::Validate;
 
@@ -56,12 +56,12 @@ pub struct UpdateDictDataReq {
     /// 备注
     pub note: Option<String>,
     /// 状态,0:停用,1:正常
-    pub status: DictDataStatus,
+    pub status: sys_dict_data::enums::Status,
 }
 
 /// 更新字典数据状态
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
 pub struct UpdateDictDataStatusReq {
     /// 状态,0:停用,1:正常
-    pub status: DictDataStatus,
+    pub status: sys_dict_data::enums::Status,
 }

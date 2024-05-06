@@ -1,9 +1,10 @@
 //! 注册
 
-use crate::{dto::register::RegisterReq, enums::UserRegisterType, RegisterService};
+use crate::{dto::register::RegisterReq, RegisterService};
 
 use actix_validator::Json;
 use code::Error;
+use entity::perm_user;
 use inject::AInjectProvider;
 use response::Response;
 
@@ -21,7 +22,7 @@ impl RegisterController {
     ) -> impl Responder {
         let data = data.into_inner();
         match data.register_type {
-            UserRegisterType::Phone => {
+            perm_user::enums::UserType::Phone => {
                 if data.phone.is_none() {
                     error!("请输入手机号码");
                     return Response::err(
@@ -31,7 +32,7 @@ impl RegisterController {
                     );
                 }
             }
-            UserRegisterType::Email => {
+            perm_user::enums::UserType::Email => {
                 if data.email.is_none() {
                     error!("请输入邮箱");
                     return Response::err(

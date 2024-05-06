@@ -1,6 +1,6 @@
 //! 用户管理
 
-use crate::enums::{Gender, UserStatus};
+use entity::perm_user;
 
 use actix_validator::Validate;
 
@@ -29,7 +29,7 @@ pub struct AddUserReq {
     /// 真实姓名
     pub real_name: Option<String>,
     /// 性别, 0:男,1:女,2:保密
-    pub gender: Gender,
+    pub gender: perm_user::enums::Gender,
     /// 年龄
     pub age: i32,
     /// 出生日期
@@ -50,7 +50,7 @@ pub struct UpdateUserReq {
     /// 真实姓名
     pub real_name: Option<String>,
     /// 性别, 0:男,1:女,2:保密
-    pub gender: Gender,
+    pub gender: perm_user::enums::Gender,
     /// 年龄
     pub age: i32,
     /// 出生日期
@@ -64,7 +64,7 @@ pub struct UpdateUserReq {
     /// 备注
     pub note: Option<String>,
     /// 状态,0:停用,1:正常
-    pub status: UserStatus,
+    pub status: perm_user::enums::Status,
     /// 角色ID列表
     pub role_ids: Vec<i32>,
 }
@@ -73,7 +73,7 @@ pub struct UpdateUserReq {
 #[derive(Clone, Serialize, Deserialize, Validate)]
 pub struct UpdateUserStatusReq {
     /// 用户状态
-    pub status: UserStatus,
+    pub status: perm_user::enums::Status,
 }
 
 /// 获取用户个人信息

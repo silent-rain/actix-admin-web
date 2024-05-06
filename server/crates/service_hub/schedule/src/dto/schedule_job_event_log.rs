@@ -1,6 +1,6 @@
 //! 调度任务事件日志管理
 
-use crate::enums::ScheduleJobEventLogStatus;
+use entity::schedule_job_event_log;
 
 use actix_validator::Validate;
 
@@ -27,5 +27,5 @@ pub struct AddScheduleJobEventLogReq {
     /// 任务ID
     pub job_id: i32,
     /// 任务状态,0:失败,1:成功'
-    pub status: ScheduleJobEventLogStatus,
+    pub status: schedule_job_event_log::enums::Status,
 }

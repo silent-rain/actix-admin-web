@@ -2,7 +2,6 @@
 use crate::{
     dao::schedule_job::ScheduleJobDao,
     dto::schedule_job::{AddcheduleJobReq, GetScheduleJobReq, UpdatecheduleJobReq},
-    enums::ScheduleJobSource,
 };
 
 use code::{Error, ErrorMsg};
@@ -143,7 +142,7 @@ impl<'a> ScheduleJobService<'a> {
     /// 删除数据
     pub async fn delete(&self, id: i32) -> Result<u64, ErrorMsg> {
         let job = self.info(id).await?;
-        if job.source == ScheduleJobSource::System as i8 {
+        if job.source == schedule_job::enums::Source::System as i8 {
             error!("系统任务不允许删除");
             return Err(Error::DbDeleteError
                 .into_msg()

@@ -2,7 +2,6 @@
 use crate::{
     dao::dept::DeptDao,
     dto::dept::{AddDeptReq, GetDeptListReq, UpdateDeptReq},
-    enums::DeptStatus,
 };
 
 use code::{Error, ErrorMsg};
@@ -92,7 +91,7 @@ impl<'a> DeptService<'a> {
             name: Set(req.name),
             sort: Set(req.sort),
             note: Set(req.note),
-            status: Set(DeptStatus::Enabled as i8),
+            status: Set(perm_dept::enums::Status::Enabled as i8),
             ..Default::default()
         };
         let mut dept = self

@@ -1,6 +1,6 @@
 //! API操作日志
 
-use crate::enums::HttpType;
+use entity::log_api_operation;
 
 use actix_validator::Validate;
 
@@ -45,7 +45,7 @@ pub struct AddApiOperationReq {
     /// 耗时,纳秒
     pub cost: u64,
     /// 请求类型:REQ/RSP
-    pub http_type: HttpType,
+    pub http_type: log_api_operation::enums::HttpType,
     /// 备注
     pub note: Option<String>,
 }

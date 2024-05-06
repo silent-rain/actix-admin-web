@@ -2,7 +2,6 @@
 pub mod asset;
 
 pub mod dto;
-pub mod enums;
 
 pub(crate) mod dao;
 

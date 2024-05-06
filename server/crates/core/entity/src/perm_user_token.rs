@@ -46,3 +46,36 @@ impl Related<super::perm_user_token_role_rel::Entity> for Entity {
 }
 
 impl ActiveModelBehavior for ActiveModel {}
+
+/// 枚举
+pub mod enums {
+    use serde::{Deserialize, Serialize};
+    use serde_repr::{Deserialize_repr, Serialize_repr};
+
+    /// 用户令牌状态
+    #[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
+    #[repr(i8)]
+    pub enum Status {
+        /// 停用
+        Disabled = 0,
+        /// 正常
+        Enabled = 1,
+    }
+
+    /// 用户令牌权限范围
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub enum Permission {
+        /// 读取数据
+        #[serde(rename = "GET")]
+        GET,
+        /// 提交数据
+        #[serde(rename = "POST")]
+        POST,
+        /// 更新数据
+        #[serde(rename = "PUT")]
+        PUT,
+        /// 删除数据
+        #[serde(rename = "DELETE")]
+        DELETE,
+    }
+}

@@ -1,7 +1,7 @@
 //! 定时任务示例2
 use database::DbRepo;
 use entity::schedule_job;
-use scheduler::{enums::ScheduleJobSource, error::Error, register::SysTaskTrait, Job};
+use scheduler::{error::Error, register::SysTaskTrait, Job};
 
 pub struct DemoTask2<DB>
 where
@@ -30,7 +30,7 @@ where
     }
 
     fn task(&self, job_model: schedule_job::Model) -> Result<Job<DB>, Error> {
-        if job_model.source != ScheduleJobSource::System as i8 {
+        if job_model.source != schedule_job::enums::Source::System as i8 {
             return Err(Error::ModelSourceError);
         }
         let expression = job_model.expression.ok_or(Error::NotExpressionError)?;

@@ -1,6 +1,6 @@
 //! 登陆
 
-use crate::enums::UserRegisterType;
+use entity::perm_user;
 
 use actix_validator::Validate;
 
@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Default, Clone, Deserialize, Validate)]
 pub struct LoginReq {
     /// 注册用户类型
-    pub user_type: UserRegisterType,
+    pub user_type: perm_user::enums::UserType,
     /// 手机号码
     pub phone: Option<String>,
     /// 邮箱

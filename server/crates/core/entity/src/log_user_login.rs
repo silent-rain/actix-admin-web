@@ -54,3 +54,28 @@ impl ActiveModelBehavior for ActiveModel {
         Ok(self)
     }
 }
+
+/// 枚举
+pub mod enums {
+    use serde_repr::{Deserialize_repr, Serialize_repr};
+
+    /// 用户登陆状态
+    #[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
+    #[repr(i8)]
+    pub enum Status {
+        /// 失败
+        Failed = 0,
+        /// 成功
+        Success = 1,
+    }
+
+    /// 用户登陆禁用状态
+    #[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
+    #[repr(i8)]
+    pub enum DisabledStatus {
+        /// 停用
+        Disabled = 0,
+        /// 正常
+        Enabled = 1,
+    }
+}

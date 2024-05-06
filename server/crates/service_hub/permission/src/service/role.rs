@@ -2,7 +2,6 @@
 use crate::{
     dao::role::RoleDao,
     dto::role::{AddRoleReq, GetRoleListReq, UpdateRoleReq},
-    enums::RoleStatus,
 };
 
 use code::{Error, ErrorMsg};
@@ -78,7 +77,7 @@ impl<'a> RoleService<'a> {
             name: Set(req.name),
             sort: Set(req.sort),
             note: Set(req.note),
-            status: Set(RoleStatus::Enabled as i8),
+            status: Set(perm_role::enums::Status::Enabled as i8),
             ..Default::default()
         };
         let result = self.role_dao.add(model).await.map_err(|err| {

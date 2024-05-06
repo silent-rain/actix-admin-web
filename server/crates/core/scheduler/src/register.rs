@@ -6,12 +6,7 @@
 //! - 初始化所有的脚本任务
 //!     - 注册用户任务
 //!     - 通过编码更新任务的UUID
-use crate::{
-    dao::Dao,
-    enums::{ScheduleJobSource, ScheduleJobStatus, ScheduleJobType},
-    error::Error,
-    Job, JobScheduler,
-};
+use crate::{dao::Dao, error::Error, Job, JobScheduler};
 
 use database::DbRepo;
 use entity::schedule_job;
@@ -151,8 +146,8 @@ where
             .await
             .map_err(|err| Error::ScheduleJobListError(err.to_string()))?
             .into_iter()
-            .filter(|v| v.status == ScheduleJobStatus::Online as i8)
-            .filter(|v| v.source == ScheduleJobSource::System as i8)
+            .filter(|v| v.status == schedule_job::enums::Status::Online as i8)
+            .filter(|v| v.status == schedule_job::enums::Source::System as i8)
             .collect::<Vec<schedule_job::Model>>();
         Ok(job_list)
     }
@@ -200,7 +195,7 @@ where
         let job_list = self.user_job_list().await?;
 
         for job_model in job_list.iter() {
-            let user_job = if job_model.job_type == ScheduleJobType::Interval as i8 {
+            let user_job = if job_model.job_type == schedule_job::enums::JobType::Interval as i8 {
                 self.init_interval_task(job_model)?
             } else {
                 self.init_cron_task(job_model)?
@@ -282,8 +277,8 @@ where
             .await
             .map_err(|err| Error::ScheduleJobListError(err.to_string()))?
             .into_iter()
-            .filter(|v| v.status == ScheduleJobStatus::Online as i8)
-            .filter(|v| v.source == ScheduleJobSource::User as i8)
+            .filter(|v| v.status == schedule_job::enums::Status::Online as i8)
+            .filter(|v| v.source == schedule_job::enums::Source::User as i8)
             .collect::<Vec<schedule_job::Model>>();
 
         Ok(job_list)

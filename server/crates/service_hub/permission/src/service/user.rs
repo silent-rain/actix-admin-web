@@ -2,7 +2,6 @@
 use crate::{
     dao::{user::UserDao, user_role_rel::UserRoleRelDao},
     dto::user::{AddUserReq, GetUserListReq, ProfileRsp, UpdateUserReq},
-    enums::UserStatus,
 };
 
 use code::{Error, ErrorMsg};
@@ -113,7 +112,7 @@ impl<'a> UserService<'a> {
             birthday: Set(data.birthday),
             avatar: Set(data.avatar),
             password: Set(password),
-            status: Set(UserStatus::Enabled as i8),
+            status: Set(perm_user::enums::Status::Enabled as i8),
             ..Default::default()
         };
 

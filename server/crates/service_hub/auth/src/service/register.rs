@@ -1,7 +1,6 @@
 //! 注册
 use crate::{
     common::captcha::check_captcha, dao::register::RegisterDao, dto::register::RegisterReq,
-    enums::UserRegisterType,
 };
 
 use permission::{UserEmailDao, UserPhoneDao};
@@ -36,8 +35,8 @@ impl<'a> RegisterService<'a> {
 
         // 根据不同注册类型进行注册
         match data.register_type {
-            UserRegisterType::Phone => self.register_phone(data).await,
-            UserRegisterType::Email => self.register_email(data).await,
+            perm_user::enums::UserType::Phone => self.register_phone(data).await,
+            perm_user::enums::UserType::Email => self.register_email(data).await,
         }
     }
 

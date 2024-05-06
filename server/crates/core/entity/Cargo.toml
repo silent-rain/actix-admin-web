@@ -13,4 +13,5 @@ utils = { path = "../utils" }
 sea-orm = { workspace = true }
 
 serde = { workspace = true, features = ["derive"] }
+serde_repr = { workspace = true }
 chrono = { workspace = true }
