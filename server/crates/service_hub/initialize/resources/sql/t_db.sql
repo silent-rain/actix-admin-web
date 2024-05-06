@@ -300,13 +300,12 @@ CREATE TABLE IF NOT EXISTS
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '字典数据表';
 
 /*
-定时任务相关
+调度任务相关
  */
--- 定时任务
+-- 调度任务
 CREATE TABLE IF NOT EXISTS
     `t_schedule_job` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
-        `uuid` VARCHAR(50) DEFAULT '' COMMENT '任务ID',
         `name` VARCHAR(200) NOT NULL COMMENT '任务名称',
         `source` TINYINT(1) NOT NULL COMMENT '任务来源,0:用户定义,1:系统内部',
         `job_type` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '任务类型,0:定时任务,1:即时任务',
@@ -318,18 +317,33 @@ CREATE TABLE IF NOT EXISTS
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`) USING BTREE
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '定时任务';
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '调度任务';
 
--- 定时任务事件日志
+-- 调度任务事件日志
+CREATE TABLE IF NOT EXISTS
+    `t_schedule_job_status` (
+        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '事件日志ID',
+        `job_id` INT(11) NOT NULL COMMENT '任务ID',
+        `uuid` VARCHAR(50) DEFAULT '' COMMENT '调度任务ID',
+        `error` TEXT COMMENT '失败信息',
+        `cost` INT(20) UNSIGNED NOT NULL COMMENT '耗时,毫秒',
+        `status` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '任务状态,0:开始,1:完成,2:停止,3:移除',
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '创建时间',
+        PRIMARY KEY (`id`) USING BTREE,
+        UNIQUE KEY `uk_job_id` (`job_id`) USING BTREE,
+        CONSTRAINT `fk_schedule_job_status_job_id` FOREIGN KEY (`job_id`) REFERENCES `t_schedule_job` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '调度任务事件日志';
+
+-- 调度任务事件日志
 CREATE TABLE IF NOT EXISTS
     `t_schedule_job_event_log` (
-        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '日志ID',
+        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '事件日志ID',
         `job_id` INT(11) NOT NULL COMMENT '任务ID',
         `status` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '任务状态,0:开始,1:完成,2:停止,3:移除',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '创建时间',
         PRIMARY KEY (`id`) USING BTREE,
         KEY `idx_job_id` (`job_id`) USING BTREE
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '定时任务事件日志';
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '调度任务事件日志';
 
 /*
 日志相关表
