@@ -43,7 +43,7 @@ pub struct AddApiOperationReq {
     /// 用户代理
     pub user_agent: String,
     /// 耗时,纳秒
-    pub cost: f64,
+    pub cost: u64,
     /// 请求类型:REQ/RSP
     pub http_type: HttpType,
     /// 备注

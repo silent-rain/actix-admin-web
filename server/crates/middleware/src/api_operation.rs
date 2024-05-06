@@ -97,7 +97,7 @@ where
             }
 
             // 添加请求操作日志
-            data.cost = start_time.elapsed().as_millis() as f64;
+            data.cost = start_time.elapsed().as_millis() as u64;
             let body = Self::get_request_body(&request_body)
                 .map_or("body data parsing error ".to_string(), |v| v);
             data.body = Some(body);
@@ -121,7 +121,7 @@ where
             }
 
             // 添加响应操作日志
-            data.cost = start_time.elapsed().as_millis() as f64;
+            data.cost = start_time.elapsed().as_millis() as u64;
             data.http_type = HttpType::Rsp;
             // TODO 添加字符限制, 如果太大则进行省略
             data.body = Some(body);
@@ -219,7 +219,7 @@ impl<S> ApiOperationMiddlewareService<S> {
             body: None,
             remote_addr,
             user_agent,
-            cost: 0.0,
+            cost: 0,
             http_type: HttpType::Req,
             note: None,
         }
