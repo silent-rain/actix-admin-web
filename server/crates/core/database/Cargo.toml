@@ -13,14 +13,14 @@ sea-orm = { workspace = true, features = [
     "sqlx-sqlite",
     "runtime-tokio-rustls",
 ] }
+sea-orm-migration = { workspace = true }
+
 log = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
 async-trait = { workspace = true }
-sea-orm-migration = { workspace = true }
 
 [dev-dependencies]
 tokio = { workspace = true, features = ["full"] }
-log = { workspace = true }
 tracing = { workspace = true }
 tracing-subscriber = { workspace = true, features = [
     "env-filter",

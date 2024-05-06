@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS
     `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '日志ID',
     `job_id` INT(11) NOT NULL COMMENT '任务ID',
     `error` TEXT COMMENT '失败信息',
-    `cost` DECIMAL(10, 2) NOT NULL COMMENT '耗时(单位：毫秒)',
+    `cost` INT(11) NOT NULL COMMENT '耗时(单位：毫秒)',
     `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '任务状态,0:待执行,1:运行中,2:成功,3:失败,4:移除',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '创建时间',
     PRIMARY KEY (`id`) USING BTREE,

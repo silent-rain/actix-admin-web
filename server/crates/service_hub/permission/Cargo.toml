@@ -17,16 +17,14 @@ inject = { path = "../../inject" }
 actix-web = { workspace = true }
 validator = { workspace = true, features = ["derive"] }
 sea-orm = { workspace = true }
-
-async-stream = { workspace = true }
-bytes = { workspace = true }
-tracing = { workspace = true }
 nject = { workspace = true }
-rust-embed = { workspace = true }
+
+tracing = { workspace = true }
 regex = { workspace = true }
-chrono = { workspace = true }
 uuid = { workspace = true, features = ["v4"] }
 serde = { workspace = true, features = ["derive"] }
-serde_json = { workspace = true }
 serde_repr = { workspace = true }
-futures-util = { workspace = true }
+
+
+[dev-dependencies]
+serde_json = { workspace = true }

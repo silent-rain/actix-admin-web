@@ -8,7 +8,6 @@ database = { path = "../../core/database" }
 entity = { path = "../../core/entity" }
 code = { path = "../../core/code" }
 response = { path = "../../core/response" }
-context = { path = "../../core/context" }
 actix_validator = { path = "../../core/actix_validator" }
 utils = { path = "../../core/utils" }
 jwt = { path = "../../core/jwt" }
@@ -20,20 +19,14 @@ system = { path = "../system" }
 log = { path = "../log" }
 
 actix-web = { workspace = true }
-actix-multipart = { workspace = true }
 validator = { workspace = true, features = ["derive"] }
 sea-orm = { workspace = true }
-
-async-stream = { workspace = true }
-bytes = { workspace = true }
-tracing = { workspace = true }
 nject = { workspace = true }
-rust-embed = { workspace = true }
-regex = { workspace = true }
+
+tracing = { workspace = true }
 chrono = { workspace = true }
-uuid = { workspace = true, features = ["v4"] }
 serde = { workspace = true, features = ["derive"] }
+
+
+[dev-dependencies]
 serde_json = { workspace = true }
-serde_repr = { workspace = true }
-uap-rust = { workspace = true }
-futures-util = { workspace = true }

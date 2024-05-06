@@ -9,24 +9,14 @@ entity = { path = "../../core/entity" }
 code = { path = "../../core/code" }
 response = { path = "../../core/response" }
 actix_validator = { path = "../../core/actix_validator" }
-utils = { path = "../../core/utils" }
 
 inject = { path = "../../inject" }
 
 actix-web = { workspace = true }
 validator = { workspace = true, features = ["derive"] }
 sea-orm = { workspace = true }
-
-async-stream = { workspace = true }
-bytes = { workspace = true }
-tracing = { workspace = true }
 nject = { workspace = true }
-rust-embed = { workspace = true }
-regex = { workspace = true }
-chrono = { workspace = true }
-uuid = { workspace = true, features = ["v4"] }
+
+tracing = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
-serde_json = { workspace = true }
 serde_repr = { workspace = true }
-futures-util = { workspace = true }
-tokio = { workspace = true }

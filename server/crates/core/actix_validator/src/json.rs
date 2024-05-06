@@ -1,5 +1,4 @@
 //! Json extractor.
-use core::fmt::Debug;
 use std::ops::Deref;
 
 use response::Response;

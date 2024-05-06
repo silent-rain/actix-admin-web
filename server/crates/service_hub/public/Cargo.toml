@@ -4,18 +4,10 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-code = { path = "../../core/code" }
 response = { path = "../../core/response" }
-utils = { path = "../../core/utils" }
 
 app_state = { path = "../../app_state" }
 
 actix-web = { workspace = true }
-bytes = { workspace = true }
+
 tracing = { workspace = true }
-rust-embed = { workspace = true }
-regex = { workspace = true }
-chrono = { workspace = true }
-serde = { workspace = true, features = ["derive"] }
-serde_json = { workspace = true }
-futures-util = { workspace = true }
