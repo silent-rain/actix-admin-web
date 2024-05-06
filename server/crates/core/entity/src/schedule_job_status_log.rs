@@ -15,9 +15,8 @@ pub struct Model {
     pub id: i32,
     /// 任务ID
     pub job_id: i32,
-    /// 调度任务ID, 每次任务动态变化
-    #[sea_orm(unique)]
-    pub uuid: Option<String>,
+    /// 调度任务ID
+    pub uuid: String,
     /// 失败信息
     pub error: Option<String>,
     /// 耗时,毫秒

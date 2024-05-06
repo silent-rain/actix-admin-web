@@ -94,7 +94,6 @@ impl<'a> ScheduleJobStatusLogService<'a> {
         let model = schedule_job_status_log::ActiveModel {
             id: Set(id),
             job_id: Set(req.job_id),
-            uuid: Set(req.uuid),
             error: Set(req.error),
             cost: Set(req.cost),
             status: Set(req.status as i8),

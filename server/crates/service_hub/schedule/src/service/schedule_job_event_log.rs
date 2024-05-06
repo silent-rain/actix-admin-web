@@ -66,6 +66,7 @@ impl<'a> ScheduleJobEventLogService<'a> {
     ) -> Result<schedule_job_event_log::Model, ErrorMsg> {
         let data = schedule_job_event_log::ActiveModel {
             job_id: Set(req.job_id),
+            uuid: Set(req.uuid),
             status: Set(req.status as i8),
             ..Default::default()
         };

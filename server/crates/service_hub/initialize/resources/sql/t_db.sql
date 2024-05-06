@@ -324,15 +324,14 @@ CREATE TABLE IF NOT EXISTS
     `t_schedule_job_status_log` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '状态日志ID',
         `job_id` INT(11) NOT NULL COMMENT '任务ID',
-        `uuid` VARCHAR(50) NULL DEFAULT '' COMMENT '调度任务ID, 每次任务动态变化',
+        `uuid` VARCHAR(50) NOT NULL COMMENT '调度任务ID',
         `error` TEXT COMMENT '失败信息',
         `cost` INT(20) UNSIGNED NOT NULL COMMENT '耗时,毫秒',
         `status` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '任务状态,0:开始,1:完成,2:停止,3:移除',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`) USING BTREE,
-        UNIQUE KEY `uk_job_id` (`job_id`) USING BTREE,
-        CONSTRAINT `fk_schedule_job_status_job_id` FOREIGN KEY (`job_id`) REFERENCES `t_schedule_job` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+        UNIQUE KEY `uk_uuid` (`uuid`) USING BTREE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '调度任务状态日志';
 
 -- 调度任务事件日志

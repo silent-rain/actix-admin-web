@@ -26,6 +26,8 @@ pub struct GetScheduleJobEventLogListReq {
 pub struct AddScheduleJobEventLogReq {
     /// 任务ID
     pub job_id: i32,
+    /// 调度任务ID
+    pub uuid: String,
     /// 任务状态,0:失败,1:成功'
     pub status: schedule_job_event_log::enums::Status,
 }

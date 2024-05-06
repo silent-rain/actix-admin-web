@@ -22,17 +22,37 @@ where
         Dao { db }
     }
 
-    /// 获取任务列表
+    /// 获取调度任务列表
     pub async fn get_schedule_job_list(&self) -> Result<Vec<schedule_job::Model>, DbErr> {
         ScheduleJob::find().all(self.db.rdb()).await
     }
 
-    /// 添加任务
-    pub async fn add_schedule_job(
+    /// 添加调度任务状态日志
+    pub async fn add_schedule_job_status_log(
         &self,
         active_model: schedule_job::ActiveModel,
-    ) -> Result<schedule_job::Model, DbErr> {
-        active_model.insert(self.db.wdb()).await
+    ) -> Result<u64, DbErr> {
+        let id: i32 = *(active_model.id.clone().as_ref());
+        let result = ScheduleJob::update_many()
+            .set(active_model)
+            .filter(schedule_job::Column::Id.eq(id))
+            .exec(self.db.wdb())
+            .await?;
+        Ok(result.rows_affected)
+    }
+
+    /// 更新调度任务状态日志
+    pub async fn update_schedule_job_status_log(
+        &self,
+        active_model: schedule_job::ActiveModel,
+    ) -> Result<u64, DbErr> {
+        let id: i32 = *(active_model.id.clone().as_ref());
+        let result = ScheduleJob::update_many()
+            .set(active_model)
+            .filter(schedule_job::Column::Id.eq(id))
+            .exec(self.db.wdb())
+            .await?;
+        Ok(result.rows_affected)
     }
 
     /// 更新任务
@@ -46,12 +66,6 @@ where
             .filter(schedule_job::Column::Id.eq(id))
             .exec(self.db.wdb())
             .await?;
-        Ok(result.rows_affected)
-    }
-
-    /// 删除任务
-    pub async fn delete_schedule_job(&self, id: i32) -> Result<u64, DbErr> {
-        let result = ScheduleJob::delete_by_id(id).exec(self.db.wdb()).await?;
         Ok(result.rows_affected)
     }
 

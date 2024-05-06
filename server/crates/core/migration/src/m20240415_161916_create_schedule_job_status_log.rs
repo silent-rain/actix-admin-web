@@ -1,10 +1,9 @@
 //! 调度任务状态日志表
-//! User Entity: [`entity::prelude::ScheduleJobStatus`]
-use crate::m20240415_161916_create_schedule_job::ScheduleJob;
+//! User Entity: [`entity::prelude::ScheduleJobStatusLog`]
 
 use sea_orm::{
-    sea_query::{ColumnDef, Expr, ForeignKey, Index, Table},
-    DatabaseBackend, DeriveIden, DeriveMigrationName, Iden,
+    sea_query::{ColumnDef, Expr, Table},
+    DatabaseBackend, DeriveIden, DeriveMigrationName,
 };
 use sea_orm_migration::{async_trait, DbErr, MigrationTrait, SchemaManager};
 
@@ -39,8 +38,8 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(ScheduleJobStatus::Uuid)
                             .string()
                             .string_len(50)
-                            .default("")
-                            .comment("调度任务ID, 每次任务动态变化"),
+                            .unique_key()
+                            .comment("调度任务ID"),
                     )
                     .col(
                         ColumnDef::new(ScheduleJobStatus::Error)
@@ -82,44 +81,7 @@ impl MigrationTrait for Migration {
                     )
                     .to_owned(),
             )
-            .await?;
-
-        if !manager
-            .has_index(ScheduleJobStatus::Table.to_string(), "uk_job_id")
-            .await?
-        {
-            manager
-                .create_index(
-                    Index::create()
-                        .if_not_exists()
-                        .name("uk_job_id")
-                        .table(ScheduleJobStatus::Table)
-                        .unique()
-                        .col(ScheduleJobStatus::JobId)
-                        .to_owned(),
-                )
-                .await?;
-        }
-
-        if !manager
-            .has_index(
-                ScheduleJobStatus::Table.to_string(),
-                "fk_schedule_job_status_job_id",
-            )
-            .await?
-        {
-            manager
-                .create_foreign_key(
-                    ForeignKey::create()
-                        .name("fk_schedule_job_status_job_id")
-                        .from(ScheduleJobStatus::Table, ScheduleJobStatus::JobId)
-                        .to(ScheduleJob::Table, ScheduleJob::Id)
-                        .to_owned(),
-                )
-                .await?;
-        }
-
-        Ok(())
+            .await
     }
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {

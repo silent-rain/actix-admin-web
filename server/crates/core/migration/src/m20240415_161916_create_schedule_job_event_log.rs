@@ -35,6 +35,13 @@ impl MigrationTrait for Migration {
                             .comment("任务ID"),
                     )
                     .col(
+                        ColumnDef::new(ScheduleJobEventLog::Uuid)
+                            .string()
+                            .string_len(50)
+                            .unique_key()
+                            .comment("调度任务ID"),
+                    )
+                    .col(
                         ColumnDef::new(ScheduleJobEventLog::Status)
                             .tiny_integer()
                             .not_null()
@@ -67,6 +74,7 @@ pub enum ScheduleJobEventLog {
     Table,
     Id,
     JobId,
+    Uuid,
     Status,
     CreatedAt,
 }

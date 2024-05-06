@@ -29,7 +29,7 @@ pub struct AddScheduleJobStatusLogReq {
     /// 任务ID
     pub job_id: i32,
     /// 调度任务ID
-    pub uuid: Option<String>,
+    pub uuid: String,
 }
 
 /// 更新调度任务状态日志
@@ -38,7 +38,7 @@ pub struct UpdateScheduleJobStatusLogReq {
     /// 任务ID
     pub job_id: i32,
     /// 调度任务ID
-    pub uuid: Option<String>,
+    pub uuid: String,
     /// 失败信息
     pub error: Option<String>,
     /// 耗时,毫秒
