@@ -2,17 +2,17 @@
 //! - 初始化所有系统任务
 //!     - 获取系统任务
 //!     - 注册系统任务
-//!     - 通过编码更新任务的UUID
+//!     - 添加任务运行状态日志
 //! - 初始化所有的脚本任务
+//!     - 获取用户任务
 //!     - 注册用户任务
-//!     - 通过编码更新任务的UUID
+//!     - 添加任务运行状态日志
 use crate::{dao::Dao, error::Error, Job, JobScheduler};
 
 use database::DbRepo;
 use entity::schedule_job;
 
 use async_trait::async_trait;
-use sea_orm::Set;
 use tracing::{error, info};
 
 /// 系统定时任务 Trait
@@ -77,8 +77,12 @@ where
                 }
             };
             let uuid = sys_job.guid().to_string();
+            info!(
+                "register sys task id:{} name: {} sys_code: {:?} uuid: {:?}",
+                job_model.id, job_model.name, job_model.sys_code, uuid
+            );
 
-            // 将任务添加到任务队列中
+            // 创建任务
             let sched = match JobScheduler::new().await {
                 Ok(v) => v,
                 Err(err) => {
@@ -92,6 +96,7 @@ where
                     continue;
                 }
             };
+            // 将任务添加到任务队列中
             match sched.add_job(sys_job.clone()).await {
                 Ok(v) => v,
                 Err(err) => {
@@ -105,29 +110,6 @@ where
                     continue;
                 }
             };
-
-            // 更新为当前任务的UUID
-            match self
-                .update_schedule_job_uuid(job_model.clone(), uuid.clone())
-                .await
-            {
-                Ok(v) => v,
-                Err(err) => {
-                    error!(
-                        "id:{} task name: {} sys_code: {:?}, err: {}",
-                        job_model.id,
-                        job_model.name,
-                        job_model.sys_code,
-                        err.to_string()
-                    );
-                    continue;
-                }
-            };
-
-            info!(
-                "register sys task id:{} name: {} sys_code: {:?} uuid: {:?}",
-                job_model.id, job_model.name, job_model.sys_code, uuid
-            );
         }
 
         Ok(())
@@ -142,7 +124,8 @@ where
     async fn sys_job_list(&self) -> Result<Vec<schedule_job::Model>, Error> {
         let job_list = self
             .dao
-            .get_schedule_job_list()
+            .schedule_job_dao
+            .list()
             .await
             .map_err(|err| Error::ScheduleJobListError(err.to_string()))?
             .into_iter()
@@ -150,23 +133,6 @@ where
             .filter(|v| v.status == schedule_job::enums::Source::System as i8)
             .collect::<Vec<schedule_job::Model>>();
         Ok(job_list)
-    }
-
-    // 更新为当前任务的UUID
-    async fn update_schedule_job_uuid(
-        &self,
-        model: schedule_job::Model,
-        uuid: String,
-    ) -> Result<(), Error> {
-        // 更新为当前任务的UUID
-
-        let mut active_model: schedule_job::ActiveModel = model.clone().into();
-        active_model.uuid = Set(Some(uuid));
-        self.dao
-            .update_schedule_job(active_model)
-            .await
-            .map_err(|err| Error::DbUpdateScheduleJobError(err.to_string()))?;
-        Ok(())
     }
 }
 
@@ -201,6 +167,10 @@ where
                 self.init_cron_task(job_model)?
             };
             let uuid = user_job.guid().to_string();
+            info!(
+                "register user task id:{} name: {} sys_code: {:?} uuid: {:?}",
+                job_model.id, job_model.name, job_model.sys_code, uuid
+            );
 
             // 将任务添加到任务队列中
             JobScheduler::new().await?.add_job(user_job.clone()).await?;
@@ -230,15 +200,6 @@ where
                     continue;
                 }
             };
-
-            // 更新为当前任务的UUID
-            self.update_schedule_job_uuid(job_model.clone(), uuid.clone())
-                .await?;
-
-            info!(
-                "register user task id:{} name: {} sys_code: {:?} uuid: {:?}",
-                job_model.id, job_model.name, job_model.sys_code, uuid
-            );
         }
 
         Ok(())
@@ -273,7 +234,8 @@ where
     async fn user_job_list(&self) -> Result<Vec<schedule_job::Model>, Error> {
         let job_list = self
             .dao
-            .get_schedule_job_list()
+            .schedule_job_dao
+            .list()
             .await
             .map_err(|err| Error::ScheduleJobListError(err.to_string()))?
             .into_iter()
@@ -282,22 +244,5 @@ where
             .collect::<Vec<schedule_job::Model>>();
 
         Ok(job_list)
-    }
-
-    // 更新为当前任务的UUID
-    async fn update_schedule_job_uuid(
-        &self,
-        model: schedule_job::Model,
-        uuid: String,
-    ) -> Result<(), Error> {
-        // 更新为当前任务的UUID
-
-        let mut active_model: schedule_job::ActiveModel = model.clone().into();
-        active_model.uuid = Set(Some(uuid));
-        self.dao
-            .update_schedule_job(active_model)
-            .await
-            .map_err(|err| Error::DbUpdateScheduleJobError(err.to_string()))?;
-        Ok(())
     }
 }

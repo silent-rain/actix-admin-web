@@ -42,7 +42,7 @@ impl JobScheduler {
     /// 将job添加到定时器中
     pub async fn add_job<DB>(&self, mut job: Job<DB>) -> Result<Uuid, Error>
     where
-        DB: DbRepo + Send + Sync + 'static,
+        DB: DbRepo + Clone + Send + Sync + 'static,
     {
         // 设置任务通知
         job.set_job_notification(self.sched.clone()).await?;

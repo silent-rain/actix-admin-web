@@ -114,6 +114,7 @@
 - 用户分享码 share_code
 - 用户会员等级
 - 调度任务接口验证
+  - 任务运行失败，日志回收
 
 <https://github.com/actix/actix-extras/tree/master/actix-identity>
 <https://crates.io/crates/actix-ws>
