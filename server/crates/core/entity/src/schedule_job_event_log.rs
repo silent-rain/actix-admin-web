@@ -1,4 +1,4 @@
-//! 定时任务日志表
+//! 调度任务事件日志
 
 use sea_orm::{
     prelude::DateTimeLocal, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey,
@@ -6,20 +6,16 @@ use sea_orm::{
 };
 use serde::{Deserialize, Serialize};
 
-/// 定时任务日志表
+/// 调度任务事件日志
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "t_schedule_job_log")]
+#[sea_orm(table_name = "t_schedule_job_event_log")]
 pub struct Model {
-    /// 日志ID
+    /// 事件日志ID
     #[sea_orm(primary_key)]
     pub id: i32,
     /// 任务ID
     pub job_id: i32,
-    /// 失败信息
-    pub error: Option<String>,
-    /// 耗时(单位：毫秒)
-    pub cost: i64,
-    /// 任务状态,0:待执行,1:运行中,2:成功,3:失败,4:移除
+    /// 任务状态,0:开始,1:完成,2:停止,3:移除
     pub status: i8,
     /// 创建时间
     pub created_at: DateTimeLocal,

@@ -4,23 +4,12 @@
 //!     Box::pin(async move {})
 //! }
 //! ```
-use std::{
-    future::Future,
-    pin::Pin,
-    sync::{
-        atomic::{
-            AtomicI64,
-            Ordering::{self, SeqCst},
-        },
-        Arc,
-    },
-    time::Duration,
-};
+use std::{future::Future, pin::Pin, sync::Arc, time::Duration};
 
 use crate::{dao::Dao, enums::ScheduleJobLogStatus, error::Error};
 
 use database::DbRepo;
-use entity::schedule_job_log;
+use entity::schedule_job_event_log;
 
 use chrono::Local;
 use sea_orm::Set;
@@ -36,7 +25,6 @@ where
     dao: Arc<Dao<DB>>,
     id: i32,
     job: TokioJob,
-    start_time: Arc<AtomicI64>,
 }
 
 impl<DB> Job<DB>
@@ -49,7 +37,6 @@ where
             job: TokioJob::new_one_shot(Duration::from_secs(0), |_uuid, _jobs| {})
                 .map_err(Error::JobSchedulerError)?,
             dao: Arc::new(Dao::new(db)),
-            start_time: Arc::new(AtomicI64::new(0)),
         };
 
         Ok(job)
@@ -130,23 +117,16 @@ where
     // 添加作业启动时要执行的操作
     pub async fn on_start_notification(&mut self, sched: JobScheduler) -> Result<(), Error> {
         let dao = self.dao.clone();
-        let start_time = self.start_time.clone();
         let id = self.id;
         self.job
             .on_start_notification_add(
                 &sched,
                 Box::new(move |job_id, notification_id, type_of_notification| {
                     let dao = dao.clone();
-                    let start_time = start_time.clone();
                     Box::pin(async move {
-                        let dao = dao.clone();
-                        let start_time = start_time.clone();
-                        start_time.fetch_add(Local::now().timestamp_millis(), SeqCst);
-
-                        let model = schedule_job_log::ActiveModel {
+                        let model = schedule_job_event_log::ActiveModel {
                             job_id: Set(id),
-                            cost: Set(0),
-                            status: Set(ScheduleJobLogStatus::Running as i8),
+                            status: Set(ScheduleJobLogStatus::Start as i8),
                             ..Default::default()
                         };
 
@@ -172,7 +152,6 @@ where
     // 添加作业完成时要执行的操作
     pub async fn on_done_notification(&mut self, sched: JobScheduler) -> Result<(), Error> {
         let dao = self.dao.clone();
-        let start_time = self.start_time.clone();
         let id = self.id;
 
         self.job
@@ -180,27 +159,57 @@ where
                 &sched,
                 Box::new(move |job_id, notification_id, type_of_notification| {
                     let dao = dao.clone();
-                    let start_time = start_time.clone();
 
                     Box::pin(async move {
-                        let dao = dao.clone();
-                        let start_time = start_time.clone();
-                        let cost =
-                            Local::now().timestamp_millis() - start_time.load(Ordering::Relaxed);
-
-                        let model = schedule_job_log::ActiveModel {
+                        let model = schedule_job_event_log::ActiveModel {
                             job_id: Set(id),
-                            cost: Set(cost),
-                            status: Set(ScheduleJobLogStatus::Success as i8),
+                            status: Set(ScheduleJobLogStatus::Done as i8),
                             ..Default::default()
                         };
 
                         if let Err(err) = dao.add_schedule_job_log(model).await {
-                            error!("TokioJob {:?} was success, err: {:?}", job_id, err);
+                            error!("TokioJob {:?} was done, err: {:?}", job_id, err);
                             return;
                         };
                         trace!(
-                            "TokioJob {:?} was success, notification {:?} ran ({:?})",
+                            "TokioJob {:?} was done, notification {:?} ran ({:?})",
+                            job_id,
+                            notification_id,
+                            type_of_notification
+                        );
+                    })
+                }),
+            )
+            .await
+            .map_err(Error::JobSchedulerError)?;
+        Ok(())
+    }
+
+    // 添加作业停止时要执行的操作
+    pub async fn on_stop_notification(&mut self, sched: JobScheduler) -> Result<(), Error> {
+        let dao = self.dao.clone();
+        let id = self.id;
+
+        self.job
+            .on_stop_notification_add(
+                &sched,
+                Box::new(move |job_id, notification_id, type_of_notification| {
+                    let dao = dao.clone();
+
+                    Box::pin(async move {
+                        let model = schedule_job_event_log::ActiveModel {
+                            job_id: Set(id),
+                            status: Set(ScheduleJobLogStatus::Removed as i8),
+                            ..Default::default()
+                        };
+
+                        if let Err(err) = dao.add_schedule_job_log(model).await {
+                            error!("TokioJob {:?} was stop, err: {:?}", job_id, err);
+                            return;
+                        };
+
+                        trace!(
+                            "TokioJob {:?} was stop, notification {:?} ran ({:?})",
                             job_id,
                             notification_id,
                             type_of_notification
@@ -216,7 +225,6 @@ where
     // 添加作业移除时要执行的操作
     pub async fn on_removed_notification(&mut self, sched: JobScheduler) -> Result<(), Error> {
         let dao = self.dao.clone();
-        let start_time = self.start_time.clone();
         let id = self.id;
 
         self.job
@@ -224,17 +232,10 @@ where
                 &sched,
                 Box::new(move |job_id, notification_id, type_of_notification| {
                     let dao = dao.clone();
-                    let start_time = start_time.clone();
 
                     Box::pin(async move {
-                        let dao = dao.clone();
-                        let start_time = start_time.clone();
-                        let cost =
-                            Local::now().timestamp_millis() - start_time.load(Ordering::Relaxed);
-
-                        let model = schedule_job_log::ActiveModel {
+                        let model = schedule_job_event_log::ActiveModel {
                             job_id: Set(id),
-                            cost: Set(cost),
                             status: Set(ScheduleJobLogStatus::Removed as i8),
                             ..Default::default()
                         };
@@ -262,7 +263,41 @@ where
     pub async fn set_job_notification(&mut self, sched: JobScheduler) -> Result<(), Error> {
         self.on_start_notification(sched.clone()).await?;
         self.on_done_notification(sched.clone()).await?;
+        self.on_stop_notification(sched.clone()).await?;
         self.on_removed_notification(sched.clone()).await?;
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use core::time;
+    use std::sync::atomic::{AtomicI64, Ordering};
+
+    use super::*;
+
+    #[tokio::test]
+    async fn test_cost() {
+        let start_time = Local::now().timestamp_millis();
+        tokio::time::sleep(time::Duration::from_millis(5)).await;
+        let end_time = Local::now().timestamp_millis();
+        let cost = end_time - start_time;
+        println!("cost: {:?}", cost as u64);
+    }
+
+    #[tokio::test]
+    async fn test_atomic_i64_cost() {
+        let start_time = Arc::new(AtomicI64::new(0));
+        start_time.fetch_add(Local::now().timestamp_millis(), Ordering::SeqCst);
+        tokio::time::sleep(time::Duration::from_millis(5)).await;
+        let end_time = Local::now().timestamp_millis();
+        let cost = end_time - start_time.load(Ordering::Relaxed);
+
+        println!(
+            "start_time: {:?} end_time: {}",
+            start_time.load(Ordering::Relaxed),
+            end_time
+        );
+        println!("cost: {:?}", cost as u64);
     }
 }

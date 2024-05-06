@@ -2300,6 +2300,7 @@ dependencies = [
  "colored",
  "database",
  "dotenv",
+ "entity",
  "logger",
  "sea-orm",
  "sea-orm-migration",

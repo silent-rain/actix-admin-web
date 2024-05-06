@@ -36,16 +36,12 @@ pub enum ScheduleJobSource {
 #[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
 #[repr(i8)]
 pub enum ScheduleJobLogStatus {
-    /// 待执行
-    Pending = 0,
-    /// 运行中
-    Running = 1,
-    /// 暂停
-    Paused = 2,
-    /// 成功
-    Success = 3,
-    /// 失败
-    Failed = 4,
+    /// 开始
+    Start = 0,
+    /// 完成
+    Done = 1,
+    /// 停止
+    Stop = 2,
     /// 移除
-    Removed = 5,
+    Removed = 3,
 }

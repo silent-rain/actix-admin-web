@@ -35,7 +35,7 @@ pub enum ScheduleJobSource {
 /// 定时任务运行状态
 #[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
 #[repr(i8)]
-pub enum ScheduleJobLogStatus {
+pub enum ScheduleJobEventLogStatus {
     /// 待执行
     Pending = 0,
     /// 运行中

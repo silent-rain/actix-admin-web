@@ -1,8 +1,8 @@
-//! 调度任务日志管理
+//! 调度任务事件日志管理
 
 use crate::{
-    dto::schedule_job_log::{AddScheduleJobLogReq, GetScheduleJobLogListReq},
-    service::schedule_job_log::ScheduleJobLogService,
+    dto::schedule_job_event_log::{AddScheduleJobEventLogReq, GetScheduleJobEventLogListReq},
+    service::schedule_job_event_log::ScheduleJobEventLogService,
 };
 
 use inject::AInjectProvider;
@@ -14,15 +14,15 @@ use actix_web::{
 };
 
 /// 控制器
-pub struct ScheduleJobLogController;
+pub struct ScheduleJobEventLogController;
 
-impl ScheduleJobLogController {
-    /// 获取调度任务日志列表
+impl ScheduleJobEventLogController {
+    /// 获取调度任务事件日志列表
     pub async fn list(
         provider: Data<AInjectProvider>,
-        req: Query<GetScheduleJobLogListReq>,
+        req: Query<GetScheduleJobEventLogListReq>,
     ) -> impl Responder {
-        let schedule_job_log_service: ScheduleJobLogService = provider.provide();
+        let schedule_job_log_service: ScheduleJobEventLogService = provider.provide();
         let resp = schedule_job_log_service.list(req.into_inner()).await;
         match resp {
             Ok((results, total)) => Response::ok().data_list(results, total),
@@ -30,9 +30,9 @@ impl ScheduleJobLogController {
         }
     }
 
-    /// 获取调度任务日志的详细信息
+    /// 获取调度任务事件日志的详细信息
     pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let schedule_job_log_service: ScheduleJobLogService = provider.provide();
+        let schedule_job_log_service: ScheduleJobEventLogService = provider.provide();
         let resp = schedule_job_log_service.info(*id).await;
         match resp {
             Ok(v) => Response::ok().data(v),
@@ -40,13 +40,13 @@ impl ScheduleJobLogController {
         }
     }
 
-    /// 添加调度任务日志
+    /// 添加调度任务事件日志
     pub async fn add(
         provider: Data<AInjectProvider>,
-        data: Json<AddScheduleJobLogReq>,
+        data: Json<AddScheduleJobEventLogReq>,
     ) -> impl Responder {
         let data = data.into_inner();
-        let schedule_job_log_service: ScheduleJobLogService = provider.provide();
+        let schedule_job_log_service: ScheduleJobEventLogService = provider.provide();
         let resp = schedule_job_log_service.add(data).await;
         match resp {
             Ok(_v) => Response::ok(),
@@ -54,9 +54,9 @@ impl ScheduleJobLogController {
         }
     }
 
-    /// 删除调度任务日志
+    /// 删除调度任务事件日志
     pub async fn delete(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let schedule_job_log_service: ScheduleJobLogService = provider.provide();
+        let schedule_job_log_service: ScheduleJobEventLogService = provider.provide();
         let resp = schedule_job_log_service.delete(*id).await;
         match resp {
             Ok(_v) => Response::ok(),

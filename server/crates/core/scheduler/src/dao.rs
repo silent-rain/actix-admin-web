@@ -2,7 +2,7 @@
 use database::DbRepo;
 use entity::prelude::ScheduleJob;
 use entity::schedule_job;
-use entity::schedule_job_log;
+use entity::schedule_job_event_log;
 
 use sea_orm::{ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, QueryFilter};
 
@@ -58,8 +58,8 @@ where
     /// 添加任务日志
     pub async fn add_schedule_job_log(
         &self,
-        active_model: schedule_job_log::ActiveModel,
-    ) -> Result<schedule_job_log::Model, DbErr> {
+        active_model: schedule_job_event_log::ActiveModel,
+    ) -> Result<schedule_job_event_log::Model, DbErr> {
         active_model.insert(self.db.wdb()).await
     }
 }

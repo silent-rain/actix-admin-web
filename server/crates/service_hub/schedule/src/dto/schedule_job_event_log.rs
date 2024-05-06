@@ -1,14 +1,14 @@
-//! 调度任务日志管理
+//! 调度任务事件日志管理
 
-use crate::enums::ScheduleJobLogStatus;
+use crate::enums::ScheduleJobEventLogStatus;
 
 use actix_validator::Validate;
 
 use serde::{Deserialize, Serialize};
 
-/// 查询调度任务日志列表
+/// 查询调度任务事件日志列表
 #[derive(Default, Deserialize)]
-pub struct GetScheduleJobLogListReq {
+pub struct GetScheduleJobEventLogListReq {
     /// 当前分页
     pub page: u64,
     /// 页面大小
@@ -21,15 +21,11 @@ pub struct GetScheduleJobLogListReq {
     pub job_id: Option<i32>,
 }
 
-/// 添加调度任务日志
+/// 添加调度任务事件日志
 #[derive(Clone, Serialize, Deserialize, Validate)]
-pub struct AddScheduleJobLogReq {
+pub struct AddScheduleJobEventLogReq {
     /// 任务ID
     pub job_id: i32,
-    /// 失败信息
-    pub error: Option<String>,
-    /// 耗时(单位：毫秒)
-    pub cost: i64,
     /// 任务状态,0:失败,1:成功'
-    pub status: ScheduleJobLogStatus,
+    pub status: ScheduleJobEventLogStatus,
 }

@@ -320,18 +320,16 @@ CREATE TABLE IF NOT EXISTS
         PRIMARY KEY (`id`) USING BTREE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '定时任务';
 
--- 定时任务日志
+-- 定时任务事件日志
 CREATE TABLE IF NOT EXISTS
-    `t_schedule_job_log` (
+    `t_schedule_job_event_log` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '日志ID',
         `job_id` INT(11) NOT NULL COMMENT '任务ID',
-        `error` TEXT COMMENT '失败信息',
-        `cost` DECIMAL(10, 2) NOT NULL COMMENT '耗时(单位：毫秒)',
-        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '任务状态,0:待执行,1:运行中,2:成功,3:失败,4:移除',
+        `status` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '任务状态,0:开始,1:完成,2:停止,3:移除',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '创建时间',
         PRIMARY KEY (`id`) USING BTREE,
         KEY `idx_job_id` (`job_id`) USING BTREE
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '定时任务日志';
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '定时任务事件日志';
 
 /*
 日志相关表

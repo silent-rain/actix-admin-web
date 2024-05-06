@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS
         `body` TEXT NULL COMMENT '请求体/响应体',
         `remote_addr` VARCHAR(64) NULL DEFAULT '' COMMENT '请求IP',
         `user_agent` VARCHAR(256) NULL DEFAULT '' COMMENT '用户代理',
-        `cost` DECIMAL(10, 2) NOT NULL COMMENT '耗时,毫秒',
+        `cost` INT(20) UNSIGNED NOT NULL COMMENT '耗时,毫秒',
         `http_type` VARCHAR(10) NOT NULL COMMENT '请求类型:REQ/RSP',
         `note` VARCHAR(200) NULL DEFAULT '' COMMENT '备注',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

@@ -1,4 +1,4 @@
-//! 定时任务表
+//! 调度任务表
 
 use sea_orm::{
     prelude::DateTimeLocal, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey,
@@ -6,7 +6,7 @@ use sea_orm::{
 };
 use serde::{Deserialize, Serialize};
 
-/// 定时任务表
+/// 调度任务表
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
 #[sea_orm(table_name = "t_schedule_job")]
 pub struct Model {
