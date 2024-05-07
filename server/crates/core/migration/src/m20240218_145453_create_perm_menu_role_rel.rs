@@ -1,4 +1,4 @@
-//! 菜单角色关联表
+//! 菜单角色关系表
 //! User Entity: [`entity::prelude::PermMenuRoleRel`]
 use crate::{
     m20240218_145453_create_perm_menu::PermMenu, m20240218_145453_create_perm_role::PermRole,
@@ -21,7 +21,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(PermMenuRoleRel::Table)
-                    .comment("菜单角色关联表")
+                    .comment("菜单角色关系表")
                     .if_not_exists()
                     .col(
                         ColumnDef::new(PermMenuRoleRel::Id)

@@ -1,5 +1,5 @@
 //! API 管理
-//! 这里演示一个表关联的写法
+//! 这里演示一个表关系的写法
 use database::DbRepo;
 use entity::api_role_http_rel;
 use entity::app_template;

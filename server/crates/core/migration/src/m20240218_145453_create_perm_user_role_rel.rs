@@ -1,4 +1,4 @@
-//! 用户角色关联表
+//! 用户角色关系表
 //! User Entity: [`entity::prelude::PermUserRoleRel`]
 
 use crate::{
@@ -22,7 +22,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(PermUserRoleRel::Table)
-                    .comment("用户角色关联表")
+                    .comment("用户角色关系表")
                     .if_not_exists()
                     .col(
                         ColumnDef::new(PermUserRoleRel::Id)

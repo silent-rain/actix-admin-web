@@ -1,4 +1,4 @@
-//! 部门角色关联表
+//! 部门角色关系表
 //! User Entity: [`entity::prelude::PermUserTokenRoleRel`]
 use crate::{
     m20240218_145453_create_perm_role::PermRole,
@@ -22,7 +22,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(PermUserTokenRoleRel::Table)
-                    .comment("用户Token令牌与角色关联表")
+                    .comment("用户Token令牌与角色关系表")
                     .if_not_exists()
                     .col(
                         ColumnDef::new(PermUserTokenRoleRel::Id)

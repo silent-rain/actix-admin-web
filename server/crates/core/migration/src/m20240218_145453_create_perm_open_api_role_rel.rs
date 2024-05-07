@@ -1,4 +1,4 @@
-//! OpenApi接口与角色关联表
+//! OpenApi接口与角色关系表
 //! User Entity: [`entity::prelude::PermOpenApiRoleRel`]
 use crate::{
     m20240218_145453_create_perm_open_api::PermOpenApi, m20240218_145453_create_perm_role::PermRole,
@@ -21,7 +21,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(PermOpenApiRoleRel::Table)
-                    .comment("OpenApi接口与角色关联表")
+                    .comment("OpenApi接口与角色关系表")
                     .if_not_exists()
                     .col(
                         ColumnDef::new(PermOpenApiRoleRel::Id)

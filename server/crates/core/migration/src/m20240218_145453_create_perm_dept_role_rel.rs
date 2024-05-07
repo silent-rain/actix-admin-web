@@ -1,4 +1,4 @@
-//! 部门角色关联表
+//! 部门角色关系表
 //! User Entity: [`entity::prelude::PermDeptRoleRel`]
 use crate::{
     m20240218_145453_create_perm_dept::PermDept, m20240218_145453_create_perm_role::PermRole,
@@ -21,7 +21,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(PermDeptRoleRel::Table)
-                    .comment("部门角色关联表")
+                    .comment("部门角色关系表")
                     .if_not_exists()
                     .col(
                         ColumnDef::new(PermDeptRoleRel::Id)

@@ -75,7 +75,7 @@ impl<'a> TableDao<'a> {
             let _ = self.txn_init_open_api_role_rel(&txn, admin_role.id).await?;
         }
 
-        // 初始化关联关系
+        // 初始化关系关系
 
         txn.commit().await?;
         Ok(admin_user)

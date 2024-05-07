@@ -81,7 +81,9 @@
         "summary": "登录",
         "description": "系统登录",
         "apipost_tags": [],
-        "tags": ["注册/登录/登出"],
+        "tags": [
+          "注册/登录/登出"
+        ],
         "parameters": [
           {
             "name": "Authorization",
@@ -135,7 +137,9 @@
         "summary": "用户注册",
         "description": "",
         "apipost_tags": [],
-        "tags": ["注册/登录/登出"],
+        "tags": [
+          "注册/登录/登出"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -173,7 +177,9 @@
         "summary": "退出登录",
         "description": "系统登录",
         "apipost_tags": [],
-        "tags": ["注册/登录/登出"],
+        "tags": [
+          "注册/登录/登出"
+        ],
         "parameters": [
           {
             "name": "Authorization",
@@ -217,7 +223,9 @@
         "summary": "获取 Token令牌列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["API令牌管理"],
+        "tags": [
+          "API令牌管理"
+        ],
         "parameters": [
           {
             "name": "page",
@@ -282,7 +290,9 @@
         "summary": "批量删除 Token 令牌",
         "description": "",
         "apipost_tags": [],
-        "tags": ["API令牌管理"],
+        "tags": [
+          "API令牌管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -320,7 +330,9 @@
         "summary": "更新 Token 令牌",
         "description": "",
         "apipost_tags": [],
-        "tags": ["API令牌管理"],
+        "tags": [
+          "API令牌管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -358,7 +370,9 @@
         "summary": "更新 Token 令牌状态",
         "description": "",
         "apipost_tags": [],
-        "tags": ["API令牌管理"],
+        "tags": [
+          "API令牌管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -396,7 +410,9 @@
         "summary": "添加 Token 令牌",
         "description": "",
         "apipost_tags": [],
-        "tags": ["API令牌管理"],
+        "tags": [
+          "API令牌管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -434,7 +450,9 @@
         "summary": "删除 Token 令牌",
         "description": "",
         "apipost_tags": [],
-        "tags": ["API令牌管理"],
+        "tags": [
+          "API令牌管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -472,7 +490,9 @@
         "summary": "获取用户登录信息列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["用户登录管理"],
+        "tags": [
+          "用户登录管理"
+        ],
         "parameters": [
           {
             "name": "page",
@@ -530,7 +550,9 @@
         "summary": "更新用户登录信息状态",
         "description": "",
         "apipost_tags": [],
-        "tags": ["用户登录管理"],
+        "tags": [
+          "用户登录管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -568,7 +590,9 @@
         "summary": "添加字典数据信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["字典数据管理"],
+        "tags": [
+          "字典数据管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -606,7 +630,9 @@
         "summary": "批量删除字典数据信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["字典数据管理"],
+        "tags": [
+          "字典数据管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -644,7 +670,9 @@
         "summary": "更新字典数据信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["字典数据管理"],
+        "tags": [
+          "字典数据管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -682,7 +710,9 @@
         "summary": "更新字典数据信息状态",
         "description": "",
         "apipost_tags": [],
-        "tags": ["字典数据管理"],
+        "tags": [
+          "字典数据管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -720,7 +750,9 @@
         "summary": "删除字典数据信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["字典数据管理"],
+        "tags": [
+          "字典数据管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -758,7 +790,9 @@
         "summary": "获取字典数据信息列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["字典数据管理"],
+        "tags": [
+          "字典数据管理"
+        ],
         "parameters": [
           {
             "name": "page",
@@ -816,7 +850,9 @@
         "summary": "删除菜单",
         "description": "",
         "apipost_tags": [],
-        "tags": ["菜单管理"],
+        "tags": [
+          "菜单管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -854,7 +890,9 @@
         "summary": "更新菜单状态",
         "description": "",
         "apipost_tags": [],
-        "tags": ["菜单管理"],
+        "tags": [
+          "菜单管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -892,7 +930,9 @@
         "summary": "更新菜单",
         "description": "",
         "apipost_tags": [],
-        "tags": ["菜单管理"],
+        "tags": [
+          "菜单管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -930,7 +970,9 @@
         "summary": "获取菜单列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["菜单管理"],
+        "tags": [
+          "菜单管理"
+        ],
         "parameters": [
           {
             "name": "page",
@@ -981,7 +1023,9 @@
         "summary": "获取所有菜单列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["菜单管理"],
+        "tags": [
+          "菜单管理"
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -1009,7 +1053,9 @@
         "summary": "批量删除菜单",
         "description": "",
         "apipost_tags": [],
-        "tags": ["菜单管理"],
+        "tags": [
+          "菜单管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1047,7 +1093,9 @@
         "summary": "添加菜单",
         "description": "",
         "apipost_tags": [],
-        "tags": ["菜单管理"],
+        "tags": [
+          "菜单管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1113,7 +1161,9 @@
         "summary": "上传图片列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["文件上传"],
+        "tags": [
+          "文件上传"
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -1160,7 +1210,9 @@
         "summary": "上传图片",
         "description": "",
         "apipost_tags": [],
-        "tags": ["文件上传"],
+        "tags": [
+          "文件上传"
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -1171,7 +1223,9 @@
                 "file": {
                   "type": "string",
                   "description": "png文件",
-                  "example": ["/home/one/Downloads/合约.png"]
+                  "example": [
+                    "/home/one/Downloads/合约.png"
+                  ]
                 }
               }
             }
@@ -1204,7 +1258,9 @@
         "summary": "上传用户头像",
         "description": "",
         "apipost_tags": [],
-        "tags": ["文件上传"],
+        "tags": [
+          "文件上传"
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -1248,7 +1304,9 @@
         "summary": "删除Http协议接口信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["Http协议接口管理"],
+        "tags": [
+          "Http协议接口管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1286,7 +1344,9 @@
         "summary": "批量删除Http协议接口信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["Http协议接口管理"],
+        "tags": [
+          "Http协议接口管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1324,7 +1384,9 @@
         "summary": "获取所有Http协议接口信息列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["Http协议接口管理"],
+        "tags": [
+          "Http协议接口管理"
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -1352,7 +1414,9 @@
         "summary": "更新Http协议接口信息状态",
         "description": "",
         "apipost_tags": [],
-        "tags": ["Http协议接口管理"],
+        "tags": [
+          "Http协议接口管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1390,7 +1454,9 @@
         "summary": "更新Http协议接口信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["Http协议接口管理"],
+        "tags": [
+          "Http协议接口管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1428,7 +1494,9 @@
         "summary": "添加Http协议接口信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["Http协议接口管理"],
+        "tags": [
+          "Http协议接口管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1466,7 +1534,9 @@
         "summary": "获取所有Http协议接口信息树",
         "description": "",
         "apipost_tags": [],
-        "tags": ["Http协议接口管理"],
+        "tags": [
+          "Http协议接口管理"
+        ],
         "parameters": [
           {
             "name": "page",
@@ -1538,7 +1608,9 @@
         "summary": "获角色色与Http协议接口关系列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["角色与Http协议接口关系管理"],
+        "tags": [
+          "角色与Http协议接口关系管理"
+        ],
         "parameters": [
           {
             "name": "role_id",
@@ -1582,7 +1654,9 @@
         "summary": "更新角色与Http协议接口关系",
         "description": "",
         "apipost_tags": [],
-        "tags": ["角色与Http协议接口关系管理"],
+        "tags": [
+          "角色与Http协议接口关系管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1620,7 +1694,9 @@
         "summary": "获取网络请求日志列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["网络请求管理"],
+        "tags": [
+          "网络请求管理"
+        ],
         "parameters": [
           {
             "name": "page",
@@ -1738,10 +1814,12 @@
     },
     "http://127.0.0.1:8080/api/v1/roleMenuRel/list": {
       "GET": {
-        "summary": "获角色色关联的菜单列表",
+        "summary": "获角色色关系的菜单列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["角色菜单关系管理"],
+        "tags": [
+          "角色菜单关系管理"
+        ],
         "parameters": [
           {
             "name": "role_id",
@@ -1782,10 +1860,12 @@
     },
     "http://127.0.0.1:8080/api/v1/roleMenuRel/update": {
       "PUT": {
-        "summary": "更新角色菜单关联关系",
+        "summary": "更新角色菜单关系关系",
         "description": "",
         "apipost_tags": [],
-        "tags": ["角色菜单关系管理"],
+        "tags": [
+          "角色菜单关系管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1823,7 +1903,9 @@
         "summary": "批量删除角色",
         "description": "",
         "apipost_tags": [],
-        "tags": ["角色管理"],
+        "tags": [
+          "角色管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1861,7 +1943,9 @@
         "summary": "删除角色",
         "description": "",
         "apipost_tags": [],
-        "tags": ["角色管理"],
+        "tags": [
+          "角色管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1899,7 +1983,9 @@
         "summary": "获取所有角色列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["角色管理"],
+        "tags": [
+          "角色管理"
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -1927,7 +2013,9 @@
         "summary": "获角色色列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["角色管理"],
+        "tags": [
+          "角色管理"
+        ],
         "parameters": [
           {
             "name": "page",
@@ -1978,7 +2066,9 @@
         "summary": "添加角色",
         "description": "",
         "apipost_tags": [],
-        "tags": ["角色管理"],
+        "tags": [
+          "角色管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2016,7 +2106,9 @@
         "summary": "更新角色状态",
         "description": "",
         "apipost_tags": [],
-        "tags": ["角色管理"],
+        "tags": [
+          "角色管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2054,7 +2146,9 @@
         "summary": "更新角色",
         "description": "",
         "apipost_tags": [],
-        "tags": ["角色管理"],
+        "tags": [
+          "角色管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2092,7 +2186,9 @@
         "summary": "更新用户手机号码",
         "description": "",
         "apipost_tags": [],
-        "tags": ["用户管理"],
+        "tags": [
+          "用户管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2130,7 +2226,9 @@
         "summary": "获取用户列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["用户管理"],
+        "tags": [
+          "用户管理"
+        ],
         "parameters": [
           {
             "name": "nickname",
@@ -2195,7 +2293,9 @@
         "summary": "更新用户密码",
         "description": "",
         "apipost_tags": [],
-        "tags": ["用户管理"],
+        "tags": [
+          "用户管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2233,7 +2333,9 @@
         "summary": "获取所有用户列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["用户管理"],
+        "tags": [
+          "用户管理"
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -2261,7 +2363,9 @@
         "summary": "获取用户信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["用户管理"],
+        "tags": [
+          "用户管理"
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -2289,7 +2393,9 @@
         "summary": "添加用户",
         "description": "",
         "apipost_tags": [],
-        "tags": ["用户管理"],
+        "tags": [
+          "用户管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2327,7 +2433,9 @@
         "summary": "删除用户",
         "description": "",
         "apipost_tags": [],
-        "tags": ["用户管理"],
+        "tags": [
+          "用户管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2365,7 +2473,9 @@
         "summary": "更新用户状态",
         "description": "",
         "apipost_tags": [],
-        "tags": ["用户管理"],
+        "tags": [
+          "用户管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2403,7 +2513,9 @@
         "summary": "重置用户密码",
         "description": "",
         "apipost_tags": [],
-        "tags": ["用户管理"],
+        "tags": [
+          "用户管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2441,7 +2553,9 @@
         "summary": "更新用户详情信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["用户管理"],
+        "tags": [
+          "用户管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2479,7 +2593,9 @@
         "summary": "更新用户邮箱",
         "description": "",
         "apipost_tags": [],
-        "tags": ["用户管理"],
+        "tags": [
+          "用户管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2517,7 +2633,9 @@
         "summary": "更新字典维度信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["字典维度管理"],
+        "tags": [
+          "字典维度管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2555,7 +2673,9 @@
         "summary": "批量删除字典维度信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["字典维度管理"],
+        "tags": [
+          "字典维度管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2593,7 +2713,9 @@
         "summary": "删除字典维度信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["字典维度管理"],
+        "tags": [
+          "字典维度管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2631,7 +2753,9 @@
         "summary": "获取字典维度信息列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["字典维度管理"],
+        "tags": [
+          "字典维度管理"
+        ],
         "parameters": [
           {
             "name": "page",
@@ -2689,7 +2813,9 @@
         "summary": "添加字典维度信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["字典维度管理"],
+        "tags": [
+          "字典维度管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2727,7 +2853,9 @@
         "summary": "更新字典维度信息状态",
         "description": "",
         "apipost_tags": [],
-        "tags": ["字典维度管理"],
+        "tags": [
+          "字典维度管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2765,7 +2893,9 @@
         "summary": "获取 WEB 日志列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["WEB 日志管理"],
+        "tags": [
+          "WEB 日志管理"
+        ],
         "parameters": [
           {
             "name": "page",
@@ -2851,7 +2981,9 @@
         "summary": "添加 WEB 日志",
         "description": "",
         "apipost_tags": [],
-        "tags": ["WEB 日志管理"],
+        "tags": [
+          "WEB 日志管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2889,7 +3021,9 @@
         "summary": "获取系统日志列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["系统日志管理"],
+        "tags": [
+          "系统日志管理"
+        ],
         "parameters": [
           {
             "name": "page",
@@ -2975,7 +3109,9 @@
         "summary": "验证码验证",
         "description": "",
         "apipost_tags": [],
-        "tags": ["验证码"],
+        "tags": [
+          "验证码"
+        ],
         "parameters": [
           {
             "name": "captcha",
@@ -3019,7 +3155,9 @@
         "summary": "获取验证码",
         "description": "",
         "apipost_tags": [],
-        "tags": ["验证码"],
+        "tags": [
+          "验证码"
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -3047,7 +3185,9 @@
         "summary": "更新配置",
         "description": "",
         "apipost_tags": [],
-        "tags": ["配置管理"],
+        "tags": [
+          "配置管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -3085,7 +3225,9 @@
         "summary": "查询网站配置列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["配置管理"],
+        "tags": [
+          "配置管理"
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -3113,7 +3255,9 @@
         "summary": "通过上级 key 获取子配置列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["配置管理"],
+        "tags": [
+          "配置管理"
+        ],
         "parameters": [
           {
             "name": "page",
@@ -3164,7 +3308,9 @@
         "summary": "获取配置树",
         "description": "",
         "apipost_tags": [],
-        "tags": ["配置管理"],
+        "tags": [
+          "配置管理"
+        ],
         "parameters": [
           {
             "name": "page",
@@ -3222,7 +3368,9 @@
         "summary": "获取配置列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["配置管理"],
+        "tags": [
+          "配置管理"
+        ],
         "parameters": [
           {
             "name": "page",
@@ -3280,7 +3428,9 @@
         "summary": "更新配置状态",
         "description": "",
         "apipost_tags": [],
-        "tags": ["配置管理"],
+        "tags": [
+          "配置管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -3318,7 +3468,9 @@
         "summary": "删除配置",
         "description": "",
         "apipost_tags": [],
-        "tags": ["配置管理"],
+        "tags": [
+          "配置管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -3356,7 +3508,9 @@
         "summary": "获取所有配置树",
         "description": "",
         "apipost_tags": [],
-        "tags": ["配置管理"],
+        "tags": [
+          "配置管理"
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -3384,7 +3538,9 @@
         "summary": "添加配置",
         "description": "",
         "apipost_tags": [],
-        "tags": ["配置管理"],
+        "tags": [
+          "配置管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -3422,7 +3578,9 @@
         "summary": "批量删除配置",
         "description": "",
         "apipost_tags": [],
-        "tags": ["配置管理"],
+        "tags": [
+          "配置管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -3460,7 +3618,9 @@
         "summary": "获取配置信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["配置管理"],
+        "tags": [
+          "配置管理"
+        ],
         "parameters": [
           {
             "name": "key",
