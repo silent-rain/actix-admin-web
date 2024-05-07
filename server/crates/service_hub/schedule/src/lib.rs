@@ -1,20 +1,27 @@
-//! 定时任务管理
-
-pub mod task;
+//! 调度任务管理
 
 pub mod dto;
-pub mod enums;
 
 pub(crate) mod dao;
-pub use dao::{schedule_job::ScheduleJobDao, schedule_job_log::ScheduleJobLogDao};
+pub use dao::{
+    schedule_job::ScheduleJobDao, schedule_job_event_log::ScheduleJobEventLogDao,
+    schedule_job_status_log::ScheduleJobStatusLogDao,
+};
 
 pub(crate) mod service;
-pub use service::{schedule_job::ScheduleJobService, schedule_job_log::ScheduleJobLogService};
+pub use service::{
+    schedule_job::ScheduleJobService, schedule_job_event_log::ScheduleJobEventLogService,
+    schedule_job_status_log::ScheduleJobStatusLogService,
+};
 
 pub(crate) mod controller;
 pub use controller::{
-    schedule_job::ScheduleJobController, schedule_job_log::ScheduleJobLogController,
+    schedule_job::ScheduleJobController, schedule_job_event_log::ScheduleJobEventLogController,
+    schedule_job_status_log::ScheduleJobStatusLogController,
 };
 
 pub(crate) mod router;
-pub use router::ScheduleRouter;
+pub use router::{
+    schedule_job::ScheduleJobRouter, schedule_job_event_log::ScheduleJobEventLogRouter,
+    schedule_job_status_log::ScheduleJobStatusLogRouter, ScheduleRouter,
+};

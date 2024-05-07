@@ -70,3 +70,72 @@ impl Related<super::perm_user_email::Entity> for Entity {
 }
 
 impl ActiveModelBehavior for ActiveModel {}
+
+/// 枚举
+pub mod enums {
+    use std::str::FromStr;
+
+    use serde::{Deserialize, Serialize};
+    use serde_repr::{Deserialize_repr, Serialize_repr};
+
+    /// 用户状态
+    #[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
+    #[repr(i8)]
+    pub enum Status {
+        /// 停用
+        Disabled = 0,
+        /// 正常
+        Enabled = 1,
+    }
+
+    /// 性别
+    #[derive(Debug, Clone, PartialEq, PartialOrd, Serialize_repr, Deserialize_repr)]
+    #[repr(i8)]
+    pub enum Gender {
+        /// 男
+        Male = 0,
+        /// 女
+        Female = 1,
+        /// 保密
+        Confidential = 2,
+    }
+
+    /// 注册用户类型
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub enum UserType {
+        /// 手机号码
+        #[serde(rename = "phone")]
+        Phone,
+        /// 邮箱
+        #[serde(rename = "email")]
+        Email,
+    }
+
+    impl Default for UserType {
+        fn default() -> Self {
+            Self::Phone
+        }
+    }
+
+    /// 实现FromStr trait来定义如何从字符串解析为RegisterType
+    impl FromStr for UserType {
+        type Err = ();
+
+        fn from_str(input: &str) -> Result<Self, Self::Err> {
+            match input {
+                "phone" => Ok(UserType::Phone),
+                "email" => Ok(UserType::Email),
+                _ => Err(()),
+            }
+        }
+    }
+
+    impl From<UserType> for String {
+        fn from(value: UserType) -> Self {
+            match value {
+                UserType::Phone => "phone".to_owned(),
+                UserType::Email => "email".to_owned(),
+            }
+        }
+    }
+}

@@ -52,3 +52,18 @@ impl GenericTreeTrait for Model {
         self.pid
     }
 }
+
+/// 枚举
+pub mod enums {
+    use serde_repr::{Deserialize_repr, Serialize_repr};
+
+    /// 配置状态
+    #[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
+    #[repr(i8)]
+    pub enum Status {
+        /// 停用
+        Disabled = 0,
+        /// 正常
+        Enabled = 1,
+    }
+}

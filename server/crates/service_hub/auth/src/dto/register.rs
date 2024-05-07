@@ -1,6 +1,6 @@
 //! 注册
 
-use crate::enums::UserRegisterType;
+use entity::perm_user;
 
 use actix_validator::Validate;
 
@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
 pub struct RegisterReq {
     /// 注册用户类型
-    pub register_type: UserRegisterType,
+    pub register_type: perm_user::enums::UserType,
     /// 手机号码
     pub phone: Option<String>,
     /// 邮箱
@@ -23,7 +23,7 @@ pub struct RegisterReq {
     /// 真实姓名
     pub real_name: Option<String>,
     /// 性别, 0:男,1:女,2:保密
-    /// Enum: [`perm::enums::Gender`]
+    /// Enum: [`permission::enums::Gender`]
     #[validate(range(min = 0, max = 3, message = "性别, 0:男,1:女,2:保密"))]
     pub gender: i8,
     /// 年龄
@@ -59,7 +59,7 @@ mod tests {
         let expected = RegisterReq {
             phone: Some("phone".to_owned()),
             email: Some("email".to_owned()),
-            register_type: UserRegisterType::Phone,
+            register_type: perm_user::enums::UserType::Phone,
             username: "username".to_owned(),
             real_name: Some("real_name".to_owned()),
             gender: 11,
@@ -95,7 +95,7 @@ mod tests {
         let expected = RegisterReq {
             phone: Some("phone".to_owned()),
             email: None,
-            register_type: UserRegisterType::Phone,
+            register_type: perm_user::enums::UserType::Phone,
             username: "username".to_owned(),
             real_name: Some("real_name".to_owned()),
             gender: 1,
@@ -130,7 +130,7 @@ mod tests {
         let expected = RegisterReq {
             phone: Some("phone".to_owned()),
             email: None,
-            register_type: UserRegisterType::Phone,
+            register_type: perm_user::enums::UserType::Phone,
             username: "username".to_owned(),
             real_name: Some("real_name".to_owned()),
             gender: 11,

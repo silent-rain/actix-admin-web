@@ -2,7 +2,6 @@
 use crate::{
     dao::config::ConfigDao,
     dto::config::{AddConfigReq, GetConfigListReq, UpdateConfigReq},
-    enums::ConfigStatus,
 };
 
 use code::{Error, ErrorMsg};
@@ -95,7 +94,7 @@ impl<'a> ConfigService<'a> {
             value: Set(req.value),
             sort: Set(req.sort),
             desc: Set(req.desc),
-            status: Set(ConfigStatus::Enabled as i8),
+            status: Set(sys_config::enums::Status::Enabled as i8),
             ..Default::default()
         };
         let result = self.config_dao.add(model).await.map_err(|err| {

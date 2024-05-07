@@ -3,14 +3,10 @@
 use crate::{
     common::captcha::check_captcha,
     dto::login::{BrowserInfo, LoginReq, LoginRsp},
-    enums::UserRegisterType,
 };
 
-use log::{
-    enums::{UserLoginDisabledStatus, UserLoginStatus},
-    UserLoginDao,
-};
-use perm::{enums::UserStatus, UserDao, UserEmailDao, UserPhoneDao};
+use log::UserLoginDao;
+use permission::{UserDao, UserEmailDao, UserPhoneDao};
 use system::CaptchaDao;
 
 use code::{Error, ErrorMsg};
@@ -49,13 +45,13 @@ impl<'a> LoginService<'a> {
         // 检测手机号码或邮件用户是否存在
         let user = self.get_user(data.clone()).await?;
         // 检查用户是否被禁用
-        if user.status == UserStatus::Disabled as i8 {
+        if user.status == perm_user::enums::Status::Disabled as i8 {
             // 添加失败登陆日志
             self.add_login_log(
                 browser_info,
                 user.clone(),
                 "".to_owned(),
-                UserLoginStatus::Failed,
+                log_user_login::enums::Status::Failed,
             )
             .await?;
             error!("用户已被禁用");
@@ -70,7 +66,7 @@ impl<'a> LoginService<'a> {
                 browser_info,
                 user.clone(),
                 "".to_owned(),
-                UserLoginStatus::Failed,
+                log_user_login::enums::Status::Failed,
             )
             .await?;
             error!("账号或密码错误");
@@ -90,7 +86,7 @@ impl<'a> LoginService<'a> {
             browser_info,
             user.clone(),
             token.clone(),
-            UserLoginStatus::Success,
+            log_user_login::enums::Status::Success,
         )
         .await?;
 
@@ -104,8 +100,8 @@ impl<'a> LoginService<'a> {
     /// 获取用户信息
     async fn get_user(&self, data: LoginReq) -> Result<perm_user::Model, ErrorMsg> {
         let user_id = match data.user_type {
-            UserRegisterType::Phone => self.get_user_phone(data).await?,
-            UserRegisterType::Email => self.get_user_email(data).await?,
+            perm_user::enums::UserType::Phone => self.get_user_phone(data).await?,
+            perm_user::enums::UserType::Email => self.get_user_email(data).await?,
         };
 
         // 查询用户
@@ -188,7 +184,7 @@ impl<'a> LoginService<'a> {
         browser_info: BrowserInfo,
         user: perm_user::Model,
         token: String,
-        status: UserLoginStatus,
+        status: log_user_login::enums::Status,
     ) -> Result<log_user_login::Model, ErrorMsg> {
         let data = log_user_login::ActiveModel {
             user_id: Set(user.id),
@@ -197,7 +193,7 @@ impl<'a> LoginService<'a> {
             remote_addr: Set(browser_info.remote_addr),
             user_agent: Set(browser_info.user_agent),
             status: Set(status as i8),
-            disabled: Set(UserLoginDisabledStatus::Enabled as i8),
+            disabled: Set(log_user_login::enums::DisabledStatus::Enabled as i8),
             ..Default::default()
         };
 

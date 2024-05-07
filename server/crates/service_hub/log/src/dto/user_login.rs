@@ -1,5 +1,5 @@
 //! 登陆日志
-use crate::enums::{UserLoginDisabledStatus, UserLoginStatus};
+use entity::log_user_login;
 
 use serde::{Deserialize, Serialize};
 
@@ -33,7 +33,7 @@ pub struct AddUserLoginInfoReq {
     /// 用户代理
     pub user_agent: String,
     /// 登录状态,0:失败,1:成功
-    pub status: UserLoginStatus,
+    pub status: log_user_login::enums::Status,
 }
 
 /// 更新登录日志状态
@@ -42,12 +42,12 @@ pub struct UpdateUserLoginStatusReq {
     /// ID
     pub id: i32,
     /// 登录状态,0:失败,1:成功
-    pub status: UserLoginStatus,
+    pub status: log_user_login::enums::Status,
 }
 
 /// 更新登录日志禁用状态
 #[derive(Deserialize)]
 pub struct UpdateUserLoginDisabledStatusReq {
     /// 禁用状态,0:未禁用,1:禁用
-    pub disabled: UserLoginDisabledStatus,
+    pub disabled: log_user_login::enums::DisabledStatus,
 }

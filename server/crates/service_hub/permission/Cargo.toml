@@ -1,0 +1,30 @@
+[package]
+name = "permission"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+database = { path = "../../core/database" }
+entity = { path = "../../core/entity" }
+code = { path = "../../core/code" }
+response = { path = "../../core/response" }
+context = { path = "../../core/context" }
+actix_validator = { path = "../../core/actix_validator" }
+utils = { path = "../../core/utils" }
+
+inject = { path = "../../inject" }
+
+actix-web = { workspace = true }
+validator = { workspace = true, features = ["derive"] }
+sea-orm = { workspace = true }
+nject = { workspace = true }
+
+tracing = { workspace = true }
+regex = { workspace = true }
+uuid = { workspace = true, features = ["v4"] }
+serde = { workspace = true, features = ["derive"] }
+serde_repr = { workspace = true }
+
+
+[dev-dependencies]
+serde_json = { workspace = true }

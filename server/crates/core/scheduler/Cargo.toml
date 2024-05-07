@@ -6,19 +6,19 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-code = { path = "../code" }
 entity = { path = "../entity" }
 database = { path = "../database" }
 
+tokio-cron-scheduler = { workspace = true }
+sea-orm = { workspace = true }
 thiserror = { workspace = true }
 uuid = { workspace = true }
 chrono = { workspace = true }
-tokio-cron-scheduler = { workspace = true }
 tracing = { workspace = true }
-sea-orm = { workspace = true }
 async-trait = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
 serde_repr = { workspace = true }
+tokio = { workspace = true }
 
 [dev-dependencies]
 tokio = { workspace = true, features = [

@@ -1,7 +1,6 @@
 //! 系统管理
 pub mod constant;
 pub mod dto;
-pub mod enums;
 
 pub(crate) mod dao;
 pub use dao::{

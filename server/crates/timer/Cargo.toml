@@ -1,0 +1,12 @@
+[package]
+name = "timer"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+database = { path = "../core/database" }
+entity = { path = "../core/entity" }
+scheduler = { path = "../core/scheduler" }
+
+
+tokio = { workspace = true }

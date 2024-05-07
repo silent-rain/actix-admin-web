@@ -17,4 +17,5 @@
   },
   "rust-analyzer.checkOnSave": true,
   "Prettier-SQL.SQLFlavourOverride": "mysql",
+  "Prettier-SQL.keywordCase": "upper"
 }

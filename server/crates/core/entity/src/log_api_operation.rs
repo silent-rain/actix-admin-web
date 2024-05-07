@@ -35,7 +35,7 @@ pub struct Model {
     /// 用户代理
     pub user_agent: String,
     /// 耗时,毫秒
-    pub cost: f64,
+    pub cost: u64,
     /// 请求类型:REQ/RSP
     pub http_type: String,
     /// 备注
@@ -48,3 +48,28 @@ pub struct Model {
 pub enum Relation {}
 
 impl ActiveModelBehavior for ActiveModel {}
+
+/// 枚举
+pub mod enums {
+    use serde::{Deserialize, Serialize};
+
+    /// Api 操作日志类型
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub enum HttpType {
+        /// 请求
+        #[serde(rename = "REQ")]
+        Req,
+        /// 响应
+        #[serde(rename = "RSP")]
+        Rsp,
+    }
+
+    impl From<HttpType> for String {
+        fn from(value: HttpType) -> Self {
+            match value {
+                HttpType::Req => "REQ".to_owned(),
+                HttpType::Rsp => "RSP".to_owned(),
+            }
+        }
+    }
+}

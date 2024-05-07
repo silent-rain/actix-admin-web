@@ -5,13 +5,13 @@ edition = "2021"
 publish = false
 
 [lib]
-name = "entity"
-path = "src/mod.rs"
+path = "src/lib.rs"
 
 [dependencies]
 utils = { path = "../utils" }
 
-serde = { workspace = true, features = ["derive"] }
-serde_json = { workspace = true }
 sea-orm = { workspace = true }
+
+serde = { workspace = true, features = ["derive"] }
+serde_repr = { workspace = true }
 chrono = { workspace = true }

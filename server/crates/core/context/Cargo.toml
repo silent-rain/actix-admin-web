@@ -7,4 +7,3 @@ edition = "2021"
 actix-web = { workspace = true }
 tracing-actix-web = { workspace = true }
 futures = { workspace = true }
-serde = { workspace = true }

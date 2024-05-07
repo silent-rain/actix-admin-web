@@ -1,7 +1,8 @@
 //! 应用状态
 
-use tokio::sync::RwLock;
 use utils::asset::EmbedAssetTrait;
+
+use tokio::sync::RwLock;
 
 /// 内部资源共享状态
 pub struct AssetState {

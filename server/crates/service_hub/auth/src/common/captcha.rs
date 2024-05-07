@@ -1,6 +1,7 @@
 //! 验证码
 
-use system::{enums::CaptchaStatus, CaptchaDao};
+use entity::sys_captcha;
+use system::CaptchaDao;
 
 use code::{Error, ErrorMsg};
 
@@ -28,7 +29,7 @@ pub async fn check_captcha<'a>(
         })?;
 
     // 检查验证码是否有效
-    if result.status == CaptchaStatus::Invalid as i8 {
+    if result.status == sys_captcha::enums::Status::Invalid as i8 {
         return {
             error!("无效验证码, captcha: {}", captcha);
             Err(Error::CaptchaInvalid.into_msg().with_msg("无效验证码"))

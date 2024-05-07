@@ -10,10 +10,8 @@ mod server;
 use crate::asset::{AssetAdminWebDist, AssetConfigFile, AssetDbDataFile};
 
 use app_state::{AppState, AssetState};
-use service_hub::{
-    inject::InjectProvider,
-    schedule::task::{TaskRegister, TaskShutdown},
-};
+use service_hub::inject::InjectProvider;
+use timer::{TimerRegister, TimerShutdown};
 
 use colored::Colorize;
 use dotenv::dotenv;
@@ -57,11 +55,11 @@ async fn main() -> std::io::Result<()> {
     //         error!("表迁移失败. err: {e}");
     //     }
     // }
-    TaskRegister::start(db.clone());
+    TimerRegister::start(db.clone());
     // let current = Handle::current();
     // let t_db = db.clone();
     // current.spawn(async {
-    //     let mut task = TaskRegister::new(t_db);
+    //     let mut task = TimerRegister::new(t_db);
     //     task.init().await.expect("定时任务初始化失败");
     // });
 
@@ -82,7 +80,7 @@ async fn main() -> std::io::Result<()> {
     }
     info!("close service...");
 
-    TaskShutdown::shutdown().await.expect("关闭定时任务失败");
+    TimerShutdown::shutdown().await.expect("关闭定时任务失败");
 
     // 关闭数据库
     let _ = db.close().await;

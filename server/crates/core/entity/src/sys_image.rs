@@ -36,3 +36,29 @@ pub struct Model {
 pub enum Relation {}
 
 impl ActiveModelBehavior for ActiveModel {}
+
+/// 枚举
+pub mod enums {
+    use serde::{Deserialize, Serialize};
+
+    /// ICON图片扩展类型,svg,png
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[repr(i8)]
+    pub enum ImageType {
+        /// 无效验证码
+        #[serde(rename = "svg")]
+        Svg,
+        /// 有效验证码
+        #[serde(rename = "png")]
+        Png,
+    }
+
+    impl From<ImageType> for String {
+        fn from(value: ImageType) -> Self {
+            match value {
+                ImageType::Svg => "svg".to_owned(),
+                ImageType::Png => "png".to_owned(),
+            }
+        }
+    }
+}

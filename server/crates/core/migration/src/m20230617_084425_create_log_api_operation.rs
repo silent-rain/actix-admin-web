@@ -103,8 +103,8 @@ impl MigrationTrait for Migration {
                     )
                     .col(
                         ColumnDef::new(LogApiOperation::Cost)
-                            .decimal()
-                            .decimal_len(10, 2)
+                            .integer()
+                            .unsigned()
                             .not_null()
                             .comment("耗时,毫秒"),
                     )

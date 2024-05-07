@@ -2,7 +2,6 @@
 use crate::{
     dao::user_login::UserLoginDao,
     dto::user_login::{AddUserLoginInfoReq, GetUserLoginListReq},
-    enums::UserLoginDisabledStatus,
 };
 
 use code::{Error, ErrorMsg};
@@ -111,7 +110,7 @@ impl<'a> UserLoginService<'a> {
             system: Set(Some(system)),
             browser: Set(Some(browser)),
             status: Set(data.status as i8),
-            disabled: Set(UserLoginDisabledStatus::Enabled as i8),
+            disabled: Set(log_user_login::enums::DisabledStatus::Enabled as i8),
             ..Default::default()
         };
         let result = self.user_login_dao.add(model).await.map_err(|err| {

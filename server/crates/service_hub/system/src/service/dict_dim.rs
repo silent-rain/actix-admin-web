@@ -2,7 +2,6 @@
 use crate::{
     dao::dict_dim::DictDimDao,
     dto::dict_dim::{AddDictDimReq, GetDictDimListReq, UpdateDictDimReq},
-    enums::DictDimStatus,
 };
 
 use code::{Error, ErrorMsg};
@@ -109,7 +108,7 @@ impl<'a> DictDimService<'a> {
             code: Set(req.code),
             sort: Set(req.sort),
             note: Set(req.note),
-            status: Set(DictDimStatus::Enabled as i8),
+            status: Set(sys_dict_dim::enums::Status::Enabled as i8),
             ..Default::default()
         };
         let result = self.dict_dim_dao.add(model).await.map_err(|err| {

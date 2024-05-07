@@ -5,7 +5,7 @@
 
 use database::Pool;
 use entity::perm_dept_role_rel;
-use service_hub::perm::{dto::dept_role_rel::GetDeptRoleRelListReq, DeptRoleRelDao};
+use service_hub::permission::{dto::dept_role_rel::GetDeptRoleRelListReq, DeptRoleRelDao};
 
 use chrono::Local;
 use sea_orm::{ActiveValue::NotSet, DatabaseBackend, DbErr, Set};

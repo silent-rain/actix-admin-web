@@ -35,3 +35,18 @@ pub struct Model {
 pub enum Relation {}
 
 impl ActiveModelBehavior for ActiveModel {}
+
+/// 枚举
+pub mod enums {
+    use serde_repr::{Deserialize_repr, Serialize_repr};
+
+    /// 验证码状态
+    #[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
+    #[repr(i8)]
+    pub enum Status {
+        /// 无效验证码
+        Invalid = 0,
+        /// 有效验证码
+        Valid = 1,
+    }
+}

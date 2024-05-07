@@ -4,7 +4,6 @@ use database::DbRepo;
 use entity::{perm_user, perm_user_email, perm_user_phone};
 
 use nject::injectable;
-use perm::enums::UserStatus;
 use sea_orm::{ActiveModelTrait, DatabaseTransaction, DbErr, Set, TransactionTrait};
 
 use crate::dto::register::RegisterReq;
@@ -49,7 +48,7 @@ impl<'a> RegisterDao<'a> {
             birthday: Set(req.birthday),
             avatar: Set(req.avatar),
             password: Set(req.password),
-            status: Set(UserStatus::Enabled as i8),
+            status: Set(perm_user::enums::Status::Enabled as i8),
             ..Default::default()
         };
         active_model.insert(txn).await

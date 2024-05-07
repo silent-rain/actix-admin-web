@@ -9,7 +9,6 @@ use entity::{
     perm_user_phone, perm_user_role_rel,
     prelude::{PermMenu, PermMenuRoleRel, PermOpenApi, PermOpenApiRoleRel, PermRole, PermUser},
 };
-use perm::enums::{Gender, UserStatus};
 
 use nject::injectable;
 use sea_orm::ConnectionTrait;
@@ -96,9 +95,9 @@ impl<'a> TableDao<'a> {
     ) -> Result<perm_user::Model, DbErr> {
         let active_model = perm_user::ActiveModel {
             username: Set(req.username),
-            gender: Set(Gender::Confidential as i8),
+            gender: Set(perm_user::enums::Gender::Confidential as i8),
             password: Set(req.password),
-            status: Set(UserStatus::Enabled as i8),
+            status: Set(perm_user::enums::Status::Enabled as i8),
             ..Default::default()
         };
         let result = active_model.insert(txn).await?;

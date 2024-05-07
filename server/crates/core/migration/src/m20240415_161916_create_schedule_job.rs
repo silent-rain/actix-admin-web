@@ -1,4 +1,4 @@
-//! 定时任务表
+//! 调度任务表
 //! User Entity: [`entity::prelude::ScheduleJob`]
 
 use sea_orm::{
@@ -19,7 +19,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(ScheduleJob::Table)
-                    .comment("定时任务表")
+                    .comment("调度任务")
                     .if_not_exists()
                     .col(
                         ColumnDef::new(ScheduleJob::Id)
@@ -30,16 +30,10 @@ impl MigrationTrait for Migration {
                             .comment("自增ID"),
                     )
                     .col(
-                        ColumnDef::new(ScheduleJob::Uuid)
-                            .string()
-                            .string_len(200)
-                            .default("")
-                            .comment("任务ID"),
-                    )
-                    .col(
                         ColumnDef::new(ScheduleJob::Name)
                             .string()
                             .string_len(200)
+                            .unique_key()
                             .not_null()
                             .comment("任务名称"),
                     )
@@ -130,7 +124,6 @@ pub enum ScheduleJob {
     #[sea_orm(iden = "t_schedule_job")]
     Table,
     Id,
-    Uuid,
     Name,
     Source,
     JobType,

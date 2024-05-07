@@ -7,10 +7,11 @@ use std::{
 
 use code::ErrorMsg;
 use context::Context;
+use entity::log_api_operation;
 use response::Response;
 use service_hub::{
     inject::AInjectProvider,
-    log::{dto::api_operation::AddApiOperationReq, enums::HttpType, ApiOperationService},
+    log::{dto::api_operation::AddApiOperationReq, ApiOperationService},
     system::constant::HEADERS_X_IMG,
 };
 
@@ -97,7 +98,7 @@ where
             }
 
             // 添加请求操作日志
-            data.cost = start_time.elapsed().as_millis() as f64;
+            data.cost = start_time.elapsed().as_millis() as u64;
             let body = Self::get_request_body(&request_body)
                 .map_or("body data parsing error ".to_string(), |v| v);
             data.body = Some(body);
@@ -121,8 +122,8 @@ where
             }
 
             // 添加响应操作日志
-            data.cost = start_time.elapsed().as_millis() as f64;
-            data.http_type = HttpType::Rsp;
+            data.cost = start_time.elapsed().as_millis() as u64;
+            data.http_type = log_api_operation::enums::HttpType::Rsp;
             // TODO 添加字符限制, 如果太大则进行省略
             data.body = Some(body);
             data.status_code = fut.status().as_u16() as i32;
@@ -219,8 +220,8 @@ impl<S> ApiOperationMiddlewareService<S> {
             body: None,
             remote_addr,
             user_agent,
-            cost: 0.0,
-            http_type: HttpType::Req,
+            cost: 0,
+            http_type: log_api_operation::enums::HttpType::Req,
             note: None,
         }
     }
