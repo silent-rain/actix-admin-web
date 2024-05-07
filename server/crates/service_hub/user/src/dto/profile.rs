@@ -1,6 +1,6 @@
-//! 用户管理
+//! 用户信息管理
 
-use entity::perm_user;
+use entity::user_profile;
 
 use actix_validator::Validate;
 
@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 /// 查询用户列表
 #[derive(Default, Deserialize, Validate)]
-pub struct GetUserListReq {
+pub struct GetProfilerListReq {
     /// 当前分页
     pub page: u64,
     /// 页面大小
@@ -23,57 +23,81 @@ pub struct GetUserListReq {
 
 /// 添加用户
 #[derive(Clone, Serialize, Deserialize, Validate)]
-pub struct AddUserReq {
+pub struct AddProfileReq {
     /// 用户名称
     pub username: String,
     /// 真实姓名
     pub real_name: Option<String>,
     /// 性别, 0:男,1:女,2:保密
-    pub gender: perm_user::enums::Gender,
-    /// 年龄
-    pub age: i32,
-    /// 出生日期
-    pub birthday: Option<String>,
+    pub gender: user_profile::enums::Gender,
     /// 密码
     pub password: String,
+    /// 状态,0:停用,1:正常
+    pub status: user_profile::enums::Status,
+    /// 年龄
+    pub age: Option<i32>,
+    /// 出生日期
+    pub date_birth: Option<String>,
     /// 头像URL
     pub avatar: Option<String>,
+    /// 用户的居住或邮寄地址
+    pub address: Option<String>,
+    /// 用户个人介绍
+    pub intro: Option<String>,
+    /// 用户描述
+    pub desc: Option<String>,
+    /// 偏好设置
+    pub preferences: Option<String>,
+    /// 所属部门ID
+    pub department_id: Option<i32>,
+    /// 所属岗位ID
+    pub position_id: Option<i32>,
+    /// 所属职级ID
+    pub rank_id: Option<i32>,
     /// 角色ID列表
     pub role_ids: Vec<i32>,
 }
 
 /// 更新用户
 #[derive(Clone, Serialize, Deserialize, Validate)]
-pub struct UpdateUserReq {
+pub struct UpdateProfileReq {
     /// 用户名称
     pub username: String,
     /// 真实姓名
     pub real_name: Option<String>,
     /// 性别, 0:男,1:女,2:保密
-    pub gender: perm_user::enums::Gender,
+    pub gender: user_profile::enums::Gender,
+    /// 状态,0:停用,1:正常
+    pub status: user_profile::enums::Status,
     /// 年龄
-    pub age: i32,
+    pub age: Option<i32>,
     /// 出生日期
-    pub birthday: Option<String>,
-    /// 密码
-    pub password: String,
+    pub date_birth: Option<String>,
     /// 头像URL
     pub avatar: Option<String>,
-    /// 介绍
+    /// 用户的居住或邮寄地址
+    pub address: Option<String>,
+    /// 用户个人介绍
     pub intro: Option<String>,
-    /// 备注
-    pub note: Option<String>,
-    /// 状态,0:停用,1:正常
-    pub status: perm_user::enums::Status,
+    /// 用户描述
+    pub desc: Option<String>,
+    /// 偏好设置
+    pub preferences: Option<String>,
+    /// 所属部门ID
+    pub department_id: Option<i32>,
+    /// 所属岗位ID
+    pub position_id: Option<i32>,
+    /// 所属职级ID
+    pub rank_id: Option<i32>,
     /// 角色ID列表
     pub role_ids: Vec<i32>,
 }
 
 /// 更新数据状态
 #[derive(Clone, Serialize, Deserialize, Validate)]
-pub struct UpdateUserStatusReq {
+pub struct UpdateProfileStatusReq {
     /// 用户状态
-    pub status: perm_user::enums::Status,
+    pub status: user_profile::enums::Status,
 }
 
 /// 获取用户个人信息
@@ -88,7 +112,7 @@ pub struct ProfileRsp {
     /// 年龄
     pub age: Option<i32>,
     /// 出生日期
-    pub birthday: Option<String>,
+    pub date_birth: Option<String>,
     /// 头像URL
     pub avatar: Option<String>,
 }

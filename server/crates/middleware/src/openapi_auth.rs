@@ -11,9 +11,9 @@ use crate::constant::{
 };
 
 use context::Context;
-use entity::{perm_token, perm_user};
+use entity::{perm_token, user_profile};
 use response::Response;
-use service_hub::{inject::AInjectProvider, permission::TokenService, user::UserService};
+use service_hub::{inject::AInjectProvider, permission::TokenService, user::ProfileService};
 
 use actix_web::{
     dev::{forward_ready, Service, ServiceRequest, ServiceResponse, Transform},
@@ -137,7 +137,7 @@ impl<S> OpenApiAuthService<S> {
         provider: AInjectProvider,
         openapi_token: String,
         passphrase: String,
-    ) -> Result<perm_user::Model, code::ErrorMsg> {
+    ) -> Result<user_profile::Model, code::ErrorMsg> {
         let token_service: TokenService = provider.provide();
         let token = token_service
             .info_by_token(openapi_token.clone(), passphrase)
@@ -149,9 +149,9 @@ impl<S> OpenApiAuthService<S> {
                 .with_msg("Token已被禁用"));
         }
 
-        let user_service: UserService = provider.provide();
+        let user_service: ProfileService = provider.provide();
         let user = user_service.info(token.user_id).await?;
-        if user.status == perm_user::enums::Status::Disabled as i8 {
+        if user.status == user_profile::enums::Status::Disabled as i8 {
             error!("user_id: {}, 用户已被禁用", user.id);
             return Err(code::Error::LoginStatusDisabled
                 .into_msg()

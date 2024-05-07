@@ -59,19 +59,19 @@ impl<'a> AppTemplateEtxDao<'a> {
     /// #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
     /// pub enum Relation {
     ///            #[sea_orm(
-    ///               belongs_to = "super::perm_user::Entity",
+    ///               belongs_to = "super::user_profile::Entity",
     ///                from = "Column::UserId",
-    ///                to = "super::perm_user::Column::Id",
+    ///                to = "super::user_profile::Column::Id",
     ///                on_update = "Cascade",
     ///                on_delete = "Cascade"
     ///           )]
-    ///           PermUser,
+    ///           UserProfile,
     ///       }
     /// ```
     pub async fn get_join_list2(&self) -> Result<Vec<app_template::Model>, DbErr> {
         let results = AppTemplate::find()
             // reuse a `Relation` from existing Entity
-            .join(JoinType::LeftJoin, app_template::Relation::PermUser.def())
+            .join(JoinType::LeftJoin, app_template::Relation::UserProfile.def())
             // construct `RelationDef` on the fly
             .join_rev(
                 JoinType::InnerJoin,

@@ -1,7 +1,7 @@
-//! 创建用户表
+//! 用户手机号表
 //! User Entity: [`entity::prelude::PermUserPhone`]
 
-use crate::m20240218_145453_create_perm_user::PermUser;
+use crate::m20240218_145453_create_perm_user_profile::UserProfile;
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, ForeignKey, ForeignKeyAction, Index, Table},
@@ -20,7 +20,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(PermUserPhone::Table)
-                    .comment("用户手机号")
+                    .comment("用户手机号表")
                     .if_not_exists()
                     .col(
                         ColumnDef::new(PermUserPhone::Id)
@@ -121,7 +121,7 @@ impl MigrationTrait for Migration {
                     ForeignKey::create()
                         .name("fk_perm_user_phone_user_id")
                         .from(PermUserPhone::Table, PermUserPhone::UserId)
-                        .to(PermUser::Table, PermUser::Id)
+                        .to(UserProfile::Table, UserProfile::Id)
                         .on_update(ForeignKeyAction::Cascade)
                         .on_delete(ForeignKeyAction::Cascade)
                         .to_owned(),

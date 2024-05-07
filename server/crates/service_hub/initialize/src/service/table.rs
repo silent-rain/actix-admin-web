@@ -7,7 +7,7 @@ use crate::{
 };
 
 use code::{Error, ErrorMsg};
-use entity::perm_user;
+use entity::user_profile;
 
 use nject::injectable;
 use tracing::error;
@@ -21,7 +21,7 @@ pub struct TableService<'a> {
 
 impl<'a> TableService<'a> {
     /// 初始化库表
-    pub async fn table(&self, req: AddAdminUserReq) -> Result<perm_user::Model, ErrorMsg> {
+    pub async fn table(&self, req: AddAdminUserReq) -> Result<user_profile::Model, ErrorMsg> {
         let mut data = req.clone();
         // 密码加密
         data.password = sha2_256(&data.password);

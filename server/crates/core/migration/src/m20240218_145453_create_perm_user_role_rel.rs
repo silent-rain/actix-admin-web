@@ -2,7 +2,8 @@
 //! User Entity: [`entity::prelude::PermUserRoleRel`]
 
 use crate::{
-    m20240218_145453_create_perm_role::PermRole, m20240218_145453_create_perm_user::PermUser,
+    m20240218_145453_create_perm_role::PermRole,
+    m20240218_145453_create_perm_user_profile::UserProfile,
 };
 
 use sea_orm::{
@@ -85,7 +86,7 @@ impl MigrationTrait for Migration {
                     ForeignKey::create()
                         .name("fk_perm_user_role_rel_user_id")
                         .from(PermUserRoleRel::Table, PermUserRoleRel::UserId)
-                        .to(PermUser::Table, PermUser::Id)
+                        .to(UserProfile::Table, UserProfile::Id)
                         .on_update(ForeignKeyAction::Cascade)
                         .on_delete(ForeignKeyAction::Cascade)
                         .to_owned(),

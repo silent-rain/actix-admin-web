@@ -32,13 +32,13 @@ pub enum Relation {
     )]
     PermRole,
     #[sea_orm(
-        belongs_to = "super::perm_user::Entity",
+        belongs_to = "super::user_profile::Entity",
         from = "Column::UserId",
-        to = "super::perm_user::Column::Id",
+        to = "super::user_profile::Column::Id",
         on_update = "Cascade",
         on_delete = "Cascade"
     )]
-    PermUser,
+    UserProfile,
 }
 
 impl Related<super::perm_role::Entity> for Entity {
@@ -47,9 +47,9 @@ impl Related<super::perm_role::Entity> for Entity {
     }
 }
 
-impl Related<super::perm_user::Entity> for Entity {
+impl Related<super::user_profile::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::PermUser.def()
+        Relation::UserProfile.def()
     }
 }
 

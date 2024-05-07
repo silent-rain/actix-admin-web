@@ -1,4 +1,4 @@
-//! 用户表
+//! 用户信息表
 
 use sea_orm::{
     prelude::DateTimeLocal, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey,
@@ -6,9 +6,9 @@ use sea_orm::{
 };
 use serde::{Deserialize, Serialize};
 
-/// 用户表
+/// 用户信息表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "t_perm_user")]
+#[sea_orm(table_name = "t_user_profile")]
 pub struct Model {
     /// 用户ID
     #[sea_orm(primary_key)]
@@ -19,22 +19,30 @@ pub struct Model {
     pub real_name: Option<String>,
     /// 性别, 0:男,1:女,2:保密
     pub gender: i8,
-    /// 年龄
-    pub age: Option<i32>,
-    /// 出生日期
-    pub birthday: Option<String>,
-    /// 头像URL
-    pub avatar: Option<String>,
-    /// 介绍
-    pub intro: Option<String>,
-    /// 备注
-    pub note: Option<String>,
     /// 密码
     pub password: String,
     /// 状态,0:停用,1:正常
     pub status: i8,
-    /// 部门ID
+    /// 年龄
+    pub age: Option<i32>,
+    /// 出生日期
+    pub date_birth: Option<String>,
+    /// 头像URL
+    pub avatar: Option<String>,
+    /// 用户的居住或邮寄地址
+    pub address: Option<String>,
+    /// 用户个人介绍
+    pub intro: Option<String>,
+    /// 用户描述
+    pub desc: Option<String>,
+    /// 偏好设置
+    pub preferences: Option<String>,
+    /// 所属部门ID
     pub department_id: Option<i32>,
+    /// 所属岗位ID
+    pub position_id: Option<i32>,
+    /// 所属职级ID
+    pub rank_id: Option<i32>,
     /// 创建时间
     pub created_at: DateTimeLocal,
     /// 更新时间

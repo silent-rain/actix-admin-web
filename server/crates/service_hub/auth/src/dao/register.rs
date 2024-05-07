@@ -1,7 +1,7 @@
 //! 注册
 
 use database::DbRepo;
-use entity::{perm_user, perm_user_email, perm_user_phone};
+use entity::{perm_user_email, perm_user_phone, user_profile};
 
 use nject::injectable;
 use sea_orm::{ActiveModelTrait, DatabaseTransaction, DbErr, Set, TransactionTrait};
@@ -16,7 +16,7 @@ pub struct RegisterDao<'a> {
 
 impl<'a> RegisterDao<'a> {
     /// 添加用户
-    pub async fn add_user(&self, req: RegisterReq) -> Result<perm_user::Model, DbErr> {
+    pub async fn add_user(&self, req: RegisterReq) -> Result<user_profile::Model, DbErr> {
         let txn = self.db.wdb().begin().await?;
 
         // 添加用户
@@ -39,16 +39,16 @@ impl<'a> RegisterDao<'a> {
         &self,
         txn: &DatabaseTransaction,
         req: RegisterReq,
-    ) -> Result<perm_user::Model, DbErr> {
-        let active_model = perm_user::ActiveModel {
+    ) -> Result<user_profile::Model, DbErr> {
+        let active_model = user_profile::ActiveModel {
             username: Set(req.username),
             real_name: Set(req.real_name),
             gender: Set(req.gender),
             age: Set(req.age),
-            birthday: Set(req.birthday),
+            date_birth: Set(req.date_birth),
             avatar: Set(req.avatar),
             password: Set(req.password),
-            status: Set(perm_user::enums::Status::Enabled as i8),
+            status: Set(user_profile::enums::Status::Enabled as i8),
             ..Default::default()
         };
         active_model.insert(txn).await

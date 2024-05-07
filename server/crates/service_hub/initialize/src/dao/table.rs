@@ -5,9 +5,9 @@ use crate::dto::table::TableSql;
 
 use database::DbRepo;
 use entity::{
-    perm_menu_role_rel, perm_openapi_role_rel, perm_role, perm_user, perm_user_email,
+    perm_menu_role_rel, perm_openapi_role_rel, perm_role, user_profile, perm_user_email,
     perm_user_phone, perm_user_role_rel,
-    prelude::{PermMenu, PermMenuRoleRel, PermOpenapi, PermOpenapiRoleRel, PermRole, PermUser},
+    prelude::{PermMenu, PermMenuRoleRel, PermOpenapi, PermOpenapiRoleRel, PermRole, UserProfile},
 };
 
 use nject::injectable;
@@ -26,9 +26,9 @@ pub struct TableDao<'a> {
 
 impl<'a> TableDao<'a> {
     /// 获取第一个用户即为管理员
-    pub async fn admin_user(&self) -> Result<Option<perm_user::Model>, DbErr> {
-        let result = PermUser::find()
-            .order_by_asc(perm_user::Column::Id)
+    pub async fn admin_user(&self) -> Result<Option<user_profile::Model>, DbErr> {
+        let result = UserProfile::find()
+            .order_by_asc(user_profile::Column::Id)
             .one(self.db.rdb())
             .await?;
 
@@ -40,7 +40,7 @@ impl<'a> TableDao<'a> {
         &self,
         req: AddAdminUserReq,
         table_sql: TableSql,
-    ) -> Result<perm_user::Model, DbErr> {
+    ) -> Result<user_profile::Model, DbErr> {
         let txn = self.db.wdb().begin().await?;
 
         // 初始化角色表
@@ -92,12 +92,12 @@ impl<'a> TableDao<'a> {
         &self,
         txn: &DatabaseTransaction,
         req: AddAdminUserReq,
-    ) -> Result<perm_user::Model, DbErr> {
-        let active_model = perm_user::ActiveModel {
+    ) -> Result<user_profile::Model, DbErr> {
+        let active_model = user_profile::ActiveModel {
             username: Set(req.username),
-            gender: Set(perm_user::enums::Gender::Confidential as i8),
+            gender: Set(user_profile::enums::Gender::Confidential as i8),
             password: Set(req.password),
-            status: Set(perm_user::enums::Status::Enabled as i8),
+            status: Set(user_profile::enums::Status::Enabled as i8),
             ..Default::default()
         };
         let result = active_model.insert(txn).await?;

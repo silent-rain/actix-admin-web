@@ -80,6 +80,9 @@
     - [ ] openapi 接口权限
     - [ ] 菜单权限
   - [x] 用户管理
+    - [x] 用户信息管理
+    - [x] 用户手机号管理
+    - [x] 用户邮箱管理
   - [x] 部门管理
   - [x] 菜单管理
   - [x] 令牌管理
@@ -120,6 +123,10 @@
 
 ## 表划分域
 
+t_user_profile
+
+user_profile
+
 用户与身份管理：
 ●t_user_profile：用户资料信息
 ●t_user_email — 用户邮箱表 (UserEmail)
@@ -151,12 +158,6 @@
 ●t_sys_image_resource — 图片资源表 (ImageResource)
 ●t_sys_dict_dimension — 字典维度表 (DictionaryDimension)
 ●t_sys_dict_data — 字典数据表 (DictionaryData)
-
-个人资料信息 (User Profile Information)
-个人资料信息则更侧重于描述用户的个人特征和偏好。这些信息用于个性化服务、用户画像分析和增强用户体验。个人资料信息通常包括：
-●出生日期（Date of Birth）：用户的出生年月日。
-●地址（Address）：用户的居住或邮寄地址。
-●偏好设置（Preferences）：用户的偏好设置，如语言、主题等。
 
 路由整理
 部门管理
