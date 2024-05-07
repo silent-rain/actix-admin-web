@@ -1,25 +1,6 @@
 /*
 日志相关表
  */
--- 用户登录日志表
-CREATE TABLE IF NOT EXISTS
-    `t_log_user_login` (
-        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
-        `user_id` INT(11) NOT NULL COMMENT '用户ID',
-        `username` VARCHAR(32) NOT NULL COMMENT '用户名称',
-        `token` VARCHAR(250) NOT NULL COMMENT '登陆令牌',
-        `remote_addr` VARCHAR(64) NULL DEFAULT '' COMMENT '登录IP',
-        `user_agent` VARCHAR(256) NULL DEFAULT '' COMMENT '用户代理',
-        `device` VARCHAR(20) NULL DEFAULT '' COMMENT '设备',
-        `system` VARCHAR(20) NULL DEFAULT '' COMMENT '系统',
-        `browser` VARCHAR(20) NULL DEFAULT '' COMMENT '浏览器',
-        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '登录状态,0:失败,1:成功',
-        `disabled` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '禁用状态,0:未禁用,1:禁用',
-        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-        `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-        PRIMARY KEY (`id`)
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户登录日志表';
-
 -- API操作日志表
 CREATE TABLE IF NOT EXISTS
     `t_log_api_operation` (
