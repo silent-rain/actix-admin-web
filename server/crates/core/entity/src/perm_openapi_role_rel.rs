@@ -14,7 +14,7 @@ pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,
     /// 接口ID
-    pub api_id: i32,
+    pub openapi_id: i32,
     /// 角色ID
     pub role_id: i32,
     /// 创建时间

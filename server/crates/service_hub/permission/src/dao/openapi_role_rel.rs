@@ -32,8 +32,8 @@ impl<'a> OpenapiRoleRelDao<'a> {
             .apply_if(req.end_time, |query, v| {
                 query.filter(perm_openapi_role_rel::Column::CreatedAt.lt(v))
             })
-            .apply_if(req.api_id, |query, v| {
-                query.filter(perm_openapi_role_rel::Column::ApiId.eq(v))
+            .apply_if(req.openapi_id, |query, v| {
+                query.filter(perm_openapi_role_rel::Column::OpenapiId.eq(v))
             });
 
         let total = states.clone().count(self.db.rdb()).await?;

@@ -15,14 +15,14 @@ pub struct GetOpenapiRoleRelListReq {
     /// 结束时间
     pub end_time: Option<String>,
     /// 接口ID
-    pub api_id: Option<i32>,
+    pub openapi_id: Option<i32>,
 }
 
 /// 批量添加OpenApi接口角色关系
 #[derive(Serialize, Deserialize, Validate)]
 pub struct BatchAddOpenapiRoleRelReq {
     /// 接口ID
-    pub api_id: i32,
+    pub openapi_id: i32,
     /// 角色ID列表
     pub role_ids: Vec<i32>,
 }

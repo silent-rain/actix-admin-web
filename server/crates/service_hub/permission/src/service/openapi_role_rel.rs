@@ -38,7 +38,7 @@ impl<'a> OpenapiRoleRelService<'a> {
         let mut models = Vec::new();
         for role_id in req.role_ids {
             let model = perm_openapi_role_rel::ActiveModel {
-                api_id: Set(req.api_id),
+                openapi_id: Set(req.openapi_id),
                 role_id: Set(role_id),
                 ..Default::default()
             };

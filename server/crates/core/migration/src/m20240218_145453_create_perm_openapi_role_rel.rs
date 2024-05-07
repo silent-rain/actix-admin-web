@@ -55,7 +55,10 @@ impl MigrationTrait for Migration {
             .await?;
 
         if !manager
-            .has_index(PermOpenapiRoleRel::Table.to_string(), "uk_api_id_role_id")
+            .has_index(
+                PermOpenapiRoleRel::Table.to_string(),
+                "uk_openapi_id_role_id",
+            )
             .await?
         {
             manager
@@ -63,7 +66,7 @@ impl MigrationTrait for Migration {
                     Index::create()
                         .if_not_exists()
                         .table(PermOpenapiRoleRel::Table)
-                        .name("uk_api_id_role_id")
+                        .name("uk_openapi_id_role_id")
                         .unique()
                         .col(PermOpenapiRoleRel::ApiId)
                         .col(PermOpenapiRoleRel::RoleId)
@@ -75,14 +78,14 @@ impl MigrationTrait for Migration {
         if !manager
             .has_index(
                 PermOpenapiRoleRel::Table.to_string(),
-                "fk_openapi_role_rel_api_id",
+                "fk_openapi_role_rel_openapi_id",
             )
             .await?
         {
             manager
                 .create_foreign_key(
                     ForeignKey::create()
-                        .name("fk_openapi_role_rel_api_id")
+                        .name("fk_openapi_role_rel_openapi_id")
                         .from(PermOpenapiRoleRel::Table, PermOpenapiRoleRel::ApiId)
                         .to(PermOpenapi::Table, PermOpenapi::Id)
                         .on_update(ForeignKeyAction::Cascade)

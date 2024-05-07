@@ -228,7 +228,7 @@ impl<'a> TableDao<'a> {
         let mut models = Vec::new();
         for open_api in open_apis {
             let model = perm_openapi_role_rel::ActiveModel {
-                api_id: Set(open_api.id),
+                openapi_id: Set(open_api.id),
                 role_id: Set(role_id),
                 ..Default::default()
             };
