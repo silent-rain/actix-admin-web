@@ -24,7 +24,7 @@ pub struct TableSql {
     /// 角色表
     pub role_sql: String,
     /// OpenAPi表
-    pub open_api_sql: String,
+    pub openapi_sql: String,
     /// 菜单表
     pub menu_sql: String,
 }

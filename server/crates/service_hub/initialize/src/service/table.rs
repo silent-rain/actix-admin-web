@@ -40,7 +40,7 @@ impl<'a> TableService<'a> {
                 .into_msg()
                 .with_msg("角色表资源解析错误")
         })?;
-        let open_api_sql = asset.to_string("t_perm_open_api.sql").map_err(|err| {
+        let openapi_sql = asset.to_string("t_perm_openapi.sql").map_err(|err| {
             error!("OpenAPi表资源解析错误, err: {err}");
             Error::AssetParseError
                 .into_msg()
@@ -56,7 +56,7 @@ impl<'a> TableService<'a> {
         let table_sql = TableSql {
             db_sql: db_sql.clone(),
             role_sql,
-            open_api_sql,
+            openapi_sql,
             menu_sql,
         };
 

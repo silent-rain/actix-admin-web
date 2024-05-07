@@ -3,8 +3,8 @@ pub mod department;
 pub mod department_role_rel;
 pub mod menu;
 pub mod menu_role_rel;
-pub mod open_api;
-pub mod open_api_role_rel;
+pub mod openapi;
+pub mod openapi_role_rel;
 pub mod role;
 pub mod token;
 pub mod token_role_rel;
@@ -45,8 +45,8 @@ impl PermissionRouter {
             // 令牌角色关系管理
             .service(token_role_rel::TokenRoleRelRouter::admin_register())
             // OpenApi接口管理
-            .service(open_api::OpenApiRouter::admin_register())
+            .service(openapi::OpenapiRouter::admin_register())
             // OpenApi接口角色关系管理
-            .service(open_api_role_rel::OpenApiRoleRelRouter::admin_register())
+            .service(openapi_role_rel::OpenapiRoleRelRouter::admin_register())
     }
 }

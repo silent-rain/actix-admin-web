@@ -1,5 +1,5 @@
 //! OpenApi接口表
-//! User Entity: [`entity::prelude::PermOpenApi`]
+//! User Entity: [`entity::prelude::PermOpenapi`]
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},
@@ -18,11 +18,11 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(PermOpenApi::Table)
+                    .table(PermOpenapi::Table)
                     .comment("OpenApi接口表")
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(PermOpenApi::Id)
+                        ColumnDef::new(PermOpenapi::Id)
                             .integer()
                             .primary_key()
                             .auto_increment()
@@ -30,48 +30,48 @@ impl MigrationTrait for Migration {
                             .comment("接口ID"),
                     )
                     .col(
-                        ColumnDef::new(PermOpenApi::Pid)
+                        ColumnDef::new(PermOpenapi::Pid)
                             .integer()
                             .null()
                             .default(0)
                             .comment("父ID"),
                     )
                     .col(
-                        ColumnDef::new(PermOpenApi::Category)
+                        ColumnDef::new(PermOpenapi::Category)
                             .integer()
                             .not_null()
                             .comment("类别,0:目录,1:接口"),
                     )
                     .col(
-                        ColumnDef::new(PermOpenApi::Name)
+                        ColumnDef::new(PermOpenapi::Name)
                             .string()
                             .string_len(50)
                             .not_null()
                             .comment("接口名称"),
                     )
                     .col(
-                        ColumnDef::new(PermOpenApi::Method)
+                        ColumnDef::new(PermOpenapi::Method)
                             .string()
                             .string_len(50)
                             .not_null()
                             .comment("请求类型"),
                     )
                     .col(
-                        ColumnDef::new(PermOpenApi::Path)
+                        ColumnDef::new(PermOpenapi::Path)
                             .string()
                             .string_len(200)
                             .not_null()
                             .comment("资源路径"),
                     )
                     .col(
-                        ColumnDef::new(PermOpenApi::Sort)
+                        ColumnDef::new(PermOpenapi::Sort)
                             .integer()
                             .null()
                             .default(0)
                             .comment("排序"),
                     )
                     .col(
-                        ColumnDef::new(PermOpenApi::Note)
+                        ColumnDef::new(PermOpenapi::Note)
                             .string()
                             .string_len(200)
                             .null()
@@ -79,21 +79,21 @@ impl MigrationTrait for Migration {
                             .comment("备注"),
                     )
                     .col(
-                        ColumnDef::new(PermOpenApi::Status)
+                        ColumnDef::new(PermOpenapi::Status)
                             .tiny_integer()
                             .not_null()
                             .default(1)
                             .comment("状态,0:停用,1:正常"),
                     )
                     .col(
-                        ColumnDef::new(PermOpenApi::CreatedAt)
+                        ColumnDef::new(PermOpenapi::CreatedAt)
                             .date_time()
                             .not_null()
                             .default(Expr::current_timestamp())
                             .comment("创建时间"),
                     )
                     .col(
-                        ColumnDef::new(PermOpenApi::UpdatedAt)
+                        ColumnDef::new(PermOpenapi::UpdatedAt)
                             .date_time()
                             .not_null()
                             .extra({
@@ -113,14 +113,14 @@ impl MigrationTrait for Migration {
         // Replace the sample below with your own migration scripts
 
         manager
-            .drop_table(Table::drop().table(PermOpenApi::Table).to_owned())
+            .drop_table(Table::drop().table(PermOpenapi::Table).to_owned())
             .await
     }
 }
 
 #[derive(DeriveIden)]
-pub enum PermOpenApi {
-    #[sea_orm(iden = "t_perm_open_api")]
+pub enum PermOpenapi {
+    #[sea_orm(iden = "t_perm_openapi")]
     Table,
     Id,
     Pid,

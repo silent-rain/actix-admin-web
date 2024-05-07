@@ -1,6 +1,6 @@
 //! OpenApi接口管理
 
-use entity::perm_open_api;
+use entity::perm_openapi;
 
 use actix_validator::Validate;
 
@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 /// 查询OpenApi接口列表
 #[derive(Clone, Deserialize, Validate)]
-pub struct GetOpenApiListReq {
+pub struct GetOpenapiListReq {
     /// 当前分页
     pub page: u64,
     /// 页面大小
@@ -25,11 +25,11 @@ pub struct GetOpenApiListReq {
 
 /// 添加OpenApi接口
 #[derive(Clone, Serialize, Deserialize, Validate)]
-pub struct AddOpenApiReq {
+pub struct AddOpenapiReq {
     /// 父ID
     pub pid: Option<i32>,
     /// 类别,0:目录,1:接口
-    pub category: perm_open_api::enums::Category,
+    pub category: perm_openapi::enums::Category,
     /// 接口名称
     pub name: String,
     /// 请求类型
@@ -41,16 +41,16 @@ pub struct AddOpenApiReq {
     /// 备注
     pub note: Option<String>,
     /// 状态, 0:停用,1:正常
-    pub status: perm_open_api::enums::Status,
+    pub status: perm_openapi::enums::Status,
 }
 
 /// 更新数据
 #[derive(Clone, Serialize, Deserialize, Validate)]
-pub struct UpdateOpenApiReq {
+pub struct UpdateOpenapiReq {
     /// 父ID
     pub pid: Option<i32>,
     /// 类别,0:目录,1:接口
-    pub category: perm_open_api::enums::Category,
+    pub category: perm_openapi::enums::Category,
     /// 接口名称
     pub name: String,
     /// 请求类型
@@ -62,12 +62,12 @@ pub struct UpdateOpenApiReq {
     /// 备注
     pub note: Option<String>,
     /// 状态,0:停用,1:正常
-    pub status: perm_open_api::enums::Status,
+    pub status: perm_openapi::enums::Status,
 }
 
 /// 更新数据状态
 #[derive(Clone, Serialize, Deserialize, Validate)]
-pub struct UpdateOpenApiStatusReq {
+pub struct UpdateOpenapiStatusReq {
     /// 状态,0:停用,1:正常
-    pub status: perm_open_api::enums::Status,
+    pub status: perm_openapi::enums::Status,
 }

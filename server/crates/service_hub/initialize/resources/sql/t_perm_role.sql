@@ -1,5 +1,12 @@
 INSERT INTO
-	t_perm_role (name, sort, note, status, created_at, updated_at)
+	t_perm_role (
+		`name`,
+		sort,
+		note,
+		`status`,
+		created_at,
+		updated_at
+	)
 VALUES
 	(
 		'管理员',

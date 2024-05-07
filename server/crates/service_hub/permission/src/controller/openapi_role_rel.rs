@@ -1,10 +1,10 @@
 //! OpenApi接口角色关系管理
 
 use crate::{
-    dto::open_api_role_rel::{
-        BatchAddOpenApiRoleRelReq, BatchDeleteOpenApiRoleRelReq, GetOpenApiRoleRelListReq,
+    dto::openapi_role_rel::{
+        BatchAddOpenapiRoleRelReq, BatchDeleteOpenapiRoleRelReq, GetOpenapiRoleRelListReq,
     },
-    service::open_api_role_rel::OpenApiRoleRelService,
+    service::openapi_role_rel::OpenapiRoleRelService,
 };
 
 use actix_validator::{Json, Query};
@@ -14,16 +14,16 @@ use response::Response;
 use actix_web::{web::Data, Responder};
 
 /// 控制器
-pub struct OpenApiRoleRelController;
+pub struct OpenapiRoleRelController;
 
-impl OpenApiRoleRelController {
+impl OpenapiRoleRelController {
     /// 获取OpenApi接口角色关系列表
     pub async fn list(
         provider: Data<AInjectProvider>,
-        req: Query<GetOpenApiRoleRelListReq>,
+        req: Query<GetOpenapiRoleRelListReq>,
     ) -> impl Responder {
-        let open_api_role_rel_service: OpenApiRoleRelService = provider.provide();
-        let resp = open_api_role_rel_service.list(req.into_inner()).await;
+        let openapi_role_rel_service: OpenapiRoleRelService = provider.provide();
+        let resp = openapi_role_rel_service.list(req.into_inner()).await;
         match resp {
             Ok((results, total)) => Response::ok().data_list(results, total),
             Err(err) => Response::err(err),
@@ -33,11 +33,11 @@ impl OpenApiRoleRelController {
     /// 批量创建OpenApi接口角色关系
     pub async fn batch_add(
         provider: Data<AInjectProvider>,
-        data: Json<BatchAddOpenApiRoleRelReq>,
+        data: Json<BatchAddOpenapiRoleRelReq>,
     ) -> impl Responder {
         let data = data.into_inner();
-        let open_api_role_rel_service: OpenApiRoleRelService = provider.provide();
-        let resp = open_api_role_rel_service.batch_add(data).await;
+        let openapi_role_rel_service: OpenapiRoleRelService = provider.provide();
+        let resp = openapi_role_rel_service.batch_add(data).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -47,11 +47,11 @@ impl OpenApiRoleRelController {
     /// 批量删除OpenApi接口角色关系
     pub async fn batch_delete(
         provider: Data<AInjectProvider>,
-        data: Json<BatchDeleteOpenApiRoleRelReq>,
+        data: Json<BatchDeleteOpenapiRoleRelReq>,
     ) -> impl Responder {
         let data = data.into_inner();
-        let open_api_role_rel_service: OpenApiRoleRelService = provider.provide();
-        let resp = open_api_role_rel_service.batch_delete(data.ids).await;
+        let openapi_role_rel_service: OpenapiRoleRelService = provider.provide();
+        let resp = openapi_role_rel_service.batch_delete(data.ids).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

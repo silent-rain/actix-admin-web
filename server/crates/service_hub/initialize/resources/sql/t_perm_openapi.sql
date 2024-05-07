@@ -1,13 +1,13 @@
 INSERT INTO
-	t_perm_open_api (
+	t_perm_openapi (
 		pid,
 		category,
-		name,
+		`name`,
 		`method`,
 		`path`,
 		sort,
 		note,
-		status,
+		`status`,
 		created_at,
 		updated_at
 	)

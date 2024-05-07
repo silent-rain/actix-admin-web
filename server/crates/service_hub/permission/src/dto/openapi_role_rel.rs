@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 
 /// 查询OpenApi接口角色关系列表
 #[derive(Default, Deserialize, Validate)]
-pub struct GetOpenApiRoleRelListReq {
+pub struct GetOpenapiRoleRelListReq {
     /// 当前分页
     pub page: u64,
     /// 页面大小
@@ -20,7 +20,7 @@ pub struct GetOpenApiRoleRelListReq {
 
 /// 批量添加OpenApi接口角色关系
 #[derive(Serialize, Deserialize, Validate)]
-pub struct BatchAddOpenApiRoleRelReq {
+pub struct BatchAddOpenapiRoleRelReq {
     /// 接口ID
     pub api_id: i32,
     /// 角色ID列表
@@ -29,7 +29,7 @@ pub struct BatchAddOpenApiRoleRelReq {
 
 /// 批量删除OpenApi接口角色关系
 #[derive(Default, Deserialize, Validate)]
-pub struct BatchDeleteOpenApiRoleRelReq {
+pub struct BatchDeleteOpenapiRoleRelReq {
     /// ID列表
     pub ids: Vec<i32>,
 }

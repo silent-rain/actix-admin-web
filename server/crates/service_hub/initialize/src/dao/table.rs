@@ -5,9 +5,9 @@ use crate::dto::table::TableSql;
 
 use database::DbRepo;
 use entity::{
-    perm_menu_role_rel, perm_open_api_role_rel, perm_role, perm_user, perm_user_email,
+    perm_menu_role_rel, perm_openapi_role_rel, perm_role, perm_user, perm_user_email,
     perm_user_phone, perm_user_role_rel,
-    prelude::{PermMenu, PermMenuRoleRel, PermOpenApi, PermOpenApiRoleRel, PermRole, PermUser},
+    prelude::{PermMenu, PermMenuRoleRel, PermOpenapi, PermOpenapiRoleRel, PermRole, PermUser},
 };
 
 use nject::injectable;
@@ -48,7 +48,7 @@ impl<'a> TableDao<'a> {
         // 初始化菜单表
         let _ = self.txn_init_menu(&txn, table_sql.menu_sql).await?;
         // 初始化OpenApi表
-        let _ = self.txn_init_open_api(&txn, table_sql.open_api_sql).await?;
+        let _ = self.txn_init_open_api(&txn, table_sql.openapi_sql).await?;
 
         // 添加管理员
         let admin_user = self.txn_add_admin_user(&txn, req.clone()).await?;
@@ -71,8 +71,8 @@ impl<'a> TableDao<'a> {
                 .await?;
             // 添加菜单与角色关系
             let _ = self.txn_init_menu_role_rel(&txn, admin_role.id).await?;
-            // 添加OpenApi与角色关系
-            let _ = self.txn_init_open_api_role_rel(&txn, admin_role.id).await?;
+            // 添加OpenApi接口角色关系
+            let _ = self.txn_init_openapi_role_rel(&txn, admin_role.id).await?;
         }
 
         // 初始化关系关系
@@ -211,23 +211,23 @@ impl<'a> TableDao<'a> {
     async fn txn_init_open_api(
         &self,
         txn: &DatabaseTransaction,
-        open_api_sql: String,
+        openapi_sql: String,
     ) -> Result<u64, DbErr> {
-        let result: ExecResult = txn.execute_unprepared(&open_api_sql).await?;
+        let result: ExecResult = txn.execute_unprepared(&openapi_sql).await?;
         Ok(result.rows_affected())
     }
 
-    /// 添加OpenApi与角色关系
-    async fn txn_init_open_api_role_rel(
+    /// 添加OpenApi接口角色关系
+    async fn txn_init_openapi_role_rel(
         &self,
         txn: &DatabaseTransaction,
         role_id: i32,
     ) -> Result<i32, DbErr> {
-        let open_apis = PermOpenApi::find().all(txn).await?;
+        let open_apis = PermOpenapi::find().all(txn).await?;
 
         let mut models = Vec::new();
         for open_api in open_apis {
-            let model = perm_open_api_role_rel::ActiveModel {
+            let model = perm_openapi_role_rel::ActiveModel {
                 api_id: Set(open_api.id),
                 role_id: Set(role_id),
                 ..Default::default()
@@ -235,7 +235,7 @@ impl<'a> TableDao<'a> {
             models.push(model);
         }
 
-        let result = PermOpenApiRoleRel::insert_many(models).exec(txn).await?;
+        let result = PermOpenapiRoleRel::insert_many(models).exec(txn).await?;
         Ok(result.last_insert_id)
     }
 }

@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 
 /// OpenApi接口表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "t_perm_open_api")]
+#[sea_orm(table_name = "t_perm_openapi")]
 pub struct Model {
     /// 自增ID
     #[sea_orm(primary_key)]

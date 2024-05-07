@@ -7,8 +7,8 @@ mod m20240218_145453_create_perm_department;
 mod m20240218_145453_create_perm_department_role_rel;
 mod m20240218_145453_create_perm_menu;
 mod m20240218_145453_create_perm_menu_role_rel;
-mod m20240218_145453_create_perm_open_api;
-mod m20240218_145453_create_perm_open_api_role_rel;
+mod m20240218_145453_create_perm_openapi;
+mod m20240218_145453_create_perm_openapi_role_rel;
 mod m20240218_145453_create_perm_role;
 mod m20240218_145453_create_perm_token;
 mod m20240218_145453_create_perm_token_role_rel;
@@ -43,8 +43,8 @@ impl MigratorTrait for Migrator {
             Box::new(m20240218_145453_create_perm_department_role_rel::Migration),
             Box::new(m20240218_145453_create_perm_menu::Migration),
             Box::new(m20240218_145453_create_perm_menu_role_rel::Migration),
-            Box::new(m20240218_145453_create_perm_open_api::Migration),
-            Box::new(m20240218_145453_create_perm_open_api_role_rel::Migration),
+            Box::new(m20240218_145453_create_perm_openapi::Migration),
+            Box::new(m20240218_145453_create_perm_openapi_role_rel::Migration),
             Box::new(m20240218_145453_create_perm_token::Migration),
             Box::new(m20240218_145453_create_perm_token_role_rel::Migration),
             Box::new(m20240218_161916_create_sys_captcha::Migration),
