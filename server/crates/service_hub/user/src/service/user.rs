@@ -1,11 +1,12 @@
 //! 用户管理
 use crate::{
-    dao::{user::UserDao, user_role_rel::UserRoleRelDao},
+    dao::user::UserDao,
     dto::user::{AddUserReq, GetUserListReq, ProfileRsp, UpdateUserReq},
 };
 
 use code::{Error, ErrorMsg};
 use entity::{perm_role, perm_user, perm_user_role_rel};
+use permission::UserRoleRelDao;
 
 use nject::injectable;
 use sea_orm::Set;

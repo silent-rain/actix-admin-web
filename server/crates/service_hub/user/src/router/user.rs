@@ -5,10 +5,10 @@ use crate::UserController;
 use actix_web::{web, Scope};
 
 /// 路由器
-pub struct UserRouter;
+pub struct ProfileRouter;
 
-impl UserRouter {
-    /// 注册`用户管理`路由
+impl ProfileRouter {
+    /// 注册`用户资料信息管理`路由
     pub fn admin_register() -> Scope {
         web::scope("/users")
             .route("/profile", web::get().to(UserController::profile))

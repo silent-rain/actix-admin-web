@@ -6,8 +6,8 @@ use crate::{
 };
 
 use log::UserLoginDao;
-use permission::{UserDao, UserEmailDao, UserPhoneDao};
 use system::CaptchaDao;
+use user::{UserDao, UserEmailDao, UserPhoneDao};
 
 use code::{Error, ErrorMsg};
 use entity::{log_user_login, perm_user};

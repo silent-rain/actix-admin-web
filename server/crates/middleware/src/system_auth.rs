@@ -2,7 +2,7 @@
 use std::future::{ready, Ready};
 
 use entity::{log_user_login, perm_user};
-use service_hub::{inject::AInjectProvider, log::UserLoginService, permission::UserService};
+use service_hub::{inject::AInjectProvider, log::UserLoginService, user::UserService};
 
 use crate::constant::{
     AUTH_WHITE_LIST, HEADERS_AUTHORIZATION, HEADERS_AUTHORIZATION_BEARER,

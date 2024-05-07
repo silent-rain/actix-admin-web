@@ -1,5 +1,5 @@
 [package]
-name = "auth"
+name = "user"
 version = "0.1.0"
 edition = "2021"
 
@@ -8,15 +8,13 @@ database = { path = "../../core/database" }
 entity = { path = "../../core/entity" }
 code = { path = "../../core/code" }
 response = { path = "../../core/response" }
+context = { path = "../../core/context" }
 actix_validator = { path = "../../core/actix_validator" }
 utils = { path = "../../core/utils" }
-jwt = { path = "../../core/jwt" }
 
 inject = { path = "../../inject" }
 
-user = { path = "../user" }
-system = { path = "../system" }
-log = { path = "../log" }
+permission = { path = "../permission" }
 
 actix-web = { workspace = true }
 validator = { workspace = true, features = ["derive"] }
@@ -24,9 +22,6 @@ sea-orm = { workspace = true }
 nject = { workspace = true }
 
 tracing = { workspace = true }
-chrono = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
-
-
-[dev-dependencies]
-serde_json = { workspace = true }
+serde_repr = { workspace = true }
+regex = { workspace = true }

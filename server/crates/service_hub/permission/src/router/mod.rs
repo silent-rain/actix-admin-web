@@ -8,9 +8,6 @@ pub mod openapi_role_rel;
 pub mod role;
 pub mod token;
 pub mod token_role_rel;
-pub mod user;
-pub mod user_email;
-pub mod user_phone;
 pub mod user_role_rel;
 
 use actix_web::{web, Scope};
@@ -24,12 +21,6 @@ impl PermissionRouter {
         web::scope("/permission")
             // 角色管理
             .service(role::RoleRouter::admin_register())
-            // 用户管理
-            .service(user::UserRouter::admin_register())
-            // 用户手机号管理
-            .service(user_phone::UserPhoneRouter::admin_register())
-            // 用户邮箱管理
-            .service(user_email::UserEmailRouter::admin_register())
             // 用户角色关系管理
             .service(user_role_rel::UserRoleRelRouter::admin_register())
             // 部门管理

@@ -20,7 +20,6 @@ sea-orm = { workspace = true }
 nject = { workspace = true }
 
 tracing = { workspace = true }
-regex = { workspace = true }
 uuid = { workspace = true, features = ["v4"] }
 serde = { workspace = true, features = ["derive"] }
 serde_repr = { workspace = true }

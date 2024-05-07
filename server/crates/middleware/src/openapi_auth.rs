@@ -13,10 +13,7 @@ use crate::constant::{
 use context::Context;
 use entity::{perm_token, perm_user};
 use response::Response;
-use service_hub::{
-    inject::AInjectProvider,
-    permission::{UserService, TokenService},
-};
+use service_hub::{inject::AInjectProvider, permission::TokenService, user::UserService};
 
 use actix_web::{
     dev::{forward_ready, Service, ServiceRequest, ServiceResponse, Transform},

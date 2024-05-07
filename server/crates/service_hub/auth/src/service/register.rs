@@ -3,8 +3,8 @@ use crate::{
     common::captcha::check_captcha, dao::register::RegisterDao, dto::register::RegisterReq,
 };
 
-use permission::{UserEmailDao, UserPhoneDao};
 use system::CaptchaDao;
+use user::{UserEmailDao, UserPhoneDao};
 
 use code::{Error, ErrorMsg};
 use entity::perm_user;
