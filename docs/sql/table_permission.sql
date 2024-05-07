@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS
         PRIMARY KEY (`id`)
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '角色表';
 
--- 用户角色关联表
+-- 用户角色关系表
 CREATE TABLE IF NOT EXISTS
     `t_perm_user_role_rel` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS
         UNIQUE KEY `uk_user_id_role_id` (`user_id`, `role_id`),
         CONSTRAINT `fk_perm_user_role_rel_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_perm_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
         CONSTRAINT `fk_perm_user_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户角色关联表';
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户角色关系表';
 
 -- 菜单表
 CREATE TABLE IF NOT EXISTS
@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS
         PRIMARY KEY (`id`)
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '部门表';
 
--- 部门角色关联表-数据权限
+-- 部门角色关系表
 CREATE TABLE IF NOT EXISTS
     `t_perm_dept_role_rel` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS
         UNIQUE KEY `uk_dept_id_role_id` (`dept_id`, `role_id`),
         CONSTRAINT `fk_perm_dept_role_rel_dept_id` FOREIGN KEY (`dept_id`) REFERENCES `t_perm_dept` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
         CONSTRAINT `fk_perm_dept_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '部门角色关联表-数据权限';
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '部门角色关系表';
 
 -- 用户Token令牌表
 CREATE TABLE IF NOT EXISTS
@@ -111,9 +111,9 @@ CREATE TABLE IF NOT EXISTS
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`)
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户Token令牌表, 一般openapi服务';
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '令牌表';
 
--- 用户Token令牌与角色关联表
+-- 令牌角色关系表
 CREATE TABLE IF NOT EXISTS
     t_perm_user_token_role_rel (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS
         UNIQUE KEY `uk_token_id_role_id` (`token_id`, `role_id`),
         CONSTRAINT `fk_perm_user_token_role_rel_token_id` FOREIGN KEY (`token_id`) REFERENCES `t_perm_user_token` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
         CONSTRAINT `fk_perm_user_token_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户Token令牌与角色关联表';
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '令牌角色关系表';
 
 -- OpenApi接口表
 CREATE TABLE IF NOT EXISTS
@@ -143,7 +143,7 @@ CREATE TABLE IF NOT EXISTS
         PRIMARY KEY (`id`)
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT 'OpenApi接口表';
 
--- OpenApi接口与角色关联表
+-- OpenApi接口角色关系表
 CREATE TABLE IF NOT EXISTS
     t_perm_open_api_role_rel (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
@@ -154,4 +154,4 @@ CREATE TABLE IF NOT EXISTS
         UNIQUE KEY `uk_api_id_role_id` (`api_id`, `role_id`),
         CONSTRAINT `fk_open_api_role_rel_api_id` FOREIGN KEY (`api_id`) REFERENCES `t_perm_open_api` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
         CONSTRAINT `fk_open_api_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT 'OpenApi接口与角色关联表';
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT 'OpenApi接口角色关系表';
