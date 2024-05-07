@@ -3,6 +3,7 @@
 pub mod user;
 pub mod user_email;
 pub mod user_phone;
+pub mod user_role_rel;
 
 use actix_web::{web, Scope};
 
@@ -19,5 +20,7 @@ impl UserRouter {
             .service(user_phone::UserPhoneRouter::admin_register())
             // 用户邮箱管理
             .service(user_email::UserEmailRouter::admin_register())
+            // 用户角色关系管理
+            .service(user_role_rel::UserRoleRelRouter::admin_register())
     }
 }
