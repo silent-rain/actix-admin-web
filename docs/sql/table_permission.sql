@@ -88,8 +88,8 @@ CREATE TABLE IF NOT EXISTS
 CREATE TABLE IF NOT EXISTS
     `t_perm_department_role_rel` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
-        `role_id` INT(10) NOT NULL COMMENT '角色ID',
         `department_id` INT(10) NOT NULL COMMENT '部门ID',
+        `role_id` INT(10) NOT NULL COMMENT '角色ID',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         PRIMARY KEY (`id`),
         UNIQUE KEY `uk_department_id_role_id` (`department_id`, `role_id`),
@@ -97,9 +97,9 @@ CREATE TABLE IF NOT EXISTS
         CONSTRAINT `fk_perm_department_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '部门角色关系表';
 
--- 用户Token令牌表
+-- 令牌表
 CREATE TABLE IF NOT EXISTS
-    `t_perm_user_token` (
+    `t_perm_token` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '令牌ID',
         `user_id` INT(20) NOT NULL COMMENT '用户ID',
         `token` VARCHAR(50) UNIQUE NOT NULL COMMENT '令牌',
@@ -115,15 +115,15 @@ CREATE TABLE IF NOT EXISTS
 
 -- 令牌角色关系表
 CREATE TABLE IF NOT EXISTS
-    t_perm_user_token_role_rel (
+    t_perm_token_role_rel (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
         `token_id` INT(11) NOT NULL COMMENT '令牌ID',
         `role_id` INT(11) NOT NULL COMMENT '角色ID',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         PRIMARY KEY (`id`),
         UNIQUE KEY `uk_token_id_role_id` (`token_id`, `role_id`),
-        CONSTRAINT `fk_perm_user_token_role_rel_token_id` FOREIGN KEY (`token_id`) REFERENCES `t_perm_user_token` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-        CONSTRAINT `fk_perm_user_token_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+        CONSTRAINT `fk_perm_token_role_rel_token_id` FOREIGN KEY (`token_id`) REFERENCES `t_perm_token` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+        CONSTRAINT `fk_perm_token_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '令牌角色关系表';
 
 -- OpenApi接口表

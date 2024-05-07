@@ -1,4 +1,4 @@
-//! 用户Token令牌与角色关系表
+//! 令牌角色关系表
 
 use sea_orm::{
     prelude::DateTimeLocal, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey,
@@ -6,9 +6,9 @@ use sea_orm::{
 };
 use serde::{Deserialize, Serialize};
 
-/// 用户Token令牌与角色关系表
+/// 令牌角色关系表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "t_perm_user_token_role_rel")]
+#[sea_orm(table_name = "t_perm_token_role_rel")]
 pub struct Model {
     /// 自增ID
     #[sea_orm(primary_key)]
@@ -24,13 +24,13 @@ pub struct Model {
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
     #[sea_orm(
-        belongs_to = "super::perm_user_token::Entity",
+        belongs_to = "super::perm_token::Entity",
         from = "Column::RoleId",
-        to = "super::perm_user_token::Column::Id",
+        to = "super::perm_token::Column::Id",
         on_update = "Cascade",
         on_delete = "Cascade"
     )]
-    PermUserToken,
+    PermToken,
     #[sea_orm(
         belongs_to = "super::perm_role::Entity",
         from = "Column::RoleId",
@@ -41,9 +41,9 @@ pub enum Relation {
     PermRole,
 }
 
-impl Related<super::perm_user_token::Entity> for Entity {
+impl Related<super::perm_token::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::PermUserToken.def()
+        Relation::PermToken.def()
     }
 }
 

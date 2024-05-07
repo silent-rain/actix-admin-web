@@ -1,4 +1,4 @@
-//! 用户Token令牌表, 一般openapi服务
+//! 令牌表
 
 use sea_orm::{
     prelude::DateTimeLocal, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey,
@@ -6,9 +6,9 @@ use sea_orm::{
 };
 use serde::{Deserialize, Serialize};
 
-/// 用户Token令牌表
+/// 令牌表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "t_perm_user_token")]
+#[sea_orm(table_name = "t_perm_token")]
 pub struct Model {
     /// 令牌ID
     #[sea_orm(primary_key)]
@@ -35,13 +35,13 @@ pub struct Model {
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
-    #[sea_orm(has_many = "super::perm_user_token_role_rel::Entity")]
-    PermUserTokenRoleRel,
+    #[sea_orm(has_many = "super::perm_token_role_rel::Entity")]
+    PermTokenRoleRel,
 }
 
-impl Related<super::perm_user_token_role_rel::Entity> for Entity {
+impl Related<super::perm_token_role_rel::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::PermUserTokenRoleRel.def()
+        Relation::PermTokenRoleRel.def()
     }
 }
 
@@ -52,7 +52,7 @@ pub mod enums {
     use serde::{Deserialize, Serialize};
     use serde_repr::{Deserialize_repr, Serialize_repr};
 
-    /// 用户令牌状态
+    /// 令牌状态
     #[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
     #[repr(i8)]
     pub enum Status {
@@ -62,7 +62,7 @@ pub mod enums {
         Enabled = 1,
     }
 
-    /// 用户令牌权限范围
+    /// 令牌权限范围
     #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
     pub enum Permission {
         /// 读取数据

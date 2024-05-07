@@ -1,8 +1,7 @@
-//! 用户Token令牌与角色关系表
-//! User Entity: [`entity::prelude::PermUserTokenRoleRel`]
+//! 令牌角色关系表
+//! User Entity: [`entity::prelude::PermTokenRoleRel`]
 use crate::{
-    m20240218_145453_create_perm_role::PermRole,
-    m20240218_145453_create_perm_user_token::PermUserToken,
+    m20240218_145453_create_perm_role::PermRole, m20240218_145453_create_perm_token::PermToken,
 };
 
 use sea_orm::{
@@ -21,11 +20,11 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(PermUserTokenRoleRel::Table)
-                    .comment("用户Token令牌与角色关系表")
+                    .table(PermTokenRoleRel::Table)
+                    .comment("令牌角色关系表")
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(PermUserTokenRoleRel::Id)
+                        ColumnDef::new(PermTokenRoleRel::Id)
                             .integer()
                             .primary_key()
                             .auto_increment()
@@ -33,19 +32,19 @@ impl MigrationTrait for Migration {
                             .comment("自增ID"),
                     )
                     .col(
-                        ColumnDef::new(PermUserTokenRoleRel::TokenId)
+                        ColumnDef::new(PermTokenRoleRel::TokenId)
                             .integer()
                             .not_null()
                             .comment("令牌ID"),
                     )
                     .col(
-                        ColumnDef::new(PermUserTokenRoleRel::RoleId)
+                        ColumnDef::new(PermTokenRoleRel::RoleId)
                             .integer()
                             .not_null()
                             .comment("角色ID"),
                     )
                     .col(
-                        ColumnDef::new(PermUserTokenRoleRel::CreatedAt)
+                        ColumnDef::new(PermTokenRoleRel::CreatedAt)
                             .date_time()
                             .not_null()
                             .default(Expr::current_timestamp())
@@ -56,21 +55,18 @@ impl MigrationTrait for Migration {
             .await?;
 
         if !manager
-            .has_index(
-                PermUserTokenRoleRel::Table.to_string(),
-                "uk_token_id_role_id",
-            )
+            .has_index(PermTokenRoleRel::Table.to_string(), "uk_token_id_role_id")
             .await?
         {
             manager
                 .create_index(
                     Index::create()
                         .if_not_exists()
-                        .table(PermUserTokenRoleRel::Table)
+                        .table(PermTokenRoleRel::Table)
                         .name("uk_token_id_role_id")
                         .unique()
-                        .col(PermUserTokenRoleRel::TokenId)
-                        .col(PermUserTokenRoleRel::RoleId)
+                        .col(PermTokenRoleRel::TokenId)
+                        .col(PermTokenRoleRel::RoleId)
                         .to_owned(),
                 )
                 .await?;
@@ -78,17 +74,17 @@ impl MigrationTrait for Migration {
 
         if !manager
             .has_index(
-                PermUserTokenRoleRel::Table.to_string(),
-                "fk_perm_user_token_role_rel_token_id",
+                PermTokenRoleRel::Table.to_string(),
+                "fk_perm_token_role_rel_token_id",
             )
             .await?
         {
             manager
                 .create_foreign_key(
                     ForeignKey::create()
-                        .name("fk_perm_user_token_role_rel_token_id")
-                        .from(PermUserTokenRoleRel::Table, PermUserTokenRoleRel::TokenId)
-                        .to(PermUserToken::Table, PermUserToken::Id)
+                        .name("fk_perm_token_role_rel_token_id")
+                        .from(PermTokenRoleRel::Table, PermTokenRoleRel::TokenId)
+                        .to(PermToken::Table, PermToken::Id)
                         .on_update(ForeignKeyAction::Cascade)
                         .on_delete(ForeignKeyAction::Cascade)
                         .to_owned(),
@@ -98,16 +94,16 @@ impl MigrationTrait for Migration {
 
         if !manager
             .has_index(
-                PermUserTokenRoleRel::Table.to_string(),
-                "fk_perm_user_token_role_rel_role_id",
+                PermTokenRoleRel::Table.to_string(),
+                "fk_perm_token_role_rel_role_id",
             )
             .await?
         {
             manager
                 .create_foreign_key(
                     ForeignKey::create()
-                        .name("fk_perm_user_token_role_rel_role_id")
-                        .from(PermUserTokenRoleRel::Table, PermUserTokenRoleRel::RoleId)
+                        .name("fk_perm_token_role_rel_role_id")
+                        .from(PermTokenRoleRel::Table, PermTokenRoleRel::RoleId)
                         .to(PermRole::Table, PermRole::Id)
                         .on_update(ForeignKeyAction::Cascade)
                         .on_delete(ForeignKeyAction::Cascade)
@@ -122,14 +118,14 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
         manager
-            .drop_table(Table::drop().table(PermUserTokenRoleRel::Table).to_owned())
+            .drop_table(Table::drop().table(PermTokenRoleRel::Table).to_owned())
             .await
     }
 }
 
 #[derive(DeriveIden)]
-pub enum PermUserTokenRoleRel {
-    #[sea_orm(iden = "t_perm_user_token_role_rel")]
+pub enum PermTokenRoleRel {
+    #[sea_orm(iden = "t_perm_token_role_rel")]
     Table,
     Id,
     TokenId,

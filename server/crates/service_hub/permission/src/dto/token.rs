@@ -1,6 +1,6 @@
-//! 用户Token令牌管理
+//! 令牌管理
 
-use entity::perm_user_token;
+use entity::perm_token;
 
 use actix_validator::Validate;
 use utils::time::{default_local_date_time, str_to_local_date_time};
@@ -8,9 +8,9 @@ use utils::time::{default_local_date_time, str_to_local_date_time};
 use sea_orm::prelude::DateTimeLocal;
 use serde::{Deserialize, Serialize};
 
-/// 查询用户令牌列表
+/// 查询令牌列表
 #[derive(Default, Deserialize, Validate)]
-pub struct GetUserTokenListReq {
+pub struct GetTokenListReq {
     /// 当前分页
     pub page: u64,
     /// 页面大小
@@ -25,13 +25,13 @@ pub struct GetUserTokenListReq {
     pub token: Option<String>,
 }
 
-/// 添加用户令牌
+/// 添加令牌
 #[derive(Serialize, Deserialize, Validate)]
-pub struct AddUserTokenReq {
+pub struct AddTokenReq {
     /// 用户ID
     pub user_id: i32,
     /// 权限范围:GET,POST,PUT,DELETE
-    /// Enum: [`perm_user_token::enums::Permission`]
+    /// Enum: [`perm_token::enums::Permission`]
     pub permission: String,
     /// 授权到期时间
     #[serde(
@@ -41,18 +41,18 @@ pub struct AddUserTokenReq {
     )]
     pub expire: DateTimeLocal,
     /// 状态,0:禁用,1:启用
-    pub status: perm_user_token::enums::Status,
+    pub status: perm_token::enums::Status,
     /// 备注
     pub note: Option<String>,
 }
 
 /// 更新数据
 #[derive(Clone, Serialize, Deserialize, Validate)]
-pub struct UpdateUserTokenReq {
+pub struct UpdateTokenReq {
     /// 用户ID
     pub user_id: i32,
     /// 权限范围:GET,POST,PUT,DELETE
-    /// Enum: [`crate::enums::UserTokenPermission`]
+    /// Enum: [`crate::enums::TokenPermission`]
     pub permission: String,
     /// 授权到期时间
     #[serde(
@@ -62,14 +62,14 @@ pub struct UpdateUserTokenReq {
     )]
     pub expire: DateTimeLocal,
     /// 状态,0:禁用,1:启用
-    pub status: perm_user_token::enums::Status,
+    pub status: perm_token::enums::Status,
     /// 备注
     pub note: Option<String>,
 }
 
-/// 更新用户令牌状态
+/// 更新令牌状态
 #[derive(Clone, Serialize, Deserialize, Validate)]
-pub struct UpdateUserTokenStatusReq {
+pub struct UpdateTokenStatusReq {
     /// 状态,0:停用,1:正常
-    pub status: perm_user_token::enums::Status,
+    pub status: perm_token::enums::Status,
 }
