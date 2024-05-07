@@ -1,6 +1,6 @@
 //! 部门管理
 
-use entity::perm_dept;
+use entity::perm_department;
 
 use actix_validator::Validate;
 
@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 /// 查询部门列表
 #[derive(Default, Deserialize, Validate)]
-pub struct GetDeptListReq {
+pub struct GetDepartmentListReq {
     /// 当前分页
     pub page: u64,
     /// 页面大小
@@ -25,7 +25,7 @@ pub struct GetDeptListReq {
 
 /// 添加部门
 #[derive(Serialize, Deserialize, Validate)]
-pub struct AddDeptReq {
+pub struct AddDepartmentReq {
     /// 上级部门ID
     pub pid: Option<i32>,
     /// 所有上级部门ID, 用逗号分开
@@ -41,7 +41,7 @@ pub struct AddDeptReq {
 
 /// 更新数据
 #[derive(Clone, Serialize, Deserialize, Validate)]
-pub struct UpdateDeptReq {
+pub struct UpdateDepartmentReq {
     /// 上级部门ID
     pub pid: Option<i32>,
     /// 所有上级部门ID, 用逗号分开
@@ -53,12 +53,12 @@ pub struct UpdateDeptReq {
     /// 备注
     pub note: Option<String>,
     /// 状态,0:停用,1:正常
-    pub status: perm_dept::enums::Status,
+    pub status: perm_department::enums::Status,
 }
 
 /// 更新数据状态
 #[derive(Clone, Serialize, Deserialize, Validate)]
-pub struct UpdateDeptStatusReq {
+pub struct UpdateDepartmentStatusReq {
     /// 状态,0:停用,1:正常
-    pub status: perm_dept::enums::Status,
+    pub status: perm_department::enums::Status,
 }

@@ -1,4 +1,4 @@
-//! 部门角色关系表-数据权限
+//! 部门角色关系表
 
 use sea_orm::{
     prelude::DateTimeLocal, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey,
@@ -8,13 +8,13 @@ use serde::{Deserialize, Serialize};
 
 /// 部门角色关系表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "t_perm_dept_role_rel")]
+#[sea_orm(table_name = "t_perm_department_role_rel")]
 pub struct Model {
     /// 自增ID
     #[sea_orm(primary_key)]
     pub id: i32,
     /// 部门ID
-    pub dept_id: i32,
+    pub department_id: i32,
     /// 角色ID
     pub role_id: i32,
     /// 创建时间

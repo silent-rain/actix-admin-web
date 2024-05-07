@@ -1,6 +1,6 @@
 //! 数据层
-pub mod dept;
-pub mod dept_role_rel;
+pub mod department;
+pub mod department_role_rel;
 pub mod menu;
 pub mod menu_role_rel;
 pub mod open_api;

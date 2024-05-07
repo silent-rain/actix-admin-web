@@ -32,16 +32,16 @@ impl MigrationTrait for Migration {
                             .comment("自增ID"),
                     )
                     .col(
-                        ColumnDef::new(PermMenuRoleRel::RoleId)
-                            .integer()
-                            .not_null()
-                            .comment("角色ID"),
-                    )
-                    .col(
                         ColumnDef::new(PermMenuRoleRel::MenuId)
                             .integer()
                             .not_null()
                             .comment("菜单ID"),
+                    )
+                    .col(
+                        ColumnDef::new(PermMenuRoleRel::RoleId)
+                            .integer()
+                            .not_null()
+                            .comment("角色ID"),
                     )
                     .col(
                         ColumnDef::new(PermMenuRoleRel::CreatedAt)

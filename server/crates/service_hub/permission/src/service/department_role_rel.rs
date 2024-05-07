@@ -1,11 +1,11 @@
 //! 部门角色关系管理
 use crate::{
-    dao::dept_role_rel::DeptRoleRelDao,
-    dto::dept_role_rel::{BatchAddDeptRoleRelReq, GetDeptRoleRelListReq},
+    dao::department_role_rel::DepartmentRoleRelDao,
+    dto::department_role_rel::{BatchAddDepartmentRoleRelReq, GetDepartmentRoleRelListReq},
 };
 
 use code::{Error, ErrorMsg};
-use entity::perm_dept_role_rel;
+use entity::perm_department_role_rel;
 
 use nject::injectable;
 use sea_orm::Set;
@@ -13,32 +13,36 @@ use tracing::error;
 
 /// 服务层
 #[injectable]
-pub struct DeptRoleRelService<'a> {
-    dept_role_rel_dao: DeptRoleRelDao<'a>,
+pub struct DepartmentRoleRelService<'a> {
+    department_role_rel_dao: DepartmentRoleRelDao<'a>,
 }
 
-impl<'a> DeptRoleRelService<'a> {
+impl<'a> DepartmentRoleRelService<'a> {
     /// 获取列表数据
     pub async fn list(
         &self,
-        req: GetDeptRoleRelListReq,
-    ) -> Result<(Vec<perm_dept_role_rel::Model>, u64), ErrorMsg> {
-        let (results, total) = self.dept_role_rel_dao.list(req).await.map_err(|err| {
-            error!("查询部门角色关系列表失败, err: {:#?}", err);
-            Error::DbQueryError
-                .into_msg()
-                .with_msg("查询部门角色关系列表失败")
-        })?;
+        req: GetDepartmentRoleRelListReq,
+    ) -> Result<(Vec<perm_department_role_rel::Model>, u64), ErrorMsg> {
+        let (results, total) = self
+            .department_role_rel_dao
+            .list(req)
+            .await
+            .map_err(|err| {
+                error!("查询部门角色关系列表失败, err: {:#?}", err);
+                Error::DbQueryError
+                    .into_msg()
+                    .with_msg("查询部门角色关系列表失败")
+            })?;
 
         Ok((results, total))
     }
 
     /// 批量添加数据
-    pub async fn batch_add(&self, req: BatchAddDeptRoleRelReq) -> Result<i32, ErrorMsg> {
+    pub async fn batch_add(&self, req: BatchAddDepartmentRoleRelReq) -> Result<i32, ErrorMsg> {
         let mut models = Vec::new();
         for role_id in req.role_ids {
-            let model = perm_dept_role_rel::ActiveModel {
-                dept_id: Set(req.dept_id),
+            let model = perm_department_role_rel::ActiveModel {
+                department_id: Set(req.department_id),
                 role_id: Set(role_id),
                 ..Default::default()
             };
@@ -46,7 +50,7 @@ impl<'a> DeptRoleRelService<'a> {
         }
 
         let result = self
-            .dept_role_rel_dao
+            .department_role_rel_dao
             .batch_add(models)
             .await
             .map_err(|err| {
@@ -62,7 +66,7 @@ impl<'a> DeptRoleRelService<'a> {
     /// 批量删除数据
     pub async fn batch_delete(&self, ids: Vec<i32>) -> Result<u64, ErrorMsg> {
         let result = self
-            .dept_role_rel_dao
+            .department_role_rel_dao
             .batch_delete(ids)
             .await
             .map_err(|err| {

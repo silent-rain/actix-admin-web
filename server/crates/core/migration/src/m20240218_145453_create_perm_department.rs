@@ -1,5 +1,5 @@
 //! 部门表
-//! User Entity: [`entity::prelude::PermDept`]
+//! User Entity: [`entity::prelude::PermDepartment`]
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},
@@ -18,11 +18,11 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(PermDept::Table)
+                    .table(PermDepartment::Table)
                     .comment("部门表")
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(PermDept::Id)
+                        ColumnDef::new(PermDepartment::Id)
                             .integer()
                             .primary_key()
                             .auto_increment()
@@ -30,14 +30,14 @@ impl MigrationTrait for Migration {
                             .comment("部门ID"),
                     )
                     .col(
-                        ColumnDef::new(PermDept::Pid)
+                        ColumnDef::new(PermDepartment::Pid)
                             .integer()
                             .null()
                             .default(0)
                             .comment("上级部门ID"),
                     )
                     .col(
-                        ColumnDef::new(PermDept::Pids)
+                        ColumnDef::new(PermDepartment::Pids)
                             .string()
                             .string_len(200)
                             .null()
@@ -45,21 +45,21 @@ impl MigrationTrait for Migration {
                             .comment("所有上级部门ID, 用逗号分开"),
                     )
                     .col(
-                        ColumnDef::new(PermDept::Name)
+                        ColumnDef::new(PermDepartment::Name)
                             .string()
                             .string_len(20)
                             .not_null()
                             .comment("部门名称"),
                     )
                     .col(
-                        ColumnDef::new(PermDept::Sort)
+                        ColumnDef::new(PermDepartment::Sort)
                             .integer()
                             .null()
                             .default(0)
                             .comment("排序"),
                     )
                     .col(
-                        ColumnDef::new(PermDept::Note)
+                        ColumnDef::new(PermDepartment::Note)
                             .string()
                             .string_len(200)
                             .null()
@@ -67,21 +67,21 @@ impl MigrationTrait for Migration {
                             .comment("备注"),
                     )
                     .col(
-                        ColumnDef::new(PermDept::Status)
+                        ColumnDef::new(PermDepartment::Status)
                             .tiny_integer()
                             .not_null()
                             .default(1)
                             .comment("状态,0:停用,1:正常"),
                     )
                     .col(
-                        ColumnDef::new(PermDept::CreatedAt)
+                        ColumnDef::new(PermDepartment::CreatedAt)
                             .date_time()
                             .not_null()
                             .default(Expr::current_timestamp())
                             .comment("创建时间"),
                     )
                     .col(
-                        ColumnDef::new(PermDept::UpdatedAt)
+                        ColumnDef::new(PermDepartment::UpdatedAt)
                             .date_time()
                             .not_null()
                             .extra({
@@ -101,14 +101,14 @@ impl MigrationTrait for Migration {
         // Replace the sample below with your own migration scripts
 
         manager
-            .drop_table(Table::drop().table(PermDept::Table).to_owned())
+            .drop_table(Table::drop().table(PermDepartment::Table).to_owned())
             .await
     }
 }
 
 #[derive(DeriveIden)]
-pub enum PermDept {
-    #[sea_orm(iden = "t_perm_dept")]
+pub enum PermDepartment {
+    #[sea_orm(iden = "t_perm_department")]
     Table,
     Id,
     Pid,

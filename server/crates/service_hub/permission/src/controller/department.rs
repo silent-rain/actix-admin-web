@@ -1,8 +1,10 @@
 //! 部门管理
 
 use crate::{
-    dto::dept::{AddDeptReq, GetDeptListReq, UpdateDeptReq, UpdateDeptStatusReq},
-    service::dept::DeptService,
+    dto::department::{
+        AddDepartmentReq, GetDepartmentListReq, UpdateDepartmentReq, UpdateDepartmentStatusReq,
+    },
+    service::department::DepartmentService,
 };
 
 use actix_validator::{Json, Query};
@@ -15,16 +17,16 @@ use actix_web::{
 };
 
 /// 控制器
-pub struct DeptController;
+pub struct DepartmentController;
 
-impl DeptController {
+impl DepartmentController {
     /// 获取部门列表
     pub async fn list(
         provider: Data<AInjectProvider>,
-        req: Query<GetDeptListReq>,
+        req: Query<GetDepartmentListReq>,
     ) -> impl Responder {
-        let dept_service: DeptService = provider.provide();
-        let resp = dept_service.list(req.into_inner()).await;
+        let department_service: DepartmentService = provider.provide();
+        let resp = department_service.list(req.into_inner()).await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::err(err),
@@ -33,8 +35,8 @@ impl DeptController {
 
     /// 获取部门树列表
     pub async fn tree(provider: Data<AInjectProvider>) -> impl Responder {
-        let dept_service: DeptService = provider.provide();
-        let resp = dept_service.tree().await;
+        let department_service: DepartmentService = provider.provide();
+        let resp = department_service.tree().await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::err(err),
@@ -43,8 +45,8 @@ impl DeptController {
 
     /// 获取部门信息
     pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let dept_service: DeptService = provider.provide();
-        let resp = dept_service.info(*id).await;
+        let department_service: DepartmentService = provider.provide();
+        let resp = department_service.info(*id).await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::err(err),
@@ -52,9 +54,12 @@ impl DeptController {
     }
 
     /// 添加部门
-    pub async fn add(provider: Data<AInjectProvider>, data: Json<AddDeptReq>) -> impl Responder {
-        let dept_service: DeptService = provider.provide();
-        let resp = dept_service.add(data.into_inner()).await;
+    pub async fn add(
+        provider: Data<AInjectProvider>,
+        data: Json<AddDepartmentReq>,
+    ) -> impl Responder {
+        let department_service: DepartmentService = provider.provide();
+        let resp = department_service.add(data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -65,10 +70,10 @@ impl DeptController {
     pub async fn update(
         provider: Data<AInjectProvider>,
         id: Path<i32>,
-        data: Json<UpdateDeptReq>,
+        data: Json<UpdateDepartmentReq>,
     ) -> impl Responder {
-        let dept_service: DeptService = provider.provide();
-        let resp = dept_service.update(*id, data.into_inner()).await;
+        let department_service: DepartmentService = provider.provide();
+        let resp = department_service.update(*id, data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -79,10 +84,10 @@ impl DeptController {
     pub async fn status(
         provider: Data<AInjectProvider>,
         id: Path<i32>,
-        data: Json<UpdateDeptStatusReq>,
+        data: Json<UpdateDepartmentStatusReq>,
     ) -> impl Responder {
-        let dept_service: DeptService = provider.provide();
-        let resp = dept_service.status(*id, data.status.clone() as i8).await;
+        let department_service: DepartmentService = provider.provide();
+        let resp = department_service.status(*id, data.status.clone() as i8).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -91,8 +96,8 @@ impl DeptController {
 
     /// 删除部门
     pub async fn delete(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let dept_service: DeptService = provider.provide();
-        let resp = dept_service.delete(*id).await;
+        let department_service: DepartmentService = provider.provide();
+        let resp = department_service.delete(*id).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

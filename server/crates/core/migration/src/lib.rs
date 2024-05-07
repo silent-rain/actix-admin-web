@@ -3,8 +3,8 @@ use sea_orm_migration::{async_trait, MigrationTrait, MigratorTrait};
 mod m20230617_084425_create_log_api_operation;
 mod m20230617_084425_create_log_system;
 mod m20230617_084425_create_log_user_login;
-mod m20240218_145453_create_perm_dept;
-mod m20240218_145453_create_perm_dept_role_rel;
+mod m20240218_145453_create_perm_department;
+mod m20240218_145453_create_perm_department_role_rel;
 mod m20240218_145453_create_perm_menu;
 mod m20240218_145453_create_perm_menu_role_rel;
 mod m20240218_145453_create_perm_open_api;
@@ -39,8 +39,8 @@ impl MigratorTrait for Migrator {
             Box::new(m20240218_145453_create_perm_user_email::Migration),
             Box::new(m20240218_145453_create_perm_user_phone::Migration),
             Box::new(m20240218_145453_create_perm_user_role_rel::Migration),
-            Box::new(m20240218_145453_create_perm_dept::Migration),
-            Box::new(m20240218_145453_create_perm_dept_role_rel::Migration),
+            Box::new(m20240218_145453_create_perm_department::Migration),
+            Box::new(m20240218_145453_create_perm_department_role_rel::Migration),
             Box::new(m20240218_145453_create_perm_menu::Migration),
             Box::new(m20240218_145453_create_perm_menu_role_rel::Migration),
             Box::new(m20240218_145453_create_perm_open_api::Migration),

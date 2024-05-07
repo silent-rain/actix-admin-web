@@ -1,7 +1,8 @@
 //! 部门角色关系表
-//! User Entity: [`entity::prelude::PermDeptRoleRel`]
+//! User Entity: [`entity::prelude::PermDepartmentRoleRel`]
 use crate::{
-    m20240218_145453_create_perm_dept::PermDept, m20240218_145453_create_perm_role::PermRole,
+    m20240218_145453_create_perm_department::PermDepartment,
+    m20240218_145453_create_perm_role::PermRole,
 };
 
 use sea_orm::{
@@ -20,11 +21,11 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(PermDeptRoleRel::Table)
+                    .table(PermDepartmentRoleRel::Table)
                     .comment("部门角色关系表")
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(PermDeptRoleRel::Id)
+                        ColumnDef::new(PermDepartmentRoleRel::Id)
                             .integer()
                             .primary_key()
                             .auto_increment()
@@ -32,19 +33,19 @@ impl MigrationTrait for Migration {
                             .comment("自增ID"),
                     )
                     .col(
-                        ColumnDef::new(PermDeptRoleRel::RoleId)
-                            .integer()
-                            .not_null()
-                            .comment("角色ID"),
-                    )
-                    .col(
-                        ColumnDef::new(PermDeptRoleRel::DeptId)
+                        ColumnDef::new(PermDepartmentRoleRel::DepartmentId)
                             .integer()
                             .not_null()
                             .comment("部门ID"),
                     )
                     .col(
-                        ColumnDef::new(PermDeptRoleRel::CreatedAt)
+                        ColumnDef::new(PermDepartmentRoleRel::RoleId)
+                            .integer()
+                            .not_null()
+                            .comment("角色ID"),
+                    )
+                    .col(
+                        ColumnDef::new(PermDepartmentRoleRel::CreatedAt)
                             .date_time()
                             .not_null()
                             .default(Expr::current_timestamp())
@@ -55,18 +56,21 @@ impl MigrationTrait for Migration {
             .await?;
 
         if !manager
-            .has_index(PermDeptRoleRel::Table.to_string(), "uk_dept_id_role_id")
+            .has_index(
+                PermDepartmentRoleRel::Table.to_string(),
+                "uk_department_id_role_id",
+            )
             .await?
         {
             manager
                 .create_index(
                     Index::create()
                         .if_not_exists()
-                        .table(PermDeptRoleRel::Table)
-                        .name("uk_dept_id_role_id")
+                        .table(PermDepartmentRoleRel::Table)
+                        .name("uk_department_id_role_id")
                         .unique()
-                        .col(PermDeptRoleRel::DeptId)
-                        .col(PermDeptRoleRel::RoleId)
+                        .col(PermDepartmentRoleRel::DepartmentId)
+                        .col(PermDepartmentRoleRel::RoleId)
                         .to_owned(),
                 )
                 .await?;
@@ -74,17 +78,20 @@ impl MigrationTrait for Migration {
 
         if !manager
             .has_index(
-                PermDeptRoleRel::Table.to_string(),
-                "fk_perm_dept_role_rel_dept_id",
+                PermDepartmentRoleRel::Table.to_string(),
+                "fk_perm_department_role_rel_department_id",
             )
             .await?
         {
             manager
                 .create_foreign_key(
                     ForeignKey::create()
-                        .name("fk_perm_dept_role_rel_dept_id")
-                        .from(PermDeptRoleRel::Table, PermDeptRoleRel::DeptId)
-                        .to(PermDept::Table, PermDept::Id)
+                        .name("fk_perm_department_role_rel_department_id")
+                        .from(
+                            PermDepartmentRoleRel::Table,
+                            PermDepartmentRoleRel::DepartmentId,
+                        )
+                        .to(PermDepartment::Table, PermDepartment::Id)
                         .on_update(ForeignKeyAction::Cascade)
                         .on_delete(ForeignKeyAction::Cascade)
                         .to_owned(),
@@ -94,16 +101,16 @@ impl MigrationTrait for Migration {
 
         if !manager
             .has_index(
-                PermDeptRoleRel::Table.to_string(),
-                "fk_perm_dept_role_rel_role_id",
+                PermDepartmentRoleRel::Table.to_string(),
+                "fk_perm_department_role_rel_role_id",
             )
             .await?
         {
             manager
                 .create_foreign_key(
                     ForeignKey::create()
-                        .name("fk_perm_dept_role_rel_role_id")
-                        .from(PermDeptRoleRel::Table, PermDeptRoleRel::RoleId)
+                        .name("fk_perm_department_role_rel_role_id")
+                        .from(PermDepartmentRoleRel::Table, PermDepartmentRoleRel::RoleId)
                         .to(PermRole::Table, PermRole::Id)
                         .on_update(ForeignKeyAction::Cascade)
                         .on_delete(ForeignKeyAction::Cascade)
@@ -118,17 +125,17 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
         manager
-            .drop_table(Table::drop().table(PermDeptRoleRel::Table).to_owned())
+            .drop_table(Table::drop().table(PermDepartmentRoleRel::Table).to_owned())
             .await
     }
 }
 
 #[derive(DeriveIden)]
-pub enum PermDeptRoleRel {
-    #[sea_orm(iden = "t_perm_dept_role_rel")]
+pub enum PermDepartmentRoleRel {
+    #[sea_orm(iden = "t_perm_department_role_rel")]
     Table,
     Id,
-    DeptId,
+    DepartmentId,
     RoleId,
     CreatedAt,
 }

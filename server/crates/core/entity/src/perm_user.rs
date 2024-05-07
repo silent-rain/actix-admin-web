@@ -34,7 +34,7 @@ pub struct Model {
     /// 状态,0:停用,1:正常
     pub status: i8,
     /// 部门ID
-    pub dept_id: Option<i32>,
+    pub department_id: Option<i32>,
     /// 创建时间
     pub created_at: DateTimeLocal,
     /// 更新时间

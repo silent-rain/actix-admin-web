@@ -4,8 +4,8 @@
 //! cargo test --package service_hub --test template_dao_mock -- --nocapture
 
 use database::Pool;
-use entity::perm_dept_role_rel;
-use service_hub::permission::{dto::dept_role_rel::GetDeptRoleRelListReq, DeptRoleRelDao};
+use entity::perm_department_role_rel;
+use service_hub::permission::{dto::department_role_rel::GetDepartmentRoleRelListReq, DepartmentRoleRelDao};
 
 use chrono::Local;
 use sea_orm::{ActiveValue::NotSet, DatabaseBackend, DbErr, Set};
@@ -15,16 +15,16 @@ use sea_orm::MockExecResult;
 
 async fn test_list() -> Result<(), DbErr> {
     let data_list = vec![
-        perm_dept_role_rel::Model {
+        perm_department_role_rel::Model {
             id: 1,
             role_id: 1,
-            dept_id: 1,
+            department_id: 1,
             created_at: Local::now(),
         },
-        perm_dept_role_rel::Model {
+        perm_department_role_rel::Model {
             id: 2,
             role_id: 2,
-            dept_id: 2,
+            department_id: 2,
             created_at: Local::now(),
         },
     ];
@@ -42,13 +42,13 @@ async fn test_list() -> Result<(), DbErr> {
         }])
         .into_connection();
     let pool = Pool::form_connect(rdb, wdb);
-    let dao = DeptRoleRelDao::new(&pool);
-    let req = GetDeptRoleRelListReq {
+    let dao = DepartmentRoleRelDao::new(&pool);
+    let req = GetDepartmentRoleRelListReq {
         page: 1,
         page_size: 20,
         start_time: None,
         end_time: None,
-        dept_id: None,
+        department_id: None,
     };
     let (results, total) = dao.list(req).await?;
     println!("{:#?}", results);
@@ -58,16 +58,16 @@ async fn test_list() -> Result<(), DbErr> {
 
 async fn test_add() -> Result<(), DbErr> {
     let data_list = vec![
-        perm_dept_role_rel::Model {
+        perm_department_role_rel::Model {
             id: 1,
             role_id: 1,
-            dept_id: 1,
+            department_id: 1,
             created_at: Local::now(),
         },
-        perm_dept_role_rel::Model {
+        perm_department_role_rel::Model {
             id: 2,
             role_id: 2,
-            dept_id: 2,
+            department_id: 2,
             created_at: Local::now(),
         },
     ];
@@ -78,21 +78,21 @@ async fn test_add() -> Result<(), DbErr> {
             rows_affected: 1,
         }])
         // insert return
-        .append_query_results([vec![perm_dept_role_rel::Model {
+        .append_query_results([vec![perm_department_role_rel::Model {
             id: 3,
             role_id: 3,
-            dept_id: 3,
+            department_id: 3,
             created_at: Local::now(),
         }]])
         .into_connection();
     let rdb = MockDatabase::new(DatabaseBackend::MySql).into_connection();
     let pool = Pool::form_connect(rdb, wdb);
-    let dao = DeptRoleRelDao::new(&pool);
+    let dao = DepartmentRoleRelDao::new(&pool);
 
-    let model = perm_dept_role_rel::ActiveModel {
+    let model = perm_department_role_rel::ActiveModel {
         id: NotSet,
         role_id: Set(3),
-        dept_id: Set(3),
+        department_id: Set(3),
         created_at: Set(Local::now()),
     };
     let result = dao.add(model).await?;
@@ -103,16 +103,16 @@ async fn test_add() -> Result<(), DbErr> {
 
 async fn test_delete() -> Result<(), DbErr> {
     let data_list = vec![
-        perm_dept_role_rel::Model {
+        perm_department_role_rel::Model {
             id: 1,
             role_id: 1,
-            dept_id: 1,
+            department_id: 1,
             created_at: Local::now(),
         },
-        perm_dept_role_rel::Model {
+        perm_department_role_rel::Model {
             id: 2,
             role_id: 2,
-            dept_id: 2,
+            department_id: 2,
             created_at: Local::now(),
         },
     ];
@@ -125,7 +125,7 @@ async fn test_delete() -> Result<(), DbErr> {
         .into_connection();
     let rdb = MockDatabase::new(DatabaseBackend::MySql).into_connection();
     let pool = Pool::form_connect(rdb, wdb);
-    let dao = DeptRoleRelDao::new(&pool);
+    let dao = DepartmentRoleRelDao::new(&pool);
 
     let result = dao.delete(3).await?;
     println!("result: \n{:#?}", result);

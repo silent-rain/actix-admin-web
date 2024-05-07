@@ -1,4 +1,4 @@
-//! 部门角色关系表
+//! 用户Token令牌与角色关系表
 //! User Entity: [`entity::prelude::PermUserTokenRoleRel`]
 use crate::{
     m20240218_145453_create_perm_role::PermRole,
@@ -33,16 +33,16 @@ impl MigrationTrait for Migration {
                             .comment("自增ID"),
                     )
                     .col(
-                        ColumnDef::new(PermUserTokenRoleRel::RoleId)
-                            .integer()
-                            .not_null()
-                            .comment("角色ID"),
-                    )
-                    .col(
                         ColumnDef::new(PermUserTokenRoleRel::TokenId)
                             .integer()
                             .not_null()
                             .comment("令牌ID"),
+                    )
+                    .col(
+                        ColumnDef::new(PermUserTokenRoleRel::RoleId)
+                            .integer()
+                            .not_null()
+                            .comment("角色ID"),
                     )
                     .col(
                         ColumnDef::new(PermUserTokenRoleRel::CreatedAt)

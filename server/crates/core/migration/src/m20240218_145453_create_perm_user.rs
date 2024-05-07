@@ -104,7 +104,7 @@ impl MigrationTrait for Migration {
                             .comment("状态,0:停用,1:正常"),
                     )
                     .col(
-                        ColumnDef::new(PermUser::DeptId)
+                        ColumnDef::new(PermUser::DepartmentId)
                             .integer()
                             .null()
                             .default(0)
@@ -157,7 +157,7 @@ pub enum PermUser {
     Note,
     Password,
     Status,
-    DeptId,
+    DepartmentId,
     CreatedAt,
     UpdatedAt,
 }
