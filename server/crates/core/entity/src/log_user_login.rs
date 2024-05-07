@@ -78,4 +78,14 @@ pub mod enums {
         /// 正常
         Enabled = 1,
     }
+
+    /// 用户登录状态是否被禁用
+    #[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
+    #[repr(u8)]
+    pub enum IsDisabled {
+        /// 有效
+        Enabled = 0,
+        /// 被禁用
+        Disabled = 1,
+    }
 }

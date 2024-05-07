@@ -1,6 +1,4 @@
-/*
-用户与身份管理相关表
- */
+/*用户与身份管理相关表*/
 -- 用户表
 CREATE TABLE IF NOT EXISTS
     `t_perm_user` (
@@ -15,7 +13,9 @@ CREATE TABLE IF NOT EXISTS
         `note` VARCHAR(200) NULL DEFAULT '' COMMENT '备注',
         `password` VARCHAR(64) NOT NULL COMMENT '密码',
         `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:停用,1:正常',
-        `department_id` BIGINT DEFAULT NULL DEFAULT 0 COMMENT '部门ID',
+        `department_id` INT(11) UNSIGNED DEFAULT 0 COMMENT '所属部门ID',
+        `position_id` INT(11) UNSIGNED DEFAULT 0 COMMENT '所属岗位ID',
+        `rank_id` INT(11) UNSIGNED DEFAULT 0 COMMENT '所属职级ID',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`),
@@ -70,6 +70,22 @@ CREATE TABLE IF NOT EXISTS
         CONSTRAINT `fk_perm_user_blockchain_wallet_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_perm_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户区块链钱包';
 
+-- 用户地理位置 - 待定
+CREATE TABLE IF NOT EXISTS
+    `t_user_location` (
+        `id` INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '地理位置ID',
+        `province` VARCHAR(100) NOT NULL COMMENT '省份',
+        `city` VARCHAR(100) NOT NULL COMMENT '城市',
+        `district` VARCHAR(100) NOT NULL COMMENT '区/县',
+        `address` VARCHAR(255) DEFAULT NULL COMMENT '详细地址',
+        `postal_code` VARCHAR(20) DEFAULT NULL COMMENT '邮政编码',
+        `longitude` DECIMAL(11, 8) DEFAULT NULL COMMENT '经度',
+        `latitude` DECIMAL(10, 8) DEFAULT NULL COMMENT '纬度',
+        `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+        `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+        PRIMARY KEY (`location_id`)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '地理位置表';
+
 -- 用户登录日志表
 CREATE TABLE IF NOT EXISTS
     `t_log_user_login` (
@@ -83,29 +99,11 @@ CREATE TABLE IF NOT EXISTS
         `system` VARCHAR(20) NULL DEFAULT '' COMMENT '系统',
         `browser` VARCHAR(20) NULL DEFAULT '' COMMENT '浏览器',
         `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '登录状态,0:失败,1:成功',
-        `disabled` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '禁用状态,0:未禁用,1:禁用',
+        `is_disabled` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否被禁用(0: 有效, 1: 被禁用)',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`)
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户登录日志表';
-
--- 用户地理位置 - 待定
-CREATE TABLE IF NOT EXISTS
-    `t_perm_user_location` (
-        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '位置ID',
-        `user_id` VARCHAR(10) NOT NULL COMMENT '用户ID',
-        `province_code` VARCHAR(10) NULL DEFAULT '' COMMENT '省',
-        `city_code` VARCHAR(10) NULL DEFAULT '' COMMENT '市',
-        `district_code` VARCHAR(10) NULL DEFAULT '' COMMENT '区',
-        `address` VARCHAR(200) NULL DEFAULT '' COMMENT '居住地址',
-        `ad_code` VARCHAR(10) NULL DEFAULT '' COMMENT '地理编号',
-        `lng` VARCHAR(20) NULL DEFAULT '' COMMENT '城市坐标中心点经度 （ * 1e6 ） ： 如果是中国 ， 此值是 1e7',
-        `lat` VARCHAR(20) NULL DEFAULT '' COMMENT '城市坐标中心点纬度 （ * 1e6 ）',
-        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-        `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-        PRIMARY KEY (`id`),
-        CONSTRAINT `fk_perm_user_location_user_id` FOREIGN KEY (`user_id`) REFERENCES `perm_user` (`id`) ON DELETE CASCADE
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户地理位置';
 
 /*
 -- user表触发器，更新其他表冗余字段

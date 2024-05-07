@@ -118,6 +118,56 @@
   - 耗时
   - 状态
 
+## 表划分域
+
+用户与身份管理：
+●t_user_profile：用户资料信息
+●t_user_email — 用户邮箱表 (UserEmail)
+●t_user_phone — 用户手机号表 (UserPhoneNumber)
+●t_user_login_log — 用户登录日志表 (UserLoginLog)
+●t_user_blockchain_wallet — 用户区块链钱包表
+●t_user_location — 用户地理位置表 (UserLocation)
+
+权限与访问控制：
+●t_auth_position — 岗位表 (Position)
+●t_auth_rank — 职级表 (Rank)
+
+会员系统：
+●t_member_level — 会员等级表 (MemberLevel)
+
+日志与审计：
+●t_audit_api_operation_log — API操作日志表 (ApiOperationLog)
+●t_audit_system_log — 系统日志表 (SystemLog)
+●t_audit_web_log — WEB日志表 (WebLog)
+
+任务调度与后台作业：
+●t_task_scheduled — 调度任务表 (ScheduledTask)
+●t_task_scheduled_status_log — 调度任务状态日志表 (ScheduledTaskStatusLog)
+●t_task_scheduled_event_log — 调度任务事件日志表 (ScheduledTaskEventLog)
+
+系统管理与基础设施：
+●t_sys_verification_code — 验证码表 (VerificationCode)
+●t_sys_config — 配置表 (Configuration)
+●t_sys_image_resource — 图片资源表 (ImageResource)
+●t_sys_dict_dimension — 字典维度表 (DictionaryDimension)
+●t_sys_dict_data — 字典数据表 (DictionaryData)
+
+个人资料信息 (User Profile Information)
+个人资料信息则更侧重于描述用户的个人特征和偏好。这些信息用于个性化服务、用户画像分析和增强用户体验。个人资料信息通常包括：
+●出生日期（Date of Birth）：用户的出生年月日。
+●地址（Address）：用户的居住或邮寄地址。
+●偏好设置（Preferences）：用户的偏好设置，如语言、主题等。
+
+路由整理
+部门管理
+部门角色关系管理   部门ID   department_id -》department_id
+令牌管理
+令牌角色关系管理
+
+OpenApi接口角色关系 napi_id  ->  openapi_id
+
+用户权限前最
+
 <https://github.com/actix/actix-extras/tree/master/actix-identity>
 <https://crates.io/crates/actix-ws>
 <https://crates.io/crates/actix-session>

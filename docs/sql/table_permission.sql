@@ -66,37 +66,6 @@ CREATE TABLE IF NOT EXISTS
         CONSTRAINT `fk_perm_menu_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '菜单角色关系表';
 
-/* 待定
-- 岗位 职级
- */
--- 部门表
-CREATE TABLE IF NOT EXISTS
-    `t_perm_department` (
-        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '部门ID',
-        `pid` BIGINT DEFAULT NULL DEFAULT 0 COMMENT '上级部门ID',
-        `pids` VARCHAR(200) DEFAULT NULL DEFAULT '' COMMENT '所有上级部门ID, 用逗号分开',
-        `name` VARCHAR(20) UNIQUE NOT NULL COMMENT '部门名称',
-        `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
-        `note` VARCHAR(200) NULL DEFAULT '' COMMENT '备注',
-        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:停用,1:正常',
-        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-        `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-        PRIMARY KEY (`id`)
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '部门表';
-
--- 部门角色关系表
-CREATE TABLE IF NOT EXISTS
-    `t_perm_department_role_rel` (
-        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
-        `department_id` INT(10) NOT NULL COMMENT '部门ID',
-        `role_id` INT(10) NOT NULL COMMENT '角色ID',
-        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-        PRIMARY KEY (`id`),
-        UNIQUE KEY `uk_department_id_role_id` (`department_id`, `role_id`),
-        CONSTRAINT `fk_perm_department_role_rel_department_id` FOREIGN KEY (`department_id`) REFERENCES `t_perm_department` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-        CONSTRAINT `fk_perm_department_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '部门角色关系表';
-
 -- 令牌表
 CREATE TABLE IF NOT EXISTS
     `t_perm_token` (
