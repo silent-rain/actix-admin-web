@@ -8,7 +8,7 @@ use actix_web::{web, Scope};
 pub struct OrganizationRouter;
 
 impl OrganizationRouter {
-    /// 注册`权限管理`路由
+    /// 注册`组织管理`路由
     pub fn admin_register() -> Scope {
         web::scope("/organization")
             // 部门管理

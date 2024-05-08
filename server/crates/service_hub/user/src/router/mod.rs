@@ -11,7 +11,7 @@ use actix_web::{web, Scope};
 pub struct UserRouter;
 
 impl UserRouter {
-    /// 注册`用户信息管理`路由
+    /// 注册`用户管理`路由
     pub fn admin_register() -> Scope {
         web::scope("/user")
             // 用户信息管理
