@@ -25,3 +25,6 @@ tracing = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
 serde_repr = { workspace = true }
 regex = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }

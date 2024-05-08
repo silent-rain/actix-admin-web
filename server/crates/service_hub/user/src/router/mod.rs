@@ -2,6 +2,7 @@
 
 pub mod email;
 pub mod phone;
+pub mod role;
 pub mod user_base;
 pub mod user_role_rel;
 
@@ -14,6 +15,8 @@ impl UserRouter {
     /// 注册`用户管理`路由
     pub fn admin_register() -> Scope {
         web::scope("/user")
+            // 角色管理
+            .service(role::RoleRouter::admin_register())
             // 用户信息管理
             .service(user_base::UserBaseRouter::admin_register())
             // 用户手机号管理

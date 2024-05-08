@@ -4,7 +4,6 @@ pub mod menu;
 pub mod menu_role_rel;
 pub mod openapi;
 pub mod openapi_role_rel;
-pub mod role;
 pub mod token;
 pub mod token_role_rel;
 
@@ -17,8 +16,6 @@ impl PermissionRouter {
     /// 注册`权限管理`路由
     pub fn admin_register() -> Scope {
         web::scope("/permission")
-            // 角色管理
-            .service(role::RoleRouter::admin_register())
             // 菜单管理
             .service(menu::MenuRouter::admin_register())
             // 菜单角色关系管理
