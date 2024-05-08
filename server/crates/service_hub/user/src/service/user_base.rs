@@ -5,7 +5,7 @@ use crate::{
 };
 
 use code::{Error, ErrorMsg};
-use entity::{perm_role, perm_user_role_rel, user_base};
+use entity::{perm_role, user_base, user_role_rel};
 
 use nject::injectable;
 use sea_orm::Set;
@@ -192,7 +192,7 @@ impl<'a> UserBaseService<'a> {
     fn diff_role_ids(
         &self,
         role_ids: Vec<i32>,
-        user_role_rels: Vec<perm_user_role_rel::Model>,
+        user_role_rels: Vec<user_role_rel::Model>,
     ) -> (Vec<i32>, Vec<i32>) {
         let raw_role_ids: Vec<i32> = user_role_rels.iter().map(|v| v.role_id).collect();
         // 待新增的ID

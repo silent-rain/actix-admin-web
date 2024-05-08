@@ -3,9 +3,9 @@ use crate::dto::user_base::GetUserBaserListReq;
 
 use database::{DbRepo, Pagination};
 use entity::{
-    perm_role, perm_user_role_rel,
-    prelude::{PermRole, PermUserRoleRel, UserBase},
-    user_base,
+    perm_role,
+    prelude::{PermRole, UserRoleRel, UserBase},
+    user_base, user_role_rel,
 };
 
 use nject::injectable;
@@ -199,7 +199,7 @@ impl<'a> UserBaseDao<'a> {
         }
         let mut user_ids = Vec::new();
         for role_id in role_ids {
-            let model = perm_user_role_rel::ActiveModel {
+            let model = user_role_rel::ActiveModel {
                 user_id: Set(user_id),
                 role_id: Set(role_id),
                 ..Default::default()
@@ -207,7 +207,7 @@ impl<'a> UserBaseDao<'a> {
             user_ids.push(model)
         }
 
-        let result = PermUserRoleRel::insert_many(user_ids).exec(txn).await?;
+        let result = UserRoleRel::insert_many(user_ids).exec(txn).await?;
         Ok(result.last_insert_id)
     }
 
@@ -222,9 +222,9 @@ impl<'a> UserBaseDao<'a> {
             return Ok(0);
         }
 
-        let result = PermUserRoleRel::delete_many()
-            .filter(perm_user_role_rel::Column::UserId.eq(user_id))
-            .filter(perm_user_role_rel::Column::RoleId.is_in(role_ids))
+        let result = UserRoleRel::delete_many()
+            .filter(user_role_rel::Column::UserId.eq(user_id))
+            .filter(user_role_rel::Column::RoleId.is_in(role_ids))
             .exec(txn)
             .await?;
         Ok(result.rows_affected)
@@ -237,12 +237,12 @@ impl<'a> UserBaseDao<'a> {
         let results = PermRole::find()
             .join_rev(
                 JoinType::InnerJoin,
-                PermUserRoleRel::belongs_to(PermRole)
-                    .from(perm_user_role_rel::Column::RoleId)
+                UserRoleRel::belongs_to(PermRole)
+                    .from(user_role_rel::Column::RoleId)
                     .to(perm_role::Column::Id)
                     .into(),
             )
-            .filter(perm_user_role_rel::Column::UserId.eq(user_id))
+            .filter(user_role_rel::Column::UserId.eq(user_id))
             .order_by_asc(perm_role::Column::Id)
             .all(self.db.rdb())
             .await?;
@@ -265,17 +265,17 @@ mod tests {
             .columns([perm_role::Column::Id])
             .join_rev(
                 JoinType::InnerJoin,
-                PermUserRoleRel::belongs_to(PermRole)
-                    .from(perm_user_role_rel::Column::RoleId)
+                UserRoleRel::belongs_to(PermRole)
+                    .from(user_role_rel::Column::RoleId)
                     .to(perm_role::Column::Id)
                     .into(),
             )
-            .filter(perm_user_role_rel::Column::UserId.eq(10))
+            .filter(user_role_rel::Column::UserId.eq(10))
             .order_by_asc(user_base::Column::Id)
             .build(DbBackend::Postgres)
             .to_string();
 
-        let sql = r#"SELECT "t_perm_role"."id" FROM "t_perm_role" INNER JOIN "t_perm_user_role_rel" ON "t_perm_user_role_rel"."role_id" = "t_perm_role"."id" WHERE "t_perm_user_role_rel"."user_id" = 10 ORDER BY "t_user_base"."id" ASC"#;
+        let sql = r#"SELECT "t_perm_role"."id" FROM "t_perm_role" INNER JOIN "t_user_role_rel" ON "t_user_role_rel"."role_id" = "t_perm_role"."id" WHERE "t_user_role_rel"."user_id" = 10 ORDER BY "t_user_base"."id" ASC"#;
         assert_eq!(result, sql);
     }
 }

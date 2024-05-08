@@ -32,8 +32,8 @@ pub struct Model {
 pub enum Relation {
     #[sea_orm(has_many = "super::perm_menu_role_rel::Entity")]
     PermMenuRoleRel,
-    #[sea_orm(has_many = "super::perm_user_role_rel::Entity")]
-    PermUserRoleRel,
+    #[sea_orm(has_many = "super::user_role_rel::Entity")]
+    UserRoleRel,
 }
 
 impl Related<super::perm_menu_role_rel::Entity> for Entity {
@@ -42,9 +42,9 @@ impl Related<super::perm_menu_role_rel::Entity> for Entity {
     }
 }
 
-impl Related<super::perm_user_role_rel::Entity> for Entity {
+impl Related<super::user_role_rel::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::PermUserRoleRel.def()
+        Relation::UserRoleRel.def()
     }
 }
 
