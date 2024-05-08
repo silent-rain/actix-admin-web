@@ -91,7 +91,7 @@ impl<'a> TokenService<'a> {
             passphrase: Set(passphrase),
             permission: Set(req.permission),
             expire: Set(req.expire),
-            note: Set(req.note),
+            desc: Set(req.desc),
             status: Set(perm_token::enums::Status::Enabled as i8),
             ..Default::default()
         };
@@ -116,7 +116,7 @@ impl<'a> TokenService<'a> {
             passphrase: Set(passphrase),
             permission: Set(req.permission),
             expire: Set(req.expire),
-            note: Set(req.note),
+            desc: Set(req.desc),
             status: Set(req.status as i8),
             ..Default::default()
         };

@@ -71,12 +71,12 @@ impl MigrationTrait for Migration {
                             .comment("排序"),
                     )
                     .col(
-                        ColumnDef::new(PermOpenapi::Note)
+                        ColumnDef::new(PermOpenapi::Desc)
                             .string()
                             .string_len(200)
                             .null()
                             .default("")
-                            .comment("备注"),
+                            .comment("描述信息"),
                     )
                     .col(
                         ColumnDef::new(PermOpenapi::Status)
@@ -129,7 +129,7 @@ pub enum PermOpenapi {
     Method,
     Path,
     Sort,
-    Note,
+    Desc,
     Status,
     CreatedAt,
     UpdatedAt,

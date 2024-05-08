@@ -100,7 +100,7 @@ impl<'a> MenuService<'a> {
             root_always_show: Set(req.root_always_show.map(|v| v as i8)),
             permission: Set(req.permission),
             sort: Set(req.sort),
-            note: Set(req.note),
+            desc: Set(req.desc),
             status: Set(perm_menu::enums::Status::Enabled as i8),
             ..Default::default()
         };
@@ -135,7 +135,7 @@ impl<'a> MenuService<'a> {
             root_always_show: Set(req.root_always_show.map(|v| v as i8)),
             permission: Set(req.permission),
             sort: Set(req.sort),
-            note: Set(req.note),
+            desc: Set(req.desc),
             status: Set(req.status as i8),
             ..Default::default()
         };

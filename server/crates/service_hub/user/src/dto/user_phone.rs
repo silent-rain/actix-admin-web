@@ -31,8 +31,8 @@ pub struct AddUserPhoneReq {
     /// 手机号码
     #[validate(custom(function = "validate_phone"))]
     pub phone: String,
-    /// 备注
-    pub note: Option<String>,
+    /// 描述信息
+    pub desc: Option<String>,
 }
 
 /// 更新用户手机号
@@ -41,8 +41,8 @@ pub struct UpdateUserPhoneReq {
     /// 手机号码
     #[validate(custom(function = "validate_phone"))]
     pub phone: String,
-    /// 备注
-    pub note: Option<String>,
+    /// 描述信息
+    pub desc: Option<String>,
 }
 
 // 自定义电话号码验证函数

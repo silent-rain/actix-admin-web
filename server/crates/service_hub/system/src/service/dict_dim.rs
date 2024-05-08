@@ -107,7 +107,7 @@ impl<'a> DictDimService<'a> {
             name: Set(req.name),
             code: Set(req.code),
             sort: Set(req.sort),
-            note: Set(req.note),
+            desc: Set(req.desc),
             status: Set(sys_dict_dim::enums::Status::Enabled as i8),
             ..Default::default()
         };
@@ -128,7 +128,7 @@ impl<'a> DictDimService<'a> {
             name: Set(req.name),
             code: Set(req.code),
             sort: Set(req.sort),
-            note: Set(req.note),
+            desc: Set(req.desc),
             status: Set(req.status as i8),
             ..Default::default()
         };

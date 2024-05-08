@@ -72,7 +72,7 @@ impl MigrationTrait for Migration {
                             .comment("间隔时间,秒"),
                     )
                     .col(
-                        ColumnDef::new(ScheduleJob::Note)
+                        ColumnDef::new(ScheduleJob::Desc)
                             .string()
                             .string_len(200)
                             .default("")
@@ -130,7 +130,7 @@ pub enum ScheduleJob {
     SysCode,
     Expression,
     Interval,
-    Note,
+    Desc,
     Status,
     CreatedAt,
     UpdatedAt,

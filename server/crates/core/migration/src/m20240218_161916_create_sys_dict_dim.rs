@@ -52,12 +52,12 @@ impl MigrationTrait for Migration {
                             .comment("排序"),
                     )
                     .col(
-                        ColumnDef::new(SysDictDim::Note)
+                        ColumnDef::new(SysDictDim::Desc)
                             .string()
                             .string_len(200)
                             .default("")
                             .null()
-                            .comment("备注"),
+                            .comment("描述信息"),
                     )
                     .col(
                         ColumnDef::new(SysDictDim::Status)
@@ -143,7 +143,7 @@ pub enum SysDictDim {
     Name,
     Code,
     Sort,
-    Note,
+    Desc,
     Status,
     CreatedAt,
     UpdatedAt,

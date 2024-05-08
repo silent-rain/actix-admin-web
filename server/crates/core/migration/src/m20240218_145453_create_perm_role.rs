@@ -45,12 +45,12 @@ impl MigrationTrait for Migration {
                             .comment("排序"),
                     )
                     .col(
-                        ColumnDef::new(PermRole::Note)
+                        ColumnDef::new(PermRole::Desc)
                             .string()
                             .string_len(200)
                             .null()
                             .default("")
-                            .comment("备注"),
+                            .comment("描述信息"),
                     )
                     .col(
                         ColumnDef::new(PermRole::Status)
@@ -99,7 +99,7 @@ pub enum PermRole {
     Id,
     Name,
     Sort,
-    Note,
+    Desc,
     Status,
     CreatedAt,
     UpdatedAt,

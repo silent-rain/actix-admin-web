@@ -36,8 +36,8 @@ pub struct AddDictDimReq {
     pub code: String,
     /// 排序
     pub sort: Option<i32>,
-    /// 备注
-    pub note: Option<String>,
+    /// 描述信息
+    pub desc: Option<String>,
 }
 
 /// 更新字典维度 请求体
@@ -51,8 +51,8 @@ pub struct UpdateDictDimReq {
     pub code: String,
     /// 排序
     pub sort: Option<i32>,
-    /// 备注
-    pub note: Option<String>,
+    /// 描述信息
+    pub desc: Option<String>,
     /// 状态,0:停用,1:正常
     pub status: sys_dict_dim::enums::Status,
 }

@@ -25,8 +25,8 @@ pub struct Model {
     pub expire: DateTimeLocal,
     /// 状态,0:禁用,1:启用
     pub status: i8,
-    /// 备注
-    pub note: Option<String>,
+    /// 描述信息
+    pub desc: Option<String>,
     /// 创建时间
     pub created_at: DateTimeLocal,
     /// 更新时间

@@ -23,8 +23,8 @@ pub struct Model {
     pub name: String,
     /// 排序
     pub sort: Option<i32>,
-    /// 备注
-    pub note: Option<String>,
+    /// 描述信息
+    pub desc: Option<String>,
     /// 状态,0:停用,1:正常
     pub status: i8,
     /// 创建时间

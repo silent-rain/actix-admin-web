@@ -35,8 +35,8 @@ pub struct Model {
     /// 堆栈信息
     #[sea_orm(column_type = "Text", nullable)]
     pub stack: Option<String>,
-    /// 备注
-    pub note: Option<String>,
+    /// 描述信息
+    pub desc: Option<String>,
     /// 创建时间
     pub created_at: DateTimeLocal,
 }

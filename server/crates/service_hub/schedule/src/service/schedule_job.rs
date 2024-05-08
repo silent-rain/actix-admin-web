@@ -82,7 +82,7 @@ impl<'a> ScheduleJobService<'a> {
             sys_code: Set(req.sys_code),
             expression: Set(req.expression),
             interval: Set(req.interval),
-            note: Set(req.note),
+            desc: Set(req.desc),
             status: Set(req.status as i8),
             ..Default::default()
         };
@@ -103,7 +103,7 @@ impl<'a> ScheduleJobService<'a> {
             name: Set(req.name),
             expression: Set(req.expression),
             interval: Set(req.interval),
-            note: Set(req.note),
+            desc: Set(req.desc),
             status: Set(req.status as i8),
             ..Default::default()
         };

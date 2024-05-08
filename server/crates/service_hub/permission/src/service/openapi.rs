@@ -107,7 +107,7 @@ impl<'a> OpenapiService<'a> {
             method: Set(req.method),
             path: Set(req.path),
             sort: Set(req.sort),
-            note: Set(req.note),
+            desc: Set(req.desc),
             status: Set(perm_openapi::enums::Status::Enabled as i8),
             ..Default::default()
         };
@@ -135,7 +135,7 @@ impl<'a> OpenapiService<'a> {
             method: Set(req.method),
             path: Set(req.path),
             sort: Set(req.sort),
-            note: Set(req.note),
+            desc: Set(req.desc),
             status: Set(req.status as i8),
             ..Default::default()
         };

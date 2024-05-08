@@ -64,12 +64,12 @@ impl MigrationTrait for Migration {
                             .comment("授权到期时间"),
                     )
                     .col(
-                        ColumnDef::new(PermToken::Note)
+                        ColumnDef::new(PermToken::Desc)
                             .string()
                             .string_len(200)
                             .null()
                             .default("")
-                            .comment("备注"),
+                            .comment("描述信息"),
                     )
                     .col(
                         ColumnDef::new(PermToken::Status)
@@ -122,7 +122,7 @@ pub enum PermToken {
     Permission,
     Expire,
     Status,
-    Note,
+    Desc,
     CreatedAt,
     UpdatedAt,
 }

@@ -2,7 +2,7 @@ INSERT INTO
 	t_perm_role (
 		`name`,
 		sort,
-		note,
+		`desc`,
 		`status`,
 		created_at,
 		updated_at

@@ -42,8 +42,8 @@ pub struct AddTokenReq {
     pub expire: DateTimeLocal,
     /// 状态,0:禁用,1:启用
     pub status: perm_token::enums::Status,
-    /// 备注
-    pub note: Option<String>,
+    /// 描述信息
+    pub desc: Option<String>,
 }
 
 /// 更新数据
@@ -63,8 +63,8 @@ pub struct UpdateTokenReq {
     pub expire: DateTimeLocal,
     /// 状态,0:禁用,1:启用
     pub status: perm_token::enums::Status,
-    /// 备注
-    pub note: Option<String>,
+    /// 描述信息
+    pub desc: Option<String>,
 }
 
 /// 更新令牌状态

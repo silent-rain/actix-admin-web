@@ -79,7 +79,7 @@ impl<'a> DictDataService<'a> {
             lable: Set(req.lable),
             value: Set(req.value),
             sort: Set(req.sort),
-            note: Set(req.note),
+            desc: Set(req.desc),
             status: Set(sys_dict_data::enums::Status::Enabled as i8),
             ..Default::default()
         };
@@ -100,7 +100,7 @@ impl<'a> DictDataService<'a> {
             lable: Set(req.lable),
             value: Set(req.value),
             sort: Set(req.sort),
-            note: Set(req.note),
+            desc: Set(req.desc),
             status: Set(req.status as i8),
             ..Default::default()
         };

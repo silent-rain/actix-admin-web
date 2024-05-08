@@ -146,7 +146,7 @@
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"realname\": \"xxx2\",\n    \"nickname\": \"demo\",\n    \"gender\": 1,\n    \"age\": 18,\n    \"birthday\": \"xxx\",\n    \"avatar\": \"xxx\",\n    \"phone\": \"183124650222\",\n    \"email\": \"\",\n    \"intro\": \"xxx\",\n    \"note\": \"xxx\",\n    \"password\": \"888888\",\n    \"role_ids\": [],\n    \"captcha_id\": \"xx\",\n    \"captcha\": \"xxx\"\n}"
+              "example": "{\n    \"realname\": \"xxx2\",\n    \"nickname\": \"demo\",\n    \"gender\": 1,\n    \"age\": 18,\n    \"birthday\": \"xxx\",\n    \"avatar\": \"xxx\",\n    \"phone\": \"183124650222\",\n    \"email\": \"\",\n    \"intro\": \"xxx\",\n    \"desc\": \"xxx\",\n    \"password\": \"888888\",\n    \"role_ids\": [],\n    \"captcha_id\": \"xx\",\n    \"captcha\": \"xxx\"\n}"
             }
           }
         },
@@ -271,7 +271,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"user_id\": 20,\n\t\t\t\t\"nickname\": \"管理员\",\n\t\t\t\t\"permission\": \"GET;POST;DELETE;PUT\",\n\t\t\t\t\"token\": \"23dfb2f62e9b55731d34d808eb8575f4\",\n\t\t\t\t\"passphrase\": \"xxx\",\n\t\t\t\t\"note\": \"xx\",\n\t\t\t\t\"status\": 0,\n\t\t\t\t\"created_at\": \"2023-03-09 22:18:36\",\n\t\t\t\t\"updated_at\": \"2023-03-09 22:39:06\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 1\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"user_id\": 20,\n\t\t\t\t\"nickname\": \"管理员\",\n\t\t\t\t\"permission\": \"GET;POST;DELETE;PUT\",\n\t\t\t\t\"token\": \"23dfb2f62e9b55731d34d808eb8575f4\",\n\t\t\t\t\"passphrase\": \"xxx\",\n\t\t\t\t\"desc\": \"xx\",\n\t\t\t\t\"status\": 0,\n\t\t\t\t\"created_at\": \"2023-03-09 22:18:36\",\n\t\t\t\t\"updated_at\": \"2023-03-09 22:39:06\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 1\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -339,7 +339,7 @@
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"id\": 1,\n    \"permission\": \"GET;POST;DELETE;PUT\",\n    \"passphrase\": \"xxx\",\n    \"note\": \"xx\",\n    \"status\": 0\n}"
+              "example": "{\n    \"id\": 1,\n    \"permission\": \"GET;POST;DELETE;PUT\",\n    \"passphrase\": \"xxx\",\n    \"desc\": \"xx\",\n    \"status\": 0\n}"
             }
           }
         },
@@ -419,7 +419,7 @@
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"user_id\": 20,\n    \"permission\": \"GET;POST;DELETE;PUT\",\n    \"passphrase\": \"xxx\",\n    \"note\": \"xx\",\n    \"status\": 0\n}"
+              "example": "{\n    \"user_id\": 20,\n    \"permission\": \"GET;POST;DELETE;PUT\",\n    \"passphrase\": \"xxx\",\n    \"desc\": \"xx\",\n    \"status\": 0\n}"
             }
           }
         },
@@ -599,7 +599,7 @@
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"dict_id\": 1,\n    \"name\": \"GET\",\n    \"value\": \"xx\",\n    \"note\": \"\",\n    \"status\": 1\n}"
+              "example": "{\n    \"dict_id\": 1,\n    \"name\": \"GET\",\n    \"value\": \"xx\",\n    \"desc\": \"\",\n    \"status\": 1\n}"
             }
           }
         },
@@ -679,7 +679,7 @@
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"id\": 1,\n   \"dict_id\": 1,\n    \"name\": \"GET\",\n    \"value\": \"xx\",\n    \"note\": \"\",\n    \"status\": 1\n}"
+              "example": "{\n    \"id\": 1,\n   \"dict_id\": 1,\n    \"name\": \"GET\",\n    \"value\": \"xx\",\n    \"desc\": \"\",\n    \"status\": 1\n}"
             }
           }
         },
@@ -831,7 +831,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 5,\n\t\t\t\t\"name\": \"测试2\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:21+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:21+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 4,\n\t\t\t\t\"name\": \"测试1\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:15+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:15+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 2,\n\t\t\t\t\"name\": \"管理员\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"管理员\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T21:55:31+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 3,\n\t\t\t\t\"name\": \"普通用户\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"普通用户\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T22:06:48+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 4\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 5,\n\t\t\t\t\"name\": \"测试2\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:21+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:21+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 4,\n\t\t\t\t\"name\": \"测试1\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:15+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:15+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 2,\n\t\t\t\t\"name\": \"管理员\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"管理员\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T21:55:31+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 3,\n\t\t\t\t\"name\": \"普通用户\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"普通用户\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T22:06:48+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 4\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -1004,7 +1004,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"title\": \"系统管理\",\n\t\t\t\t\"icon\": \"\",\n\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\"open_type\": 0,\n\t\t\t\t\"path\": \"/system\",\n\t\t\t\t\"component\": \"Layout\",\n\t\t\t\t\"link\": \"\",\n\t\t\t\t\"target\": \"\",\n\t\t\t\t\"permission\": \"\",\n\t\t\t\t\"hide\": 1,\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-04 21:18:29\",\n\t\t\t\t\"updated_at\": \"2023-02-04 21:18:29\",\n\t\t\t\t\"children\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 4,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"title\": \"菜单管理\",\n\t\t\t\t\t\t\"icon\": \"\",\n\t\t\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\t\t\"open_type\": 0,\n\t\t\t\t\t\t\"path\": \"/system/menu\",\n\t\t\t\t\t\t\"component\": \"@/views/system/menu/index.vue\",\n\t\t\t\t\t\t\"link\": \"\",\n\t\t\t\t\t\t\"target\": \"\",\n\t\t\t\t\t\t\"permission\": \"\",\n\t\t\t\t\t\t\"hide\": 1,\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"note\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-04 21:22:30\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-04 21:22:30\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 3,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"title\": \"角色管理\",\n\t\t\t\t\t\t\"icon\": \"\",\n\t\t\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\t\t\"open_type\": 0,\n\t\t\t\t\t\t\"path\": \"/system/role\",\n\t\t\t\t\t\t\"component\": \"@/views/system/role/index.vue\",\n\t\t\t\t\t\t\"link\": \"\",\n\t\t\t\t\t\t\"target\": \"\",\n\t\t\t\t\t\t\"permission\": \"\",\n\t\t\t\t\t\t\"hide\": 1,\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"note\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-04 21:21:53\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-04 21:22:03\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 2,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"title\": \"用户信息管理\",\n\t\t\t\t\t\t\"icon\": \"\",\n\t\t\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\t\t\"open_type\": 0,\n\t\t\t\t\t\t\"path\": \"/system/user\",\n\t\t\t\t\t\t\"component\": \"@/views/system/user/index.vue\",\n\t\t\t\t\t\t\"link\": \"\",\n\t\t\t\t\t\t\"target\": \"\",\n\t\t\t\t\t\t\"permission\": \"\",\n\t\t\t\t\t\t\"hide\": 1,\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"note\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-04 21:19:01\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-04 21:19:01\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 1\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"title\": \"系统管理\",\n\t\t\t\t\"icon\": \"\",\n\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\"open_type\": 0,\n\t\t\t\t\"path\": \"/system\",\n\t\t\t\t\"component\": \"Layout\",\n\t\t\t\t\"link\": \"\",\n\t\t\t\t\"target\": \"\",\n\t\t\t\t\"permission\": \"\",\n\t\t\t\t\"hide\": 1,\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-04 21:18:29\",\n\t\t\t\t\"updated_at\": \"2023-02-04 21:18:29\",\n\t\t\t\t\"children\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 4,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"title\": \"菜单管理\",\n\t\t\t\t\t\t\"icon\": \"\",\n\t\t\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\t\t\"open_type\": 0,\n\t\t\t\t\t\t\"path\": \"/system/menu\",\n\t\t\t\t\t\t\"component\": \"@/views/system/menu/index.vue\",\n\t\t\t\t\t\t\"link\": \"\",\n\t\t\t\t\t\t\"target\": \"\",\n\t\t\t\t\t\t\"permission\": \"\",\n\t\t\t\t\t\t\"hide\": 1,\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"desc\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-04 21:22:30\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-04 21:22:30\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 3,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"title\": \"角色管理\",\n\t\t\t\t\t\t\"icon\": \"\",\n\t\t\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\t\t\"open_type\": 0,\n\t\t\t\t\t\t\"path\": \"/system/role\",\n\t\t\t\t\t\t\"component\": \"@/views/system/role/index.vue\",\n\t\t\t\t\t\t\"link\": \"\",\n\t\t\t\t\t\t\"target\": \"\",\n\t\t\t\t\t\t\"permission\": \"\",\n\t\t\t\t\t\t\"hide\": 1,\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"desc\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-04 21:21:53\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-04 21:22:03\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 2,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"title\": \"用户信息管理\",\n\t\t\t\t\t\t\"icon\": \"\",\n\t\t\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\t\t\"open_type\": 0,\n\t\t\t\t\t\t\"path\": \"/system/user\",\n\t\t\t\t\t\t\"component\": \"@/views/system/user/index.vue\",\n\t\t\t\t\t\t\"link\": \"\",\n\t\t\t\t\t\t\"target\": \"\",\n\t\t\t\t\t\t\"permission\": \"\",\n\t\t\t\t\t\t\"hide\": 1,\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"desc\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-04 21:19:01\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-04 21:19:01\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 1\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -1034,7 +1034,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"title\": \"系统管理\",\n\t\t\t\t\"icon\": \"\",\n\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\"open_type\": 0,\n\t\t\t\t\"path\": \"/system\",\n\t\t\t\t\"component\": \"Layout\",\n\t\t\t\t\"link\": \"\",\n\t\t\t\t\"target\": \"\",\n\t\t\t\t\"permission\": \"\",\n\t\t\t\t\"hide\": 1,\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-04 21:18:29\",\n\t\t\t\t\"updated_at\": \"2023-02-04 21:18:29\",\n\t\t\t\t\"children\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 4,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"title\": \"菜单管理\",\n\t\t\t\t\t\t\"icon\": \"\",\n\t\t\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\t\t\"open_type\": 0,\n\t\t\t\t\t\t\"path\": \"/system/menu\",\n\t\t\t\t\t\t\"component\": \"@/views/system/menu/index.vue\",\n\t\t\t\t\t\t\"link\": \"\",\n\t\t\t\t\t\t\"target\": \"\",\n\t\t\t\t\t\t\"permission\": \"\",\n\t\t\t\t\t\t\"hide\": 1,\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"note\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-04 21:22:30\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-04 21:22:30\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 3,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"title\": \"角色管理\",\n\t\t\t\t\t\t\"icon\": \"\",\n\t\t\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\t\t\"open_type\": 0,\n\t\t\t\t\t\t\"path\": \"/system/role\",\n\t\t\t\t\t\t\"component\": \"@/views/system/role/index.vue\",\n\t\t\t\t\t\t\"link\": \"\",\n\t\t\t\t\t\t\"target\": \"\",\n\t\t\t\t\t\t\"permission\": \"\",\n\t\t\t\t\t\t\"hide\": 1,\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"note\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-04 21:21:53\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-04 21:22:03\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 2,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"title\": \"用户信息管理\",\n\t\t\t\t\t\t\"icon\": \"\",\n\t\t\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\t\t\"open_type\": 0,\n\t\t\t\t\t\t\"path\": \"/system/user\",\n\t\t\t\t\t\t\"component\": \"@/views/system/user/index.vue\",\n\t\t\t\t\t\t\"link\": \"\",\n\t\t\t\t\t\t\"target\": \"\",\n\t\t\t\t\t\t\"permission\": \"\",\n\t\t\t\t\t\t\"hide\": 1,\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"note\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-04 21:19:01\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-04 21:19:01\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 1\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"title\": \"系统管理\",\n\t\t\t\t\"icon\": \"\",\n\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\"open_type\": 0,\n\t\t\t\t\"path\": \"/system\",\n\t\t\t\t\"component\": \"Layout\",\n\t\t\t\t\"link\": \"\",\n\t\t\t\t\"target\": \"\",\n\t\t\t\t\"permission\": \"\",\n\t\t\t\t\"hide\": 1,\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-04 21:18:29\",\n\t\t\t\t\"updated_at\": \"2023-02-04 21:18:29\",\n\t\t\t\t\"children\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 4,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"title\": \"菜单管理\",\n\t\t\t\t\t\t\"icon\": \"\",\n\t\t\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\t\t\"open_type\": 0,\n\t\t\t\t\t\t\"path\": \"/system/menu\",\n\t\t\t\t\t\t\"component\": \"@/views/system/menu/index.vue\",\n\t\t\t\t\t\t\"link\": \"\",\n\t\t\t\t\t\t\"target\": \"\",\n\t\t\t\t\t\t\"permission\": \"\",\n\t\t\t\t\t\t\"hide\": 1,\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"desc\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-04 21:22:30\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-04 21:22:30\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 3,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"title\": \"角色管理\",\n\t\t\t\t\t\t\"icon\": \"\",\n\t\t\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\t\t\"open_type\": 0,\n\t\t\t\t\t\t\"path\": \"/system/role\",\n\t\t\t\t\t\t\"component\": \"@/views/system/role/index.vue\",\n\t\t\t\t\t\t\"link\": \"\",\n\t\t\t\t\t\t\"target\": \"\",\n\t\t\t\t\t\t\"permission\": \"\",\n\t\t\t\t\t\t\"hide\": 1,\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"desc\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-04 21:21:53\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-04 21:22:03\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 2,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"title\": \"用户信息管理\",\n\t\t\t\t\t\t\"icon\": \"\",\n\t\t\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\t\t\"open_type\": 0,\n\t\t\t\t\t\t\"path\": \"/system/user\",\n\t\t\t\t\t\t\"component\": \"@/views/system/user/index.vue\",\n\t\t\t\t\t\t\"link\": \"\",\n\t\t\t\t\t\t\"target\": \"\",\n\t\t\t\t\t\t\"permission\": \"\",\n\t\t\t\t\t\t\"hide\": 1,\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"desc\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-04 21:19:01\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-04 21:19:01\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 1\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -1395,7 +1395,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 5,\n\t\t\t\t\"name\": \"测试2\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:21+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:21+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 4,\n\t\t\t\t\"name\": \"测试1\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:15+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:15+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 2,\n\t\t\t\t\"name\": \"管理员\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"管理员\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T21:55:31+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 3,\n\t\t\t\t\"name\": \"普通用户\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"普通用户\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T22:06:48+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 4\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 5,\n\t\t\t\t\"name\": \"测试2\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:21+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:21+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 4,\n\t\t\t\t\"name\": \"测试1\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:15+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:15+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 2,\n\t\t\t\t\"name\": \"管理员\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"管理员\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T21:55:31+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 3,\n\t\t\t\t\"name\": \"普通用户\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"普通用户\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T22:06:48+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 4\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -1463,7 +1463,7 @@
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"parent_id\": 1,\n    \"id\": 1,\n    \"name\": \"xxxx2\",\n    \"method\": \"GET\",\n    \"uri\": \"xx\",\n    \"note\": \"xxx\",\n    \"status\": 1\n}"
+              "example": "{\n    \"parent_id\": 1,\n    \"id\": 1,\n    \"name\": \"xxxx2\",\n    \"method\": \"GET\",\n    \"uri\": \"xx\",\n    \"desc\": \"xxx\",\n    \"status\": 1\n}"
             }
           }
         },
@@ -1503,7 +1503,7 @@
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"name\": \"xxxx3\",\n    \"method\": \"GET\",\n    \"uri\": \"xx\",\n    \"note\": \"\",\n    \"status\": 1\n}"
+              "example": "{\n    \"name\": \"xxxx3\",\n    \"method\": \"GET\",\n    \"uri\": \"xx\",\n    \"desc\": \"\",\n    \"status\": 1\n}"
             }
           }
         },
@@ -1589,7 +1589,7 @@
                 "schema": []
               }
             },
-            "example": "{\"code\":10000,\"msg\":\"Ok\",\"data\":{\"data_list\":[{\"id\":2,\"name\":\"管理员\",\"sort\":0,\"note\":\"管理员\",\"status\":1,\"created_at\":\"2023-01-13T21:55:31+08:00\",\"UpdatedAt\":\"2023-01-13T22:14:23+08:00\"}],\"tatol\":1}}"
+            "example": "{\"code\":10000,\"msg\":\"Ok\",\"data\":{\"data_list\":[{\"id\":2,\"name\":\"管理员\",\"sort\":0,\"desc\":\"管理员\",\"status\":1,\"created_at\":\"2023-01-13T21:55:31+08:00\",\"UpdatedAt\":\"2023-01-13T22:14:23+08:00\"}],\"tatol\":1}}"
           },
           "404": {
             "description": "失败",
@@ -1770,7 +1770,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 13700,\n\t\t\t\t\"user_id\": 20,\n\t\t\t\t\"parent_trace_id\": \"\",\n\t\t\t\t\"trace_id\": \"3fa925b39d10a6b3832135902c99d715\",\n\t\t\t\t\"error_code\": 200,\n\t\t\t\t\"method\": \"GET\",\n\t\t\t\t\"path\": \"/api/v1/httpLog/list\",\n\t\t\t\t\"query\": \"page=1&page_size=10&user_id=0&trace_id=&error_code=&method=&path=&remote_addr=&http_type=\",\n\t\t\t\t\"body\": \"\",\n\t\t\t\t\"remote_addr\": \"127.0.0.1\",\n\t\t\t\t\"user_agent\": \"PostmanRuntime-ApipostRuntime/1.1.0\",\n\t\t\t\t\"cost\": 7443,\n\t\t\t\t\"http_type\": \"REQ\",\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"created_at\": \"2023-02-18T17:04:42+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 13294\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 13700,\n\t\t\t\t\"user_id\": 20,\n\t\t\t\t\"parent_trace_id\": \"\",\n\t\t\t\t\"trace_id\": \"3fa925b39d10a6b3832135902c99d715\",\n\t\t\t\t\"error_code\": 200,\n\t\t\t\t\"method\": \"GET\",\n\t\t\t\t\"path\": \"/api/v1/httpLog/list\",\n\t\t\t\t\"query\": \"page=1&page_size=10&user_id=0&trace_id=&error_code=&method=&path=&remote_addr=&http_type=\",\n\t\t\t\t\"body\": \"\",\n\t\t\t\t\"remote_addr\": \"127.0.0.1\",\n\t\t\t\t\"user_agent\": \"PostmanRuntime-ApipostRuntime/1.1.0\",\n\t\t\t\t\"cost\": 7443,\n\t\t\t\t\"http_type\": \"REQ\",\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"created_at\": \"2023-02-18T17:04:42+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 13294\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -1994,7 +1994,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 5,\n\t\t\t\t\"name\": \"测试2\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:21+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:21+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 4,\n\t\t\t\t\"name\": \"测试1\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:15+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:15+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 2,\n\t\t\t\t\"name\": \"管理员\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"管理员\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T21:55:31+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 3,\n\t\t\t\t\"name\": \"普通用户\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"普通用户\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T22:06:48+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 4\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 5,\n\t\t\t\t\"name\": \"测试2\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:21+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:21+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 4,\n\t\t\t\t\"name\": \"测试1\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:15+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:15+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 2,\n\t\t\t\t\"name\": \"管理员\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"管理员\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T21:55:31+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 3,\n\t\t\t\t\"name\": \"普通用户\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"普通用户\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T22:06:48+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 4\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -2047,7 +2047,7 @@
                 "schema": []
               }
             },
-            "example": "{\"code\":10000,\"msg\":\"Ok\",\"data\":{\"data_list\":[{\"id\":2,\"name\":\"管理员\",\"sort\":0,\"note\":\"管理员\",\"status\":1,\"created_at\":\"2023-01-13T21:55:31+08:00\",\"UpdatedAt\":\"2023-01-13T22:14:23+08:00\"}],\"tatol\":1}}"
+            "example": "{\"code\":10000,\"msg\":\"Ok\",\"data\":{\"data_list\":[{\"id\":2,\"name\":\"管理员\",\"sort\":0,\"desc\":\"管理员\",\"status\":1,\"created_at\":\"2023-01-13T21:55:31+08:00\",\"UpdatedAt\":\"2023-01-13T22:14:23+08:00\"}],\"tatol\":1}}"
           },
           "404": {
             "description": "失败",
@@ -2075,7 +2075,7 @@
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"name\": \"管理员2\",\n    \"status\": 1,\n    \"sort\": 0,\n    \"note\": \"\"\n}"
+              "example": "{\n    \"name\": \"管理员2\",\n    \"status\": 1,\n    \"sort\": 0,\n    \"desc\": \"\"\n}"
             }
           }
         },
@@ -2155,7 +2155,7 @@
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"id\":2,\n    \"name\": \"管理员\",\n    \"status\": 0,\n    \"sort\": 0,\n    \"note\": \"管理员\"\n}"
+              "example": "{\n    \"id\":2,\n    \"name\": \"管理员\",\n    \"status\": 0,\n    \"sort\": 0,\n    \"desc\": \"管理员\"\n}"
             }
           }
         },
@@ -2274,7 +2274,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 4,\n\t\t\t\t\"realname\": \"xxx2\",\n\t\t\t\t\"nickname\": \"xxxa\",\n\t\t\t\t\"gender\": 1,\n\t\t\t\t\"age\": 18,\n\t\t\t\t\"birthday\": \"xxx\",\n\t\t\t\t\"avatar\": \"xxx\",\n\t\t\t\t\"phone\": \"xxx\",\n\t\t\t\t\"email\": \"xxx\",\n\t\t\t\t\"intro\": \"xxx\",\n\t\t\t\t\"note\": \"xxx\",\n\t\t\t\t\"password\": \"\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-08T18:09:22+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T14:13:10+08:00\",\n\t\t\t\t\"roles\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 2,\n\t\t\t\t\t\t\"name\": \"管理员\",\n\t\t\t\t\t\t\"sort\": 0,\n\t\t\t\t\t\t\"note\": \"管理员\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-01-13T21:55:31+08:00\",\n\t\t\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 5\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 4,\n\t\t\t\t\"realname\": \"xxx2\",\n\t\t\t\t\"nickname\": \"xxxa\",\n\t\t\t\t\"gender\": 1,\n\t\t\t\t\"age\": 18,\n\t\t\t\t\"birthday\": \"xxx\",\n\t\t\t\t\"avatar\": \"xxx\",\n\t\t\t\t\"phone\": \"xxx\",\n\t\t\t\t\"email\": \"xxx\",\n\t\t\t\t\"intro\": \"xxx\",\n\t\t\t\t\"desc\": \"xxx\",\n\t\t\t\t\"password\": \"\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-08T18:09:22+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T14:13:10+08:00\",\n\t\t\t\t\"roles\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 2,\n\t\t\t\t\t\t\"name\": \"管理员\",\n\t\t\t\t\t\t\"sort\": 0,\n\t\t\t\t\t\t\"desc\": \"管理员\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-01-13T21:55:31+08:00\",\n\t\t\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 5\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -2344,7 +2344,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 19,\n\t\t\t\t\"realname\": \"xxx2\",\n\t\t\t\t\"nickname\": \"xxxx\",\n\t\t\t\t\"gender\": 0,\n\t\t\t\t\"age\": 18,\n\t\t\t\t\"birthday\": \"ffffffff\",\n\t\t\t\t\"avatar\": \"fffffff\",\n\t\t\t\t\"phone\": \"aaaa234\",\n\t\t\t\t\"email\": \"aaaa234\",\n\t\t\t\t\"intro\": \"xxx\",\n\t\t\t\t\"note\": \"xxx\",\n\t\t\t\t\"password\": \"\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"status\": 0,\n\t\t\t\t\"created_at\": \"2023-01-14T13:37:42+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:08:36+08:00\",\n\t\t\t\t\"roles\": null\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 7,\n\t\t\t\t\"realname\": \"xxx2\",\n\t\t\t\t\"nickname\": \"xxxx\",\n\t\t\t\t\"gender\": 1,\n\t\t\t\t\"age\": 18,\n\t\t\t\t\"birthday\": \"xxx\",\n\t\t\t\t\"avatar\": \"xxx\",\n\t\t\t\t\"phone\": \"555555555\",\n\t\t\t\t\"email\": \"555555555\",\n\t\t\t\t\"intro\": \"xxx\",\n\t\t\t\t\"note\": \"xxx\",\n\t\t\t\t\"password\": \"\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"status\": 0,\n\t\t\t\t\"created_at\": \"2023-01-13T22:06:48+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T14:17:20+08:00\",\n\t\t\t\t\"roles\": null\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 4,\n\t\t\t\t\"realname\": \"xxx2\",\n\t\t\t\t\"nickname\": \"xxxa\",\n\t\t\t\t\"gender\": 1,\n\t\t\t\t\"age\": 18,\n\t\t\t\t\"birthday\": \"xxx\",\n\t\t\t\t\"avatar\": \"xxx\",\n\t\t\t\t\"phone\": \"xxx\",\n\t\t\t\t\"email\": \"xxx\",\n\t\t\t\t\"intro\": \"xxx\",\n\t\t\t\t\"note\": \"xxx\",\n\t\t\t\t\"password\": \"\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-08T18:09:22+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T14:13:10+08:00\",\n\t\t\t\t\"roles\": null\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 6,\n\t\t\t\t\"realname\": \"xxx2\",\n\t\t\t\t\"nickname\": \"xxxx\",\n\t\t\t\t\"gender\": 1,\n\t\t\t\t\"age\": 18,\n\t\t\t\t\"birthday\": \"xxx\",\n\t\t\t\t\"avatar\": \"xxx\",\n\t\t\t\t\"phone\": \"aaaa\",\n\t\t\t\t\"email\": \"aaaa\",\n\t\t\t\t\"intro\": \"xxx\",\n\t\t\t\t\"note\": \"xxx\",\n\t\t\t\t\"password\": \"\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T21:34:44+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T21:34:44+08:00\",\n\t\t\t\t\"roles\": null\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 5,\n\t\t\t\t\"realname\": \"xxx2\",\n\t\t\t\t\"nickname\": \"xxx\",\n\t\t\t\t\"gender\": 1,\n\t\t\t\t\"age\": 18,\n\t\t\t\t\"birthday\": \"xxx\",\n\t\t\t\t\"avatar\": \"xxx\",\n\t\t\t\t\"phone\": \"xxxx\",\n\t\t\t\t\"email\": \"xxxx\",\n\t\t\t\t\"intro\": \"xxx\",\n\t\t\t\t\"note\": \"xxx\",\n\t\t\t\t\"password\": \"\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T21:15:20+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T21:15:20+08:00\",\n\t\t\t\t\"roles\": null\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 5\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 19,\n\t\t\t\t\"realname\": \"xxx2\",\n\t\t\t\t\"nickname\": \"xxxx\",\n\t\t\t\t\"gender\": 0,\n\t\t\t\t\"age\": 18,\n\t\t\t\t\"birthday\": \"ffffffff\",\n\t\t\t\t\"avatar\": \"fffffff\",\n\t\t\t\t\"phone\": \"aaaa234\",\n\t\t\t\t\"email\": \"aaaa234\",\n\t\t\t\t\"intro\": \"xxx\",\n\t\t\t\t\"desc\": \"xxx\",\n\t\t\t\t\"password\": \"\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"status\": 0,\n\t\t\t\t\"created_at\": \"2023-01-14T13:37:42+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:08:36+08:00\",\n\t\t\t\t\"roles\": null\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 7,\n\t\t\t\t\"realname\": \"xxx2\",\n\t\t\t\t\"nickname\": \"xxxx\",\n\t\t\t\t\"gender\": 1,\n\t\t\t\t\"age\": 18,\n\t\t\t\t\"birthday\": \"xxx\",\n\t\t\t\t\"avatar\": \"xxx\",\n\t\t\t\t\"phone\": \"555555555\",\n\t\t\t\t\"email\": \"555555555\",\n\t\t\t\t\"intro\": \"xxx\",\n\t\t\t\t\"desc\": \"xxx\",\n\t\t\t\t\"password\": \"\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"status\": 0,\n\t\t\t\t\"created_at\": \"2023-01-13T22:06:48+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T14:17:20+08:00\",\n\t\t\t\t\"roles\": null\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 4,\n\t\t\t\t\"realname\": \"xxx2\",\n\t\t\t\t\"nickname\": \"xxxa\",\n\t\t\t\t\"gender\": 1,\n\t\t\t\t\"age\": 18,\n\t\t\t\t\"birthday\": \"xxx\",\n\t\t\t\t\"avatar\": \"xxx\",\n\t\t\t\t\"phone\": \"xxx\",\n\t\t\t\t\"email\": \"xxx\",\n\t\t\t\t\"intro\": \"xxx\",\n\t\t\t\t\"desc\": \"xxx\",\n\t\t\t\t\"password\": \"\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-08T18:09:22+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T14:13:10+08:00\",\n\t\t\t\t\"roles\": null\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 6,\n\t\t\t\t\"realname\": \"xxx2\",\n\t\t\t\t\"nickname\": \"xxxx\",\n\t\t\t\t\"gender\": 1,\n\t\t\t\t\"age\": 18,\n\t\t\t\t\"birthday\": \"xxx\",\n\t\t\t\t\"avatar\": \"xxx\",\n\t\t\t\t\"phone\": \"aaaa\",\n\t\t\t\t\"email\": \"aaaa\",\n\t\t\t\t\"intro\": \"xxx\",\n\t\t\t\t\"desc\": \"xxx\",\n\t\t\t\t\"password\": \"\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T21:34:44+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T21:34:44+08:00\",\n\t\t\t\t\"roles\": null\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 5,\n\t\t\t\t\"realname\": \"xxx2\",\n\t\t\t\t\"nickname\": \"xxx\",\n\t\t\t\t\"gender\": 1,\n\t\t\t\t\"age\": 18,\n\t\t\t\t\"birthday\": \"xxx\",\n\t\t\t\t\"avatar\": \"xxx\",\n\t\t\t\t\"phone\": \"xxxx\",\n\t\t\t\t\"email\": \"xxxx\",\n\t\t\t\t\"intro\": \"xxx\",\n\t\t\t\t\"desc\": \"xxx\",\n\t\t\t\t\"password\": \"\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T21:15:20+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T21:15:20+08:00\",\n\t\t\t\t\"roles\": null\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 5\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -2374,7 +2374,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"user\": {\n\t\t\t\"id\": 20,\n\t\t\t\"realname\": \"xxx2\",\n\t\t\t\"nickname\": \"demo\",\n\t\t\t\"gender\": 1,\n\t\t\t\"age\": 18,\n\t\t\t\"birthday\": \"xxx\",\n\t\t\t\"avatar\": \"xxx\",\n\t\t\t\"phone\": \"18312465088\",\n\t\t\t\"email\": \"\",\n\t\t\t\"intro\": \"xxx\",\n\t\t\t\"note\": \"xxx\",\n\t\t\t\"password\": \"\",\n\t\t\t\"sort\": 1,\n\t\t\t\"status\": 1,\n\t\t\t\"created_at\": \"2023-01-15 17:25:17\",\n\t\t\t\"updated_at\": \"2023-02-05 19:24:48\",\n\t\t\t\"roles\": null\n\t\t},\n\t\t\"roles\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"name\": \"管理员\",\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-01 22:39:38\",\n\t\t\t\t\"updated_at\": \"2023-02-01 22:41:48\"\n\t\t\t}\n\t\t],\n\t\t\"menus\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"title\": \"系统管理\",\n\t\t\t\t\"icon\": \"\",\n\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\"open_type\": 0,\n\t\t\t\t\"path\": \"/system\",\n\t\t\t\t\"component\": \"Layout\",\n\t\t\t\t\"link\": \"\",\n\t\t\t\t\"target\": \"\",\n\t\t\t\t\"permission\": \"\",\n\t\t\t\t\"hide\": 0,\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-04 21:18:29\",\n\t\t\t\t\"updated_at\": \"2023-02-05 20:22:07\",\n\t\t\t\t\"children\": null\n\t\t\t}\n\t\t],\n\t\t\"permissions\": [\n\t\t\t\"sys:user:list\"\n\t\t]\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"user\": {\n\t\t\t\"id\": 20,\n\t\t\t\"realname\": \"xxx2\",\n\t\t\t\"nickname\": \"demo\",\n\t\t\t\"gender\": 1,\n\t\t\t\"age\": 18,\n\t\t\t\"birthday\": \"xxx\",\n\t\t\t\"avatar\": \"xxx\",\n\t\t\t\"phone\": \"18312465088\",\n\t\t\t\"email\": \"\",\n\t\t\t\"intro\": \"xxx\",\n\t\t\t\"desc\": \"xxx\",\n\t\t\t\"password\": \"\",\n\t\t\t\"sort\": 1,\n\t\t\t\"status\": 1,\n\t\t\t\"created_at\": \"2023-01-15 17:25:17\",\n\t\t\t\"updated_at\": \"2023-02-05 19:24:48\",\n\t\t\t\"roles\": null\n\t\t},\n\t\t\"roles\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"name\": \"管理员\",\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-01 22:39:38\",\n\t\t\t\t\"updated_at\": \"2023-02-01 22:41:48\"\n\t\t\t}\n\t\t],\n\t\t\"menus\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"title\": \"系统管理\",\n\t\t\t\t\"icon\": \"\",\n\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\"open_type\": 0,\n\t\t\t\t\"path\": \"/system\",\n\t\t\t\t\"component\": \"Layout\",\n\t\t\t\t\"link\": \"\",\n\t\t\t\t\"target\": \"\",\n\t\t\t\t\"permission\": \"\",\n\t\t\t\t\"hide\": 0,\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-04 21:18:29\",\n\t\t\t\t\"updated_at\": \"2023-02-05 20:22:07\",\n\t\t\t\t\"children\": null\n\t\t\t}\n\t\t],\n\t\t\"permissions\": [\n\t\t\t\"sys:user:list\"\n\t\t]\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -2402,7 +2402,7 @@
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"realname\": \"xxx2\",\n    \"nickname\": \"xxxx\",\n    \"gender\": 1,\n    \"age\": 18,\n    \"birthday\": \"xxx\",\n    \"avatar\": \"xxx\",\n    \"phone\": \"aaaa234\",\n    \"email\": \"aaaa234\",\n    \"intro\": \"xxx\",\n    \"note\": \"xxx\",\n    \"password\": \"xxx\",\n    \"role_ids\": [\n        2\n    ]\n}"
+              "example": "{\n    \"realname\": \"xxx2\",\n    \"nickname\": \"xxxx\",\n    \"gender\": 1,\n    \"age\": 18,\n    \"birthday\": \"xxx\",\n    \"avatar\": \"xxx\",\n    \"phone\": \"aaaa234\",\n    \"email\": \"aaaa234\",\n    \"intro\": \"xxx\",\n    \"desc\": \"xxx\",\n    \"password\": \"xxx\",\n    \"role_ids\": [\n        2\n    ]\n}"
             }
           }
         },
@@ -2562,7 +2562,7 @@
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"id\": 19,\n    \"realname\": \"xxx2\",\n    \"nickname\": \"xxxx\",\n    \"gender\": 0,\n    \"age\": 18,\n    \"birthday\": \"ffffffff\",\n    \"avatar\": \"fffffff\",\n    \"phone\": \"aaaa234\",\n    \"email\": \"aaaa234\",\n    \"intro\": \"xxx\",\n    \"note\": \"xxx\",\n    \"password\": \"xxx\",\n    \"role_ids\": [\n        4,\n        3\n    ]\n}"
+              "example": "{\n    \"id\": 19,\n    \"realname\": \"xxx2\",\n    \"nickname\": \"xxxx\",\n    \"gender\": 0,\n    \"age\": 18,\n    \"birthday\": \"ffffffff\",\n    \"avatar\": \"fffffff\",\n    \"phone\": \"aaaa234\",\n    \"email\": \"aaaa234\",\n    \"intro\": \"xxx\",\n    \"desc\": \"xxx\",\n    \"password\": \"xxx\",\n    \"role_ids\": [\n        4,\n        3\n    ]\n}"
             }
           }
         },
@@ -2642,7 +2642,7 @@
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"id\": 1,\n    \"name\": \"xxxx3\",\n    \"code\": \"GET\",\n    \"note\": \"\",\n    \"status\": 1\n}"
+              "example": "{\n    \"id\": 1,\n    \"name\": \"xxxx3\",\n    \"code\": \"GET\",\n    \"desc\": \"\",\n    \"status\": 1\n}"
             }
           }
         },
@@ -2794,7 +2794,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 5,\n\t\t\t\t\"name\": \"测试2\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:21+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:21+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 4,\n\t\t\t\t\"name\": \"测试1\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:15+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:15+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 2,\n\t\t\t\t\"name\": \"管理员\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"管理员\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T21:55:31+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 3,\n\t\t\t\t\"name\": \"普通用户\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"普通用户\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T22:06:48+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 4\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 5,\n\t\t\t\t\"name\": \"测试2\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:21+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:21+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 4,\n\t\t\t\t\"name\": \"测试1\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:15+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:15+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 2,\n\t\t\t\t\"name\": \"管理员\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"管理员\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T21:55:31+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 3,\n\t\t\t\t\"name\": \"普通用户\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"普通用户\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T22:06:48+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 4\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -2822,7 +2822,7 @@
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"name\": \"xxxx3\",\n    \"code\": \"GET\",\n    \"note\": \"\",\n    \"status\": 1\n}"
+              "example": "{\n    \"name\": \"xxxx3\",\n    \"code\": \"GET\",\n    \"desc\": \"\",\n    \"status\": 1\n}"
             }
           }
         },
@@ -2962,7 +2962,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"user_id\": 20,\n\t\t\t\t\"nickname\": \"管理员\",\n\t\t\t\t\"trace_id\": \"514d136905e0ab659a3f863661b61e24\",\n\t\t\t\t\"os_type\": 0,\n\t\t\t\t\"error_type\": 0,\n\t\t\t\t\"level\": \"x\",\n\t\t\t\t\"caller_line\": \"x\",\n\t\t\t\t\"url\": \"x\",\n\t\t\t\t\"msg\": \"x\",\n\t\t\t\t\"stack\": \"x\",\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"created_at\": \"2023-02-26 21:37:01\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 1\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"user_id\": 20,\n\t\t\t\t\"nickname\": \"管理员\",\n\t\t\t\t\"trace_id\": \"514d136905e0ab659a3f863661b61e24\",\n\t\t\t\t\"os_type\": 0,\n\t\t\t\t\"error_type\": 0,\n\t\t\t\t\"level\": \"x\",\n\t\t\t\t\"caller_line\": \"x\",\n\t\t\t\t\"url\": \"x\",\n\t\t\t\t\"msg\": \"x\",\n\t\t\t\t\"stack\": \"x\",\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"created_at\": \"2023-02-26 21:37:01\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 1\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -3090,7 +3090,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 13700,\n\t\t\t\t\"user_id\": 20,\n\t\t\t\t\"parent_trace_id\": \"\",\n\t\t\t\t\"trace_id\": \"3fa925b39d10a6b3832135902c99d715\",\n\t\t\t\t\"error_code\": 200,\n\t\t\t\t\"method\": \"GET\",\n\t\t\t\t\"path\": \"/api/v1/httpLog/list\",\n\t\t\t\t\"query\": \"page=1&page_size=10&user_id=0&trace_id=&error_code=&method=&path=&remote_addr=&http_type=\",\n\t\t\t\t\"body\": \"\",\n\t\t\t\t\"remote_addr\": \"127.0.0.1\",\n\t\t\t\t\"user_agent\": \"PostmanRuntime-ApipostRuntime/1.1.0\",\n\t\t\t\t\"cost\": 7443,\n\t\t\t\t\"http_type\": \"REQ\",\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"created_at\": \"2023-02-18T17:04:42+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 13294\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 13700,\n\t\t\t\t\"user_id\": 20,\n\t\t\t\t\"parent_trace_id\": \"\",\n\t\t\t\t\"trace_id\": \"3fa925b39d10a6b3832135902c99d715\",\n\t\t\t\t\"error_code\": 200,\n\t\t\t\t\"method\": \"GET\",\n\t\t\t\t\"path\": \"/api/v1/httpLog/list\",\n\t\t\t\t\"query\": \"page=1&page_size=10&user_id=0&trace_id=&error_code=&method=&path=&remote_addr=&http_type=\",\n\t\t\t\t\"body\": \"\",\n\t\t\t\t\"remote_addr\": \"127.0.0.1\",\n\t\t\t\t\"user_agent\": \"PostmanRuntime-ApipostRuntime/1.1.0\",\n\t\t\t\t\"cost\": 7443,\n\t\t\t\t\"http_type\": \"REQ\",\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"created_at\": \"2023-02-18T17:04:42+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 13294\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -3194,7 +3194,7 @@
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"id\": 2,\n    \"parent_id\": 1,\n    \"name\": \"1\",\n    \"key\": \"1\",\n    \"value\": \"1\",\n    \"sort\": 0,\n    \"note\": \"\",\n    \"status\": 1\n}"
+              "example": "{\n    \"id\": 2,\n    \"parent_id\": 1,\n    \"name\": \"1\",\n    \"key\": \"1\",\n    \"value\": \"1\",\n    \"sort\": 0,\n    \"desc\": \"\",\n    \"status\": 1\n}"
             }
           }
         },
@@ -3236,7 +3236,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"name\": \"系统配置\",\n\t\t\t\t\"key\": \"system\",\n\t\t\t\t\"value\": \"\",\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"note\": \"系统配置\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-14 22:17:20\",\n\t\t\t\t\"updated_at\": \"2023-02-25 21:01:44\",\n\t\t\t\t\"children\": null\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 19\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"name\": \"系统配置\",\n\t\t\t\t\"key\": \"system\",\n\t\t\t\t\"value\": \"\",\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"desc\": \"系统配置\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-14 22:17:20\",\n\t\t\t\t\"updated_at\": \"2023-02-25 21:01:44\",\n\t\t\t\t\"children\": null\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 19\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -3289,7 +3289,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": [\n\t\t{\n\t\t\t\"id\": 5,\n\t\t\t\"parent_id\": 4,\n\t\t\t\"name\": \"网站全称\",\n\t\t\t\"key\": \"website_title\",\n\t\t\t\"value\": \"后台管理系统\",\n\t\t\t\"sort\": 1,\n\t\t\t\"note\": \"\",\n\t\t\t\"status\": 1,\n\t\t\t\"created_at\": \"2023-02-25 20:33:49\",\n\t\t\t\"updated_at\": \"2023-02-25 20:33:49\",\n\t\t\t\"children\": null\n\t\t}\n\t]\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": [\n\t\t{\n\t\t\t\"id\": 5,\n\t\t\t\"parent_id\": 4,\n\t\t\t\"name\": \"网站全称\",\n\t\t\t\"key\": \"website_title\",\n\t\t\t\"value\": \"后台管理系统\",\n\t\t\t\"sort\": 1,\n\t\t\t\"desc\": \"\",\n\t\t\t\"status\": 1,\n\t\t\t\"created_at\": \"2023-02-25 20:33:49\",\n\t\t\t\"updated_at\": \"2023-02-25 20:33:49\",\n\t\t\t\"children\": null\n\t\t}\n\t]\n}"
           },
           "404": {
             "description": "失败",
@@ -3349,7 +3349,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"name\": \"系统配置\",\n\t\t\t\t\"key\": \"system\",\n\t\t\t\t\"value\": \"\",\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-14T22:17:20+08:00\",\n\t\t\t\t\"updated_at\": \"2023-02-14T22:38:06+08:00\",\n\t\t\t\t\"children\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 2,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"name\": \"应用名称\",\n\t\t\t\t\t\t\"key\": \"sys_app_name\",\n\t\t\t\t\t\t\"value\": \"系统后台配置\",\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"note\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-14T22:38:32+08:00\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-14T22:38:52+08:00\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 1\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"name\": \"系统配置\",\n\t\t\t\t\"key\": \"system\",\n\t\t\t\t\"value\": \"\",\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-14T22:17:20+08:00\",\n\t\t\t\t\"updated_at\": \"2023-02-14T22:38:06+08:00\",\n\t\t\t\t\"children\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 2,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"name\": \"应用名称\",\n\t\t\t\t\t\t\"key\": \"sys_app_name\",\n\t\t\t\t\t\t\"value\": \"系统后台配置\",\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"desc\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-14T22:38:32+08:00\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-14T22:38:52+08:00\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 1\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -3409,7 +3409,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"name\": \"系统配置\",\n\t\t\t\t\"key\": \"system\",\n\t\t\t\t\"value\": \"\",\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"note\": \"系统配置\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-14 22:17:20\",\n\t\t\t\t\"updated_at\": \"2023-02-25 21:01:44\",\n\t\t\t\t\"children\": null\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 19\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"name\": \"系统配置\",\n\t\t\t\t\"key\": \"system\",\n\t\t\t\t\"value\": \"\",\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"desc\": \"系统配置\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-14 22:17:20\",\n\t\t\t\t\"updated_at\": \"2023-02-25 21:01:44\",\n\t\t\t\t\"children\": null\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 19\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -3519,7 +3519,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"name\": \"系统配置\",\n\t\t\t\t\"key\": \"system\",\n\t\t\t\t\"value\": \"\",\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-14T22:17:20+08:00\",\n\t\t\t\t\"updated_at\": \"2023-02-14T22:38:06+08:00\",\n\t\t\t\t\"children\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 2,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"name\": \"应用名称\",\n\t\t\t\t\t\t\"key\": \"sys_app_name\",\n\t\t\t\t\t\t\"value\": \"系统后台配置\",\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"note\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-14T22:38:32+08:00\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-14T22:38:52+08:00\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 1\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"name\": \"系统配置\",\n\t\t\t\t\"key\": \"system\",\n\t\t\t\t\"value\": \"\",\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-14T22:17:20+08:00\",\n\t\t\t\t\"updated_at\": \"2023-02-14T22:38:06+08:00\",\n\t\t\t\t\"children\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 2,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"name\": \"应用名称\",\n\t\t\t\t\t\t\"key\": \"sys_app_name\",\n\t\t\t\t\t\t\"value\": \"系统后台配置\",\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"desc\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-14T22:38:32+08:00\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-14T22:38:52+08:00\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 1\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -3547,7 +3547,7 @@
               "schema": {
                 "type": "string"
               },
-              "example": "{\n  \"parent_id\": 1,\n  \"name\": \"1\",\n  \"key\": \"1\",\n  \"value\": \"1\",\n  \"sort\": 0,\n  \"note\": \"\",\n  \"status\": 1\n}"
+              "example": "{\n  \"parent_id\": 1,\n  \"name\": \"1\",\n  \"key\": \"1\",\n  \"value\": \"1\",\n  \"sort\": 0,\n  \"desc\": \"\",\n  \"status\": 1\n}"
             }
           }
         },
@@ -3638,7 +3638,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"id\": 26,\n\t\t\"parent_id\": 25,\n\t\t\"name\": \"可申请最大令牌数\",\n\t\t\"key\": \"api_auth_max_token_num\",\n\t\t\"value\": \"5\",\n\t\t\"sort\": 1,\n\t\t\"note\": \"\",\n\t\t\"status\": 1,\n\t\t\"created_at\": \"2023-03-10 00:25:41\",\n\t\t\"updated_at\": \"2023-03-10 00:25:41\",\n\t\t\"children\": null\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"id\": 26,\n\t\t\"parent_id\": 25,\n\t\t\"name\": \"可申请最大令牌数\",\n\t\t\"key\": \"api_auth_max_token_num\",\n\t\t\"value\": \"5\",\n\t\t\"sort\": 1,\n\t\t\"desc\": \"\",\n\t\t\"status\": 1,\n\t\t\"created_at\": \"2023-03-10 00:25:41\",\n\t\t\"updated_at\": \"2023-03-10 00:25:41\",\n\t\t\"children\": null\n\t}\n}"
           },
           "404": {
             "description": "失败",

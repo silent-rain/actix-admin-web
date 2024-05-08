@@ -26,8 +26,8 @@ pub struct Model {
     pub img_type: String,
     /// 图片大小
     pub img_size: i32,
-    /// 备注
-    pub note: Option<String>,
+    /// 描述信息
+    pub desc: Option<String>,
     /// 创建时间
     pub created_at: DateTimeLocal,
 }

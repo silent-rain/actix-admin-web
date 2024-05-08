@@ -141,12 +141,12 @@ impl MigrationTrait for Migration {
                             .comment("排序"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::Note)
+                        ColumnDef::new(PermMenu::Desc)
                             .string()
                             .string_len(200)
                             .null()
                             .default("")
-                            .comment("备注"),
+                            .comment("描述信息"),
                     )
                     .col(
                         ColumnDef::new(PermMenu::Status)
@@ -208,7 +208,7 @@ pub enum PermMenu {
     RootAlwaysShow,
     Permission,
     Sort,
-    Note,
+    Desc,
     Status,
     CreatedAt,
     UpdatedAt,

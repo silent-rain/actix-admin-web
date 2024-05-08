@@ -39,8 +39,8 @@ pub struct UploadFileForm {
 pub struct UpdateIconReq {
     /// 图片名称
     pub name: String,
-    /// 备注
-    pub note: Option<String>,
+    /// 描述信息
+    pub desc: Option<String>,
 }
 
 /// 批量删除图片

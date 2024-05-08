@@ -44,13 +44,13 @@ impl MigrationTrait for Migration {
                             .comment("邮箱"),
                     )
                     .col(
-                        ColumnDef::new(UserEmail::Note)
+                        ColumnDef::new(UserEmail::Desc)
                             .string()
                             .string_len(200)
                             .default("")
                             .null()
                             .default("")
-                            .comment("备注"),
+                            .comment("描述信息"),
                     )
                     .col(
                         ColumnDef::new(UserEmail::CreatedAt)
@@ -144,7 +144,7 @@ pub enum UserEmail {
     Id,
     UserId,
     Email,
-    Note,
+    Desc,
     CreatedAt,
     UpdatedAt,
 }

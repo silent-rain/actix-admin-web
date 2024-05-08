@@ -222,7 +222,7 @@ impl<S> ApiOperationMiddlewareService<S> {
             user_agent,
             cost: 0,
             http_type: log_api_operation::enums::HttpType::Req,
-            note: None,
+            desc: None,
         }
     }
 

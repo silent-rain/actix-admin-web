@@ -63,12 +63,12 @@ impl MigrationTrait for Migration {
                             .comment("图片大小"),
                     )
                     .col(
-                        ColumnDef::new(SysImage::Note)
+                        ColumnDef::new(SysImage::Desc)
                             .string()
                             .string_len(200)
                             .null()
                             .default("")
-                            .comment("备注"),
+                            .comment("描述信息"),
                     )
                     .col(
                         ColumnDef::new(SysImage::CreatedAt)
@@ -100,6 +100,6 @@ pub enum SysImage {
     BaseImg,
     ImgType,
     ImgSize,
-    Note,
+    Desc,
     CreatedAt,
 }

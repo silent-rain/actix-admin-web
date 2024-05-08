@@ -90,7 +90,7 @@ impl<'a> DepartmentService<'a> {
             pid: Set(req.pid),
             name: Set(req.name),
             sort: Set(req.sort),
-            note: Set(req.note),
+            desc: Set(req.desc),
             status: Set(perm_department::enums::Status::Enabled as i8),
             ..Default::default()
         };
@@ -146,7 +146,7 @@ impl<'a> DepartmentService<'a> {
             pids: Set(Some(pids)),
             name: Set(req.name),
             sort: Set(req.sort),
-            note: Set(req.note),
+            desc: Set(req.desc),
             status: Set(req.status as i8),
             ..Default::default()
         };

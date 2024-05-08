@@ -78,7 +78,7 @@ impl<'a> UserPhoneService<'a> {
         let model = perm_user_phone::ActiveModel {
             user_id: Set(req.user_id),
             phone: Set(req.phone),
-            note: Set(req.note),
+            desc: Set(req.desc),
             ..Default::default()
         };
         let result = self.user_phone_dao.add(model).await.map_err(|err| {
@@ -114,7 +114,7 @@ impl<'a> UserPhoneService<'a> {
         let model = perm_user_phone::ActiveModel {
             id: Set(id),
             phone: Set(req.phone),
-            note: Set(req.note),
+            desc: Set(req.desc),
             ..Default::default()
         };
 

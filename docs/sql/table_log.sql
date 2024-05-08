@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS
         `user_agent` VARCHAR(256) NULL DEFAULT '' COMMENT '用户代理',
         `cost` INT(20) UNSIGNED NOT NULL COMMENT '耗时,毫秒',
         `http_type` VARCHAR(10) NOT NULL COMMENT '请求类型:REQ/RSP',
-        `note` VARCHAR(200) NULL DEFAULT '' COMMENT '备注',
+        `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '描述信息',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         PRIMARY KEY (`id`)
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT 'API操作日志表';
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS
         `code` INT(10) NULL DEFAULT 0 COMMENT '业务误码',
         `code_msg` VARCHAR(500) NULL DEFAULT '' COMMENT '业务误码信息',
         `stack` TEXT NULL COMMENT '堆栈信息',
-        `note` VARCHAR(200) NULL DEFAULT '' COMMENT '备注',
+        `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '描述信息',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '创建时间',
         PRIMARY KEY (`id`)
     ) ENGINE = InnoDB AUTO_INCREMENT = 1485 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '系统日志';
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS
         `url` VARCHAR(500) NOT NULL COMMENT '错误页面',
         `msg` TEXT NULL COMMENT '日志消息',
         `stack` TEXT NULL COMMENT '堆栈信息',
-        `note` VARCHAR(200) NULL DEFAULT '' COMMENT '备注',
+        `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '描述信息',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         PRIMARY KEY (`id`)
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT 'WEB日志表';

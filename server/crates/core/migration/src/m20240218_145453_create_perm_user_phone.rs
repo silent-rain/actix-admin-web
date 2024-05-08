@@ -44,13 +44,13 @@ impl MigrationTrait for Migration {
                             .comment("手机号码"),
                     )
                     .col(
-                        ColumnDef::new(PermUserPhone::Note)
+                        ColumnDef::new(PermUserPhone::Desc)
                             .string()
                             .string_len(200)
                             .default("")
                             .null()
                             .default("")
-                            .comment("备注"),
+                            .comment("描述信息"),
                     )
                     .col(
                         ColumnDef::new(PermUserPhone::CreatedAt)
@@ -147,7 +147,7 @@ pub enum PermUserPhone {
     Id,
     UserId,
     Phone,
-    Note,
+    Desc,
     CreatedAt,
     UpdatedAt,
 }

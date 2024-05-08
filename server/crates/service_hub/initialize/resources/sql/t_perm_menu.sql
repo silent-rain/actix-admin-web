@@ -15,7 +15,7 @@ INSERT INTO
 		root_always_show,
 		permission,
 		sort,
-		note,
+		`desc`,
 		`status`,
 		created_at,
 		updated_at
@@ -37,7 +37,7 @@ VALUES
 		1,
 		NULL,
 		1,
-		'note',
+		'desc',
 		0,
 		'2024-04-18 16:46:31',
 		'2024-04-19 13:09:20'
@@ -58,7 +58,7 @@ VALUES
 		1,
 		NULL,
 		1,
-		'note',
+		'desc',
 		1,
 		'2024-04-18 16:47:08',
 		'2024-04-18 16:47:08'
@@ -79,7 +79,7 @@ VALUES
 		1,
 		NULL,
 		1,
-		'note',
+		'desc',
 		1,
 		'2024-04-18 16:47:13',
 		'2024-04-18 16:47:13'
@@ -100,7 +100,7 @@ VALUES
 		1,
 		NULL,
 		1,
-		'note',
+		'desc',
 		1,
 		'2024-04-18 16:47:27',
 		'2024-04-18 16:47:27'

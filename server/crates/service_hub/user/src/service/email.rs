@@ -78,7 +78,7 @@ impl<'a> EmailService<'a> {
         let model = user_email::ActiveModel {
             user_id: Set(req.user_id),
             email: Set(req.email),
-            note: Set(req.note),
+            desc: Set(req.desc),
             ..Default::default()
         };
         let result = self.email_dao.add(model).await.map_err(|err| {
@@ -114,7 +114,7 @@ impl<'a> EmailService<'a> {
         let model = user_email::ActiveModel {
             id: Set(id),
             email: Set(req.email),
-            note: Set(req.note),
+            desc: Set(req.desc),
             ..Default::default()
         };
 

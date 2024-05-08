@@ -162,12 +162,12 @@ impl MigrationTrait for Migration {
                             .comment("堆栈信息"),
                     )
                     .col(
-                        ColumnDef::new(LogSystem::Note)
+                        ColumnDef::new(LogSystem::Desc)
                             .string()
                             .string_len(200)
                             .null()
                             .default("")
-                            .comment("备注"),
+                            .comment("描述信息"),
                     )
                     .col(
                         ColumnDef::new(LogSystem::CreatedAt)
@@ -213,6 +213,6 @@ pub enum LogSystem {
     Code,
     CodeMsg,
     Stack,
-    Note,
+    Desc,
     CreatedAt,
 }

@@ -21,7 +21,7 @@ pub struct GetEmailListReq {
     pub email: Option<String>,
 }
 
-/// 添加用户手机号
+/// 添加邮箱
 #[derive(Serialize, Deserialize, Validate)]
 pub struct AddEmailReq {
     /// 用户ID
@@ -29,16 +29,16 @@ pub struct AddEmailReq {
     /// 邮箱
     #[validate(email)]
     pub email: String,
-    /// 备注
-    pub note: Option<String>,
+    /// 描述信息
+    pub desc: Option<String>,
 }
 
-/// 更新用户手机号
+/// 更新邮箱
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
 pub struct UpdateEmailReq {
     /// 邮箱
     #[validate(email)]
     pub email: String,
-    /// 备注
-    pub note: Option<String>,
+    /// 描述信息
+    pub desc: Option<String>,
 }

@@ -64,12 +64,12 @@ impl MigrationTrait for Migration {
                             .comment("排序"),
                     )
                     .col(
-                        ColumnDef::new(SysDictData::Note)
+                        ColumnDef::new(SysDictData::Desc)
                             .string()
                             .string_len(200)
                             .default("")
                             .null()
-                            .comment("备注"),
+                            .comment("描述信息"),
                     )
                     .col(
                         ColumnDef::new(SysDictData::Status)
@@ -154,7 +154,7 @@ pub enum SysDictData {
     Lable,
     Value,
     Sort,
-    Note,
+    Desc,
     Status,
     CreatedAt,
     UpdatedAt,

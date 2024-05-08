@@ -26,8 +26,8 @@ pub struct Model {
     pub expression: Option<String>,
     /// 间隔时间,秒
     pub interval: Option<i32>,
-    /// 备注
-    pub note: Option<String>,
+    /// 描述信息
+    pub desc: Option<String>,
     /// 任务状态,0:下线,1:上线
     pub status: i8,
     /// 创建时间

@@ -76,7 +76,7 @@ impl<'a> RoleService<'a> {
         let model = perm_role::ActiveModel {
             name: Set(req.name),
             sort: Set(req.sort),
-            note: Set(req.note),
+            desc: Set(req.desc),
             status: Set(perm_role::enums::Status::Enabled as i8),
             ..Default::default()
         };
@@ -94,7 +94,7 @@ impl<'a> RoleService<'a> {
             id: Set(id),
             name: Set(req.name),
             sort: Set(req.sort),
-            note: Set(req.note),
+            desc: Set(req.desc),
             status: Set(req.status as i8),
             ..Default::default()
         };

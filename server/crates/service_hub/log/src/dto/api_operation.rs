@@ -46,6 +46,6 @@ pub struct AddApiOperationReq {
     pub cost: u64,
     /// 请求类型:REQ/RSP
     pub http_type: log_api_operation::enums::HttpType,
-    /// 备注
-    pub note: Option<String>,
+    /// 描述信息
+    pub desc: Option<String>,
 }

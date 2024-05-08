@@ -138,7 +138,7 @@ impl<'a> ImageService<'a> {
         let model = sys_image::ActiveModel {
             id: Set(id),
             name: Set(req.name),
-            note: Set(req.note),
+            desc: Set(req.desc),
             ..Default::default()
         };
 

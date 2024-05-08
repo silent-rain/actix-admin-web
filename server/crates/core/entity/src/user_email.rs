@@ -17,8 +17,8 @@ pub struct Model {
     pub user_id: i32,
     /// 邮箱
     pub email: String,
-    /// 备注
-    pub note: Option<String>,
+    /// 描述信息
+    pub desc: Option<String>,
     /// 创建时间
     pub created_at: DateTimeLocal,
     /// 更新时间
