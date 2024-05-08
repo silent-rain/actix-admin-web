@@ -63,13 +63,13 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(PermMenu::MenuType)
                             .integer()
                             .not_null()
-                            .comment("菜单类型,0:菜单,1:按钮"),
+                            .comment("菜单类型(0:菜单,1:按钮)"),
                     )
                     .col(
                         ColumnDef::new(PermMenu::OpenType)
                             .integer()
                             .not_null()
-                            .comment("打开方式,0:组件,1:内链,2:外链"),
+                            .comment("打开方式(0:组件,1:内链,2:外链)"),
                     )
                     .col(
                         ColumnDef::new(PermMenu::Path)
@@ -116,14 +116,14 @@ impl MigrationTrait for Migration {
                             .integer()
                             .null()
                             .default(1)
-                            .comment("是否隐藏,0:显示,1:隐藏"),
+                            .comment("是否隐藏(0:显示,1:隐藏)"),
                     )
                     .col(
                         ColumnDef::new(PermMenu::RootAlwaysShow)
                             .integer()
                             .null()
                             .default(1)
-                            .comment("始终显示根菜单,0:显示,1:隐藏"),
+                            .comment("始终显示根菜单(0:显示,1:隐藏)"),
                     )
                     .col(
                         ColumnDef::new(PermMenu::Permission)
@@ -153,7 +153,7 @@ impl MigrationTrait for Migration {
                             .tiny_integer()
                             .not_null()
                             .default(1)
-                            .comment("状态,0:停用,1:正常"),
+                            .comment("状态(0:停用,1:正常)"),
                     )
                     .col(
                         ColumnDef::new(PermMenu::CreatedAt)

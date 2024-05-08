@@ -31,7 +31,7 @@ pub struct Model {
     pub system: Option<String>,
     /// 浏览器
     pub browser: Option<String>,
-    /// 登录状态,0:失败,1:成功
+    /// 登录状态(0:失败,1:成功)
     pub status: i8,
     /// 禁用状态,0:未禁用,1:禁用
     pub disabled: i8,

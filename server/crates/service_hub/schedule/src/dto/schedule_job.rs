@@ -30,7 +30,7 @@ pub struct GetScheduleJobReq {
 pub struct AddcheduleJobReq {
     /// 任务名称
     pub name: String,
-    /// 任务来源,0:用户定义,1:系统内部
+    /// 任务来源(0:用户定义,1:系统内部)
     pub source: schedule_job::enums::Source,
     /// 任务类型,0:调度任务,1:即时任务
     pub job_type: schedule_job::enums::JobType,
@@ -42,7 +42,7 @@ pub struct AddcheduleJobReq {
     pub interval: Option<i32>,
     /// 描述信息
     pub desc: Option<String>,
-    /// 任务状态,0:下线,1:上线
+    /// 任务状态(0:下线,1:上线)
     pub status: schedule_job::enums::Status,
 }
 
@@ -57,13 +57,13 @@ pub struct UpdatecheduleJobReq {
     pub interval: Option<i32>,
     /// 描述信息
     pub desc: Option<String>,
-    /// 任务状态,0:下线,1:上线
+    /// 任务状态(0:下线,1:上线)
     pub status: schedule_job::enums::Status,
 }
 
 /// 更新数据状态
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
 pub struct UpdatecheduleJobStatusReq {
-    /// 任务状态,0:下线,1:上线
+    /// 任务状态(0:下线,1:上线)
     pub status: schedule_job::enums::Status,
 }

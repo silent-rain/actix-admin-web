@@ -93,7 +93,7 @@ impl MigrationTrait for Migration {
                             .tiny_integer()
                             .not_null()
                             .default(1)
-                            .comment("登录状态,0:失败,1:成功"),
+                            .comment("登录状态(0:失败,1:成功)"),
                     )
                     .col(
                         ColumnDef::new(LogUserLogin::Disabled)

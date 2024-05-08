@@ -46,7 +46,7 @@ impl MigrationTrait for Migration {
                             .tiny_integer()
                             .not_null()
                             .default(0)
-                            .comment("任务状态,0:开始,1:完成,2:停止,3:移除"),
+                            .comment("任务状态(0:开始,1:完成,2:停止,3:移除)"),
                     )
                     .col(
                         ColumnDef::new(ScheduleJobEventLog::CreatedAt)

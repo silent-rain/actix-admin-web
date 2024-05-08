@@ -61,13 +61,13 @@ pub struct UpdateOpenapiReq {
     pub sort: Option<i32>,
     /// 描述信息
     pub desc: Option<String>,
-    /// 状态,0:停用,1:正常
+    /// 状态(0:停用,1:正常)
     pub status: perm_openapi::enums::Status,
 }
 
 /// 更新数据状态
 #[derive(Clone, Serialize, Deserialize, Validate)]
 pub struct UpdateOpenapiStatusReq {
-    /// 状态,0:停用,1:正常
+    /// 状态(0:停用,1:正常)
     pub status: perm_openapi::enums::Status,
 }

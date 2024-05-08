@@ -35,9 +35,9 @@ pub struct AddMenuReq {
     pub icon: Option<String>,
     /// Element-Icon图标
     pub el_icon: Option<String>,
-    /// 菜单类型,0:菜单,1:按钮
+    /// 菜单类型(0:菜单,1:按钮)
     pub menu_type: perm_menu::enums::MenuType,
-    /// 打开方式,0:组件,1:内链,2:外链
+    /// 打开方式(0:组件,1:内链,2:外链)
     pub open_type: perm_menu::enums::OpenType,
     /// 路由地址
     pub path: Option<String>,
@@ -49,9 +49,9 @@ pub struct AddMenuReq {
     pub link: Option<String>,
     /// 链接跳转方式, _blank/_self
     pub link_target: Option<perm_menu::enums::LinkTarget>,
-    /// 是否隐藏,0:显示,1:隐藏
+    /// 是否隐藏(0:显示,1:隐藏)
     pub hidden: Option<perm_menu::enums::Hidden>,
-    /// 始终显示根菜单,0:显示,1:隐藏
+    /// 始终显示根菜单(0:显示,1:隐藏)
     pub root_always_show: Option<perm_menu::enums::RootAlwaysShow>,
     /// 权限标识
     pub permission: Option<String>,
@@ -59,7 +59,7 @@ pub struct AddMenuReq {
     pub sort: Option<i32>,
     /// 描述信息
     pub desc: Option<String>,
-    /// 状态,0:停用,1:正常
+    /// 状态(0:停用,1:正常)
     pub status: perm_menu::enums::Status,
 }
 
@@ -75,9 +75,9 @@ pub struct UpdateMenuReq {
     pub icon: Option<String>,
     /// Element-Icon图标
     pub el_icon: Option<String>,
-    /// 菜单类型,0:菜单,1:按钮
+    /// 菜单类型(0:菜单,1:按钮)
     pub menu_type: perm_menu::enums::MenuType,
-    /// 打开方式,0:组件,1:内链,2:外链
+    /// 打开方式(0:组件,1:内链,2:外链)
     pub open_type: perm_menu::enums::OpenType,
     /// 路由地址
     pub path: Option<String>,
@@ -89,9 +89,9 @@ pub struct UpdateMenuReq {
     pub link: Option<String>,
     /// 链接跳转方式, _blank/_self
     pub link_target: Option<perm_menu::enums::LinkTarget>,
-    /// 是否隐藏,0:显示,1:隐藏
+    /// 是否隐藏(0:显示,1:隐藏)
     pub hidden: Option<perm_menu::enums::Hidden>,
-    /// 始终显示根菜单,0:显示,1:隐藏
+    /// 始终显示根菜单(0:显示,1:隐藏)
     pub root_always_show: Option<perm_menu::enums::RootAlwaysShow>,
     /// 权限标识
     pub permission: Option<String>,
@@ -99,13 +99,13 @@ pub struct UpdateMenuReq {
     pub sort: Option<i32>,
     /// 描述信息
     pub desc: Option<String>,
-    /// 状态,0:停用,1:正常
+    /// 状态(0:停用,1:正常)
     pub status: perm_menu::enums::Status,
 }
 
 /// 更新数据状态
 #[derive(Clone, Serialize, Deserialize, Validate)]
 pub struct UpdateMenuStatusReq {
-    /// 状态,0:停用,1:正常
+    /// 状态(0:停用,1:正常)
     pub status: perm_menu::enums::Status,
 }

@@ -19,7 +19,7 @@ pub struct Model {
     pub username: Option<String>,
     /// 请求ID
     pub request_id: Option<String>,
-    /// 终端类型: 0: 未知,1: 安卓,2 :ios,3 :web
+    /// 终端类型(0: 未知,1: 安卓,2 :ios,3 :web)
     pub os_type: i8,
     /// 错误类型: 1:接口报错,2:代码报错
     pub error_type: i8,

@@ -28,11 +28,11 @@ pub struct AddUserBaseReq {
     pub username: String,
     /// 真实姓名
     pub real_name: Option<String>,
-    /// 性别, 0:男,1:女,2:保密
+    /// 性别(0:男,1:女,2:保密)
     pub gender: user_base::enums::Gender,
     /// 密码
     pub password: String,
-    /// 状态,0:停用,1:正常
+    /// 状态(0:停用,1:正常)
     pub status: user_base::enums::Status,
     /// 年龄
     pub age: Option<i32>,
@@ -65,9 +65,9 @@ pub struct UpdateUserBaseReq {
     pub username: String,
     /// 真实姓名
     pub real_name: Option<String>,
-    /// 性别, 0:男,1:女,2:保密
+    /// 性别(0:男,1:女,2:保密)
     pub gender: user_base::enums::Gender,
-    /// 状态,0:停用,1:正常
+    /// 状态(0:停用,1:正常)
     pub status: user_base::enums::Status,
     /// 年龄
     pub age: Option<i32>,

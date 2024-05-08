@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS
         `captcha` VARCHAR(10) NOT NULL COMMENT '验证码',
         `base_img` MEDIUMBLOB NOT NULL COMMENT 'Base64图片',
         `expire` INT(4) UNSIGNED NOT NULL DEFAULT 1 COMMENT '过期时间,秒',
-        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:无效,1:有效',
+        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态(0:无效,1:有效)',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`)
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS
         `value` TEXT NULL COMMENT '配置值',
         `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
         `desc` VARCHAR(200) DEFAULT '' COMMENT '配置描述',
-        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态,0:停用,1:正常',
+        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态(0:停用,1:正常)',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`)

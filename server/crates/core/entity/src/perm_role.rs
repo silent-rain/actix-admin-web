@@ -20,7 +20,7 @@ pub struct Model {
     pub sort: Option<i32>,
     /// 描述信息
     pub desc: Option<String>,
-    /// 状态,0:停用,1:正常
+    /// 状态(0:停用,1:正常)
     pub status: i8,
     /// 创建时间
     pub created_at: DateTimeLocal,

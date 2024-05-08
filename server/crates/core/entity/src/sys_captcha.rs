@@ -23,7 +23,7 @@ pub struct Model {
     pub base_img: Vec<u8>,
     /// 过期时间,秒
     pub expire: u32,
-    /// 状态,0:无效,1:有效
+    /// 状态(0:无效,1:有效)
     pub status: i8,
     /// 创建时间
     pub created_at: DateTimeLocal,

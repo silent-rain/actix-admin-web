@@ -60,7 +60,7 @@ impl MigrationTrait for Migration {
                             .tiny_integer()
                             .not_null()
                             .default(1)
-                            .comment("状态,0:无效,1:有效"),
+                            .comment("状态(0:无效,1:有效)"),
                     )
                     .col(
                         ColumnDef::new(SysCaptcha::CreatedAt)

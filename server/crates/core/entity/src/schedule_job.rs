@@ -16,9 +16,9 @@ pub struct Model {
     /// 任务名称
     #[sea_orm(unique)]
     pub name: String,
-    /// 任务来源,0:用户定义,1:系统内部
+    /// 任务来源(0:用户定义,1:系统内部)
     pub source: i8,
-    /// 任务类型,0:定时任务,1:即时任务
+    /// 任务类型(0:定时任务,1:即时任务)
     pub job_type: i8,
     /// 系统任务编码
     pub sys_code: Option<String>,
@@ -28,7 +28,7 @@ pub struct Model {
     pub interval: Option<i32>,
     /// 描述信息
     pub desc: Option<String>,
-    /// 任务状态,0:下线,1:上线
+    /// 任务状态(0:下线,1:上线)
     pub status: i8,
     /// 创建时间
     pub created_at: DateTimeLocal,

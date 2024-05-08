@@ -32,7 +32,7 @@ pub struct AddUserLoginInfoReq {
     pub remote_addr: String,
     /// 用户代理
     pub user_agent: String,
-    /// 登录状态,0:失败,1:成功
+    /// 登录状态(0:失败,1:成功)
     pub status: log_user_login::enums::Status,
 }
 
@@ -41,7 +41,7 @@ pub struct AddUserLoginInfoReq {
 pub struct UpdateUserLoginStatusReq {
     /// ID
     pub id: i32,
-    /// 登录状态,0:失败,1:成功
+    /// 登录状态(0:失败,1:成功)
     pub status: log_user_login::enums::Status,
 }
 

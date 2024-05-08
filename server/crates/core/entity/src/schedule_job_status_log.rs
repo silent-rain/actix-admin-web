@@ -21,7 +21,7 @@ pub struct Model {
     pub error: Option<String>,
     /// 耗时,毫秒
     pub cost: u64,
-    /// 任务状态,0:开始,1:完成,2:停止,3:移除
+    /// 任务状态(0:开始,1:完成,2:停止,3:移除)
     pub status: i8,
     /// 创建时间
     pub created_at: DateTimeLocal,

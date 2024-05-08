@@ -22,9 +22,9 @@ pub struct Model {
     pub icon: Option<String>,
     /// Element-Icon图标
     pub el_icon: Option<String>,
-    /// 菜单类型,0:菜单,1:按钮
+    /// 菜单类型(0:菜单,1:按钮)
     pub menu_type: i8,
-    /// 打开方式,0:组件,1:内链,2:外链
+    /// 打开方式(0:组件,1:内链,2:外链)
     pub open_type: i8,
     /// 路由地址
     pub path: Option<String>,
@@ -36,9 +36,9 @@ pub struct Model {
     pub link: Option<String>,
     /// 链接跳转方式, _blank/_self
     pub link_target: Option<String>,
-    /// 是否隐藏,0:显示,1:隐藏
+    /// 是否隐藏(0:显示,1:隐藏)
     pub hidden: Option<i8>,
-    /// 始终显示根菜单,0:显示,1:隐藏
+    /// 始终显示根菜单(0:显示,1:隐藏)
     pub root_always_show: Option<i8>,
     /// 权限标识
     pub permission: Option<String>,
@@ -46,7 +46,7 @@ pub struct Model {
     pub sort: Option<i32>,
     /// 描述信息
     pub desc: Option<String>,
-    /// 状态,0:停用,1:正常
+    /// 状态(0:停用,1:正常)
     pub status: i8,
     /// 创建时间
     pub created_at: DateTimeLocal,

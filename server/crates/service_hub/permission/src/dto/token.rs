@@ -70,6 +70,6 @@ pub struct UpdateTokenReq {
 /// 更新令牌状态
 #[derive(Clone, Serialize, Deserialize, Validate)]
 pub struct UpdateTokenStatusReq {
-    /// 状态,0:停用,1:正常
+    /// 状态(0:停用,1:正常)
     pub status: perm_token::enums::Status,
 }

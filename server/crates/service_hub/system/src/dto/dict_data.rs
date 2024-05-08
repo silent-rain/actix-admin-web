@@ -55,13 +55,13 @@ pub struct UpdateDictDataReq {
     pub sort: Option<i32>,
     /// 描述信息
     pub desc: Option<String>,
-    /// 状态,0:停用,1:正常
+    /// 状态(0:停用,1:正常)
     pub status: sys_dict_data::enums::Status,
 }
 
 /// 更新字典数据状态
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
 pub struct UpdateDictDataStatusReq {
-    /// 状态,0:停用,1:正常
+    /// 状态(0:停用,1:正常)
     pub status: sys_dict_data::enums::Status,
 }

@@ -17,11 +17,11 @@ pub struct Model {
     pub username: String,
     /// 真实姓名
     pub real_name: Option<String>,
-    /// 性别, 0:男,1:女,2:保密
+    /// 性别(0:男,1:女,2:保密)
     pub gender: i8,
     /// 密码
     pub password: String,
-    /// 状态,0:停用,1:正常
+    /// 状态(0:停用,1:正常)
     pub status: i8,
     /// 年龄
     pub age: Option<i32>,

@@ -64,7 +64,7 @@ impl MigrationTrait for Migration {
                             .tiny_integer()
                             .not_null()
                             .default(1)
-                            .comment("状态,0:停用,1:正常"),
+                            .comment("状态(0:停用,1:正常)"),
                     )
                     .col(
                         ColumnDef::new(SysDictDim::CreatedAt)

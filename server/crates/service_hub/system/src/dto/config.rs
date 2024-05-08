@@ -59,13 +59,13 @@ pub struct UpdateConfigReq {
     pub sort: Option<i32>,
     /// 配置描述
     pub desc: Option<String>,
-    /// 状态,0:停用,1:正常
+    /// 状态(0:停用,1:正常)
     pub status: sys_config::enums::Status,
 }
 
 /// 更新数据状态
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
 pub struct UpdateConfigStatusReq {
-    /// 状态,0:停用,1:正常
+    /// 状态(0:停用,1:正常)
     pub status: sys_config::enums::Status,
 }

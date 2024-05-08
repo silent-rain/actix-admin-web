@@ -41,13 +41,13 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(ScheduleJob::Source)
                             .integer()
                             .not_null()
-                            .comment("任务来源,0:用户定义,1:系统内部"),
+                            .comment("任务来源(0:用户定义,1:系统内部)"),
                     )
                     .col(
                         ColumnDef::new(ScheduleJob::JobType)
                             .integer()
                             .not_null()
-                            .comment("任务类型,0:定时任务,1:即时任务"),
+                            .comment("任务类型(0:定时任务,1:即时任务)"),
                     )
                     .col(
                         ColumnDef::new(ScheduleJob::SysCode)
@@ -84,7 +84,7 @@ impl MigrationTrait for Migration {
                             .tiny_integer()
                             .not_null()
                             .default(1)
-                            .comment("任务状态,0:下线,1:上线"),
+                            .comment("任务状态(0:下线,1:上线)"),
                     )
                     .col(
                         ColumnDef::new(ScheduleJob::CreatedAt)
