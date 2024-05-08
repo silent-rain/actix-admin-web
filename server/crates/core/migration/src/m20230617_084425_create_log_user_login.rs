@@ -1,5 +1,5 @@
 //! 用户登录日志表
-//! User Entity: [`entity::prelude::LogUserLogin`]
+//! Entity: [`entity::prelude::LogUserLogin`]
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},

@@ -1,5 +1,5 @@
 //! 菜单角色关系表
-//! User Entity: [`entity::prelude::PermMenuRoleRel`]
+//! Entity: [`entity::prelude::PermMenuRoleRel`]
 use crate::{
     m20240218_145453_create_perm_menu::PermMenu, m20240218_145453_create_perm_role::PermRole,
 };

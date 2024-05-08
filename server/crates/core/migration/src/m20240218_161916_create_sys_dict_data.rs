@@ -1,5 +1,5 @@
 //! 字典数据表
-//! User Entity: [`entity::prelude::SysDictData`]
+//! Entity: [`entity::prelude::SysDictData`]
 use crate::m20240218_161916_create_sys_dict_dim::SysDictDim;
 
 use sea_orm::{

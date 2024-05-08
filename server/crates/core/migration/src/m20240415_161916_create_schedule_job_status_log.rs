@@ -1,5 +1,5 @@
 //! 调度任务状态日志表
-//! User Entity: [`entity::prelude::ScheduleJobStatusLog`]
+//! Entity: [`entity::prelude::ScheduleJobStatusLog`]
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},

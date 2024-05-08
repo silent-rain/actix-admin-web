@@ -1,5 +1,5 @@
 //! 部门表
-//! User Entity: [`entity::prelude::PermDepartment`]
+//! Entity: [`entity::prelude::PermDepartment`]
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},

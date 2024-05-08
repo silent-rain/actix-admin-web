@@ -1,5 +1,5 @@
 //! 系统日志表
-//! User Entity: [`entity::prelude::LogSystem`]
+//! Entity: [`entity::prelude::LogSystem`]
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},

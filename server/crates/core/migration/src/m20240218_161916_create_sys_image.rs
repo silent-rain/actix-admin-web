@@ -1,5 +1,5 @@
 //! 图片资源表
-//! User Entity: [`entity::prelude::SysImage`]
+//! Entity: [`entity::prelude::SysImage`]
 
 use sea_orm::{
     sea_query::{BlobSize, ColumnDef, Expr, Table},

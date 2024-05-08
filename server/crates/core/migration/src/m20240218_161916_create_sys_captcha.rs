@@ -1,8 +1,9 @@
 //! 验证码表
-//! User Entity: [`entity::prelude::SysCaptcha`]
+//! Entity: [`entity::prelude::SysCaptcha`]
 
 use sea_orm::{
-    sea_query::{BlobSize, ColumnDef, Expr, Table}, DatabaseBackend, DeriveIden, DeriveMigrationName
+    sea_query::{BlobSize, ColumnDef, Expr, Table},
+    DatabaseBackend, DeriveIden, DeriveMigrationName,
 };
 use sea_orm_migration::{async_trait, DbErr, MigrationTrait, SchemaManager};
 

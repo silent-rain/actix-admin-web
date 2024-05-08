@@ -1,5 +1,5 @@
 //! 部门角色关系表
-//! User Entity: [`entity::prelude::PermDepartmentRoleRel`]
+//! Entity: [`entity::prelude::PermDepartmentRoleRel`]
 use crate::{
     m20240218_145453_create_perm_department::PermDepartment,
     m20240218_145453_create_perm_role::PermRole,

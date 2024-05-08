@@ -1,5 +1,5 @@
 //! 调度任务表
-//! User Entity: [`entity::prelude::ScheduleJob`]
+//! Entity: [`entity::prelude::ScheduleJob`]
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},

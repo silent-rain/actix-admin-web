@@ -1,5 +1,5 @@
 //! OpenApi接口角色关系表
-//! User Entity: [`entity::prelude::PermOpenapiRoleRel`]
+//! Entity: [`entity::prelude::PermOpenapiRoleRel`]
 use crate::{
     m20240218_145453_create_perm_openapi::PermOpenapi, m20240218_145453_create_perm_role::PermRole,
 };

@@ -1,5 +1,5 @@
 //! 令牌角色关系表
-//! User Entity: [`entity::prelude::PermTokenRoleRel`]
+//! Entity: [`entity::prelude::PermTokenRoleRel`]
 use crate::{
     m20240218_145453_create_perm_role::PermRole, m20240218_145453_create_perm_token::PermToken,
 };

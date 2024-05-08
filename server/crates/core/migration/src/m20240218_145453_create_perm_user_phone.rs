@@ -1,5 +1,5 @@
 //! 用户手机号表
-//! User Entity: [`entity::prelude::PermUserPhone`]
+//! Entity: [`entity::prelude::PermUserPhone`]
 
 use crate::m20240218_145453_create_user_base::UserBase;
 

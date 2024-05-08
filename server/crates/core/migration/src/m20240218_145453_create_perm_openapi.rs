@@ -1,5 +1,5 @@
 //! OpenApi接口表
-//! User Entity: [`entity::prelude::PermOpenapi`]
+//! Entity: [`entity::prelude::PermOpenapi`]
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},

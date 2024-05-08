@@ -1,5 +1,5 @@
 //! 令牌表
-//! User Entity: [`entity::prelude::PermToken`]
+//! Entity: [`entity::prelude::PermToken`]
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},

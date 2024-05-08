@@ -1,5 +1,5 @@
 //! 用户邮箱表
-//! User Entity: [`entity::prelude::PermUserEmail`]
+//! Entity: [`entity::prelude::PermUserEmail`]
 
 use crate::m20240218_145453_create_user_base::UserBase;
 
