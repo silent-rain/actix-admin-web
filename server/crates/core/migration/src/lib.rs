@@ -42,14 +42,15 @@ impl MigratorTrait for Migrator {
             Box::new(m20240218_145453_create_user_phone::Migration),
             Box::new(m20240218_145453_create_user_role_rel::Migration),
             // 权限管理
-            Box::new(m20240218_145453_create_org_department::Migration),
-            Box::new(m20240218_145453_create_org_department_role_rel::Migration),
             Box::new(m20240218_145453_create_perm_menu::Migration),
             Box::new(m20240218_145453_create_perm_menu_role_rel::Migration),
             Box::new(m20240218_145453_create_perm_openapi::Migration),
             Box::new(m20240218_145453_create_perm_openapi_role_rel::Migration),
             Box::new(m20240218_145453_create_perm_token::Migration),
             Box::new(m20240218_145453_create_perm_token_role_rel::Migration),
+            // 组织管理
+            Box::new(m20240218_145453_create_org_department::Migration),
+            Box::new(m20240218_145453_create_org_department_role_rel::Migration),
             // 系统管理
             Box::new(m20240218_161916_create_sys_config::Migration),
             Box::new(m20240218_161916_create_sys_dict_data::Migration),
