@@ -2,8 +2,7 @@
 use crate::dto::email::GetEmailListReq;
 
 use database::{DbRepo, Pagination};
-use entity::prelude::UserEmail;
-use entity::user_email;
+use entity::user::{user_email, UserEmail};
 
 use nject::injectable;
 use sea_orm::{

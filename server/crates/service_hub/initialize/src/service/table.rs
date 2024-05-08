@@ -7,7 +7,7 @@ use crate::{
 };
 
 use code::{Error, ErrorMsg};
-use entity::user_base;
+use entity::user::user_base;
 
 use nject::injectable;
 use tracing::error;
@@ -34,7 +34,7 @@ impl<'a> TableService<'a> {
                 .with_msg("数据库资源解析错误")
         })?;
 
-        let role_sql = asset.to_string("t_perm_role.sql").map_err(|err| {
+        let role_sql = asset.to_string("t_user_role.sql").map_err(|err| {
             error!("角色表资源解析错误, err: {err}");
             Error::AssetParseError
                 .into_msg()

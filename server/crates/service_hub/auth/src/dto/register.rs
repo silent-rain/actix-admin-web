@@ -1,6 +1,6 @@
 //! 注册
 
-use entity::user_base;
+use entity::user::user_base;
 
 use actix_validator::Validate;
 

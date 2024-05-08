@@ -5,7 +5,7 @@ use crate::{
 };
 
 use code::{Error, ErrorMsg};
-use entity::{perm_role, user_base, user_role_rel};
+use entity::user::{user_base, user_role, user_role_rel};
 
 use nject::injectable;
 use sea_orm::Set;
@@ -217,7 +217,7 @@ impl<'a> UserBaseService<'a> {
 
 impl<'a> UserBaseService<'a> {
     /// 通过用户信息ID获角色色列表
-    pub async fn roles(&self, user_id: i32) -> Result<(Vec<perm_role::Model>, u64), ErrorMsg> {
+    pub async fn roles(&self, user_id: i32) -> Result<(Vec<user_role::Model>, u64), ErrorMsg> {
         let (results, total) = self.user_base_dao.roles(user_id).await.map_err(|err| {
             error!("查询用户信息失败, err: {:#?}", err);
             Error::DbQueryError.into_msg().with_msg("查询用户信息失败")

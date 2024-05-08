@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 /// 角色表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "t_perm_role")]
+#[sea_orm(table_name = "t_user_role")]
 pub struct Model {
     /// 角色ID
     #[sea_orm(primary_key)]
@@ -30,19 +30,19 @@ pub struct Model {
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
-    #[sea_orm(has_many = "super::perm_menu_role_rel::Entity")]
+    #[sea_orm(has_many = "crate::perm_menu_role_rel::Entity")]
     PermMenuRoleRel,
-    #[sea_orm(has_many = "super::user_role_rel::Entity")]
+    #[sea_orm(has_many = "crate::user::user_role_rel::Entity")]
     UserRoleRel,
 }
 
-impl Related<super::perm_menu_role_rel::Entity> for Entity {
+impl Related<crate::perm_menu_role_rel::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::PermMenuRoleRel.def()
     }
 }
 
-impl Related<super::user_role_rel::Entity> for Entity {
+impl Related<crate::user::user_role_rel::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::UserRoleRel.def()
     }

@@ -5,7 +5,7 @@ use crate::{
 };
 
 use code::{Error, ErrorMsg};
-use entity::user_role_rel;
+use entity::user::user_role_rel;
 
 use nject::injectable;
 use sea_orm::Set;

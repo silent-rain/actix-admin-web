@@ -5,9 +5,9 @@ use crate::dto::table::TableSql;
 
 use database::DbRepo;
 use entity::{
-    perm_menu_role_rel, perm_openapi_role_rel, perm_role,
-    prelude::{PermMenu, PermMenuRoleRel, PermOpenapi, PermOpenapiRoleRel, PermRole, UserBase},
-    user_base, user_email, user_phone, user_role_rel,
+    perm_menu_role_rel, perm_openapi_role_rel,
+    prelude::{PermMenu, PermMenuRoleRel, PermOpenapi, PermOpenapiRoleRel},
+    user::{user_base, user_email, user_phone, user_role, user_role_rel, UserBase, UserRole},
 };
 
 use nject::injectable;
@@ -140,9 +140,9 @@ impl<'a> TableDao<'a> {
     pub async fn txn_admin_role(
         &self,
         txn: &DatabaseTransaction,
-    ) -> Result<Option<perm_role::Model>, DbErr> {
-        let result = PermRole::find()
-            .order_by_asc(perm_role::Column::Id)
+    ) -> Result<Option<user_role::Model>, DbErr> {
+        let result = UserRole::find()
+            .order_by_asc(user_role::Column::Id)
             .one(txn)
             .await?;
 

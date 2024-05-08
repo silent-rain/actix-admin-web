@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS
         PRIMARY KEY (`id`),
         UNIQUE KEY `uk_department_id_role_id` (`department_id`, `role_id`),
         CONSTRAINT `fk_org_department_role_rel_department_id` FOREIGN KEY (`department_id`) REFERENCES `t_org_department` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-        CONSTRAINT `fk_org_department_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+        CONSTRAINT `fk_org_department_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_user_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '部门角色关系表';
 
 -- TODO 岗位表

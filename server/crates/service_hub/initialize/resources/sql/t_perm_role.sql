@@ -1,5 +1,5 @@
 INSERT INTO
-	t_perm_role (
+	t_user_role (
 		`name`,
 		sort,
 		`desc`,

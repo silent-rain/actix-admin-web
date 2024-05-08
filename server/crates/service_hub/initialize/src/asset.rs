@@ -22,11 +22,11 @@ mod tests {
 
     #[test]
     fn test_config() {
-        let t_perm_role = "t_perm_role.sql";
+        let t_user_role = "t_user_role.sql";
         let asset = AssetDbTable;
-        let data = asset.get(t_perm_role);
+        let data = asset.get(t_user_role);
         assert!(data.is_some());
-        let content = asset.to_string(t_perm_role);
+        let content = asset.to_string(t_user_role);
         println!("content: {:#?}", content);
         assert!(content.is_ok());
     }

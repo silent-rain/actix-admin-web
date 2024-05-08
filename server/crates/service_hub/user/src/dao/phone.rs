@@ -2,7 +2,7 @@
 use crate::dto::phone::GetPhoneListReq;
 
 use database::{DbRepo, Pagination};
-use entity::{prelude::UserPhone, user_phone};
+use entity::user::{user_phone, UserPhone};
 
 use nject::injectable;
 use sea_orm::{

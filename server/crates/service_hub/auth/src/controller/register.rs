@@ -4,7 +4,7 @@ use crate::{dto::register::RegisterReq, RegisterService};
 
 use actix_validator::Json;
 use code::Error;
-use entity::user_base;
+use entity::user::user_base;
 use inject::AInjectProvider;
 use response::Response;
 

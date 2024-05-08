@@ -11,7 +11,7 @@ use crate::constant::{
 };
 
 use context::Context;
-use entity::{perm_token, user_base};
+use entity::{perm_token, user::user_base};
 use response::Response;
 use service_hub::{inject::AInjectProvider, permission::TokenService, user::UserBaseService};
 

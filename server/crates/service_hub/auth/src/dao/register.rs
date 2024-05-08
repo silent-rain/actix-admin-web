@@ -1,7 +1,7 @@
 //! 注册
 
 use database::DbRepo;
-use entity::{user_email, user_phone, user_base};
+use entity::user::{user_base, user_email, user_phone};
 
 use nject::injectable;
 use sea_orm::{ActiveModelTrait, DatabaseTransaction, DbErr, Set, TransactionTrait};

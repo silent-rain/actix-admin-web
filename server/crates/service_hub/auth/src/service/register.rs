@@ -7,7 +7,7 @@ use system::ImageCaptchaDao;
 use user::{EmailDao, PhoneDao};
 
 use code::{Error, ErrorMsg};
-use entity::user_base;
+use entity::user::user_base;
 use utils::crypto::sha2_256;
 
 use nject::injectable;

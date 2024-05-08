@@ -1,7 +1,7 @@
 //! 菜单角色关系表
 //! Entity: [`entity::prelude::PermMenuRoleRel`]
 use crate::{
-    m20240218_145453_create_perm_menu::PermMenu, m20240218_145453_create_perm_role::PermRole,
+    m20240218_145453_create_perm_menu::PermMenu, m20240218_145453_create_user_role::UserRole,
 };
 
 use sea_orm::{
@@ -104,7 +104,7 @@ impl MigrationTrait for Migration {
                     ForeignKey::create()
                         .name("fk_perm_menu_role_rel_role_id")
                         .from(PermMenuRoleRel::Table, PermMenuRoleRel::RoleId)
-                        .to(PermRole::Table, PermRole::Id)
+                        .to(UserRole::Table, UserRole::Id)
                         .on_update(ForeignKeyAction::Cascade)
                         .on_delete(ForeignKeyAction::Cascade)
                         .to_owned(),

@@ -2,7 +2,7 @@
 use crate::dto::role::GetRoleListReq;
 
 use database::{DbRepo, Pagination};
-use entity::{perm_role, prelude::PermRole};
+use entity::user::{user_role, UserRole};
 use nject::injectable;
 
 use sea_orm::{
@@ -18,9 +18,9 @@ pub struct RoleDao<'a> {
 
 impl<'a> RoleDao<'a> {
     /// 获取所有数据
-    pub async fn all(&self) -> Result<(Vec<perm_role::Model>, u64), DbErr> {
-        let results = PermRole::find()
-            .order_by_asc(perm_role::Column::Id)
+    pub async fn all(&self) -> Result<(Vec<user_role::Model>, u64), DbErr> {
+        let results = UserRole::find()
+            .order_by_asc(user_role::Column::Id)
             .all(self.db.rdb())
             .await?;
         let total = results.len() as u64;
@@ -28,18 +28,18 @@ impl<'a> RoleDao<'a> {
     }
 
     /// 获取数据列表
-    pub async fn list(&self, req: GetRoleListReq) -> Result<(Vec<perm_role::Model>, u64), DbErr> {
+    pub async fn list(&self, req: GetRoleListReq) -> Result<(Vec<user_role::Model>, u64), DbErr> {
         let page = Pagination::new(req.page, req.page_size);
 
-        let states = PermRole::find()
+        let states = UserRole::find()
             .apply_if(req.start_time, |query, v| {
-                query.filter(perm_role::Column::CreatedAt.gte(v))
+                query.filter(user_role::Column::CreatedAt.gte(v))
             })
             .apply_if(req.end_time, |query, v| {
-                query.filter(perm_role::Column::CreatedAt.lt(v))
+                query.filter(user_role::Column::CreatedAt.lt(v))
             })
             .apply_if(req.name, |query, v| {
-                query.filter(perm_role::Column::Name.like(format!("{v}%")))
+                query.filter(user_role::Column::Name.like(format!("{v}%")))
             });
 
         let total = states.clone().count(self.db.rdb()).await?;
@@ -48,7 +48,7 @@ impl<'a> RoleDao<'a> {
         }
 
         let results = states
-            .order_by_desc(perm_role::Column::Id)
+            .order_by_desc(user_role::Column::Id)
             .offset(page.offset())
             .limit(page.page_size())
             .all(self.db.rdb())
@@ -58,14 +58,14 @@ impl<'a> RoleDao<'a> {
     }
 
     /// 获取详情信息
-    pub async fn info(&self, id: i32) -> Result<Option<perm_role::Model>, DbErr> {
-        PermRole::find_by_id(id).one(self.db.rdb()).await
+    pub async fn info(&self, id: i32) -> Result<Option<user_role::Model>, DbErr> {
+        UserRole::find_by_id(id).one(self.db.rdb()).await
     }
 
     /// 通过名称获取详情信息
-    pub async fn info_by_name(&self, name: String) -> Result<Option<perm_role::Model>, DbErr> {
-        PermRole::find()
-            .filter(perm_role::Column::Name.eq(name))
+    pub async fn info_by_name(&self, name: String) -> Result<Option<user_role::Model>, DbErr> {
+        UserRole::find()
+            .filter(user_role::Column::Name.eq(name))
             .one(self.db.rdb())
             .await
     }
@@ -73,17 +73,17 @@ impl<'a> RoleDao<'a> {
     /// 添加详情信息
     pub async fn add(
         &self,
-        active_model: perm_role::ActiveModel,
-    ) -> Result<perm_role::Model, DbErr> {
+        active_model: user_role::ActiveModel,
+    ) -> Result<user_role::Model, DbErr> {
         active_model.insert(self.db.wdb()).await
     }
 
     /// 更新数据
-    pub async fn update(&self, active_model: perm_role::ActiveModel) -> Result<u64, DbErr> {
+    pub async fn update(&self, active_model: user_role::ActiveModel) -> Result<u64, DbErr> {
         let id: i32 = *(active_model.id.clone().as_ref());
-        let result = PermRole::update_many()
+        let result = UserRole::update_many()
             .set(active_model)
-            .filter(perm_role::Column::Id.eq(id))
+            .filter(user_role::Column::Id.eq(id))
             .exec(self.db.wdb())
             .await?;
 
@@ -92,7 +92,7 @@ impl<'a> RoleDao<'a> {
 
     /// 更新状态
     pub async fn status(&self, id: i32, status: i8) -> Result<(), DbErr> {
-        let active_model = perm_role::ActiveModel {
+        let active_model = user_role::ActiveModel {
             id: Set(id),
             status: Set(status),
             ..Default::default()
@@ -103,7 +103,7 @@ impl<'a> RoleDao<'a> {
 
     /// 按主键删除信息
     pub async fn delete(&self, id: i32) -> Result<u64, DbErr> {
-        let result = PermRole::delete_by_id(id).exec(self.db.wdb()).await?;
+        let result = UserRole::delete_by_id(id).exec(self.db.wdb()).await?;
         Ok(result.rows_affected)
     }
 }

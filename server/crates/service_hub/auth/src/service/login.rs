@@ -10,7 +10,7 @@ use system::ImageCaptchaDao;
 use user::{EmailDao, PhoneDao, UserBaseDao};
 
 use code::{Error, ErrorMsg};
-use entity::{log_user_login, user_base};
+use entity::{log_user_login, user::user_base};
 use jwt::encode_token;
 
 use nject::injectable;

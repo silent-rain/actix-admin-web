@@ -3,7 +3,7 @@
 use crate::dto::user_role_rel::GetUserRoleRelListReq;
 
 use database::{DbRepo, Pagination};
-use entity::{prelude::UserRoleRel, user_role_rel};
+use entity::user::{user_role_rel, UserRoleRel};
 
 use nject::injectable;
 use sea_orm::{

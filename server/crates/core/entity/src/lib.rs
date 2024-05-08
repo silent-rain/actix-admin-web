@@ -6,6 +6,7 @@ pub mod app_template;
 
 pub mod organization;
 pub mod schedule;
+pub mod user;
 
 pub mod log_api_operation;
 pub mod log_system;
@@ -16,7 +17,6 @@ pub mod perm_menu;
 pub mod perm_menu_role_rel;
 pub mod perm_openapi;
 pub mod perm_openapi_role_rel;
-pub mod perm_role;
 pub mod perm_token;
 pub mod perm_token_role_rel;
 pub mod sys_config;
@@ -24,7 +24,3 @@ pub mod sys_dict_data;
 pub mod sys_dict_dimension;
 pub mod sys_image_captcha;
 pub mod sys_image_resource;
-pub mod user_base;
-pub mod user_email;
-pub mod user_phone;
-pub mod user_role_rel;

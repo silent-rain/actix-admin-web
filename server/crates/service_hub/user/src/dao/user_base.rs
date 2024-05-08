@@ -2,11 +2,7 @@
 use crate::dto::user_base::GetUserBaserListReq;
 
 use database::{DbRepo, Pagination};
-use entity::{
-    perm_role,
-    prelude::{PermRole, UserRoleRel, UserBase},
-    user_base, user_role_rel,
-};
+use entity::user::{user_base, user_role, user_role_rel, UserBase, UserRole, UserRoleRel};
 
 use nject::injectable;
 use sea_orm::{
@@ -233,17 +229,17 @@ impl<'a> UserBaseDao<'a> {
 
 impl<'a> UserBaseDao<'a> {
     /// 通过用户ID获角色色列表
-    pub async fn roles(&self, user_id: i32) -> Result<(Vec<perm_role::Model>, u64), DbErr> {
-        let results = PermRole::find()
+    pub async fn roles(&self, user_id: i32) -> Result<(Vec<user_role::Model>, u64), DbErr> {
+        let results = UserRole::find()
             .join_rev(
                 JoinType::InnerJoin,
-                UserRoleRel::belongs_to(PermRole)
+                UserRoleRel::belongs_to(UserRole)
                     .from(user_role_rel::Column::RoleId)
-                    .to(perm_role::Column::Id)
+                    .to(user_role::Column::Id)
                     .into(),
             )
             .filter(user_role_rel::Column::UserId.eq(user_id))
-            .order_by_asc(perm_role::Column::Id)
+            .order_by_asc(user_role::Column::Id)
             .all(self.db.rdb())
             .await?;
         let total = results.len() as u64;
@@ -260,14 +256,14 @@ mod tests {
 
     #[test]
     fn test_role_list() {
-        let result = PermRole::find()
+        let result = UserRole::find()
             .select_only()
-            .columns([perm_role::Column::Id])
+            .columns([user_role::Column::Id])
             .join_rev(
                 JoinType::InnerJoin,
-                UserRoleRel::belongs_to(PermRole)
+                UserRoleRel::belongs_to(UserRole)
                     .from(user_role_rel::Column::RoleId)
-                    .to(perm_role::Column::Id)
+                    .to(user_role::Column::Id)
                     .into(),
             )
             .filter(user_role_rel::Column::UserId.eq(10))
@@ -275,7 +271,7 @@ mod tests {
             .build(DbBackend::Postgres)
             .to_string();
 
-        let sql = r#"SELECT "t_perm_role"."id" FROM "t_perm_role" INNER JOIN "t_user_role_rel" ON "t_user_role_rel"."role_id" = "t_perm_role"."id" WHERE "t_user_role_rel"."user_id" = 10 ORDER BY "t_user_base"."id" ASC"#;
+        let sql = r#"SELECT "t_user_role"."id" FROM "t_user_role" INNER JOIN "t_user_role_rel" ON "t_user_role_rel"."role_id" = "t_user_role"."id" WHERE "t_user_role_rel"."user_id" = 10 ORDER BY "t_user_base"."id" ASC"#;
         assert_eq!(result, sql);
     }
 }

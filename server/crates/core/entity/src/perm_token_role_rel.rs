@@ -25,20 +25,20 @@ pub struct Model {
 pub enum Relation {
     #[sea_orm(
         belongs_to = "super::perm_token::Entity",
-        from = "Column::RoleId",
+        from = "Column::TokenId",
         to = "super::perm_token::Column::Id",
         on_update = "Cascade",
         on_delete = "Cascade"
     )]
     PermToken,
     #[sea_orm(
-        belongs_to = "super::perm_role::Entity",
+        belongs_to = "crate::user::user_role::Entity",
         from = "Column::RoleId",
-        to = "super::perm_role::Column::Id",
+        to = "crate::user::user_role::Column::Id",
         on_update = "Cascade",
         on_delete = "Cascade"
     )]
-    PermRole,
+    UserRole,
 }
 
 impl Related<super::perm_token::Entity> for Entity {
@@ -47,9 +47,9 @@ impl Related<super::perm_token::Entity> for Entity {
     }
 }
 
-impl Related<super::perm_role::Entity> for Entity {
+impl Related<super::user::user_role::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::PermRole.def()
+        Relation::UserRole.def()
     }
 }
 

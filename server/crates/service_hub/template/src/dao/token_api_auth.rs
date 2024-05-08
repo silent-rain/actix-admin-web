@@ -29,7 +29,7 @@ impl<'a> AppTemplateEtxDao<'a> {
             )
             .join(
                 JoinType::LeftJoin,
-                api_role_http_rel::Relation::PermRole
+                api_role_http_rel::Relation::UserRole
                     .def()
                     .rev()
                     .on_condition(|_left, right| {

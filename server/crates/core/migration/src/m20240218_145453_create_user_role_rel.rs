@@ -2,7 +2,7 @@
 //! Entity: [`entity::prelude::UserRoleRel`]
 
 use crate::{
-    m20240218_145453_create_perm_role::PermRole, m20240218_145453_create_user_base::UserBase,
+    m20240218_145453_create_user_base::UserBase, m20240218_145453_create_user_role::UserRole,
 };
 
 use sea_orm::{
@@ -74,10 +74,7 @@ impl MigrationTrait for Migration {
         }
 
         if !manager
-            .has_index(
-                UserRoleRel::Table.to_string(),
-                "fk_user_role_rel_user_id",
-            )
+            .has_index(UserRoleRel::Table.to_string(), "fk_user_role_rel_user_id")
             .await?
         {
             manager
@@ -94,10 +91,7 @@ impl MigrationTrait for Migration {
         }
 
         if !manager
-            .has_index(
-                UserRoleRel::Table.to_string(),
-                "fk_user_role_rel_role_id",
-            )
+            .has_index(UserRoleRel::Table.to_string(), "fk_user_role_rel_role_id")
             .await?
         {
             manager
@@ -105,7 +99,7 @@ impl MigrationTrait for Migration {
                     ForeignKey::create()
                         .name("fk_user_role_rel_role_id")
                         .from(UserRoleRel::Table, UserRoleRel::RoleId)
-                        .to(PermRole::Table, PermRole::Id)
+                        .to(UserRole::Table, UserRole::Id)
                         .on_update(ForeignKeyAction::Cascade)
                         .on_delete(ForeignKeyAction::Cascade)
                         .to_owned(),

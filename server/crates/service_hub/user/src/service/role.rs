@@ -5,7 +5,7 @@ use crate::{
 };
 
 use code::{Error, ErrorMsg};
-use entity::perm_role;
+use entity::user::user_role;
 
 use nject::injectable;
 use sea_orm::{DbErr::RecordNotUpdated, Set};
@@ -22,7 +22,7 @@ impl<'a> RoleService<'a> {
     pub async fn list(
         &self,
         req: GetRoleListReq,
-    ) -> Result<(Vec<perm_role::Model>, u64), ErrorMsg> {
+    ) -> Result<(Vec<user_role::Model>, u64), ErrorMsg> {
         // 获取所有数据
         if let Some(true) = req.all {
             return self.role_dao.all().await.map_err(|err| {
@@ -40,7 +40,7 @@ impl<'a> RoleService<'a> {
     }
 
     /// 获取详情数据
-    pub async fn info(&self, id: i32) -> Result<perm_role::Model, ErrorMsg> {
+    pub async fn info(&self, id: i32) -> Result<user_role::Model, ErrorMsg> {
         let result = self
             .role_dao
             .info(id)
@@ -58,7 +58,7 @@ impl<'a> RoleService<'a> {
     }
 
     /// 添加数据
-    pub async fn add(&self, req: AddRoleReq) -> Result<perm_role::Model, ErrorMsg> {
+    pub async fn add(&self, req: AddRoleReq) -> Result<user_role::Model, ErrorMsg> {
         // 查询角色是否已存在
         let role = self
             .role_dao
@@ -73,11 +73,11 @@ impl<'a> RoleService<'a> {
             return Err(Error::DbDataExistError.into_msg().with_msg("角色已存在"));
         }
 
-        let model = perm_role::ActiveModel {
+        let model = user_role::ActiveModel {
             name: Set(req.name),
             sort: Set(req.sort),
             desc: Set(req.desc),
-            status: Set(perm_role::enums::Status::Enabled as i8),
+            status: Set(user_role::enums::Status::Enabled as i8),
             ..Default::default()
         };
         let result = self.role_dao.add(model).await.map_err(|err| {
@@ -90,7 +90,7 @@ impl<'a> RoleService<'a> {
 
     /// 更新角色
     pub async fn update(&self, id: i32, req: UpdateRoleReq) -> Result<u64, ErrorMsg> {
-        let model = perm_role::ActiveModel {
+        let model = user_role::ActiveModel {
             id: Set(id),
             name: Set(req.name),
             sort: Set(req.sort),

@@ -3,7 +3,7 @@
  */
 -- 角色表
 CREATE TABLE IF NOT EXISTS
-    `t_perm_role` (
+    `t_user_role` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '角色ID',
         `name` VARCHAR(20) UNIQUE NOT NULL COMMENT '角色名称',
         `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS
         PRIMARY KEY (`id`),
         UNIQUE KEY `uk_menu_id_role_id` (`menu_id`, `role_id`),
         CONSTRAINT `fk_perm_menu_role_rel_menu_id` FOREIGN KEY (`menu_id`) REFERENCES `t_perm_menu` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-        CONSTRAINT `fk_perm_menu_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+        CONSTRAINT `fk_perm_menu_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_user_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '菜单角色关系表';
 
 -- 令牌表
@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS
         PRIMARY KEY (`id`),
         UNIQUE KEY `uk_token_id_role_id` (`token_id`, `role_id`),
         CONSTRAINT `fk_perm_token_role_rel_token_id` FOREIGN KEY (`token_id`) REFERENCES `t_perm_token` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-        CONSTRAINT `fk_perm_token_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+        CONSTRAINT `fk_perm_token_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_user_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '令牌角色关系表';
 
 -- OpenApi接口表
@@ -108,5 +108,5 @@ CREATE TABLE IF NOT EXISTS
         PRIMARY KEY (`id`),
         UNIQUE KEY `uk_openapi_id_role_id` (`openapi_id`, `role_id`),
         CONSTRAINT `fk_openapi_role_rel_openapi_id` FOREIGN KEY (`openapi_id`) REFERENCES `t_perm_openapi` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-        CONSTRAINT `fk_openapi_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+        CONSTRAINT `fk_openapi_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_user_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT 'OpenApi接口角色关系表';

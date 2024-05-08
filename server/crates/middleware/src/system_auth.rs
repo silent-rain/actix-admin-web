@@ -1,7 +1,7 @@
 //! 权限拦截器
 use std::future::{ready, Ready};
 
-use entity::{log_user_login, user_base};
+use entity::{log_user_login, user::user_base};
 use service_hub::{inject::AInjectProvider, log::UserLoginService, user::UserBaseService};
 
 use crate::constant::{
