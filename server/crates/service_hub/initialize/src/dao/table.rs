@@ -5,10 +5,9 @@ use crate::dto::table::TableSql;
 
 use database::DbRepo;
 use entity::{
-    perm_menu_role_rel, perm_openapi_role_rel, perm_role, perm_user_email, perm_user_phone,
-    perm_user_role_rel,
+    perm_menu_role_rel, perm_openapi_role_rel, perm_role, perm_user_phone, perm_user_role_rel,
     prelude::{PermMenu, PermMenuRoleRel, PermOpenapi, PermOpenapiRoleRel, PermRole, UserBase},
-    user_base,
+    user_base, user_email,
 };
 
 use nject::injectable;
@@ -127,8 +126,8 @@ impl<'a> TableDao<'a> {
         txn: &DatabaseTransaction,
         user_id: i32,
         email: String,
-    ) -> Result<perm_user_email::Model, DbErr> {
-        let active_model = perm_user_email::ActiveModel {
+    ) -> Result<user_email::Model, DbErr> {
+        let active_model = user_email::ActiveModel {
             user_id: Set(user_id),
             email: Set(email),
             ..Default::default()

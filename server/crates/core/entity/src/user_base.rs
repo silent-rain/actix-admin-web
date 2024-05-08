@@ -55,8 +55,8 @@ pub enum Relation {
     PermUserRoleRel,
     #[sea_orm(has_many = "super::perm_user_phone::Entity")]
     PermUserPhone,
-    #[sea_orm(has_many = "super::perm_user_email::Entity")]
-    PermUserEmail,
+    #[sea_orm(has_many = "super::user_email::Entity")]
+    UserEmail,
 }
 
 impl Related<super::perm_user_role_rel::Entity> for Entity {
@@ -71,9 +71,9 @@ impl Related<super::perm_user_phone::Entity> for Entity {
     }
 }
 
-impl Related<super::perm_user_email::Entity> for Entity {
+impl Related<super::user_email::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::PermUserEmail.def()
+        Relation::UserEmail.def()
     }
 }
 

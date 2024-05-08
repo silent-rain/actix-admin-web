@@ -1,7 +1,7 @@
 //! 路由层
 
+pub mod email;
 pub mod user_base;
-pub mod user_email;
 pub mod user_phone;
 pub mod user_role_rel;
 
@@ -19,7 +19,7 @@ impl UserRouter {
             // 用户手机号管理
             .service(user_phone::UserPhoneRouter::admin_register())
             // 用户邮箱管理
-            .service(user_email::UserEmailRouter::admin_register())
+            .service(email::EmailRouter::admin_register())
             // 用户角色关系管理
             .service(user_role_rel::UserRoleRelRouter::admin_register())
     }

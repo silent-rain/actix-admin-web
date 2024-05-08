@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 /// 用户邮箱表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "t_perm_user_email")]
+#[sea_orm(table_name = "t_user_email")]
 pub struct Model {
     /// 邮箱ID
     #[sea_orm(primary_key)]

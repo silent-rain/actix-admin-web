@@ -129,7 +129,7 @@ user_base
 
 用户与身份管理：
 ●t_user_base：用户资料信息
-●t_user_email — 用户邮箱表 (UserEmail)
+●t_user_email — 用户邮箱表 (Email)
 ●t_user_phone — 用户手机号表 (UserPhoneNumber)
 ●t_user_login_log — 用户登录日志表 (UserLoginLog)
 ●t_user_blockchain_wallet — 用户区块链钱包表

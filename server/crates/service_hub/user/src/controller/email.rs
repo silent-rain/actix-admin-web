@@ -1,8 +1,8 @@
 //! 用户邮箱管理
 
 use crate::{
-    dto::user_email::{AddUserEmailReq, GetUserEmailListReq, UpdateUserEmailReq},
-    service::user_email::UserEmailService,
+    dto::email::{AddEmailReq, GetEmailListReq, UpdateEmailReq},
+    service::email::EmailService,
 };
 
 use actix_validator::{Json, Query};
@@ -15,16 +15,16 @@ use actix_web::{
 };
 
 /// 控制器
-pub struct UserEmailController;
+pub struct EmailController;
 
-impl UserEmailController {
+impl EmailController {
     /// 获取用户邮箱列表
     pub async fn list(
         provider: Data<AInjectProvider>,
-        req: Query<GetUserEmailListReq>,
+        req: Query<GetEmailListReq>,
     ) -> impl Responder {
-        let user_email_service: UserEmailService = provider.provide();
-        let resp = user_email_service.list(req.into_inner()).await;
+        let email_service: EmailService = provider.provide();
+        let resp = email_service.list(req.into_inner()).await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::err(err),
@@ -33,8 +33,8 @@ impl UserEmailController {
 
     /// 获取用户邮箱信息
     pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let user_email_service: UserEmailService = provider.provide();
-        let resp = user_email_service.info(*id).await;
+        let email_service: EmailService = provider.provide();
+        let resp = email_service.info(*id).await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::err(err),
@@ -42,12 +42,9 @@ impl UserEmailController {
     }
 
     /// 添加用户邮箱
-    pub async fn add(
-        provider: Data<AInjectProvider>,
-        data: Json<AddUserEmailReq>,
-    ) -> impl Responder {
-        let user_email_service: UserEmailService = provider.provide();
-        let resp = user_email_service.add(data.into_inner()).await;
+    pub async fn add(provider: Data<AInjectProvider>, data: Json<AddEmailReq>) -> impl Responder {
+        let email_service: EmailService = provider.provide();
+        let resp = email_service.add(data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -58,10 +55,10 @@ impl UserEmailController {
     pub async fn update(
         provider: Data<AInjectProvider>,
         id: Path<i32>,
-        data: Json<UpdateUserEmailReq>,
+        data: Json<UpdateEmailReq>,
     ) -> impl Responder {
-        let user_email_service: UserEmailService = provider.provide();
-        let resp = user_email_service.update(*id, data.into_inner()).await;
+        let email_service: EmailService = provider.provide();
+        let resp = email_service.update(*id, data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -70,8 +67,8 @@ impl UserEmailController {
 
     /// 删除用户邮箱
     pub async fn delete(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let user_email_service: UserEmailService = provider.provide();
-        let resp = user_email_service.delete(*id).await;
+        let email_service: EmailService = provider.provide();
+        let resp = email_service.delete(*id).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

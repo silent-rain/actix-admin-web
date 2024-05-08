@@ -4,7 +4,7 @@ use crate::{
 };
 
 use system::CaptchaDao;
-use user::{UserEmailDao, UserPhoneDao};
+use user::{EmailDao, UserPhoneDao};
 
 use code::{Error, ErrorMsg};
 use entity::user_base;
@@ -16,7 +16,7 @@ use tracing::error;
 /// 服务层
 #[injectable]
 pub struct RegisterService<'a> {
-    user_email_dao: UserEmailDao<'a>,
+    email_dao: EmailDao<'a>,
     user_phone_dao: UserPhoneDao<'a>,
     register_dao: RegisterDao<'a>,
     captcha_dao: CaptchaDao<'a>,
@@ -99,14 +99,10 @@ impl<'a> RegisterService<'a> {
         };
 
         // 检测是否已注册邮箱
-        let user = self
-            .user_email_dao
-            .info_by_email(email)
-            .await
-            .map_err(|err| {
-                error!("查询用户信息失败, err: {:#?}", err);
-                Error::DbQueryError.into_msg().with_msg("查询用户信息失败")
-            })?;
+        let user = self.email_dao.info_by_email(email).await.map_err(|err| {
+            error!("查询用户信息失败, err: {:#?}", err);
+            Error::DbQueryError.into_msg().with_msg("查询用户信息失败")
+        })?;
         if user.is_some() {
             {
                 error!("该邮箱已注册");

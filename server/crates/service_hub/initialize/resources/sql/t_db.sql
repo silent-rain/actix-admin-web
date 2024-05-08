@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS
 
 -- 用户邮箱表
 CREATE TABLE IF NOT EXISTS
-    `t_perm_user_email` (
+    `t_user_email` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '邮箱ID',
         `user_id` INT(10) NOT NULL COMMENT '用户ID',
         `email` VARCHAR(50) NOT NULL COMMENT '邮箱',
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS
         PRIMARY KEY (`id`),
         UNIQUE KEY `uk_user_id` (`user_id`) USING BTREE,
         UNIQUE KEY `uk_email` (`email`) USING BTREE,
-        CONSTRAINT `fk_perm_user_email_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_user_base` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+        CONSTRAINT `fk_email_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_user_base` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户邮箱';
 
 -- 用户手机号表

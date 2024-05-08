@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 
 /// 查询用户列表
 #[derive(Default, Deserialize, Validate)]
-pub struct GetUserEmailListReq {
+pub struct GetEmailListReq {
     /// 当前分页
     pub page: u64,
     /// 页面大小
@@ -23,7 +23,7 @@ pub struct GetUserEmailListReq {
 
 /// 添加用户手机号
 #[derive(Serialize, Deserialize, Validate)]
-pub struct AddUserEmailReq {
+pub struct AddEmailReq {
     /// 用户ID
     pub user_id: i32,
     /// 邮箱
@@ -35,7 +35,7 @@ pub struct AddUserEmailReq {
 
 /// 更新用户手机号
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
-pub struct UpdateUserEmailReq {
+pub struct UpdateEmailReq {
     /// 邮箱
     #[validate(email)]
     pub email: String,
