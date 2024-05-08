@@ -81,7 +81,7 @@ impl<'a> AppTemplateEtxDao<'a> {
             ..Default::default()
         };
 
-        // Desc that this method will not alter the primary key values in ActiveModel
+        // Note that this method will not alter the primary key values in ActiveModel
         users.set_from_json(json!({
             "status": data2.get("status").unwrap(),
         }))?;
