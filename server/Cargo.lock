@@ -3713,6 +3713,7 @@ dependencies = [
  "initialize",
  "inject",
  "log 0.1.0",
+ "organization",
  "permission",
  "public",
  "schedule",

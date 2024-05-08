@@ -1,6 +1,6 @@
 //! 模板管理
 
-use crate::AppTemplateController;
+use crate::controller::template::AppTemplateController;
 
 use actix_web::{
     web::{delete, get, post, put, scope},
@@ -12,7 +12,7 @@ pub struct AppTemplateRouter;
 
 impl AppTemplateRouter {
     /// 注册路由
-    pub fn register() -> Scope {
+    pub fn admin_register() -> Scope {
         scope("/app-templates")
             .route("", get().to(AppTemplateController::list))
             .route("/{id}", get().to(AppTemplateController::info))

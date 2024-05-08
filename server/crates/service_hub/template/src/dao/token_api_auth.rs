@@ -1,10 +1,10 @@
 //! API 管理
 //! 这里演示一个表关系的写法
 use database::DbRepo;
-use entity::api_role_http_rel;
-use entity::app_template;
-use entity::log_user_login;
-use entity::prelude::{ApiRoleHttpRel, AppTemplate};
+use entity::{
+    api_role_http_rel, app_template, log_user_login,
+    prelude::{ApiRoleHttpRel, AppTemplate},
+};
 
 use nject::injectable;
 use sea_orm::{DbErr, EntityTrait, JoinType, QuerySelect, RelationTrait};
