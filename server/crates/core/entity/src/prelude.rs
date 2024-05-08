@@ -20,7 +20,7 @@ pub use super::schedule_job_event_log::Entity as ScheduleJobEventLog;
 pub use super::schedule_job_status_log::Entity as ScheduleJobStatusLog;
 pub use super::sys_config::Entity as SysConfig;
 pub use super::sys_dict_data::Entity as SysDictData;
-pub use super::sys_dict_dim::Entity as SysDictDim;
+pub use super::sys_dict_dimension::Entity as SysDictDimension;
 pub use super::sys_image_captcha::Entity as SysImageCaptcha;
 pub use super::sys_image_resource::Entity as SysImageResource;
 pub use super::user_base::Entity as UserBase;

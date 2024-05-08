@@ -1,6 +1,6 @@
 //! 字典维度管理
 
-use entity::sys_dict_dim;
+use entity::sys_dict_dimension;
 
 use actix_validator::Validate;
 
@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 /// 查询字典维度列表
 #[derive(Default, Deserialize, Validate)]
-pub struct GetDictDimListReq {
+pub struct GetDictDimensionListReq {
     /// 当前分页
     pub page: u64,
     /// 页面大小
@@ -27,7 +27,7 @@ pub struct GetDictDimListReq {
 
 /// 添加字典维度
 #[derive(Serialize, Deserialize, Validate)]
-pub struct AddDictDimReq {
+pub struct AddDictDimensionReq {
     /// 字典维度名称
     #[validate(length(min = 2, message = "至少输入两个字符"))]
     pub name: String,
@@ -42,7 +42,7 @@ pub struct AddDictDimReq {
 
 /// 更新字典维度 请求体
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
-pub struct UpdateDictDimReq {
+pub struct UpdateDictDimensionReq {
     /// 字典维度名称
     #[validate(length(min = 2, message = "至少输入两个字符"))]
     pub name: String,
@@ -54,12 +54,12 @@ pub struct UpdateDictDimReq {
     /// 描述信息
     pub desc: Option<String>,
     /// 状态(0:停用,1:正常)
-    pub status: sys_dict_dim::enums::Status,
+    pub status: sys_dict_dimension::enums::Status,
 }
 
 /// 更新字典维度状态
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
-pub struct UpdateDictDimStatusReq {
+pub struct UpdateDictDimensionStatusReq {
     /// 状态(0:停用,1:正常)
-    pub status: sys_dict_dim::enums::Status,
+    pub status: sys_dict_dimension::enums::Status,
 }

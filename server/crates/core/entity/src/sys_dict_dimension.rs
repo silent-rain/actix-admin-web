@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 /// 字典维度表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "t_sys_dict_dim")]
+#[sea_orm(table_name = "t_sys_dict_dimension")]
 pub struct Model {
     /// 字典维度ID
     #[sea_orm(primary_key)]
@@ -34,12 +34,12 @@ pub struct Model {
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
     #[sea_orm(has_many = "super::sys_dict_data::Entity")]
-    DcDictData,
+    SysDictData,
 }
 
 impl Related<super::sys_dict_data::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::DcDictData.def()
+        Relation::SysDictData.def()
     }
 }
 

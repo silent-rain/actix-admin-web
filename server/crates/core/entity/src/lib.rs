@@ -22,7 +22,7 @@ pub mod schedule_job_event_log;
 pub mod schedule_job_status_log;
 pub mod sys_config;
 pub mod sys_dict_data;
-pub mod sys_dict_dim;
+pub mod sys_dict_dimension;
 pub mod sys_image_captcha;
 pub mod sys_image_resource;
 pub mod user_base;

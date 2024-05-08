@@ -1,8 +1,11 @@
 //! 字典维度管理
 
 use crate::{
-    dto::dict_dim::{AddDictDimReq, GetDictDimListReq, UpdateDictDimReq, UpdateDictDimStatusReq},
-    service::dict_dim::DictDimService,
+    dto::dict_dimension::{
+        AddDictDimensionReq, GetDictDimensionListReq, UpdateDictDimensionReq,
+        UpdateDictDimensionStatusReq,
+    },
+    service::dict_dimension::DictDimensionService,
 };
 
 use actix_validator::{Json, Query};
@@ -15,16 +18,16 @@ use actix_web::{
 };
 
 /// 控制器
-pub struct DictDimController;
+pub struct DictDimensionController;
 
-impl DictDimController {
+impl DictDimensionController {
     /// 获取字典维度列表
     pub async fn list(
         provider: Data<AInjectProvider>,
-        req: Query<GetDictDimListReq>,
+        req: Query<GetDictDimensionListReq>,
     ) -> impl Responder {
-        let dict_dim_service: DictDimService = provider.provide();
-        let resp = dict_dim_service.list(req.into_inner()).await;
+        let dict_dimension_service: DictDimensionService = provider.provide();
+        let resp = dict_dimension_service.list(req.into_inner()).await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::err(err),
@@ -33,8 +36,8 @@ impl DictDimController {
 
     /// 获取字典维度信息
     pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let dict_dim_service: DictDimService = provider.provide();
-        let resp = dict_dim_service.info(*id).await;
+        let dict_dimension_service: DictDimensionService = provider.provide();
+        let resp = dict_dimension_service.info(*id).await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::err(err),
@@ -42,9 +45,12 @@ impl DictDimController {
     }
 
     /// 添加字典维度
-    pub async fn add(provider: Data<AInjectProvider>, data: Json<AddDictDimReq>) -> impl Responder {
-        let dict_dim_service: DictDimService = provider.provide();
-        let resp = dict_dim_service.add(data.into_inner()).await;
+    pub async fn add(
+        provider: Data<AInjectProvider>,
+        data: Json<AddDictDimensionReq>,
+    ) -> impl Responder {
+        let dict_dimension_service: DictDimensionService = provider.provide();
+        let resp = dict_dimension_service.add(data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -55,10 +61,10 @@ impl DictDimController {
     pub async fn update(
         provider: Data<AInjectProvider>,
         id: Path<i32>,
-        data: Json<UpdateDictDimReq>,
+        data: Json<UpdateDictDimensionReq>,
     ) -> impl Responder {
-        let dict_dim_service: DictDimService = provider.provide();
-        let resp = dict_dim_service.update(*id, data.into_inner()).await;
+        let dict_dimension_service: DictDimensionService = provider.provide();
+        let resp = dict_dimension_service.update(*id, data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -69,10 +75,10 @@ impl DictDimController {
     pub async fn status(
         provider: Data<AInjectProvider>,
         id: Path<i32>,
-        data: Json<UpdateDictDimStatusReq>,
+        data: Json<UpdateDictDimensionStatusReq>,
     ) -> impl Responder {
-        let dict_dim_service: DictDimService = provider.provide();
-        let resp = dict_dim_service
+        let dict_dimension_service: DictDimensionService = provider.provide();
+        let resp = dict_dimension_service
             .status(*id, data.status.clone() as i8)
             .await;
         match resp {
@@ -83,8 +89,8 @@ impl DictDimController {
 
     /// 删除字典维度
     pub async fn delete(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let dict_dim_service: DictDimService = provider.provide();
-        let resp = dict_dim_service.delete(*id).await;
+        let dict_dimension_service: DictDimensionService = provider.provide();
+        let resp = dict_dimension_service.delete(*id).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

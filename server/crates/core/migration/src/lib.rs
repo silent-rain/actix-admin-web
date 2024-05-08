@@ -18,7 +18,7 @@ mod m20240218_145453_create_user_phone;
 mod m20240218_145453_create_user_role_rel;
 mod m20240218_161916_create_sys_config;
 mod m20240218_161916_create_sys_dict_data;
-mod m20240218_161916_create_sys_dict_dim;
+mod m20240218_161916_create_sys_dict_dimension;
 mod m20240218_161916_create_sys_image_captcha;
 mod m20240218_161916_create_sys_image_resource;
 mod m20240415_161916_create_schedule_job;
@@ -52,8 +52,8 @@ impl MigratorTrait for Migrator {
             Box::new(m20240218_145453_create_perm_token_role_rel::Migration),
             // 系统管理
             Box::new(m20240218_161916_create_sys_config::Migration),
-            Box::new(m20240218_161916_create_sys_dict_dim::Migration),
             Box::new(m20240218_161916_create_sys_dict_data::Migration),
+            Box::new(m20240218_161916_create_sys_dict_dimension::Migration),
             Box::new(m20240218_161916_create_sys_image_captcha::Migration),
             Box::new(m20240218_161916_create_sys_image_resource::Migration),
             // 任务调度管理

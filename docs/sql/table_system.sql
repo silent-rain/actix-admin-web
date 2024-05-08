@@ -73,10 +73,10 @@ CREATE TABLE IF NOT EXISTS
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`),
-        CONSTRAINT `fk_sys_dict_data_dim_id` FOREIGN KEY (`dim_id`) REFERENCES `t_sys_dict_dim` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+        CONSTRAINT `fk_sys_dict_data_dimension_id` FOREIGN KEY (`dimension_id`) REFERENCES `t_sys_dict_dimension` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '字典数据表';
 
--- 会员等级表
+-- TODO 会员等级表
 -- CONSTRAINT `fk_perm_user_member_level_id` FOREIGN KEY (`member_level_id`) REFERENCES `t_sys_member_level` (`id`) ON DELETE CASCADE
 CREATE TABLE
     `t_sys_member_level` (

@@ -1,6 +1,6 @@
 //! 字典数据表
 //! Entity: [`entity::prelude::SysDictData`]
-use crate::m20240218_161916_create_sys_dict_dim::SysDictDim;
+use crate::m20240218_161916_create_sys_dict_dimension::SysDictDimension;
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, ForeignKey, Index, Table},
@@ -31,13 +31,13 @@ impl MigrationTrait for Migration {
                             .comment("字典项ID"),
                     )
                     .col(
-                        ColumnDef::new(SysDictData::DimId)
+                        ColumnDef::new(SysDictData::DimensionId)
                             .integer()
                             .not_null()
                             .comment("字典维度ID"),
                     )
                     .col(
-                        ColumnDef::new(SysDictData::DimCode)
+                        ColumnDef::new(SysDictData::DimensionCode)
                             .string()
                             .string_len(64)
                             .not_null()
@@ -48,13 +48,13 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(64)
                             .not_null()
-                            .comment("字典标签"),
+                            .comment("字典项标签"),
                     )
                     .col(
                         ColumnDef::new(SysDictData::Value)
                             .text()
                             .not_null()
-                            .comment("字典键值"),
+                            .comment("字典项值"),
                     )
                     .col(
                         ColumnDef::new(SysDictData::Sort)
@@ -102,31 +102,34 @@ impl MigrationTrait for Migration {
             .await?;
 
         if !manager
-            .has_index(SysDictData::Table.to_string(), "idx_dim_id")
+            .has_index(SysDictData::Table.to_string(), "idx_dimension_id")
             .await?
         {
             manager
                 .create_index(
                     Index::create()
                         .if_not_exists()
-                        .name("idx_dim_id")
+                        .name("idx_dimension_id")
                         .table(SysDictData::Table)
-                        .col(SysDictData::DimId)
+                        .col(SysDictData::DimensionId)
                         .to_owned(),
                 )
                 .await?;
         }
 
         if !manager
-            .has_index(SysDictData::Table.to_string(), "fk_sys_dict_data_dim_id")
+            .has_index(
+                SysDictData::Table.to_string(),
+                "fk_sys_dict_data_dimension_id",
+            )
             .await?
         {
             manager
                 .create_foreign_key(
                     ForeignKey::create()
-                        .name("fk_t_sys_dict_data_dim_id")
-                        .from(SysDictData::Table, SysDictData::DimId)
-                        .to(SysDictDim::Table, SysDictDim::Id)
+                        .name("fk_sys_dict_data_dimension_id")
+                        .from(SysDictData::Table, SysDictData::DimensionId)
+                        .to(SysDictDimension::Table, SysDictDimension::Id)
                         .to_owned(),
                 )
                 .await?;
@@ -149,8 +152,8 @@ pub enum SysDictData {
     #[sea_orm(iden = "t_sys_dict_data")]
     Table,
     Id,
-    DimId,
-    DimCode,
+    DimensionId,
+    DimensionCode,
     Lable,
     Value,
     Sort,
