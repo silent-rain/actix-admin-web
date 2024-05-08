@@ -120,17 +120,11 @@
   - 任务运行失败，日志回收
   - 耗时
   - 状态
+- 图片的hash值
 
 ## 表划分域
 
-t_user_base
-
-user_base
-
 用户与身份管理：
-●t_user_base：用户资料信息
-●t_user_email — 用户邮箱表 (Email)
-●t_user_phone — 用户手机号表 (UserPhoneNumber)
 ●t_user_login_log — 用户登录日志表 (UserLoginLog)
 ●t_user_blockchain_wallet — 用户区块链钱包表
 ●t_user_location — 用户地理位置表 (UserLocation)
@@ -158,16 +152,6 @@ user_base
 ●t_sys_image_resource — 图片资源表 (ImageResource)
 ●t_sys_dict_dimension — 字典维度表 (DictionaryDimension)
 ●t_sys_dict_data — 字典数据表 (DictionaryData)
-
-路由整理
-部门管理
-部门角色关系管理   部门ID   department_id -》department_id
-令牌管理
-令牌角色关系管理
-
-OpenApi接口角色关系 napi_id  ->  openapi_id
-
-用户权限前最
 
 <https://github.com/actix/actix-extras/tree/master/actix-identity>
 <https://crates.io/crates/actix-ws>

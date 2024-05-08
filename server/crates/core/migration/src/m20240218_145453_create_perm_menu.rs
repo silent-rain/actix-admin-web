@@ -44,20 +44,12 @@ impl MigrationTrait for Migration {
                             .comment("菜单名称"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::Icon)
+                        ColumnDef::new(PermMenu::IconClass)
                             .string()
                             .string_len(20)
                             .null()
                             .default("")
-                            .comment("Icon图标"),
-                    )
-                    .col(
-                        ColumnDef::new(PermMenu::ElIcon)
-                            .string()
-                            .string_len(20)
-                            .null()
-                            .default("")
-                            .comment("Element-Ico图标"),
+                            .comment("Icon图标类"),
                     )
                     .col(
                         ColumnDef::new(PermMenu::MenuType)
@@ -66,7 +58,7 @@ impl MigrationTrait for Migration {
                             .comment("菜单类型(0:菜单,1:按钮)"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::OpenType)
+                        ColumnDef::new(PermMenu::OpenMethod)
                             .integer()
                             .not_null()
                             .comment("打开方式(0:组件,1:内链,2:外链)"),
@@ -80,7 +72,7 @@ impl MigrationTrait for Migration {
                             .comment("路由地址"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::Component)
+                        ColumnDef::new(PermMenu::ComponentPath)
                             .string()
                             .string_len(500)
                             .null()
@@ -88,7 +80,7 @@ impl MigrationTrait for Migration {
                             .comment("组件路径"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::Redirect)
+                        ColumnDef::new(PermMenu::RedirectTo)
                             .string()
                             .string_len(200)
                             .null()
@@ -112,18 +104,18 @@ impl MigrationTrait for Migration {
                             .comment("链接跳转方式,_blank/_self"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::Hidden)
+                        ColumnDef::new(PermMenu::IsHidden)
                             .integer()
                             .null()
                             .default(1)
                             .comment("是否隐藏(0:显示,1:隐藏)"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::RootAlwaysShow)
+                        ColumnDef::new(PermMenu::IsAlwaysDisplayed)
                             .integer()
                             .null()
                             .default(1)
-                            .comment("始终显示根菜单(0:显示,1:隐藏)"),
+                            .comment("是否始终显示根菜单(0:隐藏,1:显示)"),
                     )
                     .col(
                         ColumnDef::new(PermMenu::Permission)
@@ -195,17 +187,16 @@ pub enum PermMenu {
     Id,
     Pid,
     Title,
-    Icon,
-    ElIcon,
+    IconClass,
     MenuType,
-    OpenType,
+    OpenMethod,
     Path,
-    Component,
-    Redirect,
+    ComponentPath,
+    RedirectTo,
     Link,
     LinkTarget,
-    Hidden,
-    RootAlwaysShow,
+    IsHidden,
+    IsAlwaysDisplayed,
     Permission,
     Sort,
     Desc,

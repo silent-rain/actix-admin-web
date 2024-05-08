@@ -172,7 +172,7 @@ CREATE TABLE IF NOT EXISTS
         `link` VARCHAR(200) NULL DEFAULT '' COMMENT '链接地址:站内链地址/站外链地址',
         `link_target` VARCHAR(20) NULL DEFAULT '_blank' COMMENT '链接跳转方式,_blank/_self',
         `hidden` TINYINT(1) NULL DEFAULT 1 COMMENT '是否隐藏(0:显示,1:隐藏)',
-        `root_always_show` TINYINT(1) NULL DEFAULT 1 COMMENT '始终显示根菜单(0:显示,1:隐藏)',
+        `root_always_show` TINYINT(1) NULL DEFAULT 1 COMMENT '是否始终显示根菜单(0:隐藏,1:显示)',
         `permission` VARCHAR(200) NULL DEFAULT '' COMMENT '权限标识',
         `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
         `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '描述信息',

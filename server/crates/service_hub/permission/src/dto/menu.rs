@@ -31,28 +31,26 @@ pub struct AddMenuReq {
     /// 菜单名称
     #[validate(length(min = 2, message = "至少输入两个字符"))]
     pub title: String,
-    /// Icon图标
-    pub icon: Option<String>,
-    /// Element-Icon图标
-    pub el_icon: Option<String>,
+    /// Icon图标类
+    pub icon_class: Option<String>,
     /// 菜单类型(0:菜单,1:按钮)
     pub menu_type: perm_menu::enums::MenuType,
     /// 打开方式(0:组件,1:内链,2:外链)
-    pub open_type: perm_menu::enums::OpenType,
+    pub open_method: perm_menu::enums::OpenMethod,
     /// 路由地址
     pub path: Option<String>,
     /// 组件路径
-    pub component: Option<String>,
+    pub component_path: Option<String>,
     /// 路由重定向
-    pub redirect: Option<String>,
+    pub redirect_to: Option<String>,
     /// 链接地址:站内链地址/站外链地址
     pub link: Option<String>,
     /// 链接跳转方式, _blank/_self
     pub link_target: Option<perm_menu::enums::LinkTarget>,
     /// 是否隐藏(0:显示,1:隐藏)
-    pub hidden: Option<perm_menu::enums::Hidden>,
-    /// 始终显示根菜单(0:显示,1:隐藏)
-    pub root_always_show: Option<perm_menu::enums::RootAlwaysShow>,
+    pub is_hidden: Option<perm_menu::enums::IsHidden>,
+    /// 是否始终显示根菜单(0:隐藏,1:显示)
+    pub is_always_show_root: Option<perm_menu::enums::IsAlwaysShowRoot>,
     /// 权限标识
     pub permission: Option<String>,
     /// 排序
@@ -71,28 +69,26 @@ pub struct UpdateMenuReq {
     /// 菜单名称
     #[validate(length(min = 2, message = "至少输入两个字符"))]
     pub title: String,
-    /// Icon图标
-    pub icon: Option<String>,
-    /// Element-Icon图标
-    pub el_icon: Option<String>,
+    /// Icon图标类
+    pub icon_class: Option<String>,
     /// 菜单类型(0:菜单,1:按钮)
     pub menu_type: perm_menu::enums::MenuType,
     /// 打开方式(0:组件,1:内链,2:外链)
-    pub open_type: perm_menu::enums::OpenType,
+    pub open_method: perm_menu::enums::OpenMethod,
     /// 路由地址
     pub path: Option<String>,
     /// 组件路径
-    pub component: Option<String>,
+    pub component_path: Option<String>,
     /// 路由重定向
-    pub redirect: Option<String>,
+    pub redirect_to: Option<String>,
     /// 链接地址:站内链地址/站外链地址
     pub link: Option<String>,
     /// 链接跳转方式, _blank/_self
     pub link_target: Option<perm_menu::enums::LinkTarget>,
     /// 是否隐藏(0:显示,1:隐藏)
-    pub hidden: Option<perm_menu::enums::Hidden>,
-    /// 始终显示根菜单(0:显示,1:隐藏)
-    pub root_always_show: Option<perm_menu::enums::RootAlwaysShow>,
+    pub is_hidden: Option<perm_menu::enums::IsHidden>,
+    /// 是否始终显示根菜单(0:隐藏,1:显示)
+    pub is_always_show_root: Option<perm_menu::enums::IsAlwaysShowRoot>,
     /// 权限标识
     pub permission: Option<String>,
     /// 排序
