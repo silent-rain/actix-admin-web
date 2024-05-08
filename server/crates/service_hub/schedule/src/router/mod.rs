@@ -9,7 +9,7 @@ use actix_web::{web, Scope};
 pub struct ScheduleRouter;
 
 impl ScheduleRouter {
-    /// 注册`调度任务管理`路由
+    /// 注册`任务调度管理`路由
     pub fn admin_register() -> Scope {
         web::scope("/schedule")
             .service(schedule_job::ScheduleJobRouter::admin_register())

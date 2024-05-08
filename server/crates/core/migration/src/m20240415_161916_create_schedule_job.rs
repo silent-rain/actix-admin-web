@@ -1,4 +1,4 @@
-//! 调度任务表
+//! 任务调度表
 //! Entity: [`entity::prelude::ScheduleJob`]
 
 use sea_orm::{
@@ -19,7 +19,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(ScheduleJob::Table)
-                    .comment("调度任务")
+                    .comment("任务调度")
                     .if_not_exists()
                     .col(
                         ColumnDef::new(ScheduleJob::Id)

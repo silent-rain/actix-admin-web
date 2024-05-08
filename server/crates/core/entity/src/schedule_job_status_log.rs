@@ -1,4 +1,4 @@
-//! 调度任务状态日志
+//! 任务调度状态日志
 
 use sea_orm::{
     prelude::DateTimeLocal, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey,
@@ -6,7 +6,7 @@ use sea_orm::{
 };
 use serde::{Deserialize, Serialize};
 
-/// 调度任务状态日志
+/// 任务调度状态日志
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize, DeriveEntityModel)]
 #[sea_orm(table_name = "t_schedule_job_status_log")]
 pub struct Model {
@@ -15,7 +15,7 @@ pub struct Model {
     pub id: i32,
     /// 任务ID
     pub job_id: i32,
-    /// 调度任务ID
+    /// 任务调度ID
     pub uuid: String,
     /// 失败信息
     pub error: Option<String>,

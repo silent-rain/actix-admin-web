@@ -1,4 +1,4 @@
-//! 调度任务状态日志管理
+//! 任务调度状态日志管理
 
 use entity::schedule_job_status_log;
 
@@ -6,7 +6,7 @@ use actix_validator::Validate;
 
 use serde::{Deserialize, Serialize};
 
-/// 查询调度任务状态日志列表
+/// 查询任务调度状态日志列表
 #[derive(Default, Deserialize)]
 pub struct GetScheduleJobStatusListLogReq {
     /// 当前分页
@@ -23,21 +23,21 @@ pub struct GetScheduleJobStatusListLogReq {
     pub status: Option<i8>,
 }
 
-/// 添加调度任务状态日志
+/// 添加任务调度状态日志
 #[derive(Clone, Serialize, Deserialize, Validate)]
 pub struct AddScheduleJobStatusLogReq {
     /// 任务ID
     pub job_id: i32,
-    /// 调度任务ID
+    /// 任务调度ID
     pub uuid: String,
 }
 
-/// 更新调度任务状态日志
+/// 更新任务调度状态日志
 #[derive(Clone, Serialize, Deserialize, Validate)]
 pub struct UpdateScheduleJobStatusLogReq {
     /// 任务ID
     pub job_id: i32,
-    /// 调度任务ID
+    /// 任务调度ID
     pub uuid: String,
     /// 失败信息
     pub error: Option<String>,

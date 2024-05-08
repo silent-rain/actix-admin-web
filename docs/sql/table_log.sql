@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS
         PRIMARY KEY (`id`)
     ) ENGINE = InnoDB AUTO_INCREMENT = 1485 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '系统日志';
 
--- WEB日志表
+-- TODO WEB日志表
 CREATE TABLE IF NOT EXISTS
     `t_log_web` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',

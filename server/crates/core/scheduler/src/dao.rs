@@ -46,7 +46,7 @@ where
         ScheduleJobDao { db }
     }
 
-    /// 获取调度任务列表
+    /// 获取任务调度列表
     pub async fn list(&self) -> Result<Vec<schedule_job::Model>, DbErr> {
         ScheduleJob::find().all(self.db.rdb()).await
     }
@@ -68,7 +68,7 @@ where
         ScheduleJobStatusLogDao { db }
     }
 
-    /// 添加调度任务状态日志
+    /// 添加任务调度状态日志
     pub async fn add(
         &self,
         job_id: i32,
@@ -84,7 +84,7 @@ where
         active_model.insert(self.db.wdb()).await
     }
 
-    /// 更新调度任务状态日志
+    /// 更新任务调度状态日志
     pub async fn update(
         &self,
         id: i32,
@@ -107,7 +107,7 @@ where
         Ok(result.rows_affected)
     }
 
-    /// 更新调度任务状态日志状态
+    /// 更新任务调度状态日志状态
     pub async fn status(
         &self,
         id: i32,
@@ -143,7 +143,7 @@ where
         ScheduleJobEventLogDao { db }
     }
 
-    /// 添加调度任务事件日志
+    /// 添加任务调度事件日志
     pub async fn add(
         &self,
         job_id: i32,

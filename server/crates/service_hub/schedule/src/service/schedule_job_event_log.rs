@@ -1,4 +1,4 @@
-//! 调度任务事件日志管理
+//! 任务调度事件日志管理
 use crate::{
     dao::schedule_job_event_log::ScheduleJobEventLogDao,
     dto::schedule_job_event_log::{AddScheduleJobEventLogReq, GetScheduleJobEventLogListReq},
@@ -28,10 +28,10 @@ impl<'a> ScheduleJobEventLogService<'a> {
             .list(req)
             .await
             .map_err(|err| {
-                error!("查询调度任务事件日志列表失败, err: {:#?}", err);
+                error!("查询任务调度事件日志列表失败, err: {:#?}", err);
                 Error::DbQueryError
                     .into_msg()
-                    .with_msg("查询调度任务事件日志列表失败")
+                    .with_msg("查询任务调度事件日志列表失败")
             })?;
 
         Ok((results, total))
@@ -44,16 +44,16 @@ impl<'a> ScheduleJobEventLogService<'a> {
             .info(id)
             .await
             .map_err(|err| {
-                error!("查询调度任务事件日志失败, err: {:#?}", err);
+                error!("查询任务调度事件日志失败, err: {:#?}", err);
                 Error::DbQueryError
                     .into_msg()
-                    .with_msg("查询调度任务事件日志失败")
+                    .with_msg("查询任务调度事件日志失败")
             })?
             .ok_or_else(|| {
-                error!("调度任务事件日志不存在");
+                error!("任务调度事件日志不存在");
                 Error::DbQueryEmptyError
                     .into_msg()
-                    .with_msg("调度任务事件日志不存在")
+                    .with_msg("任务调度事件日志不存在")
             })?;
 
         Ok(result)
@@ -75,10 +75,10 @@ impl<'a> ScheduleJobEventLogService<'a> {
             .add(data)
             .await
             .map_err(|err| {
-                error!("添加调度任务事件日志失败, err: {:#?}", err);
+                error!("添加任务调度事件日志失败, err: {:#?}", err);
                 Error::DbQueryError
                     .into_msg()
-                    .with_msg("添加调度任务事件日志失败")
+                    .with_msg("添加任务调度事件日志失败")
             })?;
 
         Ok(result)
@@ -91,10 +91,10 @@ impl<'a> ScheduleJobEventLogService<'a> {
             .delete(id)
             .await
             .map_err(|err| {
-                error!("删除调度任务事件日志失败, err: {:#?}", err);
+                error!("删除任务调度事件日志失败, err: {:#?}", err);
                 Error::DbQueryError
                     .into_msg()
-                    .with_msg("删除调度任务事件日志失败")
+                    .with_msg("删除任务调度事件日志失败")
             })?;
 
         Ok(result)

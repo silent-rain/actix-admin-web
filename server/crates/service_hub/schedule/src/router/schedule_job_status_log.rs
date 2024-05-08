@@ -1,4 +1,4 @@
-//! 调度任务状态日志管理
+//! 任务调度状态日志管理
 
 use crate::ScheduleJobStatusLogController;
 
@@ -8,7 +8,7 @@ use actix_web::{web, Scope};
 pub struct ScheduleJobStatusLogRouter;
 
 impl ScheduleJobStatusLogRouter {
-    /// 注册`调度任务状态日志管理`路由
+    /// 注册`任务调度状态日志管理`路由
     pub fn admin_register() -> Scope {
         web::scope("/job-event-logs")
             .route("", web::get().to(ScheduleJobStatusLogController::list))

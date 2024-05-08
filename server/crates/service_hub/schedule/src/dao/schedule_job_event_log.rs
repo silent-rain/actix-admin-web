@@ -1,4 +1,4 @@
-//! 调度任务事件日志管理
+//! 任务调度事件日志管理
 
 use crate::dto::schedule_job_event_log::GetScheduleJobEventLogListReq;
 

@@ -1,4 +1,4 @@
-//! 调度任务表
+//! 任务调度表
 
 use sea_orm::{
     prelude::DateTimeLocal, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey,
@@ -6,7 +6,7 @@ use sea_orm::{
 };
 use serde::{Deserialize, Serialize};
 
-/// 调度任务表
+/// 任务调度表
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
 #[sea_orm(table_name = "t_schedule_job")]
 pub struct Model {
@@ -45,7 +45,7 @@ impl ActiveModelBehavior for ActiveModel {}
 pub mod enums {
     use serde_repr::{Deserialize_repr, Serialize_repr};
 
-    /// 调度任务状态
+    /// 任务调度状态
     #[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
     #[repr(i8)]
     pub enum Status {
@@ -59,7 +59,7 @@ pub mod enums {
     #[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
     #[repr(i8)]
     pub enum JobType {
-        /// 调度任务
+        /// 任务调度
         Timer = 0,
         /// 即时任务
         Interval = 1,

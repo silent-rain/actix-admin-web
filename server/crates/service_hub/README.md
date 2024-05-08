@@ -4,12 +4,12 @@
 - public: 公共接口
 - auth: 用户认证
 - initialize: 初始化资源管理
-- log: 日志与审计
+- log: 日志管理
 - user: 用户与身份管理
 - permission: 权限管理与访问控制
 - organization: 组织管理
 - system: 系统管理与基础设施
-- schedule: 调度任务管理
+- schedule: 任务调度管理
 
 ## 参考文档
 

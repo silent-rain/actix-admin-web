@@ -94,16 +94,16 @@
   - [x] 图片资源管理
   - [x] 数据字典管理
 - [ ] 任务调度管理
-  - [ ] 任务调度
+  - [ ] 任务调度信息
   - [ ] 任务调度状态日志
   - [ ] 任务调度事件日志
 - [ ] 会员管理
   - [ ] 会员等级管理
 - [ ] 日志管理
-  - [ ] 系统日志
-  - [ ] 操作日志
+  - [x] 系统日志
+  - [x] 操作日志
   - [ ] 前端日志
-  - [ ] 登陆日志
+  - [x] 登陆日志
 - [ ] 前端权限
   - [ ] 动态路由
   - [ ] 按钮权限
@@ -122,7 +122,7 @@
   - 系统用户接口鉴权
 - 用户分享码 share_code
 - 用户会员等级
-- 调度任务接口验证
+- 任务调度接口验证
   - 任务运行失败，日志回收
   - 耗时
   - 状态
@@ -132,23 +132,13 @@
 
 ## 表划分域
 
-用户与身份管理：
-t_user_blockchain_wallet — 用户区块链钱包表
-t_user_location — 用户地理位置表 (UserLocation)
-
 会员系统：
 t_member_level — 会员等级表 (MemberLevel)
 
-日志与审计：
-t_audit_api_operation_log — API操作日志表 (ApiOperationLog)
-t_audit_system_log — 系统日志表 (SystemLog)
-t_audit_web_log — WEB日志表 (WebLog)
-t_audit_user_login_log — 用户登录日志表
-
 任务调度与后台作业：
-t_task_scheduled — 调度任务表 (ScheduledTask)
-t_task_scheduled_status_log — 调度任务状态日志表 (ScheduledTaskStatusLog)
-t_task_scheduled_event_log — 调度任务事件日志表 (ScheduledTaskEventLog)
+t_schedule_job: 任务调度作业表
+t_schedule_status_log: 任务调度状态日志表
+t_schedule_event_log: 任务调度事件日志表
 
 <https://github.com/actix/actix-extras/tree/master/actix-identity>
 <https://crates.io/crates/actix-ws>

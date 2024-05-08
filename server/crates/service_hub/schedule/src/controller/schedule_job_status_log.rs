@@ -1,4 +1,4 @@
-//! 调度任务状态日志管理
+//! 任务调度状态日志管理
 
 use crate::{
     dto::schedule_job_status_log::{
@@ -20,7 +20,7 @@ use actix_web::{
 pub struct ScheduleJobStatusLogController;
 
 impl ScheduleJobStatusLogController {
-    /// 获取调度任务状态日志列表
+    /// 获取任务调度状态日志列表
     pub async fn list(
         provider: Data<AInjectProvider>,
         req: Query<GetScheduleJobStatusListLogReq>,
@@ -33,7 +33,7 @@ impl ScheduleJobStatusLogController {
         }
     }
 
-    /// 获取调度任务状态日志的详细信息
+    /// 获取任务调度状态日志的详细信息
     pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
         let schedule_job_status_log_service: ScheduleJobStatusLogService = provider.provide();
         let resp = schedule_job_status_log_service.info(*id).await;
@@ -43,7 +43,7 @@ impl ScheduleJobStatusLogController {
         }
     }
 
-    /// 添加调度任务状态日志
+    /// 添加任务调度状态日志
     pub async fn add(
         provider: Data<AInjectProvider>,
         data: Json<AddScheduleJobStatusLogReq>,
@@ -57,7 +57,7 @@ impl ScheduleJobStatusLogController {
         }
     }
 
-    /// 更新调度任务状态日志
+    /// 更新任务调度状态日志
     pub async fn update(
         provider: Data<AInjectProvider>,
         id: Path<i32>,
@@ -73,7 +73,7 @@ impl ScheduleJobStatusLogController {
         }
     }
 
-    /// 更新调度任务状态日志
+    /// 更新任务调度状态日志
     pub async fn status(
         provider: Data<AInjectProvider>,
         id: Path<i32>,
@@ -89,7 +89,7 @@ impl ScheduleJobStatusLogController {
         }
     }
 
-    /// 删除调度任务状态日志
+    /// 删除任务调度状态日志
     pub async fn delete(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
         let schedule_job_status_log_service: ScheduleJobStatusLogService = provider.provide();
         let resp = schedule_job_status_log_service.delete(*id).await;

@@ -1,4 +1,4 @@
-//! 调度任务状态日志管理
+//! 任务调度状态日志管理
 use crate::{
     dao::schedule_job_status_log::ScheduleJobStatusLogDao,
     dto::schedule_job_status_log::{
@@ -30,10 +30,10 @@ impl<'a> ScheduleJobStatusLogService<'a> {
             .list(req)
             .await
             .map_err(|err| {
-                error!("查询调度任务状态日志列表失败, err: {:#?}", err);
+                error!("查询任务调度状态日志列表失败, err: {:#?}", err);
                 Error::DbQueryError
                     .into_msg()
-                    .with_msg("查询调度任务状态日志列表失败")
+                    .with_msg("查询任务调度状态日志列表失败")
             })?;
 
         Ok((results, total))
@@ -46,16 +46,16 @@ impl<'a> ScheduleJobStatusLogService<'a> {
             .info(id)
             .await
             .map_err(|err| {
-                error!("查询调度任务状态日志失败, err: {:#?}", err);
+                error!("查询任务调度状态日志失败, err: {:#?}", err);
                 Error::DbQueryError
                     .into_msg()
-                    .with_msg("查询调度任务状态日志失败")
+                    .with_msg("查询任务调度状态日志失败")
             })?
             .ok_or_else(|| {
-                error!("调度任务状态日志不存在");
+                error!("任务调度状态日志不存在");
                 Error::DbQueryEmptyError
                     .into_msg()
-                    .with_msg("调度任务状态日志不存在")
+                    .with_msg("任务调度状态日志不存在")
             })?;
 
         Ok(result)
@@ -76,10 +76,10 @@ impl<'a> ScheduleJobStatusLogService<'a> {
             .add(data)
             .await
             .map_err(|err| {
-                error!("添加调度任务状态日志失败, err: {:#?}", err);
+                error!("添加任务调度状态日志失败, err: {:#?}", err);
                 Error::DbQueryError
                     .into_msg()
-                    .with_msg("添加调度任务状态日志失败")
+                    .with_msg("添加任务调度状态日志失败")
             })?;
 
         Ok(result)
@@ -105,10 +105,10 @@ impl<'a> ScheduleJobStatusLogService<'a> {
             .update(model)
             .await
             .map_err(|err| {
-                error!("更新调度任务状态日志失败, err: {:#?}", err);
+                error!("更新任务调度状态日志失败, err: {:#?}", err);
                 Error::DbUpdateError
                     .into_msg()
-                    .with_msg("更新调度任务状态日志失败")
+                    .with_msg("更新任务调度状态日志失败")
             })?;
 
         Ok(result)
@@ -121,15 +121,15 @@ impl<'a> ScheduleJobStatusLogService<'a> {
             .await
             .map_err(|err| {
                 if err == RecordNotUpdated {
-                    error!("更新调度任务状态日志失败, 该调度任务状态日志不存在");
+                    error!("更新任务调度状态日志失败, 该任务调度状态日志不存在");
                     return Error::DbUpdateError
                         .into_msg()
-                        .with_msg("更新调度任务状态日志失败, 该调度任务状态日志不存在");
+                        .with_msg("更新任务调度状态日志失败, 该任务调度状态日志不存在");
                 }
-                error!("更新调度任务状态日志失败, err: {:#?}", err);
+                error!("更新任务调度状态日志失败, err: {:#?}", err);
                 Error::DbUpdateError
                     .into_msg()
-                    .with_msg("更新调度任务状态日志失败")
+                    .with_msg("更新任务调度状态日志失败")
             })?;
 
         Ok(())
@@ -142,10 +142,10 @@ impl<'a> ScheduleJobStatusLogService<'a> {
             .delete(id)
             .await
             .map_err(|err| {
-                error!("删除调度任务状态日志失败, err: {:#?}", err);
+                error!("删除任务调度状态日志失败, err: {:#?}", err);
                 Error::DbQueryError
                     .into_msg()
-                    .with_msg("删除调度任务状态日志失败")
+                    .with_msg("删除任务调度状态日志失败")
             })?;
 
         Ok(result)

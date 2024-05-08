@@ -1,4 +1,4 @@
-//! 调度任务状态日志管理
+//! 任务调度状态日志管理
 
 use crate::dto::schedule_job_status_log::GetScheduleJobStatusListLogReq;
 

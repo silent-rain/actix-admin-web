@@ -1,4 +1,4 @@
-//! 调度任务状态日志表
+//! 任务调度状态日志表
 //! Entity: [`entity::prelude::ScheduleJobStatusLog`]
 
 use sea_orm::{
@@ -18,7 +18,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(ScheduleJobStatus::Table)
-                    .comment("调度任务状态日志")
+                    .comment("任务调度状态日志")
                     .if_not_exists()
                     .col(
                         ColumnDef::new(ScheduleJobStatus::Id)
@@ -39,7 +39,7 @@ impl MigrationTrait for Migration {
                             .string()
                             .string_len(50)
                             .unique_key()
-                            .comment("调度任务ID"),
+                            .comment("任务调度ID"),
                     )
                     .col(
                         ColumnDef::new(ScheduleJobStatus::Error)

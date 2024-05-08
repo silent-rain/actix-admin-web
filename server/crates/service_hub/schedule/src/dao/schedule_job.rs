@@ -1,4 +1,4 @@
-//! 调度任务管理
+//! 任务调度管理
 use crate::dto::schedule_job::GetScheduleJobReq;
 
 use database::{DbRepo, Pagination};
