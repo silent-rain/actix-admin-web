@@ -10,6 +10,6 @@ pub struct GenCaptchaRouter;
 impl GenCaptchaRouter {
     /// 注册`生成验证码`路由
     pub fn register() -> Scope {
-        web::scope("/image-captcha").route("", web::post().to(ImageCaptchaController::add))
+        web::scope("/captcha").route("", web::post().to(ImageCaptchaController::add))
     }
 }
