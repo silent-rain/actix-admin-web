@@ -36,31 +36,31 @@ impl MigrationTrait for Migration {
                             .comment("图片名称"),
                     )
                     .col(
-                        ColumnDef::new(SysImage::HashName)
+                        ColumnDef::new(SysImage::Hash)
                             .string()
                             .string_len(32)
                             .unique_key()
                             .not_null()
-                            .comment("HASH名称"),
+                            .comment("图片HASH值"),
                     )
                     .col(
-                        ColumnDef::new(SysImage::BaseImg)
+                        ColumnDef::new(SysImage::Data)
                             .blob(BlobSize::Medium)
                             .not_null()
                             .comment("图片数据, Base64编码"),
                     )
                     .col(
-                        ColumnDef::new(SysImage::ImgType)
+                        ColumnDef::new(SysImage::Extension)
                             .string()
                             .string_len(10)
                             .not_null()
-                            .comment("扩展类型,svg,png"),
+                            .comment("图片文件扩展名, 如svg, png"),
                     )
                     .col(
-                        ColumnDef::new(SysImage::ImgSize)
+                        ColumnDef::new(SysImage::Size)
                             .integer()
                             .not_null()
-                            .comment("图片大小"),
+                            .comment("图片文件大小，单位为字节"),
                     )
                     .col(
                         ColumnDef::new(SysImage::Desc)
@@ -92,14 +92,14 @@ impl MigrationTrait for Migration {
 
 #[derive(DeriveIden)]
 pub enum SysImage {
-    #[sea_orm(iden = "t_sys_image")]
+    #[sea_orm(iden = "t_sys_image_resource")]
     Table,
     Id,
     Name,
-    HashName,
-    BaseImg,
-    ImgType,
-    ImgSize,
+    Hash,
+    Data,
+    Extension,
+    Size,
     Desc,
     CreatedAt,
 }

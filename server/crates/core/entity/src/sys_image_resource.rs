@@ -9,23 +9,23 @@ use serde::{Deserialize, Serialize};
 
 /// 图片资源表
 #[derive(Clone, Debug, Default, PartialEq, Eq, Deserialize, Serialize, DeriveEntityModel)]
-#[sea_orm(table_name = "t_sys_image")]
+#[sea_orm(table_name = "t_sys_image_resource")]
 pub struct Model {
     /// 图片ID
     #[sea_orm(primary_key)]
     pub id: i32,
     /// 图片名称
     pub name: String,
-    /// HASH名称
+    /// 图片HASH值
     #[sea_orm(unique)]
-    pub hash_name: String,
+    pub hash: String,
     /// 图片数据, Base64编码
     #[sea_orm(column_type = "Binary(BlobSize::Medium)")]
-    pub base_img: Vec<u8>,
-    /// 扩展类型:svg,png
-    pub img_type: String,
+    pub data: Vec<u8>,
+    /// 图片文件扩展名, 如svg, png
+    pub extension: String,
     /// 图片大小
-    pub img_size: i32,
+    pub size: i32,
     /// 描述信息
     pub desc: Option<String>,
     /// 创建时间

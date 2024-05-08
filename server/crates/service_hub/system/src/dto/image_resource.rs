@@ -1,4 +1,4 @@
-//! 图片
+//! 图片资源管理
 
 use actix_validator::Validate;
 
@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 
 /// 获取图片列表 请求体
 #[derive(Default, Deserialize, Validate)]
-pub struct GetIconListReq {
+pub struct GetImageResourceListReq {
     /// 当前分页
     pub page: u64,
     /// 页面大小
@@ -36,7 +36,7 @@ pub struct UploadFileForm {
 
 /// 更新图片
 #[derive(Default, Deserialize, Serialize, Validate)]
-pub struct UpdateIconReq {
+pub struct UpdateImageResourceReq {
     /// 图片名称
     pub name: String,
     /// 描述信息
@@ -45,7 +45,7 @@ pub struct UpdateIconReq {
 
 /// 批量删除图片
 #[derive(Default, Deserialize, Validate)]
-pub struct BatchDeleteIconReq {
+pub struct BatchDeleteImageResourceReq {
     /// ID列表
     pub ids: Vec<i32>,
 }

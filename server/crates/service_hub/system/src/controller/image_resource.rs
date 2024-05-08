@@ -1,12 +1,13 @@
-//! 图片
+//! 图片资源管理
 
 use crate::{
     constant::HEADERS_X_IMG,
     {
-        dto::image::{
-            BatchDeleteIconReq, GetIconListReq, UpdateIconReq, UploadFileForm, UploadFilesForm,
+        dto::image_resource::{
+            BatchDeleteImageResourceReq, GetImageResourceListReq, UpdateImageResourceReq,
+            UploadFileForm, UploadFilesForm,
         },
-        service::image::ImageService,
+        service::image_resource::ImageResourceService,
     },
 };
 
@@ -21,16 +22,16 @@ use actix_web::{
 };
 
 /// 控制器
-pub struct ImageController;
+pub struct ImageResourceController;
 
-impl ImageController {
+impl ImageResourceController {
     /// 获取图片列表
     pub async fn list(
         provider: Data<AInjectProvider>,
-        req: Query<GetIconListReq>,
+        req: Query<GetImageResourceListReq>,
     ) -> impl Responder {
-        let icon_service: ImageService = provider.provide();
-        let resp = icon_service.list(req.into_inner()).await;
+        let image_resource_service: ImageResourceService = provider.provide();
+        let resp = image_resource_service.list(req.into_inner()).await;
         match resp {
             Ok((results, total)) => Response::ok().data_list(results, total),
             Err(err) => Response::err(err),
@@ -39,13 +40,13 @@ impl ImageController {
 
     /// 获取图片信息
     pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let icon_service: ImageService = provider.provide();
-        let resp = icon_service.info(*id).await;
+        let image_resource_service: ImageResourceService = provider.provide();
+        let resp = image_resource_service.info(*id).await;
         match resp {
             Ok(v) => HttpResponse::Ok()
                 .insert_header((HEADERS_X_IMG, "true"))
-                .content_type(v.img_type)
-                .body(v.base_img.to_vec()),
+                .content_type(v.extension)
+                .body(v.data.to_vec()),
             Err(_err) => HttpResponse::NotFound().finish(),
         }
     }
@@ -55,13 +56,13 @@ impl ImageController {
         provider: Data<AInjectProvider>,
         hash: Path<String>,
     ) -> impl Responder {
-        let icon_service: ImageService = provider.provide();
-        let resp = icon_service.info_by_hash(hash.to_string()).await;
+        let image_resource_service: ImageResourceService = provider.provide();
+        let resp = image_resource_service.info_by_hash(hash.to_string()).await;
         match resp {
             Ok(v) => HttpResponse::Ok()
                 .insert_header((HEADERS_X_IMG, "true"))
-                .content_type(v.img_type)
-                .body(v.base_img.to_vec()),
+                .content_type(v.extension)
+                .body(v.data.to_vec()),
             Err(_err) => HttpResponse::NotFound().finish(),
         }
     }
@@ -71,8 +72,8 @@ impl ImageController {
         provider: Data<AInjectProvider>,
         MultipartForm(form): MultipartForm<UploadFileForm>,
     ) -> impl Responder {
-        let icon_service: ImageService = provider.provide();
-        let resp = icon_service.upload_file(form).await;
+        let image_resource_service: ImageResourceService = provider.provide();
+        let resp = image_resource_service.upload_file(form).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -84,8 +85,8 @@ impl ImageController {
         provider: Data<AInjectProvider>,
         MultipartForm(form): MultipartForm<UploadFilesForm>,
     ) -> impl Responder {
-        let icon_service: ImageService = provider.provide();
-        let resp = icon_service.upload_files(form).await;
+        let image_resource_service: ImageResourceService = provider.provide();
+        let resp = image_resource_service.upload_files(form).await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::err(err),
@@ -96,10 +97,10 @@ impl ImageController {
     pub async fn update(
         provider: Data<AInjectProvider>,
         id: Path<i32>,
-        data: Json<UpdateIconReq>,
+        data: Json<UpdateImageResourceReq>,
     ) -> impl Responder {
-        let icon_service: ImageService = provider.provide();
-        let resp = icon_service.update(*id, data.into_inner()).await;
+        let image_resource_service: ImageResourceService = provider.provide();
+        let resp = image_resource_service.update(*id, data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -108,8 +109,8 @@ impl ImageController {
 
     /// 删除图片
     pub async fn delete(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let icon_service: ImageService = provider.provide();
-        let resp = icon_service.delete(*id).await;
+        let image_resource_service: ImageResourceService = provider.provide();
+        let resp = image_resource_service.delete(*id).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -119,10 +120,10 @@ impl ImageController {
     /// 批量删除图片
     pub async fn batch_delete(
         provider: Data<AInjectProvider>,
-        data: Json<BatchDeleteIconReq>,
+        data: Json<BatchDeleteImageResourceReq>,
     ) -> impl Responder {
-        let icon_service: ImageService = provider.provide();
-        let resp = icon_service.batch_delete(data.ids.clone()).await;
+        let image_resource_service: ImageResourceService = provider.provide();
+        let resp = image_resource_service.batch_delete(data.ids.clone()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
