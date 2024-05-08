@@ -1,6 +1,6 @@
 //! OpenApi接口角色关系管理
 
-use crate::OpenapiRoleRelController;
+use crate::controller::openapi_role_rel::OpenapiRoleRelController;
 
 use actix_web::{web, Scope};
 

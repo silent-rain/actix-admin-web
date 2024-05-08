@@ -1,6 +1,6 @@
 //! 字典数据管理
 
-use crate::DictDataController;
+use crate::controller::dict_data::DictDataController;
 
 use actix_web::{web, Scope};
 

@@ -1,6 +1,6 @@
 //! 图片资源管理
 
-use crate::ImageResourceController;
+use crate::controller::image_resource::ImageResourceController;
 
 use actix_web::{web, Scope};
 

@@ -1,6 +1,6 @@
 //! OpenApi接口管理
 
-use crate::OpenapiController;
+use crate::controller::openapi::OpenapiController;
 
 use actix_web::{web, Scope};
 

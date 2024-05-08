@@ -1,6 +1,6 @@
 //! 令牌角色关系管理
 
-use crate::TokenRoleRelController;
+use crate::controller::token_role_rel::TokenRoleRelController;
 
 use actix_web::{web, Scope};
 

@@ -1,6 +1,6 @@
 //! 角色管理
 
-use crate::RoleController;
+use crate::controller::role::RoleController;
 
 use actix_web::{web, Scope};
 

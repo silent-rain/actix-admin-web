@@ -1,6 +1,6 @@
 //! 部门管理
 
-use crate::DepartmentController;
+use crate::controller::department::DepartmentController;
 
 use actix_web::{web, Scope};
 

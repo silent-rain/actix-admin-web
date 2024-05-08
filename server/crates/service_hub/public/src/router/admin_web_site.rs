@@ -1,6 +1,6 @@
 //! 后台管理 WEB 服务
 
-use crate::AdminWebSiteController;
+use crate::controller::admin_web_site::AdminWebSiteController;
 
 use actix_web::{dev::HttpServiceFactory, web};
 

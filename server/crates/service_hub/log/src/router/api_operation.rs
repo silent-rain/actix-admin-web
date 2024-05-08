@@ -1,6 +1,6 @@
 //! API操作日志
 
-use crate::ApiOperationController;
+use crate::controller::api_operation::ApiOperationController;
 
 use actix_web::{web, Scope};
 

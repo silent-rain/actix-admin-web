@@ -73,7 +73,7 @@
   - [x] 用户注册
   - [x] 登陆
     - [ ] 单点登录
-- [x] 用户管理
+- [ ] 用户管理
   - [x] 用户信息管理
   - [x] 用户手机号管理
   - [x] 用户邮箱管理
@@ -134,11 +134,6 @@
 
 会员系统：
 t_member_level — 会员等级表 (MemberLevel)
-
-任务调度与后台作业：
-t_schedule_job: 任务调度作业表
-t_schedule_status_log: 任务调度状态日志表
-t_schedule_event_log: 任务调度事件日志表
 
 <https://github.com/actix/actix-extras/tree/master/actix-identity>
 <https://crates.io/crates/actix-ws>

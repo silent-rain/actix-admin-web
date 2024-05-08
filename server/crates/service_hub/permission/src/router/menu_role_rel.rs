@@ -1,6 +1,6 @@
 //! 菜单角色关系管理
 
-use crate::MenuRoleRelController;
+use crate::controller::menu_role_rel::MenuRoleRelController;
 
 use actix_web::{web, Scope};
 

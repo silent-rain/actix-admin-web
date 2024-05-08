@@ -1,6 +1,6 @@
 //! 用户信息管理
 
-use crate::UserBaseController;
+use crate::controller::user_base::UserBaseController;
 
 use actix_web::{web, Scope};
 

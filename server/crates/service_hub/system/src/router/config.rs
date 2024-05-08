@@ -1,6 +1,6 @@
 //! 配置管理
 
-use crate::ConfigController;
+use crate::controller::config::ConfigController;
 
 use actix_web::{web, Scope};
 

@@ -1,6 +1,6 @@
 //! 用户角色关系管理
 
-use crate::UserRoleRelController;
+use crate::controller::user_role_rel::UserRoleRelController;
 
 use actix_web::{web, Scope};
 

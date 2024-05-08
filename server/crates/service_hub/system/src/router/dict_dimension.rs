@@ -1,6 +1,6 @@
 //! 字典维度管理
 
-use crate::DictDimensionController;
+use crate::controller::dict_dimension::DictDimensionController;
 
 use actix_web::{web, Scope};
 

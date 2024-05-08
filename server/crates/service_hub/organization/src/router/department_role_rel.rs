@@ -1,6 +1,6 @@
 //! 部门角色关系管理
 
-use crate::DepartmentRoleRelController;
+use crate::controller::department_role_rel::DepartmentRoleRelController;
 
 use actix_web::{web, Scope};
 

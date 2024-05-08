@@ -1,6 +1,6 @@
 //! 库表初始化
 
-use crate::TableController;
+use crate::controller::table::TableController;
 
 use actix_web::{web, Scope};
 

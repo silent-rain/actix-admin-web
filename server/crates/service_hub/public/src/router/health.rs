@@ -1,6 +1,6 @@
 //! 健康检查
 
-use crate::HealthController;
+use crate::controller::health::HealthController;
 
 use actix_web::{web, Scope};
 

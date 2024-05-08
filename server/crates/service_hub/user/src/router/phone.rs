@@ -1,6 +1,6 @@
 //! 用户手机号管理
 
-use crate::PhoneController;
+use crate::controller::phone::PhoneController;
 
 use actix_web::{web, Scope};
 

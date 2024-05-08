@@ -1,6 +1,6 @@
 //! 图片验证码管理
 
-use crate::ImageCaptchaController;
+use crate::controller::image_captcha::ImageCaptchaController;
 
 use actix_web::{web, Scope};
 

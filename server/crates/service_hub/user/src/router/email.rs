@@ -1,6 +1,6 @@
 //! 用户邮箱管理
 
-use crate::EmailController;
+use crate::controller::email::EmailController;
 
 use actix_web::{web, Scope};
 

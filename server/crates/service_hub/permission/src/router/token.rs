@@ -1,6 +1,6 @@
 //! 令牌管理
 
-use crate::TokenController;
+use crate::controller::token::TokenController;
 
 use actix_web::{web, Scope};
 

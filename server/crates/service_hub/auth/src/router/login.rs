@@ -1,6 +1,6 @@
 //! 登陆
 
-use crate::LoginController;
+use crate::controller::login::LoginController;
 
 use actix_web::{web, Scope};
 

@@ -1,6 +1,6 @@
 //! 注册用户路由
 
-use crate::RegisterController;
+use crate::controller::register::RegisterController;
 
 use actix_web::{web, Scope};
 
