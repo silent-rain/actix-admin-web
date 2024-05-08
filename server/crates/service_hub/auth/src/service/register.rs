@@ -3,7 +3,7 @@ use crate::{
     common::captcha::check_captcha, dao::register::RegisterDao, dto::register::RegisterReq,
 };
 
-use system::CaptchaDao;
+use system::ImageCaptchaDao;
 use user::{EmailDao, PhoneDao};
 
 use code::{Error, ErrorMsg};
@@ -19,7 +19,7 @@ pub struct RegisterService<'a> {
     email_dao: EmailDao<'a>,
     phone_dao: PhoneDao<'a>,
     register_dao: RegisterDao<'a>,
-    captcha_dao: CaptchaDao<'a>,
+    captcha_dao: ImageCaptchaDao<'a>,
 }
 
 impl<'a> RegisterService<'a> {

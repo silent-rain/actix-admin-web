@@ -16,7 +16,7 @@ mod m20240218_145453_create_user_base;
 mod m20240218_145453_create_user_email;
 mod m20240218_145453_create_user_phone;
 mod m20240218_145453_create_user_role_rel;
-mod m20240218_161916_create_sys_captcha;
+mod m20240218_161916_create_sys_image_captcha;
 mod m20240218_161916_create_sys_config;
 mod m20240218_161916_create_sys_dict_data;
 mod m20240218_161916_create_sys_dict_dim;
@@ -47,7 +47,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20240218_145453_create_perm_openapi_role_rel::Migration),
             Box::new(m20240218_145453_create_perm_token::Migration),
             Box::new(m20240218_145453_create_perm_token_role_rel::Migration),
-            Box::new(m20240218_161916_create_sys_captcha::Migration),
+            Box::new(m20240218_161916_create_sys_image_captcha::Migration),
             Box::new(m20240218_161916_create_sys_config::Migration),
             Box::new(m20240218_161916_create_sys_dict_dim::Migration),
             Box::new(m20240218_161916_create_sys_dict_data::Migration),

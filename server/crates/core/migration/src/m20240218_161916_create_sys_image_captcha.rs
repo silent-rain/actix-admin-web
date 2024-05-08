@@ -1,5 +1,5 @@
-//! 验证码表
-//! Entity: [`entity::prelude::SysCaptcha`]
+//! 图片验证码表
+//! Entity: [`entity::prelude::SysImageCaptcha`]
 
 use sea_orm::{
     sea_query::{BlobSize, ColumnDef, Expr, Table},
@@ -17,11 +17,11 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(SysCaptcha::Table)
-                    .comment("验证码表")
+                    .table(SysImageCaptcha::Table)
+                    .comment("图片验证码表")
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(SysCaptcha::Id)
+                        ColumnDef::new(SysImageCaptcha::Id)
                             .integer()
                             .primary_key()
                             .auto_increment()
@@ -29,7 +29,7 @@ impl MigrationTrait for Migration {
                             .comment("ID"),
                     )
                     .col(
-                        ColumnDef::new(SysCaptcha::CaptchaId)
+                        ColumnDef::new(SysImageCaptcha::CaptchaId)
                             .string()
                             .string_len(40)
                             .unique_key()
@@ -37,40 +37,40 @@ impl MigrationTrait for Migration {
                             .comment("验证码ID"),
                     )
                     .col(
-                        ColumnDef::new(SysCaptcha::Captcha)
+                        ColumnDef::new(SysImageCaptcha::Captcha)
                             .string()
                             .string_len(10)
                             .not_null()
                             .comment("验证码"),
                     )
                     .col(
-                        ColumnDef::new(SysCaptcha::BaseImg)
+                        ColumnDef::new(SysImageCaptcha::Data)
                             .blob(BlobSize::Medium)
                             .not_null()
-                            .comment("Base64图片"),
+                            .comment("图片数据, Base64编码"),
                     )
                     .col(
-                        ColumnDef::new(SysCaptcha::Expire)
+                        ColumnDef::new(SysImageCaptcha::Expire)
                             .integer()
                             .not_null()
                             .comment("过期时间,秒"),
                     )
                     .col(
-                        ColumnDef::new(SysCaptcha::Status)
+                        ColumnDef::new(SysImageCaptcha::Status)
                             .tiny_integer()
                             .not_null()
                             .default(1)
                             .comment("状态(0:无效,1:有效)"),
                     )
                     .col(
-                        ColumnDef::new(SysCaptcha::CreatedAt)
+                        ColumnDef::new(SysImageCaptcha::CreatedAt)
                             .date_time()
                             .not_null()
                             .default(Expr::current_timestamp())
                             .comment("创建时间"),
                     )
                     .col(
-                        ColumnDef::new(SysCaptcha::UpdatedAt)
+                        ColumnDef::new(SysImageCaptcha::UpdatedAt)
                             .date_time()
                             .not_null()
                             .extra({
@@ -89,19 +89,19 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
         manager
-            .drop_table(Table::drop().table(SysCaptcha::Table).to_owned())
+            .drop_table(Table::drop().table(SysImageCaptcha::Table).to_owned())
             .await
     }
 }
 
 #[derive(DeriveIden)]
-pub enum SysCaptcha {
-    #[sea_orm(iden = "t_sys_captcha")]
+pub enum SysImageCaptcha {
+    #[sea_orm(iden = "t_sys_image_captcha")]
     Table,
     Id,
     CaptchaId,
     Captcha,
-    BaseImg,
+    Data,
     Expire,
     Status,
     CreatedAt,

@@ -147,7 +147,7 @@
 ●t_task_scheduled_event_log — 调度任务事件日志表 (ScheduledTaskEventLog)
 
 系统管理与基础设施：
-●t_sys_verification_code — 验证码表 (VerificationCode)
+●t_sys_verification_code — 图片验证码表 (VerificationCode)
 ●t_sys_config — 配置表 (Configuration)
 ●t_sys_image_resource — 图片资源表 (ImageResource)
 ●t_sys_dict_dimension — 字典维度表 (DictionaryDimension)

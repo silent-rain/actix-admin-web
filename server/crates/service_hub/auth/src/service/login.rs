@@ -6,7 +6,7 @@ use crate::{
 };
 
 use log::UserLoginDao;
-use system::CaptchaDao;
+use system::ImageCaptchaDao;
 use user::{EmailDao, PhoneDao, UserBaseDao};
 
 use code::{Error, ErrorMsg};
@@ -24,7 +24,7 @@ pub struct LoginService<'a> {
     email_dao: EmailDao<'a>,
     phone_dao: PhoneDao<'a>,
     user_login_dao: UserLoginDao<'a>,
-    captcha_dao: CaptchaDao<'a>,
+    captcha_dao: ImageCaptchaDao<'a>,
 }
 
 impl<'a> LoginService<'a> {

@@ -1,6 +1,6 @@
 //! 验证码
 
-use system::CaptchaController;
+use system::ImageCaptchaController;
 
 use actix_web::{web, Scope};
 
@@ -10,6 +10,6 @@ pub struct GenCaptchaRouter;
 impl GenCaptchaRouter {
     /// 注册`生成验证码`路由
     pub fn register() -> Scope {
-        web::scope("/captcha").route("", web::post().to(CaptchaController::add))
+        web::scope("/captcha").route("", web::post().to(ImageCaptchaController::add))
     }
 }

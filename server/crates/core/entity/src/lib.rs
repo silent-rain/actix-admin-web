@@ -20,7 +20,7 @@ pub mod perm_token_role_rel;
 pub mod schedule_job;
 pub mod schedule_job_event_log;
 pub mod schedule_job_status_log;
-pub mod sys_captcha;
+pub mod sys_image_captcha;
 pub mod sys_config;
 pub mod sys_dict_data;
 pub mod sys_dict_dim;

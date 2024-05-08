@@ -1,4 +1,4 @@
-//! 验证码表
+//! 图片验证码表
 
 use sea_orm::{
     prelude::{BlobSize, DateTimeLocal},
@@ -7,9 +7,9 @@ use sea_orm::{
 };
 use serde::{Deserialize, Serialize};
 
-/// 验证码表
+/// 图片验证码表
 #[derive(Clone, Debug, Default, PartialEq, Eq, Deserialize, Serialize, DeriveEntityModel)]
-#[sea_orm(table_name = "t_sys_captcha")]
+#[sea_orm(table_name = "t_sys_image_captcha")]
 pub struct Model {
     /// 自增ID
     #[sea_orm(primary_key)]
@@ -18,9 +18,9 @@ pub struct Model {
     pub captcha_id: String,
     /// 验证码
     pub captcha: String,
-    /// Base64图片
+    /// 图片数据, Base64编码
     #[sea_orm(column_type = "Binary(BlobSize::Medium)")]
-    pub base_img: Vec<u8>,
+    pub data: Vec<u8>,
     /// 过期时间,秒
     pub expire: u32,
     /// 状态(0:无效,1:有效)

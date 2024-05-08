@@ -19,7 +19,7 @@ pub struct Model {
     /// HASH名称
     #[sea_orm(unique)]
     pub hash_name: String,
-    /// Base64图片
+    /// 图片数据, Base64编码
     #[sea_orm(column_type = "Binary(BlobSize::Medium)")]
     pub base_img: Vec<u8>,
     /// 扩展类型:svg,png

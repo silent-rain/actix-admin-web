@@ -312,19 +312,19 @@ CREATE TABLE IF NOT EXISTS
 /*
 系统相关表
  */
--- 验证码表
+-- 图片验证码表
 CREATE TABLE IF NOT EXISTS
-    `t_sys_captcha` (
+    `t_sys_image_captcha` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
         `captcha_id` VARCHAR(40) NOT NULL UNIQUE COMMENT '验证码ID',
         `captcha` VARCHAR(10) NOT NULL COMMENT '验证码',
-        `base_img` MEDIUMBLOB NOT NULL COMMENT 'Base64图片',
+        `base_img` MEDIUMBLOB NOT NULL COMMENT '图片数据, Base64编码',
         `expire` INT(4) UNSIGNED NOT NULL DEFAULT 1 COMMENT '过期时间,秒',
         `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态(0:无效,1:有效)',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`)
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '验证码表';
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '图片验证码表';
 
 -- 配置表
 CREATE TABLE IF NOT EXISTS

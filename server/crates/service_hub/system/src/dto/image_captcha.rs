@@ -1,4 +1,4 @@
-//! 验证码
+//! 图片验证码管理
 
 use actix_validator::Validate;
 
@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 
 /// 获取验证码列表
 #[derive(Default, Deserialize, Validate)]
-pub struct GetCaptchaListReq {
+pub struct GetImageCaptchaListReq {
     /// 当前分页
     pub page: u64,
     /// 页面大小
@@ -20,18 +20,18 @@ pub struct GetCaptchaListReq {
 
 /// 批量删除验证码
 #[derive(Default, Deserialize, Validate)]
-pub struct BatchDeleteCaptchaReq {
+pub struct BatchDeleteImageCaptchaReq {
     /// ID列表
     pub ids: Vec<i32>,
 }
 
 /// 添加验证码 响应体
 #[derive(Default, Deserialize, Serialize)]
-pub struct AddCaptchaResp {
+pub struct AddImageCaptchaResp {
     /// 验证码ID
     pub captcha_id: String,
-    /// Base64图片
-    pub base_img: String,
+    /// 图片数据, Base64编码
+    pub data: String,
     /// 过期时间,秒
     pub expire: u32,
     /// 创建时间

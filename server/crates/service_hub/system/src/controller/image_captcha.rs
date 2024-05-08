@@ -1,8 +1,8 @@
-//! 验证码
+//! 图片验证码管理
 
 use crate::{
-    dto::captcha::{BatchDeleteCaptchaReq, GetCaptchaListReq},
-    service::captcha::CaptchaService,
+    dto::image_captcha::{BatchDeleteImageCaptchaReq, GetImageCaptchaListReq},
+    service::image_captcha::ImageCaptchaService,
 };
 
 use actix_validator::{Json, Query};
@@ -15,16 +15,16 @@ use actix_web::{
 };
 
 /// 控制器
-pub struct CaptchaController;
+pub struct ImageCaptchaController;
 
-impl CaptchaController {
+impl ImageCaptchaController {
     /// 获取验证码列表
     pub async fn list(
         provider: Data<AInjectProvider>,
-        req: Query<GetCaptchaListReq>,
+        req: Query<GetImageCaptchaListReq>,
     ) -> impl Responder {
-        let captcha_service: CaptchaService = provider.provide();
-        let resp = captcha_service.list(req.into_inner()).await;
+        let image_captcha_service: ImageCaptchaService = provider.provide();
+        let resp = image_captcha_service.list(req.into_inner()).await;
         match resp {
             Ok((results, total)) => Response::ok().data_list(results, total),
             Err(err) => Response::err(err),
@@ -33,8 +33,8 @@ impl CaptchaController {
 
     /// 获取验证码信息
     pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let captcha_service: CaptchaService = provider.provide();
-        let resp = captcha_service.info(*id).await;
+        let image_captcha_service: ImageCaptchaService = provider.provide();
+        let resp = image_captcha_service.info(*id).await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::err(err),
@@ -46,8 +46,8 @@ impl CaptchaController {
         provider: Data<AInjectProvider>,
         captcha_id: Path<String>,
     ) -> impl Responder {
-        let captcha_service: CaptchaService = provider.provide();
-        let resp = captcha_service
+        let image_captcha_service: ImageCaptchaService = provider.provide();
+        let resp = image_captcha_service
             .info_by_captcha_id(captcha_id.to_string())
             .await;
         match resp {
@@ -58,8 +58,8 @@ impl CaptchaController {
 
     /// 添加验证码
     pub async fn add(provider: Data<AInjectProvider>) -> impl Responder {
-        let captcha_service: CaptchaService = provider.provide();
-        let resp = captcha_service.add().await;
+        let image_captcha_service: ImageCaptchaService = provider.provide();
+        let resp = image_captcha_service.add().await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::err(err),
@@ -68,8 +68,8 @@ impl CaptchaController {
 
     /// 删除验证码
     pub async fn delete(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let captcha_service: CaptchaService = provider.provide();
-        let resp = captcha_service.delete(*id).await;
+        let image_captcha_service: ImageCaptchaService = provider.provide();
+        let resp = image_captcha_service.delete(*id).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -79,10 +79,10 @@ impl CaptchaController {
     /// 批量删除验证码
     pub async fn batch_delete(
         provider: Data<AInjectProvider>,
-        data: Json<BatchDeleteCaptchaReq>,
+        data: Json<BatchDeleteImageCaptchaReq>,
     ) -> impl Responder {
-        let captcha_service: CaptchaService = provider.provide();
-        let resp = captcha_service.batch_delete(data.ids.clone()).await;
+        let image_captcha_service: ImageCaptchaService = provider.provide();
+        let resp = image_captcha_service.batch_delete(data.ids.clone()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
