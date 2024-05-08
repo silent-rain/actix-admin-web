@@ -2,65 +2,75 @@
 CREATE DATABASE IF NOT EXISTS `actix_admin_web` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 /*用户与身份管理相关表*/
--- 用户表
+-- 角色表
+CREATE TABLE IF NOT EXISTS
+    `t_user_role` (
+        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '角色ID',
+        `name` VARCHAR(20) UNIQUE NOT NULL COMMENT '角色名称',
+        `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
+        `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '描述信息',
+        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态(0:停用,1:正常)',
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+        `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+        PRIMARY KEY (`id`)
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '角色表';
+
+-- 用户信息表
 CREATE TABLE IF NOT EXISTS
     `t_user_base` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '用户ID',
-        `username` VARCHAR(32) NOT NULL COMMENT '用户名称',
+        `username` VARCHAR(32) UNIQUE NOT NULL COMMENT '用户名称',
         `real_name` VARCHAR(32) NULL DEFAULT '' COMMENT '真实姓名',
-        `gender` TINYINT(1) NULL DEFAULT 0 COMMENT '性别(0:男,1:女,2:保密)',
-        `age` INT(11) NULL DEFAULT 0 COMMENT '年龄',
-        `birthday` VARCHAR(20) NULL DEFAULT '' COMMENT '出生日期',
-        `avatar` VARCHAR(200) NULL DEFAULT '' COMMENT '头像URL',
-        `intro` VARCHAR(200) NULL DEFAULT '' COMMENT '介绍',
-        `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '描述信息',
+        `gender` TINYINT(1) NOT NULL COMMENT '性别(0:男,1:女,2:保密)',
         `password` VARCHAR(64) NOT NULL COMMENT '密码',
-        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态(0:停用,1:正常)',
-        `department_id` INT(11) UNSIGNED DEFAULT 0 COMMENT '所属部门ID',
-        `position_id` INT(11) UNSIGNED DEFAULT 0 COMMENT '所属岗位ID',
-        `rank_id` INT(11) UNSIGNED DEFAULT 0 COMMENT '所属职级ID',
+        `status` TINYINT(1) NOT NULL COMMENT '状态(0:停用,1:正常)',
+        `age` INT(11) NULL DEFAULT 0 COMMENT '年龄',
+        `date_birth` VARCHAR(20) NULL DEFAULT '' COMMENT '出生日期',
+        `avatar` VARCHAR(200) NULL DEFAULT '' COMMENT '头像URL',
+        `intro` VARCHAR(200) NULL DEFAULT '' COMMENT '用户个人介绍',
+        `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '用户描述',
+        `address` VARCHAR(200) NULL DEFAULT '' COMMENT '用户的居住或邮寄地址',
+        `preferences` VARCHAR(200) NULL DEFAULT '' COMMENT '偏好设置',
+        `department_id` INT(11) DEFAULT 0 COMMENT '所属部门ID',
+        `position_id` INT(11) DEFAULT 0 COMMENT '所属岗位ID',
+        `rank_id` INT(11) DEFAULT 0 COMMENT '所属职级ID',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-        PRIMARY KEY (`id`),
-        UNIQUE KEY `uk_username` (`username`) USING BTREE
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户';
+        PRIMARY KEY (`id`)
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户信息表';
 
 -- 用户邮箱表
 CREATE TABLE IF NOT EXISTS
     `t_user_email` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '邮箱ID',
-        `user_id` INT(10) NOT NULL COMMENT '用户ID',
-        `email` VARCHAR(50) NOT NULL COMMENT '邮箱',
+        `user_id` INT(10) UNIQUE NOT NULL COMMENT '用户ID',
+        `email` VARCHAR(50) UNIQUE NOT NULL COMMENT '邮箱',
         `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '描述信息',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`),
-        UNIQUE KEY `uk_user_id` (`user_id`) USING BTREE,
-        UNIQUE KEY `uk_email` (`email`) USING BTREE,
-        CONSTRAINT `fk_email_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_user_base` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+        CONSTRAINT `fk_user_email_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_user_base` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户邮箱';
 
 -- 用户手机号表
 CREATE TABLE IF NOT EXISTS
     `t_user_phone` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '手机号ID',
-        `user_id` INT(10) NOT NULL COMMENT '用户ID',
-        `phone` VARCHAR(16) NOT NULL COMMENT '手机号码',
+        `user_id` INT(10) UNIQUE NOT NULL COMMENT '用户ID',
+        `phone` VARCHAR(16) UNIQUE NOT NULL COMMENT '手机号码',
         `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '描述信息',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`),
-        UNIQUE KEY `uk_user_id` (`user_id`) USING BTREE,
-        UNIQUE KEY `uk_phone` (`phone`) USING BTREE,
         CONSTRAINT `fk_user_phone_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_user_base` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户手机号';
 
--- 用户区块链钱包
+-- TODO 用户区块链钱包
 CREATE TABLE IF NOT EXISTS
     `t_user_blockchain_wallet` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '手机号ID',
-        `user_id` INT(10) NOT NULL COMMENT '用户ID',
-        `wallet_address` VARCHAR(255) NOT NULL COMMENT '钱包地址',
+        `user_id` INT(10) UNIQUE NOT NULL COMMENT '用户ID',
+        `wallet_address` VARCHAR(255) UNIQUE NOT NULL COMMENT '钱包地址',
         `mnemonic` VARCHAR(255) NULL DEFAULT '' COMMENT '助记词',
         `private_key` VARCHAR(255) NULL DEFAULT '' COMMENT '私钥',
         `chain_id` INT(10) NULL DEFAULT 0 COMMENT '区块链ID',
@@ -68,8 +78,6 @@ CREATE TABLE IF NOT EXISTS
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`),
-        UNIQUE KEY `uk_user_id` (`user_id`) USING BTREE,
-        UNIQUE KEY `uk_wallet_address` (`wallet_address`) USING BTREE,
         CONSTRAINT `fk_perm_user_blockchain_wallet_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_user_base` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户区块链钱包';
 
@@ -86,7 +94,7 @@ CREATE TABLE IF NOT EXISTS
         CONSTRAINT `fk_user_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_user_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户角色关系表';
 
--- 用户地理位置 - 待定
+-- TODO 用户地理位置
 CREATE TABLE IF NOT EXISTS
     `t_user_location` (
         `id` INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '地理位置ID',
@@ -99,27 +107,8 @@ CREATE TABLE IF NOT EXISTS
         `latitude` DECIMAL(10, 8) DEFAULT NULL COMMENT '纬度',
         `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-        PRIMARY KEY (`location_id`)
-    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '地理位置表';
-
--- 用户登录日志表
-CREATE TABLE IF NOT EXISTS
-    `t_log_user_login` (
-        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
-        `user_id` INT(11) NOT NULL COMMENT '用户ID',
-        `username` VARCHAR(32) NOT NULL COMMENT '用户名称',
-        `token` VARCHAR(250) NOT NULL COMMENT '登陆令牌',
-        `remote_addr` VARCHAR(64) NULL DEFAULT '' COMMENT '登录IP',
-        `user_agent` VARCHAR(256) NULL DEFAULT '' COMMENT '用户代理',
-        `device` VARCHAR(20) NULL DEFAULT '' COMMENT '设备',
-        `system` VARCHAR(20) NULL DEFAULT '' COMMENT '系统',
-        `browser` VARCHAR(20) NULL DEFAULT '' COMMENT '浏览器',
-        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '登录状态(0:失败,1:成功)',
-        `is_disabled` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否被禁用(0: 有效, 1: 被禁用)',
-        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-        `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`)
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户登录日志表';
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '地理位置表';
 
 /*
 -- user表触发器，更新其他表冗余字段
@@ -143,36 +132,22 @@ END;
 /*
 权限相关的表
  */
--- 角色表
-CREATE TABLE IF NOT EXISTS
-    `t_user_role` (
-        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '角色ID',
-        `name` VARCHAR(20) UNIQUE NOT NULL COMMENT '角色名称',
-        `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
-        `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '描述信息',
-        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态(0:停用,1:正常)',
-        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-        `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-        PRIMARY KEY (`id`)
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '角色表';
-
 -- 菜单表
 CREATE TABLE IF NOT EXISTS
     `t_perm_menu` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '菜单ID',
         `pid` INT(20) NULL DEFAULT 0 COMMENT '父菜单ID',
         `title` VARCHAR(20) NOT NULL COMMENT '菜单名称',
-        `icon` VARCHAR(20) NULL DEFAULT '' COMMENT 'Icon图标',
-        `el_icon` VARCHAR(20) NULL DEFAULT '' COMMENT 'Element-Ico图标',
+        `icon_class` VARCHAR(20) NULL DEFAULT '' COMMENT 'Icon图标类',
         `menu_type` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '菜单类型(0:菜单,1:按钮)',
-        `open_type` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '打开方式(0:组件,1:内链,2:外链)',
-        `path` VARCHAR(500) NULL DEFAULT '' COMMENT '路由地址',
-        `component` VARCHAR(500) NULL DEFAULT '' COMMENT '组件路径',
-        `redirect` VARCHAR(200) NULL DEFAULT '' COMMENT '路由重定向',
-        `link` VARCHAR(200) NULL DEFAULT '' COMMENT '链接地址:站内链地址/站外链地址',
+        `open_method` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '打开方式(0:组件,1:内链,2:外链)',
+        `path` VARCHAR(255) NULL DEFAULT '' COMMENT '路由地址',
+        `component_path` VARCHAR(255) NULL DEFAULT '' COMMENT '组件路径',
+        `redirect_to` VARCHAR(255) NULL DEFAULT '' COMMENT '路由重定向',
+        `link` VARCHAR(255) NULL DEFAULT '' COMMENT '链接地址:站内链地址/站外链地址',
         `link_target` VARCHAR(20) NULL DEFAULT '_blank' COMMENT '链接跳转方式,_blank/_self',
-        `hidden` TINYINT(1) NULL DEFAULT 1 COMMENT '是否隐藏(0:显示,1:隐藏)',
-        `root_always_show` TINYINT(1) NULL DEFAULT 1 COMMENT '是否始终显示根菜单(0:隐藏,1:显示)',
+        `is_hidden` TINYINT(1) NULL DEFAULT 1 COMMENT '是否隐藏(0:显示,1:隐藏)',
+        `is_always_show_root` TINYINT(1) NULL DEFAULT 1 COMMENT '是否始终显示根菜单(0:隐藏,1:显示)',
         `permission` VARCHAR(200) NULL DEFAULT '' COMMENT '权限标识',
         `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
         `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '描述信息',
@@ -205,7 +180,7 @@ CREATE TABLE IF NOT EXISTS
         `permission` VARCHAR(20) NOT NULL COMMENT '权限范围:GET,POST,PUT,DELETE',
         `expire` DATETIME NOT NULL COMMENT '授权到期时间',
         `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '描述信息',
-        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态, 0:停用,1:正常',
+        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态(0:停用,1:正常)',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`)
@@ -235,7 +210,7 @@ CREATE TABLE IF NOT EXISTS
         `path` VARCHAR(200) NOT NULL COMMENT '资源路径',
         `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
         `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '描述信息',
-        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态, 0:停用,1:正常',
+        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态(0:停用,1:正常)',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`)
@@ -283,27 +258,27 @@ CREATE TABLE IF NOT EXISTS
         CONSTRAINT `fk_org_department_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_user_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '部门角色关系表';
 
--- 岗位表
+-- TODO 岗位表
 CREATE TABLE IF NOT EXISTS
     `t_org_position` (
-        `id` INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '岗位ID',
+        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '岗位ID',
         `name` VARCHAR(100) NOT NULL COMMENT '岗位名称',
-        `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '部门描述',
-        `department_id` INT UNSIGNED DEFAULT NULL COMMENT '所属部门ID',
+        `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '岗位描述',
+        `department_id` INT(11) DEFAULT 0 COMMENT '所属部门ID',
         `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`),
         UNIQUE KEY `uk_name` (`name`),
-        CONSTRAINT `fk_org_position_department_id` FOREIGN KEY (`id`) REFERENCES `t_org_department` (`id`)
+        CONSTRAINT `fk_org_position_department_id` FOREIGN KEY (`department_id`) REFERENCES `t_org_department` (`id`)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '岗位表';
 
--- 职级表
+-- TODO 职级表
 CREATE TABLE IF NOT EXISTS
     `t_org_rank` (
         `id` INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '职级ID',
         `name` VARCHAR(100) NOT NULL COMMENT '职级名称',
         `level` INT UNSIGNED NOT NULL COMMENT '职级等级',
-        `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '部门描述',
+        `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '职级描述',
         `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`)
@@ -316,15 +291,15 @@ CREATE TABLE IF NOT EXISTS
 CREATE TABLE IF NOT EXISTS
     `t_sys_image_captcha` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
-        `captcha_id` VARCHAR(40) NOT NULL UNIQUE COMMENT '验证码ID',
+        `captcha_id` VARCHAR(40) UNIQUE NOT NULL COMMENT '验证码ID',
         `captcha` VARCHAR(10) NOT NULL COMMENT '验证码',
-        `base_img` MEDIUMBLOB NOT NULL COMMENT '图片数据, Base64编码',
+        `data` MEDIUMBLOB NOT NULL COMMENT '图片数据, Base64编码',
         `expire` INT(4) UNSIGNED NOT NULL DEFAULT 1 COMMENT '过期时间,秒',
         `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态(0:无效,1:有效)',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`)
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '图片验证码表';
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '图片图片验证码表';
 
 -- 配置表
 CREATE TABLE IF NOT EXISTS
@@ -384,10 +359,12 @@ CREATE TABLE IF NOT EXISTS
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`),
+        KEY `idx_dimension_id` (`dimension_id`),
+        KEY `idx_dimension_code` (`dimension_code`),
         CONSTRAINT `fk_sys_dict_data_dimension_id` FOREIGN KEY (`dimension_id`) REFERENCES `t_sys_dict_dimension` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '字典数据表';
 
--- 会员等级表
+-- TODO 会员等级表
 -- CONSTRAINT `fk_perm_user_member_level_id` FOREIGN KEY (`member_level_id`) REFERENCES `t_sys_member_level` (`id`) ON DELETE CASCADE
 CREATE TABLE
     `t_sys_member_level` (
@@ -402,11 +379,11 @@ CREATE TABLE
 /*
 任务调度相关
  */
--- 任务调度
+-- 任务调度作业表
 CREATE TABLE IF NOT EXISTS
     `t_schedule_job` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
-        `name` VARCHAR(200) NOT NULL COMMENT '任务名称',
+        `name` VARCHAR(200) UNIQUE NOT NULL COMMENT '任务名称',
         `source` TINYINT(1) NOT NULL COMMENT '任务来源(0:用户定义,1:系统内部)',
         `job_type` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '任务类型(0:定时任务,1:即时任务)',
         `sys_code` VARCHAR(200) NOT NULL COMMENT '系统任务编码',
@@ -416,25 +393,24 @@ CREATE TABLE IF NOT EXISTS
         `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '任务状态(0:下线,1:上线)',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-        PRIMARY KEY (`id`) USING BTREE,
-        UNIQUE KEY `uk_name` (`name`) USING BTREE
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '任务调度';
+        PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '任务调度作业表';
 
--- 任务调度状态日志
+-- 任务调度状态日志表
 CREATE TABLE IF NOT EXISTS
     `t_schedule_status_log` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '状态日志ID',
         `job_id` INT(11) NOT NULL COMMENT '任务ID',
-        `uuid` VARCHAR(50) NOT NULL COMMENT '任务调度ID',
+        `uuid` VARCHAR(50) UNIQUE NOT NULL COMMENT '任务调度ID',
         `error` TEXT COMMENT '失败信息',
         `cost` INT(20) UNSIGNED NOT NULL COMMENT '耗时,毫秒',
         `status` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '任务状态(0:开始,1:完成,2:停止,3:移除)',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`) USING BTREE
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '任务调度状态日志';
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '任务调度状态日志表';
 
--- 任务调度事件日志
+-- 任务调度事件日志表
 CREATE TABLE IF NOT EXISTS
     `t_schedule_event_log` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '事件日志ID',
@@ -444,11 +420,30 @@ CREATE TABLE IF NOT EXISTS
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '创建时间',
         PRIMARY KEY (`id`) USING BTREE,
         KEY `idx_job_id` (`job_id`) USING BTREE
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '任务调度事件日志';
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '任务调度事件日志表';
 
 /*
 日志相关表
  */
+-- 用户登录日志表
+CREATE TABLE IF NOT EXISTS
+    `t_log_user_login` (
+        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
+        `user_id` INT(11) NOT NULL COMMENT '用户ID',
+        `username` VARCHAR(32) NOT NULL COMMENT '用户名称',
+        `token` VARCHAR(250) NOT NULL COMMENT '登陆令牌',
+        `remote_addr` VARCHAR(64) NULL DEFAULT '' COMMENT '登录IP',
+        `user_agent` VARCHAR(256) NULL DEFAULT '' COMMENT '用户代理',
+        `device` VARCHAR(20) NULL DEFAULT '' COMMENT '设备',
+        `system` VARCHAR(20) NULL DEFAULT '' COMMENT '系统',
+        `browser` VARCHAR(20) NULL DEFAULT '' COMMENT '浏览器',
+        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '登录状态(0:失败,1:成功)',
+        `is_disabled` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否被禁用(0: 有效, 1: 被禁用)',
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+        `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+        PRIMARY KEY (`id`)
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户登录日志表';
+
 -- API操作日志表
 CREATE TABLE IF NOT EXISTS
     `t_log_api_operation` (
@@ -498,7 +493,7 @@ CREATE TABLE IF NOT EXISTS
         PRIMARY KEY (`id`)
     ) ENGINE = InnoDB AUTO_INCREMENT = 1485 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '系统日志';
 
--- WEB日志表
+-- TODO WEB日志表
 CREATE TABLE IF NOT EXISTS
     `t_log_web` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',

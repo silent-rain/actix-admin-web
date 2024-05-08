@@ -53,8 +53,8 @@ impl MigratorTrait for Migrator {
             Box::new(m20240218_145453_create_org_department_role_rel::Migration),
             // 系统管理
             Box::new(m20240218_161916_create_sys_config::Migration),
-            Box::new(m20240218_161916_create_sys_dict_data::Migration),
             Box::new(m20240218_161916_create_sys_dict_dimension::Migration),
+            Box::new(m20240218_161916_create_sys_dict_data::Migration),
             Box::new(m20240218_161916_create_sys_image_captcha::Migration),
             Box::new(m20240218_161916_create_sys_image_resource::Migration),
             // 任务调度作业管理

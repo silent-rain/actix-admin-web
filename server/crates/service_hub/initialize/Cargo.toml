@@ -25,7 +25,7 @@ tracing = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
 serde_repr = { workspace = true }
 rust-embed = { workspace = true, features = [
-    "debug-embed",
+    # "debug-embed",
     "include-exclude",
     "mime-guess",
 ] }

@@ -5,7 +5,7 @@
 CREATE TABLE IF NOT EXISTS
     `t_sys_image_captcha` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
-        `captcha_id` VARCHAR(40) NOT NULL UNIQUE COMMENT '验证码ID',
+        `captcha_id` VARCHAR(40) UNIQUE NOT NULL COMMENT '验证码ID',
         `captcha` VARCHAR(10) NOT NULL COMMENT '验证码',
         `data` MEDIUMBLOB NOT NULL COMMENT '图片数据, Base64编码',
         `expire` INT(4) UNSIGNED NOT NULL DEFAULT 1 COMMENT '过期时间,秒',
@@ -73,6 +73,8 @@ CREATE TABLE IF NOT EXISTS
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`),
+        KEY `idx_dimension_id` (`dimension_id`),
+        KEY `idx_dimension_code` (`dimension_code`),
         CONSTRAINT `fk_sys_dict_data_dimension_id` FOREIGN KEY (`dimension_id`) REFERENCES `t_sys_dict_dimension` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '字典数据表';
 

@@ -78,14 +78,14 @@ impl MigrationTrait for Migration {
         if !manager
             .has_index(
                 DepartmentRoleRel::Table.to_string(),
-                "fk_perm_department_role_rel_department_id",
+                "fk_org_department_role_rel_department_id",
             )
             .await?
         {
             manager
                 .create_foreign_key(
                     ForeignKey::create()
-                        .name("fk_perm_department_role_rel_department_id")
+                        .name("fk_org_department_role_rel_department_id")
                         .from(DepartmentRoleRel::Table, DepartmentRoleRel::DepartmentId)
                         .to(Department::Table, Department::Id)
                         .on_update(ForeignKeyAction::Cascade)
@@ -98,14 +98,14 @@ impl MigrationTrait for Migration {
         if !manager
             .has_index(
                 DepartmentRoleRel::Table.to_string(),
-                "fk_perm_department_role_rel_role_id",
+                "fk_org_department_role_rel_role_id",
             )
             .await?
         {
             manager
                 .create_foreign_key(
                     ForeignKey::create()
-                        .name("fk_perm_department_role_rel_role_id")
+                        .name("fk_org_department_role_rel_role_id")
                         .from(DepartmentRoleRel::Table, DepartmentRoleRel::RoleId)
                         .to(UserRole::Table, UserRole::Id)
                         .on_update(ForeignKeyAction::Cascade)

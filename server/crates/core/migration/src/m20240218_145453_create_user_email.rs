@@ -4,7 +4,7 @@
 use crate::m20240218_145453_create_user_base::UserBase;
 
 use sea_orm::{
-    sea_query::{ColumnDef, Expr, ForeignKey, ForeignKeyAction, Index, Table},
+    sea_query::{ColumnDef, Expr, ForeignKey, ForeignKeyAction, Table},
     DatabaseBackend, DeriveIden, DeriveMigrationName, Iden,
 };
 use sea_orm_migration::{async_trait, DbErr, MigrationTrait, SchemaManager};
@@ -33,6 +33,7 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(UserEmail::UserId)
                             .integer()
+                            .unique_key()
                             .not_null()
                             .comment("用户ID"),
                     )
@@ -40,6 +41,7 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(UserEmail::Email)
                             .string()
                             .string_len(50)
+                            .unique_key()
                             .not_null()
                             .comment("邮箱"),
                     )
@@ -74,40 +76,6 @@ impl MigrationTrait for Migration {
                     .to_owned(),
             )
             .await?;
-
-        if !manager
-            .has_index(UserEmail::Table.to_string(), "uk_user_id")
-            .await?
-        {
-            manager
-                .create_index(
-                    Index::create()
-                        .if_not_exists()
-                        .table(UserEmail::Table)
-                        .name("uk_user_id")
-                        .unique()
-                        .col(UserEmail::UserId)
-                        .to_owned(),
-                )
-                .await?;
-        }
-
-        if !manager
-            .has_index(UserEmail::Table.to_string(), "uk_email")
-            .await?
-        {
-            manager
-                .create_index(
-                    Index::create()
-                        .if_not_exists()
-                        .table(UserEmail::Table)
-                        .name("uk_email")
-                        .unique()
-                        .col(UserEmail::Email)
-                        .to_owned(),
-                )
-                .await?;
-        }
 
         if !manager
             .has_index(UserEmail::Table.to_string(), "fk_user_email_user_id")

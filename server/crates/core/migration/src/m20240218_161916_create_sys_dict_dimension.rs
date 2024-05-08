@@ -1,8 +1,8 @@
 //! 字典维度表
 //! Entity: [`entity::prelude::SysDictDimension`]
 use sea_orm::{
-    sea_query::{ColumnDef, Expr, Index, Table},
-    DatabaseBackend, DeriveIden, DeriveMigrationName, Iden,
+    sea_query::{ColumnDef, Expr, Table},
+    DatabaseBackend, DeriveIden, DeriveMigrationName,
 };
 use sea_orm_migration::{async_trait, DbErr, MigrationTrait, SchemaManager};
 
@@ -88,40 +88,6 @@ impl MigrationTrait for Migration {
                     .to_owned(),
             )
             .await?;
-
-        if !manager
-            .has_index(SysDictDimension::Table.to_string(), "uk_name")
-            .await?
-        {
-            manager
-                .create_index(
-                    Index::create()
-                        .if_not_exists()
-                        .table(SysDictDimension::Table)
-                        .name("uk_name")
-                        .unique()
-                        .col(SysDictDimension::Name)
-                        .to_owned(),
-                )
-                .await?;
-        }
-
-        if !manager
-            .has_index(SysDictDimension::Table.to_string(), "uk_code")
-            .await?
-        {
-            manager
-                .create_index(
-                    Index::create()
-                        .if_not_exists()
-                        .name("uk_code")
-                        .unique()
-                        .table(SysDictDimension::Table)
-                        .col(SysDictDimension::Code)
-                        .to_owned(),
-                )
-                .await?;
-        }
 
         Ok(())
     }

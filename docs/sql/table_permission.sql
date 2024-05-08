@@ -1,19 +1,6 @@
 /*
 权限相关的表
  */
--- 角色表
-CREATE TABLE IF NOT EXISTS
-    `t_user_role` (
-        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '角色ID',
-        `name` VARCHAR(20) UNIQUE NOT NULL COMMENT '角色名称',
-        `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
-        `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '描述信息',
-        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态(0:停用,1:正常)',
-        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-        `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-        PRIMARY KEY (`id`)
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '角色表';
-
 -- 菜单表
 CREATE TABLE IF NOT EXISTS
     `t_perm_menu` (

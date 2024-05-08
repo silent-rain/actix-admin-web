@@ -118,6 +118,22 @@ impl MigrationTrait for Migration {
         }
 
         if !manager
+            .has_index(SysDictData::Table.to_string(), "idx_dimension_code")
+            .await?
+        {
+            manager
+                .create_index(
+                    Index::create()
+                        .if_not_exists()
+                        .name("idx_dimension_code")
+                        .table(SysDictData::Table)
+                        .col(SysDictData::DimensionId)
+                        .to_owned(),
+                )
+                .await?;
+        }
+
+        if !manager
             .has_index(
                 SysDictData::Table.to_string(),
                 "fk_sys_dict_data_dimension_id",

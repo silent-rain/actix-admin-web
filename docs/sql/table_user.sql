@@ -1,9 +1,22 @@
 /*用户与身份管理相关表*/
+-- 角色表
+CREATE TABLE IF NOT EXISTS
+    `t_user_role` (
+        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '角色ID',
+        `name` VARCHAR(20) UNIQUE NOT NULL COMMENT '角色名称',
+        `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
+        `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '描述信息',
+        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态(0:停用,1:正常)',
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+        `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+        PRIMARY KEY (`id`)
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '角色表';
+
 -- 用户信息表
 CREATE TABLE IF NOT EXISTS
     `t_user_base` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '用户ID',
-        `username` VARCHAR(32) NOT NULL COMMENT '用户名称',
+        `username` VARCHAR(32) UNIQUE NOT NULL COMMENT '用户名称',
         `real_name` VARCHAR(32) NULL DEFAULT '' COMMENT '真实姓名',
         `gender` TINYINT(1) NOT NULL COMMENT '性别(0:男,1:女,2:保密)',
         `password` VARCHAR(64) NOT NULL COMMENT '密码',
@@ -15,27 +28,24 @@ CREATE TABLE IF NOT EXISTS
         `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '用户描述',
         `address` VARCHAR(200) NULL DEFAULT '' COMMENT '用户的居住或邮寄地址',
         `preferences` VARCHAR(200) NULL DEFAULT '' COMMENT '偏好设置',
-        `department_id` INT(11) UNSIGNED DEFAULT 0 COMMENT '所属部门ID',
-        `position_id` INT(11) UNSIGNED DEFAULT 0 COMMENT '所属岗位ID',
-        `rank_id` INT(11) UNSIGNED DEFAULT 0 COMMENT '所属职级ID',
+        `department_id` INT(11) DEFAULT 0 COMMENT '所属部门ID',
+        `position_id` INT(11) DEFAULT 0 COMMENT '所属岗位ID',
+        `rank_id` INT(11) DEFAULT 0 COMMENT '所属职级ID',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-        PRIMARY KEY (`id`),
-        UNIQUE KEY `uk_username` (`username`) USING BTREE
+        PRIMARY KEY (`id`)
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户信息表';
 
 -- 用户邮箱表
 CREATE TABLE IF NOT EXISTS
     `t_user_email` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '邮箱ID',
-        `user_id` INT(10) NOT NULL COMMENT '用户ID',
-        `email` VARCHAR(50) NOT NULL COMMENT '邮箱',
+        `user_id` INT(10) UNIQUE NOT NULL COMMENT '用户ID',
+        `email` VARCHAR(50) UNIQUE NOT NULL COMMENT '邮箱',
         `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '描述信息',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`),
-        UNIQUE KEY `uk_user_id` (`user_id`) USING BTREE,
-        UNIQUE KEY `uk_email` (`email`) USING BTREE,
         CONSTRAINT `fk_user_email_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_user_base` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户邮箱';
 
@@ -43,14 +53,12 @@ CREATE TABLE IF NOT EXISTS
 CREATE TABLE IF NOT EXISTS
     `t_user_phone` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '手机号ID',
-        `user_id` INT(10) NOT NULL COMMENT '用户ID',
-        `phone` VARCHAR(16) NOT NULL COMMENT '手机号码',
+        `user_id` INT(10) UNIQUE NOT NULL COMMENT '用户ID',
+        `phone` VARCHAR(16) UNIQUE NOT NULL COMMENT '手机号码',
         `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '描述信息',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`),
-        UNIQUE KEY `uk_user_id` (`user_id`) USING BTREE,
-        UNIQUE KEY `uk_phone` (`phone`) USING BTREE,
         CONSTRAINT `fk_user_phone_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_user_base` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户手机号';
 
@@ -58,8 +66,8 @@ CREATE TABLE IF NOT EXISTS
 CREATE TABLE IF NOT EXISTS
     `t_user_blockchain_wallet` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '手机号ID',
-        `user_id` INT(10) NOT NULL COMMENT '用户ID',
-        `wallet_address` VARCHAR(255) NOT NULL COMMENT '钱包地址',
+        `user_id` INT(10) UNIQUE NOT NULL COMMENT '用户ID',
+        `wallet_address` VARCHAR(255) UNIQUE NOT NULL COMMENT '钱包地址',
         `mnemonic` VARCHAR(255) NULL DEFAULT '' COMMENT '助记词',
         `private_key` VARCHAR(255) NULL DEFAULT '' COMMENT '私钥',
         `chain_id` INT(10) NULL DEFAULT 0 COMMENT '区块链ID',
@@ -67,8 +75,6 @@ CREATE TABLE IF NOT EXISTS
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`),
-        UNIQUE KEY `uk_user_id` (`user_id`) USING BTREE,
-        UNIQUE KEY `uk_wallet_address` (`wallet_address`) USING BTREE,
         CONSTRAINT `fk_perm_user_blockchain_wallet_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_user_base` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户区块链钱包';
 
@@ -98,7 +104,7 @@ CREATE TABLE IF NOT EXISTS
         `latitude` DECIMAL(10, 8) DEFAULT NULL COMMENT '纬度',
         `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-        PRIMARY KEY (`location_id`)
+        PRIMARY KEY (`id`)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '地理位置表';
 
 /*

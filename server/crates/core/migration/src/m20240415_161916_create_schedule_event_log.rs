@@ -38,7 +38,6 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(ScheduleEventLog::Uuid)
                             .string()
                             .string_len(50)
-                            .unique_key()
                             .comment("任务调度ID"),
                     )
                     .col(
