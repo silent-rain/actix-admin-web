@@ -7,10 +7,10 @@ use crate::{
 
 use log::UserLoginDao;
 use system::CaptchaDao;
-use user::{ProfileDao, UserEmailDao, UserPhoneDao};
+use user::{UserBaseDao, UserEmailDao, UserPhoneDao};
 
 use code::{Error, ErrorMsg};
-use entity::{log_user_login, user_profile};
+use entity::{log_user_login, user_base};
 use jwt::encode_token;
 
 use nject::injectable;
@@ -20,7 +20,7 @@ use tracing::error;
 /// 服务层
 #[injectable]
 pub struct LoginService<'a> {
-    user_dao: ProfileDao<'a>,
+    user_dao: UserBaseDao<'a>,
     user_email_dao: UserEmailDao<'a>,
     user_phone_dao: UserPhoneDao<'a>,
     user_login_dao: UserLoginDao<'a>,
@@ -45,7 +45,7 @@ impl<'a> LoginService<'a> {
         // 检测手机号码或邮件用户是否存在
         let user = self.get_user(data.clone()).await?;
         // 检查用户是否被禁用
-        if user.status == user_profile::enums::Status::Disabled as i8 {
+        if user.status == user_base::enums::Status::Disabled as i8 {
             // 添加失败登陆日志
             self.add_login_log(
                 browser_info,
@@ -98,10 +98,10 @@ impl<'a> LoginService<'a> {
     }
 
     /// 获取用户信息
-    async fn get_user(&self, data: LoginReq) -> Result<user_profile::Model, ErrorMsg> {
+    async fn get_user(&self, data: LoginReq) -> Result<user_base::Model, ErrorMsg> {
         let user_id = match data.user_type {
-            user_profile::enums::UserType::Phone => self.get_user_phone(data).await?,
-            user_profile::enums::UserType::Email => self.get_user_email(data).await?,
+            user_base::enums::UserType::Phone => self.get_user_phone(data).await?,
+            user_base::enums::UserType::Email => self.get_user_email(data).await?,
         };
 
         // 查询用户
@@ -182,7 +182,7 @@ impl<'a> LoginService<'a> {
     async fn add_login_log(
         &self,
         browser_info: BrowserInfo,
-        user: user_profile::Model,
+        user: user_base::Model,
         token: String,
         status: log_user_login::enums::Status,
     ) -> Result<log_user_login::Model, ErrorMsg> {

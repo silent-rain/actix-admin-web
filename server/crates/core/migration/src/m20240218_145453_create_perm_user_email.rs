@@ -1,7 +1,7 @@
 //! 用户邮箱表
 //! User Entity: [`entity::prelude::PermUserEmail`]
 
-use crate::m20240218_145453_create_perm_user_profile::UserProfile;
+use crate::m20240218_145453_create_user_base::UserBase;
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, ForeignKey, ForeignKeyAction, Index, Table},
@@ -121,7 +121,7 @@ impl MigrationTrait for Migration {
                     ForeignKey::create()
                         .name("fk_perm_user_email_user_id")
                         .from(PermUserEmail::Table, PermUserEmail::UserId)
-                        .to(UserProfile::Table, UserProfile::Id)
+                        .to(UserBase::Table, UserBase::Id)
                         .on_update(ForeignKeyAction::Cascade)
                         .on_delete(ForeignKeyAction::Cascade)
                         .to_owned(),

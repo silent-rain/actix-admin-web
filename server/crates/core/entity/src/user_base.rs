@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 /// 用户信息表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "t_user_profile")]
+#[sea_orm(table_name = "t_user_base")]
 pub struct Model {
     /// 用户ID
     #[sea_orm(primary_key)]
@@ -29,12 +29,12 @@ pub struct Model {
     pub date_birth: Option<String>,
     /// 头像URL
     pub avatar: Option<String>,
-    /// 用户的居住或邮寄地址
-    pub address: Option<String>,
     /// 用户个人介绍
     pub intro: Option<String>,
     /// 用户描述
     pub desc: Option<String>,
+    /// 用户的居住或邮寄地址
+    pub address: Option<String>,
     /// 偏好设置
     pub preferences: Option<String>,
     /// 所属部门ID
@@ -105,7 +105,7 @@ pub mod enums {
         /// 女
         Female = 1,
         /// 保密
-        Confidential = 2,
+        Undisclosed = 2,
     }
 
     /// 注册用户类型

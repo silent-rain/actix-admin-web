@@ -26,13 +26,13 @@ pub struct Model {
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
     #[sea_orm(
-        belongs_to = "super::user_profile::Entity",
+        belongs_to = "super::user_base::Entity",
         from = "Column::UserId",
-        to = "super::user_profile::Column::Id",
+        to = "super::user_base::Column::Id",
         on_update = "Cascade",
         on_delete = "Cascade"
     )]
-    UserProfile,
+    UserBase,
 }
 
 impl ActiveModelBehavior for ActiveModel {}

@@ -1,6 +1,6 @@
 //! 路由层
 
-pub mod profile;
+pub mod user_base;
 pub mod user_email;
 pub mod user_phone;
 pub mod user_role_rel;
@@ -15,7 +15,7 @@ impl UserRouter {
     pub fn admin_register() -> Scope {
         web::scope("/user")
             // 用户信息管理
-            .service(profile::ProfileRouter::admin_register())
+            .service(user_base::UserBaseRouter::admin_register())
             // 用户手机号管理
             .service(user_phone::UserPhoneRouter::admin_register())
             // 用户邮箱管理

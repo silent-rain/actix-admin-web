@@ -1,8 +1,8 @@
 //! 权限拦截器
 use std::future::{ready, Ready};
 
-use entity::{log_user_login, user_profile};
-use service_hub::{inject::AInjectProvider, log::UserLoginService, user::ProfileService};
+use entity::{log_user_login, user_base};
+use service_hub::{inject::AInjectProvider, log::UserLoginService, user::UserBaseService};
 
 use crate::constant::{
     AUTH_WHITE_LIST, HEADERS_AUTHORIZATION, HEADERS_AUTHORIZATION_BEARER,
@@ -186,9 +186,9 @@ impl<S> SystemAuthService<S> {
         provider: AInjectProvider,
         user_id: i32,
     ) -> Result<(), code::ErrorMsg> {
-        let user_service: ProfileService = provider.provide();
+        let user_service: UserBaseService = provider.provide();
         let user = user_service.info(user_id).await?;
-        if user.status == user_profile::enums::Status::Disabled as i8 {
+        if user.status == user_base::enums::Status::Disabled as i8 {
             error!("user_id: {}, 用户已被禁用", user.id);
             return Err(code::Error::LoginStatusDisabled
                 .into_msg()

@@ -1,6 +1,6 @@
 //! 注册
 
-use entity::user_profile;
+use entity::user_base;
 
 use actix_validator::Validate;
 
@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
 pub struct RegisterReq {
     /// 注册用户类型
-    pub register_type: user_profile::enums::UserType,
+    pub register_type: user_base::enums::UserType,
     /// 手机号码
     pub phone: Option<String>,
     /// 邮箱
@@ -59,7 +59,7 @@ mod tests {
         let expected = RegisterReq {
             phone: Some("phone".to_owned()),
             email: Some("email".to_owned()),
-            register_type: user_profile::enums::UserType::Phone,
+            register_type: user_base::enums::UserType::Phone,
             username: "username".to_owned(),
             real_name: Some("real_name".to_owned()),
             gender: 11,
@@ -95,7 +95,7 @@ mod tests {
         let expected = RegisterReq {
             phone: Some("phone".to_owned()),
             email: None,
-            register_type: user_profile::enums::UserType::Phone,
+            register_type: user_base::enums::UserType::Phone,
             username: "username".to_owned(),
             real_name: Some("real_name".to_owned()),
             gender: 1,
@@ -130,7 +130,7 @@ mod tests {
         let expected = RegisterReq {
             phone: Some("phone".to_owned()),
             email: None,
-            register_type: user_profile::enums::UserType::Phone,
+            register_type: user_base::enums::UserType::Phone,
             username: "username".to_owned(),
             real_name: Some("real_name".to_owned()),
             gender: 11,

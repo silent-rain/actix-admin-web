@@ -26,4 +26,4 @@ pub use super::sys_config::Entity as SysConfig;
 pub use super::sys_dict_data::Entity as SysDictData;
 pub use super::sys_dict_dim::Entity as SysDictDim;
 pub use super::sys_image::Entity as SysImage;
-pub use super::user_profile::Entity as UserProfile;
+pub use super::user_base::Entity as UserBase;

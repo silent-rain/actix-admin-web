@@ -1,11 +1,11 @@
 //! 用户信息管理
-use crate::dto::profile::GetProfilerListReq;
+use crate::dto::user_base::GetUserBaserListReq;
 
 use database::{DbRepo, Pagination};
 use entity::{
     perm_role, perm_user_role_rel,
-    prelude::{PermRole, PermUserRoleRel, UserProfile},
-    user_profile,
+    prelude::{PermRole, PermUserRoleRel, UserBase},
+    user_base,
 };
 
 use nject::injectable;
@@ -16,15 +16,15 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct ProfileDao<'a> {
+pub struct UserBaseDao<'a> {
     db: &'a dyn DbRepo,
 }
 
-impl<'a> ProfileDao<'a> {
+impl<'a> UserBaseDao<'a> {
     /// 获取所有数据
-    pub async fn all(&self) -> Result<(Vec<user_profile::Model>, u64), DbErr> {
-        let results = UserProfile::find()
-            .order_by_asc(user_profile::Column::Id)
+    pub async fn all(&self) -> Result<(Vec<user_base::Model>, u64), DbErr> {
+        let results = UserBase::find()
+            .order_by_asc(user_base::Column::Id)
             .all(self.db.rdb())
             .await?;
         let total = results.len() as u64;
@@ -34,19 +34,19 @@ impl<'a> ProfileDao<'a> {
     /// 获取数据列表
     pub async fn list(
         &self,
-        req: GetProfilerListReq,
-    ) -> Result<(Vec<user_profile::Model>, u64), DbErr> {
+        req: GetUserBaserListReq,
+    ) -> Result<(Vec<user_base::Model>, u64), DbErr> {
         let page = Pagination::new(req.page, req.page_size);
 
-        let states = UserProfile::find()
+        let states = UserBase::find()
             .apply_if(req.start_time, |query, v| {
-                query.filter(user_profile::Column::CreatedAt.gte(v))
+                query.filter(user_base::Column::CreatedAt.gte(v))
             })
             .apply_if(req.end_time, |query, v| {
-                query.filter(user_profile::Column::CreatedAt.lt(v))
+                query.filter(user_base::Column::CreatedAt.lt(v))
             })
             .apply_if(req.username, |query, v| {
-                query.filter(user_profile::Column::Username.like(format!("{v}%")))
+                query.filter(user_base::Column::Username.like(format!("{v}%")))
             });
 
         let total = states.clone().count(self.db.rdb()).await?;
@@ -55,7 +55,7 @@ impl<'a> ProfileDao<'a> {
         }
 
         let results = states
-            .order_by_desc(user_profile::Column::Id)
+            .order_by_desc(user_base::Column::Id)
             .offset(page.offset())
             .limit(page.page_size())
             .all(self.db.rdb())
@@ -64,24 +64,24 @@ impl<'a> ProfileDao<'a> {
         Ok((results, total))
     }
     /// 获取详情信息
-    pub async fn info(&self, id: i32) -> Result<Option<user_profile::Model>, DbErr> {
-        UserProfile::find_by_id(id).one(self.db.rdb()).await
+    pub async fn info(&self, id: i32) -> Result<Option<user_base::Model>, DbErr> {
+        UserBase::find_by_id(id).one(self.db.rdb()).await
     }
 
     /// 添加详情信息
     pub async fn add(
         &self,
-        active_model: user_profile::ActiveModel,
-    ) -> Result<user_profile::Model, DbErr> {
+        active_model: user_base::ActiveModel,
+    ) -> Result<user_base::Model, DbErr> {
         active_model.insert(self.db.wdb()).await
     }
 
     /// 更新信息
-    pub async fn update(&self, active_model: user_profile::ActiveModel) -> Result<u64, DbErr> {
+    pub async fn update(&self, active_model: user_base::ActiveModel) -> Result<u64, DbErr> {
         let id: i32 = *(active_model.id.clone().as_ref());
-        let result = UserProfile::update_many()
+        let result = UserBase::update_many()
             .set(active_model)
-            .filter(user_profile::Column::Id.eq(id))
+            .filter(user_base::Column::Id.eq(id))
             .exec(self.db.wdb())
             .await?;
 
@@ -90,7 +90,7 @@ impl<'a> ProfileDao<'a> {
 
     /// 更新状态
     pub async fn status(&self, id: i32, status: i8) -> Result<(), DbErr> {
-        let active_model = user_profile::ActiveModel {
+        let active_model = user_base::ActiveModel {
             id: Set(id),
             status: Set(status),
             ..Default::default()
@@ -101,14 +101,14 @@ impl<'a> ProfileDao<'a> {
 
     /// 按主键删除信息
     pub async fn delete(&self, id: i32) -> Result<u64, DbErr> {
-        let result = UserProfile::delete_by_id(id).exec(self.db.wdb()).await?;
+        let result = UserBase::delete_by_id(id).exec(self.db.wdb()).await?;
         Ok(result.rows_affected)
     }
 
     /// 指定字段删除
     pub async fn delete_by_name(&self, username: String) -> Result<u64, DbErr> {
-        let result = UserProfile::delete_many()
-            .filter(user_profile::Column::Username.contains(&username))
+        let result = UserBase::delete_many()
+            .filter(user_base::Column::Username.contains(&username))
             .exec(self.db.wdb())
             .await?;
 
@@ -116,13 +116,13 @@ impl<'a> ProfileDao<'a> {
     }
 }
 
-impl<'a> ProfileDao<'a> {
+impl<'a> UserBaseDao<'a> {
     /// 添加用户及对应用户的角色
     pub async fn add_user(
         &self,
-        active_model: user_profile::ActiveModel,
+        active_model: user_base::ActiveModel,
         add_role_ids: Vec<i32>,
-    ) -> Result<user_profile::Model, DbErr> {
+    ) -> Result<user_base::Model, DbErr> {
         let txn = self.db.wdb().begin().await?;
 
         // 添加用户
@@ -141,7 +141,7 @@ impl<'a> ProfileDao<'a> {
     /// 更新用户及对应用户的角色
     pub async fn update_user(
         &self,
-        active_model: user_profile::ActiveModel,
+        active_model: user_base::ActiveModel,
         add_role_ids: Vec<i32>,
         del_role_ids: Vec<i32>,
     ) -> Result<(), DbErr> {
@@ -167,8 +167,8 @@ impl<'a> ProfileDao<'a> {
     async fn txn_add_user(
         &self,
         txn: &DatabaseTransaction,
-        data: user_profile::ActiveModel,
-    ) -> Result<user_profile::Model, DbErr> {
+        data: user_base::ActiveModel,
+    ) -> Result<user_base::Model, DbErr> {
         data.insert(txn).await
     }
 
@@ -176,12 +176,12 @@ impl<'a> ProfileDao<'a> {
     async fn txn_update_user(
         &self,
         txn: &DatabaseTransaction,
-        active_model: user_profile::ActiveModel,
+        active_model: user_base::ActiveModel,
     ) -> Result<u64, DbErr> {
         let id: i32 = *(active_model.id.clone().as_ref());
-        let result = UserProfile::update_many()
+        let result = UserBase::update_many()
             .set(active_model)
-            .filter(user_profile::Column::Id.eq(id))
+            .filter(user_base::Column::Id.eq(id))
             .exec(txn)
             .await?;
         Ok(result.rows_affected)
@@ -231,7 +231,7 @@ impl<'a> ProfileDao<'a> {
     }
 }
 
-impl<'a> ProfileDao<'a> {
+impl<'a> UserBaseDao<'a> {
     /// 通过用户ID获角色色列表
     pub async fn roles(&self, user_id: i32) -> Result<(Vec<perm_role::Model>, u64), DbErr> {
         let results = PermRole::find()
@@ -271,11 +271,11 @@ mod tests {
                     .into(),
             )
             .filter(perm_user_role_rel::Column::UserId.eq(10))
-            .order_by_asc(user_profile::Column::Id)
+            .order_by_asc(user_base::Column::Id)
             .build(DbBackend::Postgres)
             .to_string();
 
-        let sql = r#"SELECT "t_perm_role"."id" FROM "t_perm_role" INNER JOIN "t_perm_user_role_rel" ON "t_perm_user_role_rel"."role_id" = "t_perm_role"."id" WHERE "t_perm_user_role_rel"."user_id" = 10 ORDER BY "t_user_profile"."id" ASC"#;
+        let sql = r#"SELECT "t_perm_role"."id" FROM "t_perm_role" INNER JOIN "t_perm_user_role_rel" ON "t_perm_user_role_rel"."role_id" = "t_perm_role"."id" WHERE "t_perm_user_role_rel"."user_id" = 10 ORDER BY "t_user_base"."id" ASC"#;
         assert_eq!(result, sql);
     }
 }

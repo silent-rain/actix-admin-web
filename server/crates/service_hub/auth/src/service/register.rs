@@ -7,7 +7,7 @@ use system::CaptchaDao;
 use user::{UserEmailDao, UserPhoneDao};
 
 use code::{Error, ErrorMsg};
-use entity::user_profile;
+use entity::user_base;
 use utils::crypto::sha2_256;
 
 use nject::injectable;
@@ -24,7 +24,7 @@ pub struct RegisterService<'a> {
 
 impl<'a> RegisterService<'a> {
     /// 根据不同的注册类型进行注册用户
-    pub async fn register(&self, data: RegisterReq) -> Result<user_profile::Model, ErrorMsg> {
+    pub async fn register(&self, data: RegisterReq) -> Result<user_base::Model, ErrorMsg> {
         // 检测验证码
         check_captcha(
             &self.captcha_dao,
@@ -35,13 +35,13 @@ impl<'a> RegisterService<'a> {
 
         // 根据不同注册类型进行注册
         match data.register_type {
-            user_profile::enums::UserType::Phone => self.register_phone(data).await,
-            user_profile::enums::UserType::Email => self.register_email(data).await,
+            user_base::enums::UserType::Phone => self.register_phone(data).await,
+            user_base::enums::UserType::Email => self.register_email(data).await,
         }
     }
 
     /// 注册手机用户
-    async fn register_phone(&self, data: RegisterReq) -> Result<user_profile::Model, ErrorMsg> {
+    async fn register_phone(&self, data: RegisterReq) -> Result<user_base::Model, ErrorMsg> {
         let mut data = data.clone();
 
         let phone = match data.phone.clone() {
@@ -86,7 +86,7 @@ impl<'a> RegisterService<'a> {
     }
 
     /// 注册邮箱用户
-    async fn register_email(&self, data: RegisterReq) -> Result<user_profile::Model, ErrorMsg> {
+    async fn register_email(&self, data: RegisterReq) -> Result<user_base::Model, ErrorMsg> {
         let mut data = data.clone();
 
         let email = match data.email.clone() {

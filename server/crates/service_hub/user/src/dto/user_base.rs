@@ -1,6 +1,6 @@
 //! 用户信息管理
 
-use entity::user_profile;
+use entity::user_base;
 
 use actix_validator::Validate;
 
@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 /// 查询用户列表
 #[derive(Default, Deserialize, Validate)]
-pub struct GetProfilerListReq {
+pub struct GetUserBaserListReq {
     /// 当前分页
     pub page: u64,
     /// 页面大小
@@ -23,29 +23,29 @@ pub struct GetProfilerListReq {
 
 /// 添加用户
 #[derive(Clone, Serialize, Deserialize, Validate)]
-pub struct AddProfileReq {
+pub struct AddUserBaseReq {
     /// 用户名称
     pub username: String,
     /// 真实姓名
     pub real_name: Option<String>,
     /// 性别, 0:男,1:女,2:保密
-    pub gender: user_profile::enums::Gender,
+    pub gender: user_base::enums::Gender,
     /// 密码
     pub password: String,
     /// 状态,0:停用,1:正常
-    pub status: user_profile::enums::Status,
+    pub status: user_base::enums::Status,
     /// 年龄
     pub age: Option<i32>,
     /// 出生日期
     pub date_birth: Option<String>,
     /// 头像URL
     pub avatar: Option<String>,
-    /// 用户的居住或邮寄地址
-    pub address: Option<String>,
     /// 用户个人介绍
     pub intro: Option<String>,
     /// 用户描述
     pub desc: Option<String>,
+    /// 用户的居住或邮寄地址
+    pub address: Option<String>,
     /// 偏好设置
     pub preferences: Option<String>,
     /// 所属部门ID
@@ -60,27 +60,27 @@ pub struct AddProfileReq {
 
 /// 更新用户
 #[derive(Clone, Serialize, Deserialize, Validate)]
-pub struct UpdateProfileReq {
+pub struct UpdateUserBaseReq {
     /// 用户名称
     pub username: String,
     /// 真实姓名
     pub real_name: Option<String>,
     /// 性别, 0:男,1:女,2:保密
-    pub gender: user_profile::enums::Gender,
+    pub gender: user_base::enums::Gender,
     /// 状态,0:停用,1:正常
-    pub status: user_profile::enums::Status,
+    pub status: user_base::enums::Status,
     /// 年龄
     pub age: Option<i32>,
     /// 出生日期
     pub date_birth: Option<String>,
     /// 头像URL
     pub avatar: Option<String>,
-    /// 用户的居住或邮寄地址
-    pub address: Option<String>,
     /// 用户个人介绍
     pub intro: Option<String>,
     /// 用户描述
     pub desc: Option<String>,
+    /// 用户的居住或邮寄地址
+    pub address: Option<String>,
     /// 偏好设置
     pub preferences: Option<String>,
     /// 所属部门ID
@@ -95,9 +95,9 @@ pub struct UpdateProfileReq {
 
 /// 更新数据状态
 #[derive(Clone, Serialize, Deserialize, Validate)]
-pub struct UpdateProfileStatusReq {
+pub struct UpdateUserBaseStatusReq {
     /// 用户状态
-    pub status: user_profile::enums::Status,
+    pub status: user_base::enums::Status,
 }
 
 /// 获取用户个人信息

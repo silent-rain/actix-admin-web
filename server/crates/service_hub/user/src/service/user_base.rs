@@ -1,11 +1,11 @@
 //! 用户信息管理
 use crate::{
-    dao::{profile::ProfileDao, user_role_rel::UserRoleRelDao},
-    dto::profile::{AddProfileReq, GetProfilerListReq, ProfileRsp, UpdateProfileReq},
+    dao::{user_base::UserBaseDao, user_role_rel::UserRoleRelDao},
+    dto::user_base::{AddUserBaseReq, GetUserBaserListReq, ProfileRsp, UpdateUserBaseReq},
 };
 
 use code::{Error, ErrorMsg};
-use entity::{perm_role, perm_user_role_rel, user_profile};
+use entity::{perm_role, perm_user_role_rel, user_base};
 
 use nject::injectable;
 use sea_orm::Set;
@@ -14,18 +14,18 @@ use utils::crypto::sha2_256;
 
 /// 服务层
 #[injectable]
-pub struct ProfileService<'a> {
-    profile_dao: ProfileDao<'a>,
+pub struct UserBaseService<'a> {
+    user_base_dao: UserBaseDao<'a>,
     user_role_rel_dao: UserRoleRelDao<'a>,
 }
 
-impl<'a> ProfileService<'a> {
+impl<'a> UserBaseService<'a> {
     /// 获取列表数据
     pub async fn list(
         &self,
-        req: GetProfilerListReq,
-    ) -> Result<(Vec<user_profile::Model>, u64), ErrorMsg> {
-        let (results, total) = self.profile_dao.list(req).await.map_err(|err| {
+        req: GetUserBaserListReq,
+    ) -> Result<(Vec<user_base::Model>, u64), ErrorMsg> {
+        let (results, total) = self.user_base_dao.list(req).await.map_err(|err| {
             error!("查询用户信息列表失败, err: {:#?}", err);
             Error::DbQueryError
                 .into_msg()
@@ -36,9 +36,9 @@ impl<'a> ProfileService<'a> {
     }
 
     /// 获取详情数据
-    pub async fn info(&self, id: i32) -> Result<user_profile::Model, ErrorMsg> {
+    pub async fn info(&self, id: i32) -> Result<user_base::Model, ErrorMsg> {
         let result = self
-            .profile_dao
+            .user_base_dao
             .info(id)
             .await
             .map_err(|err| {
@@ -58,7 +58,7 @@ impl<'a> ProfileService<'a> {
     /// 获取用户信息个人信息
     pub async fn profile(&self, id: i32) -> Result<ProfileRsp, ErrorMsg> {
         let user = self
-            .profile_dao
+            .user_base_dao
             .info(id)
             .await
             .map_err(|err| {
@@ -85,7 +85,7 @@ impl<'a> ProfileService<'a> {
 
     /// 更新数据状态
     pub async fn status(&self, id: i32, status: i8) -> Result<(), ErrorMsg> {
-        self.profile_dao.status(id, status).await.map_err(|err| {
+        self.user_base_dao.status(id, status).await.map_err(|err| {
             error!("更新用户信息状态失败, err: {:#?}", err);
             Error::DbUpdateError
                 .into_msg()
@@ -97,7 +97,7 @@ impl<'a> ProfileService<'a> {
 
     /// 删除数据
     pub async fn delete(&self, id: i32) -> Result<u64, ErrorMsg> {
-        let result = self.profile_dao.delete(id).await.map_err(|err| {
+        let result = self.user_base_dao.delete(id).await.map_err(|err| {
             error!("删除用户信息失败, err: {:#?}", err);
             Error::DbDeleteError.into_msg().with_msg("删除用户信息失败")
         })?;
@@ -106,13 +106,13 @@ impl<'a> ProfileService<'a> {
     }
 }
 
-impl<'a> ProfileService<'a> {
+impl<'a> UserBaseService<'a> {
     /// 后台添加用户信息及对应用户信息的角色
-    pub async fn add(&self, data: AddProfileReq) -> Result<user_profile::Model, ErrorMsg> {
+    pub async fn add(&self, data: AddUserBaseReq) -> Result<user_base::Model, ErrorMsg> {
         // 密码加密
         let password = sha2_256(&data.password);
 
-        let model = user_profile::ActiveModel {
+        let model = user_base::ActiveModel {
             username: Set(data.username),
             real_name: Set(data.real_name),
             gender: Set(data.gender as i8),
@@ -121,9 +121,9 @@ impl<'a> ProfileService<'a> {
             age: Set(data.age),
             date_birth: Set(data.date_birth),
             avatar: Set(data.avatar),
-            address: Set(data.address),
             intro: Set(data.intro),
             desc: Set(data.desc),
+            address: Set(data.address),
             preferences: Set(data.preferences),
             department_id: Set(data.department_id),
             position_id: Set(data.position_id),
@@ -132,7 +132,7 @@ impl<'a> ProfileService<'a> {
         };
 
         let result = self
-            .profile_dao
+            .user_base_dao
             .add_user(model, data.role_ids)
             .await
             .map_err(|err| {
@@ -143,7 +143,7 @@ impl<'a> ProfileService<'a> {
     }
 
     /// 后台更新用户信息及对应用户信息的角色
-    pub async fn update(&self, id: i32, data: UpdateProfileReq) -> Result<(), ErrorMsg> {
+    pub async fn update(&self, id: i32, data: UpdateUserBaseReq) -> Result<(), ErrorMsg> {
         // 获取原角色列表
         let (user_role_rels, _) =
             self.user_role_rel_dao
@@ -159,7 +159,7 @@ impl<'a> ProfileService<'a> {
         // 获角色色ID的差异列表
         let (add_role_ids, del_role_ids) = self.diff_role_ids(data.role_ids, user_role_rels);
 
-        let model = user_profile::ActiveModel {
+        let model = user_base::ActiveModel {
             id: Set(id),
             username: Set(data.username),
             real_name: Set(data.real_name),
@@ -168,16 +168,16 @@ impl<'a> ProfileService<'a> {
             age: Set(data.age),
             date_birth: Set(data.date_birth),
             avatar: Set(data.avatar),
-            address: Set(data.address),
             intro: Set(data.intro),
             desc: Set(data.desc),
+            address: Set(data.address),
             preferences: Set(data.preferences),
             department_id: Set(data.department_id),
             position_id: Set(data.position_id),
             rank_id: Set(data.rank_id),
             ..Default::default()
         };
-        self.profile_dao
+        self.user_base_dao
             .update_user(model, add_role_ids, del_role_ids)
             .await
             .map_err(|err| {
@@ -215,10 +215,10 @@ impl<'a> ProfileService<'a> {
     }
 }
 
-impl<'a> ProfileService<'a> {
+impl<'a> UserBaseService<'a> {
     /// 通过用户信息ID获角色色列表
     pub async fn roles(&self, user_id: i32) -> Result<(Vec<perm_role::Model>, u64), ErrorMsg> {
-        let (results, total) = self.profile_dao.roles(user_id).await.map_err(|err| {
+        let (results, total) = self.user_base_dao.roles(user_id).await.map_err(|err| {
             error!("查询用户信息失败, err: {:#?}", err);
             Error::DbQueryError.into_msg().with_msg("查询用户信息失败")
         })?;

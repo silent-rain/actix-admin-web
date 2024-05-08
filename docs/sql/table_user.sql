@@ -1,7 +1,7 @@
 /*用户与身份管理相关表*/
 -- 用户信息表
 CREATE TABLE IF NOT EXISTS
-    `t_user_profile` (
+    `t_user_base` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '用户ID',
         `username` VARCHAR(32) NOT NULL COMMENT '用户名称',
         `real_name` VARCHAR(32) NULL DEFAULT '' COMMENT '真实姓名',
@@ -11,9 +11,9 @@ CREATE TABLE IF NOT EXISTS
         `age` INT(11) NULL DEFAULT 0 COMMENT '年龄',
         `date_birth` VARCHAR(20) NULL DEFAULT '' COMMENT '出生日期',
         `avatar` VARCHAR(200) NULL DEFAULT '' COMMENT '头像URL',
-        `address` VARCHAR(200) NULL DEFAULT '' COMMENT '用户的居住或邮寄地址',
         `intro` VARCHAR(200) NULL DEFAULT '' COMMENT '用户个人介绍',
         `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '用户描述',
+        `address` VARCHAR(200) NULL DEFAULT '' COMMENT '用户的居住或邮寄地址',
         `preferences` VARCHAR(200) NULL DEFAULT '' COMMENT '偏好设置',
         `department_id` INT(11) UNSIGNED DEFAULT 0 COMMENT '所属部门ID',
         `position_id` INT(11) UNSIGNED DEFAULT 0 COMMENT '所属岗位ID',
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS
         PRIMARY KEY (`id`),
         UNIQUE KEY `uk_user_id` (`user_id`) USING BTREE,
         UNIQUE KEY `uk_email` (`email`) USING BTREE,
-        CONSTRAINT `fk_perm_user_email_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_user_profile` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+        CONSTRAINT `fk_perm_user_email_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_user_base` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户邮箱';
 
 -- 用户手机号表
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS
         PRIMARY KEY (`id`),
         UNIQUE KEY `uk_user_id` (`user_id`) USING BTREE,
         UNIQUE KEY `uk_phone` (`phone`) USING BTREE,
-        CONSTRAINT `fk_perm_user_phone_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_user_profile` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+        CONSTRAINT `fk_perm_user_phone_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_user_base` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户手机号';
 
 -- 用户区块链钱包
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS
         PRIMARY KEY (`id`),
         UNIQUE KEY `uk_user_id` (`user_id`) USING BTREE,
         UNIQUE KEY `uk_wallet_address` (`wallet_address`) USING BTREE,
-        CONSTRAINT `fk_perm_user_blockchain_wallet_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_user_profile` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+        CONSTRAINT `fk_perm_user_blockchain_wallet_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_user_base` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户区块链钱包';
 
 -- 用户角色关系表
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         PRIMARY KEY (`id`),
         UNIQUE KEY `uk_user_id_role_id` (`user_id`, `role_id`),
-        CONSTRAINT `fk_perm_user_role_rel_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_user_profile` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+        CONSTRAINT `fk_perm_user_role_rel_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_user_base` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
         CONSTRAINT `fk_perm_user_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户角色关系表';
 
@@ -126,7 +126,7 @@ CREATE TABLE IF NOT EXISTS
 CREATE TRIGGER trigger_update_user
 AFTER
 UPDATE
-ON `user_profile` FOR EACH ROW BEGIN
+ON `user_base` FOR EACH ROW BEGIN
 
 IF NEW.nickname != OLD.nickname THEN 
 -- 更新 perm_user_api_token.nickname 字段

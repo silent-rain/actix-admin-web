@@ -28,4 +28,4 @@ pub mod sys_config;
 pub mod sys_dict_data;
 pub mod sys_dict_dim;
 pub mod sys_image;
-pub mod user_profile;
+pub mod user_base;

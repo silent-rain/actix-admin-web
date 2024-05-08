@@ -123,12 +123,12 @@
 
 ## 表划分域
 
-t_user_profile
+t_user_base
 
-user_profile
+user_base
 
 用户与身份管理：
-●t_user_profile：用户资料信息
+●t_user_base：用户资料信息
 ●t_user_email — 用户邮箱表 (UserEmail)
 ●t_user_phone — 用户手机号表 (UserPhoneNumber)
 ●t_user_login_log — 用户登录日志表 (UserLoginLog)

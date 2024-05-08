@@ -4,7 +4,7 @@ use crate::{dto::register::RegisterReq, RegisterService};
 
 use actix_validator::Json;
 use code::Error;
-use entity::user_profile;
+use entity::user_base;
 use inject::AInjectProvider;
 use response::Response;
 
@@ -22,7 +22,7 @@ impl RegisterController {
     ) -> impl Responder {
         let data = data.into_inner();
         match data.register_type {
-            user_profile::enums::UserType::Phone => {
+            user_base::enums::UserType::Phone => {
                 if data.phone.is_none() {
                     error!("请输入手机号码");
                     return Response::err(
@@ -32,7 +32,7 @@ impl RegisterController {
                     );
                 }
             }
-            user_profile::enums::UserType::Email => {
+            user_base::enums::UserType::Email => {
                 if data.email.is_none() {
                     error!("请输入邮箱");
                     return Response::err(
