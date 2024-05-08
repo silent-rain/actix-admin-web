@@ -6,8 +6,6 @@ pub use super::log_api_operation::Entity as LogApiOperation;
 pub use super::log_system::Entity as LogSystem;
 pub use super::log_user_login::Entity as LogUserLogin;
 pub use super::log_web::Entity as LogWeb;
-pub use super::perm_department::Entity as PermDepartment;
-pub use super::perm_department_role_rel::Entity as PermDepartmentRoleRel;
 pub use super::perm_menu::Entity as PermMenu;
 pub use super::perm_menu_role_rel::Entity as PermMenuRoleRel;
 pub use super::perm_openapi::Entity as PermOpenapi;

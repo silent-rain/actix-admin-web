@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS
         CONSTRAINT `fk_org_department_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_perm_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '部门角色关系表';
 
--- 岗位表
+-- TODO 岗位表
 CREATE TABLE IF NOT EXISTS
     `t_org_position` (
         `id` INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '岗位ID',
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS
         CONSTRAINT `fk_org_position_department_id` FOREIGN KEY (`id`) REFERENCES `t_org_department` (`id`)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '岗位表';
 
--- 职级表
+-- TODO 职级表
 CREATE TABLE IF NOT EXISTS
     `t_org_rank` (
         `id` INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '职级ID',

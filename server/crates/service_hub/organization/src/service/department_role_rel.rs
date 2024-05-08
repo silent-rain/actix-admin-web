@@ -5,7 +5,7 @@ use crate::{
 };
 
 use code::{Error, ErrorMsg};
-use entity::perm_department_role_rel;
+use entity::organization::department_role_rel;
 
 use nject::injectable;
 use sea_orm::Set;
@@ -22,7 +22,7 @@ impl<'a> DepartmentRoleRelService<'a> {
     pub async fn list(
         &self,
         req: GetDepartmentRoleRelListReq,
-    ) -> Result<(Vec<perm_department_role_rel::Model>, u64), ErrorMsg> {
+    ) -> Result<(Vec<department_role_rel::Model>, u64), ErrorMsg> {
         let (results, total) = self
             .department_role_rel_dao
             .list(req)
@@ -41,7 +41,7 @@ impl<'a> DepartmentRoleRelService<'a> {
     pub async fn batch_add(&self, req: BatchAddDepartmentRoleRelReq) -> Result<i32, ErrorMsg> {
         let mut models = Vec::new();
         for role_id in req.role_ids {
-            let model = perm_department_role_rel::ActiveModel {
+            let model = department_role_rel::ActiveModel {
                 department_id: Set(req.department_id),
                 role_id: Set(role_id),
                 ..Default::default()

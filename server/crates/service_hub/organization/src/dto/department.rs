@@ -1,6 +1,6 @@
 //! 部门管理
 
-use entity::perm_department;
+use entity::organization::department;
 
 use actix_validator::Validate;
 
@@ -53,12 +53,12 @@ pub struct UpdateDepartmentReq {
     /// 描述信息
     pub desc: Option<String>,
     /// 状态(0:停用,1:正常)
-    pub status: perm_department::enums::Status,
+    pub status: department::enums::Status,
 }
 
 /// 更新数据状态
 #[derive(Clone, Serialize, Deserialize, Validate)]
 pub struct UpdateDepartmentStatusReq {
     /// 状态(0:停用,1:正常)
-    pub status: perm_department::enums::Status,
+    pub status: department::enums::Status,
 }

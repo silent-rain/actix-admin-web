@@ -4,12 +4,13 @@ pub mod prelude;
 
 pub mod app_template;
 
+pub mod organization;
+
 pub mod log_api_operation;
 pub mod log_system;
 pub mod log_user_login;
 pub mod log_web;
-pub mod perm_department;
-pub mod perm_department_role_rel;
+
 pub mod perm_menu;
 pub mod perm_menu_role_rel;
 pub mod perm_openapi;

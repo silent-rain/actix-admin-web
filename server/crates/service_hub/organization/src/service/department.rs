@@ -5,7 +5,7 @@ use crate::{
 };
 
 use code::{Error, ErrorMsg};
-use entity::perm_department;
+use entity::organization::department;
 
 use nject::injectable;
 use sea_orm::Set;
@@ -23,7 +23,7 @@ impl<'a> DepartmentService<'a> {
     pub async fn list(
         &self,
         req: GetDepartmentListReq,
-    ) -> Result<(Vec<perm_department::Model>, u64), ErrorMsg> {
+    ) -> Result<(Vec<department::Model>, u64), ErrorMsg> {
         // 获取所有数据
         if let Some(true) = req.all {
             return self.department_dao.all().await.map_err(|err| {
@@ -41,7 +41,7 @@ impl<'a> DepartmentService<'a> {
     }
 
     /// 获取树列表数据
-    pub async fn tree(&self) -> Result<Vec<GenericTree<perm_department::Model>>, ErrorMsg> {
+    pub async fn tree(&self) -> Result<Vec<GenericTree<department::Model>>, ErrorMsg> {
         let (results, _total) = self.department_dao.all().await.map_err(|err| {
             error!("查询部门列表失败, err: {:#?}", err);
             Error::DbQueryError.into_msg().with_msg("查询部门列表失败")
@@ -53,7 +53,7 @@ impl<'a> DepartmentService<'a> {
     }
 
     /// 获取详情数据
-    pub async fn info(&self, id: i32) -> Result<perm_department::Model, ErrorMsg> {
+    pub async fn info(&self, id: i32) -> Result<department::Model, ErrorMsg> {
         let result = self
             .department_dao
             .info(id)
@@ -71,7 +71,7 @@ impl<'a> DepartmentService<'a> {
     }
 
     /// 添加数据
-    pub async fn add(&self, req: AddDepartmentReq) -> Result<perm_department::Model, ErrorMsg> {
+    pub async fn add(&self, req: AddDepartmentReq) -> Result<department::Model, ErrorMsg> {
         // 查询部门是否已存在
         let department = self
             .department_dao
@@ -86,12 +86,12 @@ impl<'a> DepartmentService<'a> {
             return Err(Error::DbDataExistError.into_msg().with_msg("部门已存在"));
         }
 
-        let model = perm_department::ActiveModel {
+        let model = department::ActiveModel {
             pid: Set(req.pid),
             name: Set(req.name),
             sort: Set(req.sort),
             desc: Set(req.desc),
-            status: Set(perm_department::enums::Status::Enabled as i8),
+            status: Set(department::enums::Status::Enabled as i8),
             ..Default::default()
         };
         let mut department =
@@ -117,7 +117,7 @@ impl<'a> DepartmentService<'a> {
 
         department.pids = Some(pids);
         // 更新PID
-        let model: perm_department::ActiveModel = department.clone().into();
+        let model: department::ActiveModel = department.clone().into();
         let _result = self.department_dao.update(model).await.map_err(|err| {
             error!("更新部门Pids失败, err: {:#?}", err);
             Error::DbUpdateError.into_msg().with_msg("更新部门Pids失败")
@@ -140,7 +140,7 @@ impl<'a> DepartmentService<'a> {
             .collect::<Vec<String>>()
             .join(",");
 
-        let model = perm_department::ActiveModel {
+        let model = department::ActiveModel {
             id: Set(id),
             pid: Set(req.pid),
             pids: Set(Some(pids)),
