@@ -1,5 +1,5 @@
 //! 任务调度状态日志表
-//! Entity: [`entity::prelude::ScheduleJobStatusLog`]
+//! Entity: [`entity::schedule::ScheduleStatusLog`]
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},
@@ -17,11 +17,11 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(ScheduleJobStatus::Table)
-                    .comment("任务调度状态日志")
+                    .table(ScheduleStatusLog::Table)
+                    .comment("任务调度状态日志表")
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(ScheduleJobStatus::Id)
+                        ColumnDef::new(ScheduleStatusLog::Id)
                             .integer()
                             .primary_key()
                             .auto_increment()
@@ -29,46 +29,46 @@ impl MigrationTrait for Migration {
                             .comment("事件日志ID"),
                     )
                     .col(
-                        ColumnDef::new(ScheduleJobStatus::JobId)
+                        ColumnDef::new(ScheduleStatusLog::JobId)
                             .integer()
                             .not_null()
                             .comment("任务ID"),
                     )
                     .col(
-                        ColumnDef::new(ScheduleJobStatus::Uuid)
+                        ColumnDef::new(ScheduleStatusLog::Uuid)
                             .string()
                             .string_len(50)
                             .unique_key()
                             .comment("任务调度ID"),
                     )
                     .col(
-                        ColumnDef::new(ScheduleJobStatus::Error)
+                        ColumnDef::new(ScheduleStatusLog::Error)
                             .text()
                             .comment("失败信息"),
                     )
                     .col(
-                        ColumnDef::new(ScheduleJobStatus::Cost)
+                        ColumnDef::new(ScheduleStatusLog::Cost)
                             .integer()
                             .unsigned()
                             .not_null()
                             .comment("耗时,毫秒"),
                     )
                     .col(
-                        ColumnDef::new(ScheduleJobStatus::Status)
+                        ColumnDef::new(ScheduleStatusLog::Status)
                             .tiny_integer()
                             .not_null()
                             .default(0)
                             .comment("任务状态(0:开始,1:完成,2:停止,3:移除)"),
                     )
                     .col(
-                        ColumnDef::new(ScheduleJobStatus::CreatedAt)
+                        ColumnDef::new(ScheduleStatusLog::CreatedAt)
                             .date_time()
                             .not_null()
                             .default(Expr::current_timestamp())
                             .comment("创建时间"),
                     )
                     .col(
-                        ColumnDef::new(ScheduleJobStatus::UpdatedAt)
+                        ColumnDef::new(ScheduleStatusLog::UpdatedAt)
                             .date_time()
                             .not_null()
                             .extra({
@@ -87,14 +87,14 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
         manager
-            .drop_table(Table::drop().table(ScheduleJobStatus::Table).to_owned())
+            .drop_table(Table::drop().table(ScheduleStatusLog::Table).to_owned())
             .await
     }
 }
 
 #[derive(DeriveIden)]
-pub enum ScheduleJobStatus {
-    #[sea_orm(iden = "t_schedule_job_status_log")]
+pub enum ScheduleStatusLog {
+    #[sea_orm(iden = "t_schedule_status_log")]
     Table,
     Id,
     JobId,

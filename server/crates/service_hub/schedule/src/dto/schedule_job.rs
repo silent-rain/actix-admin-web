@@ -1,6 +1,6 @@
-//! 任务调度管理
+//! 任务调度作业管理
 
-use entity::schedule_job;
+use entity::schedule::schedule_job;
 
 use actix_validator::Validate;
 

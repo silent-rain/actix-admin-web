@@ -1,5 +1,5 @@
-//! 任务调度表
-//! Entity: [`entity::prelude::ScheduleJob`]
+//! 任务调度作业表
+//! Entity: [`entity::schedule::ScheduleJob`]
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},
@@ -19,7 +19,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(ScheduleJob::Table)
-                    .comment("任务调度")
+                    .comment("任务调度作业表")
                     .if_not_exists()
                     .col(
                         ColumnDef::new(ScheduleJob::Id)

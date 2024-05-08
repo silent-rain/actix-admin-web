@@ -9,7 +9,7 @@ use std::{future::Future, pin::Pin, sync::Arc, time::Duration};
 use crate::{dao::Dao, error::Error};
 
 use database::DbRepo;
-use entity::{schedule_job_event_log, schedule_job_status_log};
+use entity::schedule::{schedule_event_log, schedule_status_log};
 
 use chrono::Local;
 use tokio::sync::RwLock;
@@ -137,7 +137,7 @@ where
                     Box::pin(async move {
                         // 添加任务运行状态日志
                         match dao
-                            .schedule_job_status_log_dao
+                            .schedule_status_log_dao
                             .add(sys_id, job_id.to_string())
                             .await
                         {
@@ -156,11 +156,11 @@ where
 
                         // 添加任务运行事件日志
                         if let Err(err) = dao
-                            .schedule_job_event_log_dao
+                            .schedule_event_log_dao
                             .add(
                                 sys_id,
                                 job_id.to_string(),
-                                schedule_job_event_log::enums::Status::Start,
+                                schedule_event_log::enums::Status::Start,
                             )
                             .await
                         {
@@ -202,8 +202,8 @@ where
                     Box::pin(async move {
                         // 更新任务运行状态日志
                         if let Err(err) = dao
-                            .schedule_job_status_log_dao
-                            .status(sys_status_id, schedule_job_status_log::enums::Status::Done)
+                            .schedule_status_log_dao
+                            .status(sys_status_id, schedule_status_log::enums::Status::Done)
                             .await
                         {
                             error!(
@@ -215,11 +215,11 @@ where
 
                         // 添加任务运行事件日志
                         if let Err(err) = dao
-                            .schedule_job_event_log_dao
+                            .schedule_event_log_dao
                             .add(
                                 sys_id,
                                 job_id.to_string(),
-                                schedule_job_event_log::enums::Status::Done,
+                                schedule_event_log::enums::Status::Done,
                             )
                             .await
                         {
@@ -257,8 +257,8 @@ where
                     Box::pin(async move {
                         // 更新任务运行状态日志
                         if let Err(err) = dao
-                            .schedule_job_status_log_dao
-                            .status(sys_status_id, schedule_job_status_log::enums::Status::Stop)
+                            .schedule_status_log_dao
+                            .status(sys_status_id, schedule_status_log::enums::Status::Stop)
                             .await
                         {
                             error!(
@@ -270,11 +270,11 @@ where
 
                         // 添加任务运行事件日志
                         if let Err(err) = dao
-                            .schedule_job_event_log_dao
+                            .schedule_event_log_dao
                             .add(
                                 sys_id,
                                 job_id.to_string(),
-                                schedule_job_event_log::enums::Status::Stop,
+                                schedule_event_log::enums::Status::Stop,
                             )
                             .await
                         {
@@ -312,11 +312,8 @@ where
                     Box::pin(async move {
                         // 更新任务运行状态日志
                         if let Err(err) = dao
-                            .schedule_job_status_log_dao
-                            .status(
-                                sys_status_id,
-                                schedule_job_status_log::enums::Status::Removed,
-                            )
+                            .schedule_status_log_dao
+                            .status(sys_status_id, schedule_status_log::enums::Status::Removed)
                             .await
                         {
                             error!(
@@ -328,11 +325,11 @@ where
 
                         // 添加任务运行事件日志
                         if let Err(err) = dao
-                            .schedule_job_event_log_dao
+                            .schedule_event_log_dao
                             .add(
                                 sys_id,
                                 job_id.to_string(),
-                                schedule_job_event_log::enums::Status::Removed,
+                                schedule_event_log::enums::Status::Removed,
                             )
                             .await
                         {

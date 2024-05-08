@@ -10,7 +10,7 @@
 use crate::{dao::Dao, error::Error, Job, JobScheduler};
 
 use database::DbRepo;
-use entity::schedule_job;
+use entity::schedule::schedule_job;
 
 use async_trait::async_trait;
 use tracing::{error, info};

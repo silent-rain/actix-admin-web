@@ -5,6 +5,7 @@ pub mod prelude;
 pub mod app_template;
 
 pub mod organization;
+pub mod schedule;
 
 pub mod log_api_operation;
 pub mod log_system;
@@ -18,9 +19,6 @@ pub mod perm_openapi_role_rel;
 pub mod perm_role;
 pub mod perm_token;
 pub mod perm_token_role_rel;
-pub mod schedule_job;
-pub mod schedule_job_event_log;
-pub mod schedule_job_status_log;
 pub mod sys_config;
 pub mod sys_dict_data;
 pub mod sys_dict_dimension;

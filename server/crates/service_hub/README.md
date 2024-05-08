@@ -9,7 +9,7 @@
 - permission: 权限管理
 - organization: 组织管理
 - system: 系统管理
-- schedule: 任务调度管理
+- schedule: 任务调度作业管理
 
 ## 参考文档
 

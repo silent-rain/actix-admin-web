@@ -1,13 +1,13 @@
 //! 任务调度状态日志管理
 use crate::{
-    dao::schedule_job_status_log::ScheduleJobStatusLogDao,
-    dto::schedule_job_status_log::{
-        AddScheduleJobStatusLogReq, GetScheduleJobStatusListLogReq, UpdateScheduleJobStatusLogReq,
+    dao::schedule_status_log::ScheduleStatusLogDao,
+    dto::schedule_status_log::{
+        AddScheduleStatusLogReq, GetScheduleStatusLogListLogReq, UpdateScheduleStatusLogReq,
     },
 };
 
 use code::{Error, ErrorMsg};
-use entity::schedule_job_status_log;
+use entity::schedule::schedule_status_log;
 
 use nject::injectable;
 use sea_orm::{DbErr::RecordNotUpdated, Set};
@@ -15,18 +15,18 @@ use tracing::error;
 
 /// 服务层
 #[injectable]
-pub struct ScheduleJobStatusLogService<'a> {
-    schedule_job_status_log_dao: ScheduleJobStatusLogDao<'a>,
+pub struct ScheduleStatusLogService<'a> {
+    schedule_status_log_dao: ScheduleStatusLogDao<'a>,
 }
 
-impl<'a> ScheduleJobStatusLogService<'a> {
+impl<'a> ScheduleStatusLogService<'a> {
     /// 获取列表数据
     pub async fn list(
         &self,
-        req: GetScheduleJobStatusListLogReq,
-    ) -> Result<(Vec<schedule_job_status_log::Model>, u64), ErrorMsg> {
+        req: GetScheduleStatusLogListLogReq,
+    ) -> Result<(Vec<schedule_status_log::Model>, u64), ErrorMsg> {
         let (results, total) = self
-            .schedule_job_status_log_dao
+            .schedule_status_log_dao
             .list(req)
             .await
             .map_err(|err| {
@@ -40,9 +40,9 @@ impl<'a> ScheduleJobStatusLogService<'a> {
     }
 
     /// 获取详情数据
-    pub async fn info(&self, id: i32) -> Result<schedule_job_status_log::Model, ErrorMsg> {
+    pub async fn info(&self, id: i32) -> Result<schedule_status_log::Model, ErrorMsg> {
         let result = self
-            .schedule_job_status_log_dao
+            .schedule_status_log_dao
             .info(id)
             .await
             .map_err(|err| {
@@ -64,15 +64,15 @@ impl<'a> ScheduleJobStatusLogService<'a> {
     /// 添加数据
     pub async fn add(
         &self,
-        req: AddScheduleJobStatusLogReq,
-    ) -> Result<schedule_job_status_log::Model, ErrorMsg> {
-        let data = schedule_job_status_log::ActiveModel {
+        req: AddScheduleStatusLogReq,
+    ) -> Result<schedule_status_log::Model, ErrorMsg> {
+        let data = schedule_status_log::ActiveModel {
             job_id: Set(req.job_id),
             uuid: Set(req.uuid),
             ..Default::default()
         };
         let result = self
-            .schedule_job_status_log_dao
+            .schedule_status_log_dao
             .add(data)
             .await
             .map_err(|err| {
@@ -86,12 +86,8 @@ impl<'a> ScheduleJobStatusLogService<'a> {
     }
 
     /// 更新数据
-    pub async fn update(
-        &self,
-        id: i32,
-        req: UpdateScheduleJobStatusLogReq,
-    ) -> Result<u64, ErrorMsg> {
-        let model = schedule_job_status_log::ActiveModel {
+    pub async fn update(&self, id: i32, req: UpdateScheduleStatusLogReq) -> Result<u64, ErrorMsg> {
+        let model = schedule_status_log::ActiveModel {
             id: Set(id),
             job_id: Set(req.job_id),
             error: Set(req.error),
@@ -101,7 +97,7 @@ impl<'a> ScheduleJobStatusLogService<'a> {
         };
 
         let result = self
-            .schedule_job_status_log_dao
+            .schedule_status_log_dao
             .update(model)
             .await
             .map_err(|err| {
@@ -116,7 +112,7 @@ impl<'a> ScheduleJobStatusLogService<'a> {
 
     /// 更新数据状态
     pub async fn status(&self, id: i32, status: i8) -> Result<(), ErrorMsg> {
-        self.schedule_job_status_log_dao
+        self.schedule_status_log_dao
             .status(id, status)
             .await
             .map_err(|err| {
@@ -138,7 +134,7 @@ impl<'a> ScheduleJobStatusLogService<'a> {
     /// 删除数据
     pub async fn delete(&self, id: i32) -> Result<u64, ErrorMsg> {
         let result = self
-            .schedule_job_status_log_dao
+            .schedule_status_log_dao
             .delete(id)
             .await
             .map_err(|err| {

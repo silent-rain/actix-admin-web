@@ -1,11 +1,11 @@
-//! 任务调度管理
+//! 任务调度作业管理
 use crate::{
     dao::schedule_job::ScheduleJobDao,
     dto::schedule_job::{AddcheduleJobReq, GetScheduleJobReq, UpdatecheduleJobReq},
 };
 
 use code::{Error, ErrorMsg};
-use entity::schedule_job;
+use entity::schedule::schedule_job;
 
 use nject::injectable;
 use sea_orm::{DbErr::RecordNotUpdated, Set};
@@ -40,10 +40,10 @@ impl<'a> ScheduleJobService<'a> {
             .info(id)
             .await
             .map_err(|err| {
-                error!("查询任务调度信息失败, err: {:#?}", err);
+                error!("查询任务调度作业失败, err: {:#?}", err);
                 Error::DbQueryError
                     .into_msg()
-                    .with_msg("查询任务调度信息失败")
+                    .with_msg("查询任务调度作业失败")
             })?
             .ok_or_else(|| {
                 error!("任务调度不存在");
@@ -63,10 +63,10 @@ impl<'a> ScheduleJobService<'a> {
             .info_by_name(req.name.clone())
             .await
             .map_err(|err| {
-                error!("查询任务调度信息失败, err: {:#?}", err);
+                error!("查询任务调度作业失败, err: {:#?}", err);
                 Error::DbQueryError
                     .into_msg()
-                    .with_msg("查询任务调度信息失败")
+                    .with_msg("查询任务调度作业失败")
             })?;
         if job.is_some() {
             error!("任务调度已存在");
@@ -87,10 +87,10 @@ impl<'a> ScheduleJobService<'a> {
             ..Default::default()
         };
         let result = self.schedule_job_dao.add(model).await.map_err(|err| {
-            error!("添加任务调度信息失败, err: {:#?}", err);
+            error!("添加任务调度作业失败, err: {:#?}", err);
             Error::DbAddError
                 .into_msg()
-                .with_msg("添加任务调度信息失败")
+                .with_msg("添加任务调度作业失败")
         })?;
 
         Ok(result)
@@ -148,10 +148,10 @@ impl<'a> ScheduleJobService<'a> {
         }
 
         let result = self.schedule_job_dao.delete(id).await.map_err(|err| {
-            error!("删除任务调度信息失败, err: {:#?}", err);
+            error!("删除任务调度作业失败, err: {:#?}", err);
             Error::DbDeleteError
                 .into_msg()
-                .with_msg("删除任务调度信息失败")
+                .with_msg("删除任务调度作业失败")
         })?;
 
         Ok(result)

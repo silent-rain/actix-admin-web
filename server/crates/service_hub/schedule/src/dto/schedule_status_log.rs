@@ -1,6 +1,6 @@
 //! 任务调度状态日志管理
 
-use entity::schedule_job_status_log;
+use entity::schedule::schedule_status_log;
 
 use actix_validator::Validate;
 
@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 /// 查询任务调度状态日志列表
 #[derive(Default, Deserialize)]
-pub struct GetScheduleJobStatusListLogReq {
+pub struct GetScheduleStatusLogListLogReq {
     /// 当前分页
     pub page: u64,
     /// 页面大小
@@ -25,7 +25,7 @@ pub struct GetScheduleJobStatusListLogReq {
 
 /// 添加任务调度状态日志
 #[derive(Clone, Serialize, Deserialize, Validate)]
-pub struct AddScheduleJobStatusLogReq {
+pub struct AddScheduleStatusLogReq {
     /// 任务ID
     pub job_id: i32,
     /// 任务调度ID
@@ -34,7 +34,7 @@ pub struct AddScheduleJobStatusLogReq {
 
 /// 更新任务调度状态日志
 #[derive(Clone, Serialize, Deserialize, Validate)]
-pub struct UpdateScheduleJobStatusLogReq {
+pub struct UpdateScheduleStatusLogReq {
     /// 任务ID
     pub job_id: i32,
     /// 任务调度ID
@@ -44,12 +44,12 @@ pub struct UpdateScheduleJobStatusLogReq {
     /// 耗时,毫秒
     pub cost: u64,
     /// 任务状态,0:失败,1:成功
-    pub status: schedule_job_status_log::enums::Status,
+    pub status: schedule_status_log::enums::Status,
 }
 
 /// 更新数据状态
 #[derive(Debug, PartialEq, Serialize, Deserialize, Validate)]
-pub struct UpdateScheduleJobStatusLogSatausReq {
+pub struct UpdateScheduleStatusLogSatausReq {
     /// 任务状态,0:失败,1:成功
-    pub status: schedule_job_status_log::enums::Status,
+    pub status: schedule_status_log::enums::Status,
 }

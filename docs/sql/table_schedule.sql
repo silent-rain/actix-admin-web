@@ -1,7 +1,7 @@
 /*
 任务调度相关
  */
--- 任务调度信息表
+-- 任务调度作业表
 CREATE TABLE IF NOT EXISTS
   `t_schedule_job` (
     `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
@@ -17,11 +17,11 @@ CREATE TABLE IF NOT EXISTS
     `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE KEY `uk_name` (`name`) USING BTREE
-  ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '任务调度信息表';
+  ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '任务调度作业表';
 
 -- 任务调度状态日志表
 CREATE TABLE IF NOT EXISTS
-  `t_schedule_job_status_log` (
+  `t_schedule_status_log` (
     `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '状态日志ID',
     `job_id` INT(11) NOT NULL COMMENT '任务ID',
     `uuid` VARCHAR(50) NOT NULL COMMENT '任务调度ID',
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS
 
 -- 任务调度事件日志表
 CREATE TABLE IF NOT EXISTS
-  `t_schedule_job_event_log` (
+  `t_schedule_event_log` (
     `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '事件日志ID',
     `job_id` INT(11) NOT NULL COMMENT '任务ID',
     `uuid` VARCHAR(50) NOT NULL COMMENT '任务调度ID',

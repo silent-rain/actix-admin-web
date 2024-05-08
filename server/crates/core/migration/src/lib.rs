@@ -21,9 +21,9 @@ mod m20240218_161916_create_sys_dict_data;
 mod m20240218_161916_create_sys_dict_dimension;
 mod m20240218_161916_create_sys_image_captcha;
 mod m20240218_161916_create_sys_image_resource;
+mod m20240415_161916_create_schedule_event_log;
 mod m20240415_161916_create_schedule_job;
-mod m20240415_161916_create_schedule_job_event_log;
-mod m20240415_161916_create_schedule_job_status_log;
+mod m20240415_161916_create_schedule_status_log;
 
 pub struct Migrator;
 
@@ -57,10 +57,10 @@ impl MigratorTrait for Migrator {
             Box::new(m20240218_161916_create_sys_dict_dimension::Migration),
             Box::new(m20240218_161916_create_sys_image_captcha::Migration),
             Box::new(m20240218_161916_create_sys_image_resource::Migration),
-            // 任务调度管理
+            // 任务调度作业管理
             Box::new(m20240415_161916_create_schedule_job::Migration),
-            Box::new(m20240415_161916_create_schedule_job_status_log::Migration),
-            Box::new(m20240415_161916_create_schedule_job_event_log::Migration),
+            Box::new(m20240415_161916_create_schedule_status_log::Migration),
+            Box::new(m20240415_161916_create_schedule_event_log::Migration),
         ]
     }
 }

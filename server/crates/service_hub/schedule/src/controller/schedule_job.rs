@@ -1,4 +1,4 @@
-//! 任务调度管理
+//! 任务调度作业管理
 
 use crate::{
     dto::schedule_job::{
@@ -33,7 +33,7 @@ impl ScheduleJobController {
         }
     }
 
-    /// 获取任务调度信息
+    /// 获取任务调度作业
     pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
         let schedule_job_service: ScheduleJobService = provider.provide();
         let resp = schedule_job_service.info(*id).await;
