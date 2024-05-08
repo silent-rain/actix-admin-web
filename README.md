@@ -143,6 +143,7 @@ t_member_level — 会员等级表 (MemberLevel)
 t_audit_api_operation_log — API操作日志表 (ApiOperationLog)
 t_audit_system_log — 系统日志表 (SystemLog)
 t_audit_web_log — WEB日志表 (WebLog)
+t_audit_user_login_log — 用户登录日志表
 
 任务调度与后台作业：
 t_task_scheduled — 调度任务表 (ScheduledTask)

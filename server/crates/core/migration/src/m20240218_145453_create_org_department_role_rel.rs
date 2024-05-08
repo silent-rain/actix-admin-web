@@ -1,8 +1,7 @@
 //! 部门角色关系表
-//! Entity: [`entity::prelude::PermDepartmentRoleRel`]
+//! Entity: [`entity::organization::DepartmentRoleRel`]
 use crate::{
-    m20240218_145453_create_perm_department::PermDepartment,
-    m20240218_145453_create_perm_role::PermRole,
+    m20240218_145453_create_org_department::Department, m20240218_145453_create_perm_role::PermRole,
 };
 
 use sea_orm::{
@@ -21,11 +20,11 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(PermDepartmentRoleRel::Table)
+                    .table(DepartmentRoleRel::Table)
                     .comment("部门角色关系表")
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(PermDepartmentRoleRel::Id)
+                        ColumnDef::new(DepartmentRoleRel::Id)
                             .integer()
                             .primary_key()
                             .auto_increment()
@@ -33,19 +32,19 @@ impl MigrationTrait for Migration {
                             .comment("自增ID"),
                     )
                     .col(
-                        ColumnDef::new(PermDepartmentRoleRel::DepartmentId)
+                        ColumnDef::new(DepartmentRoleRel::DepartmentId)
                             .integer()
                             .not_null()
                             .comment("部门ID"),
                     )
                     .col(
-                        ColumnDef::new(PermDepartmentRoleRel::RoleId)
+                        ColumnDef::new(DepartmentRoleRel::RoleId)
                             .integer()
                             .not_null()
                             .comment("角色ID"),
                     )
                     .col(
-                        ColumnDef::new(PermDepartmentRoleRel::CreatedAt)
+                        ColumnDef::new(DepartmentRoleRel::CreatedAt)
                             .date_time()
                             .not_null()
                             .default(Expr::current_timestamp())
@@ -57,7 +56,7 @@ impl MigrationTrait for Migration {
 
         if !manager
             .has_index(
-                PermDepartmentRoleRel::Table.to_string(),
+                DepartmentRoleRel::Table.to_string(),
                 "uk_department_id_role_id",
             )
             .await?
@@ -66,11 +65,11 @@ impl MigrationTrait for Migration {
                 .create_index(
                     Index::create()
                         .if_not_exists()
-                        .table(PermDepartmentRoleRel::Table)
+                        .table(DepartmentRoleRel::Table)
                         .name("uk_department_id_role_id")
                         .unique()
-                        .col(PermDepartmentRoleRel::DepartmentId)
-                        .col(PermDepartmentRoleRel::RoleId)
+                        .col(DepartmentRoleRel::DepartmentId)
+                        .col(DepartmentRoleRel::RoleId)
                         .to_owned(),
                 )
                 .await?;
@@ -78,7 +77,7 @@ impl MigrationTrait for Migration {
 
         if !manager
             .has_index(
-                PermDepartmentRoleRel::Table.to_string(),
+                DepartmentRoleRel::Table.to_string(),
                 "fk_perm_department_role_rel_department_id",
             )
             .await?
@@ -87,11 +86,8 @@ impl MigrationTrait for Migration {
                 .create_foreign_key(
                     ForeignKey::create()
                         .name("fk_perm_department_role_rel_department_id")
-                        .from(
-                            PermDepartmentRoleRel::Table,
-                            PermDepartmentRoleRel::DepartmentId,
-                        )
-                        .to(PermDepartment::Table, PermDepartment::Id)
+                        .from(DepartmentRoleRel::Table, DepartmentRoleRel::DepartmentId)
+                        .to(Department::Table, Department::Id)
                         .on_update(ForeignKeyAction::Cascade)
                         .on_delete(ForeignKeyAction::Cascade)
                         .to_owned(),
@@ -101,7 +97,7 @@ impl MigrationTrait for Migration {
 
         if !manager
             .has_index(
-                PermDepartmentRoleRel::Table.to_string(),
+                DepartmentRoleRel::Table.to_string(),
                 "fk_perm_department_role_rel_role_id",
             )
             .await?
@@ -110,7 +106,7 @@ impl MigrationTrait for Migration {
                 .create_foreign_key(
                     ForeignKey::create()
                         .name("fk_perm_department_role_rel_role_id")
-                        .from(PermDepartmentRoleRel::Table, PermDepartmentRoleRel::RoleId)
+                        .from(DepartmentRoleRel::Table, DepartmentRoleRel::RoleId)
                         .to(PermRole::Table, PermRole::Id)
                         .on_update(ForeignKeyAction::Cascade)
                         .on_delete(ForeignKeyAction::Cascade)
@@ -125,13 +121,13 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
         manager
-            .drop_table(Table::drop().table(PermDepartmentRoleRel::Table).to_owned())
+            .drop_table(Table::drop().table(DepartmentRoleRel::Table).to_owned())
             .await
     }
 }
 
 #[derive(DeriveIden)]
-pub enum PermDepartmentRoleRel {
+pub enum DepartmentRoleRel {
     #[sea_orm(iden = "t_org_department_role_rel")]
     Table,
     Id,
