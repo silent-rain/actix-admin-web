@@ -4,7 +4,7 @@ use crate::{
 };
 
 use system::CaptchaDao;
-use user::{EmailDao, UserPhoneDao};
+use user::{EmailDao, PhoneDao};
 
 use code::{Error, ErrorMsg};
 use entity::user_base;
@@ -17,7 +17,7 @@ use tracing::error;
 #[injectable]
 pub struct RegisterService<'a> {
     email_dao: EmailDao<'a>,
-    user_phone_dao: UserPhoneDao<'a>,
+    phone_dao: PhoneDao<'a>,
     register_dao: RegisterDao<'a>,
     captcha_dao: CaptchaDao<'a>,
 }
@@ -56,15 +56,11 @@ impl<'a> RegisterService<'a> {
         // TODO 检测手机验证码, 待接入第三方服务
 
         // 检测是否已注册用户
-        let user = self
-            .user_phone_dao
-            .info_by_phone(phone)
-            .await
-            .map_err(|err| {
-                error!("查询用户信息失败, err: {:#?}", err);
-                Error::DbQueryError.into_msg().with_msg("查询用户信息失败")
-            })?;
-        if user.is_some() {
+        let phone = self.phone_dao.info_by_phone(phone).await.map_err(|err| {
+            error!("查询用户信息失败, err: {:#?}", err);
+            Error::DbQueryError.into_msg().with_msg("查询用户信息失败")
+        })?;
+        if phone.is_some() {
             {
                 error!("该手机号码已注册");
                 return Err(code::Error::DbDataExistError

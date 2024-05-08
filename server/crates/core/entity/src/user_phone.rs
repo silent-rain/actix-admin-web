@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 /// 用户手机号表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "t_perm_user_phone")]
+#[sea_orm(table_name = "t_user_phone")]
 pub struct Model {
     /// 手机号ID
     #[sea_orm(primary_key)]

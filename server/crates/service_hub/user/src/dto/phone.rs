@@ -8,7 +8,7 @@ use validator::ValidationError;
 
 /// 查询用户手机号列表
 #[derive(Default, Deserialize, Validate)]
-pub struct GetUserPhoneListReq {
+pub struct GetPhoneListReq {
     /// 当前分页
     pub page: u64,
     /// 页面大小
@@ -25,7 +25,7 @@ pub struct GetUserPhoneListReq {
 
 /// 添加用户手机号
 #[derive(Serialize, Deserialize, Validate)]
-pub struct AddUserPhoneReq {
+pub struct AddPhoneReq {
     /// 用户ID
     pub user_id: i32,
     /// 手机号码
@@ -37,7 +37,7 @@ pub struct AddUserPhoneReq {
 
 /// 更新用户手机号
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
-pub struct UpdateUserPhoneReq {
+pub struct UpdatePhoneReq {
     /// 手机号码
     #[validate(custom(function = "validate_phone"))]
     pub phone: String,

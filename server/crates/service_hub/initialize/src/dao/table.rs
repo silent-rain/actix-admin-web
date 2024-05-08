@@ -5,7 +5,7 @@ use crate::dto::table::TableSql;
 
 use database::DbRepo;
 use entity::{
-    perm_menu_role_rel, perm_openapi_role_rel, perm_role, perm_user_phone, perm_user_role_rel,
+    perm_menu_role_rel, perm_openapi_role_rel, perm_role, user_phone, perm_user_role_rel,
     prelude::{PermMenu, PermMenuRoleRel, PermOpenapi, PermOpenapiRoleRel, PermRole, UserBase},
     user_base, user_email,
 };
@@ -110,8 +110,8 @@ impl<'a> TableDao<'a> {
         txn: &DatabaseTransaction,
         user_id: i32,
         phone: String,
-    ) -> Result<perm_user_phone::Model, DbErr> {
-        let active_model = perm_user_phone::ActiveModel {
+    ) -> Result<user_phone::Model, DbErr> {
+        let active_model = user_phone::ActiveModel {
             user_id: Set(user_id),
             phone: Set(phone),
             ..Default::default()

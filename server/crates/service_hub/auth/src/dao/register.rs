@@ -1,7 +1,7 @@
 //! 注册
 
 use database::DbRepo;
-use entity::{user_email, perm_user_phone, user_base};
+use entity::{user_email, user_phone, user_base};
 
 use nject::injectable;
 use sea_orm::{ActiveModelTrait, DatabaseTransaction, DbErr, Set, TransactionTrait};
@@ -60,8 +60,8 @@ impl<'a> RegisterDao<'a> {
         txn: &DatabaseTransaction,
         user_id: i32,
         phone: String,
-    ) -> Result<perm_user_phone::Model, DbErr> {
-        let active_model = perm_user_phone::ActiveModel {
+    ) -> Result<user_phone::Model, DbErr> {
+        let active_model = user_phone::ActiveModel {
             user_id: Set(user_id),
             phone: Set(phone),
             ..Default::default()

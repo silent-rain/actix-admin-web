@@ -1,8 +1,8 @@
 //! 路由层
 
 pub mod email;
+pub mod phone;
 pub mod user_base;
-pub mod user_phone;
 pub mod user_role_rel;
 
 use actix_web::{web, Scope};
@@ -17,7 +17,7 @@ impl UserRouter {
             // 用户信息管理
             .service(user_base::UserBaseRouter::admin_register())
             // 用户手机号管理
-            .service(user_phone::UserPhoneRouter::admin_register())
+            .service(phone::PhoneRouter::admin_register())
             // 用户邮箱管理
             .service(email::EmailRouter::admin_register())
             // 用户角色关系管理

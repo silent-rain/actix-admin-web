@@ -7,7 +7,7 @@ use crate::{
 
 use log::UserLoginDao;
 use system::CaptchaDao;
-use user::{UserBaseDao, EmailDao, UserPhoneDao};
+use user::{EmailDao, PhoneDao, UserBaseDao};
 
 use code::{Error, ErrorMsg};
 use entity::{log_user_login, user_base};
@@ -22,7 +22,7 @@ use tracing::error;
 pub struct LoginService<'a> {
     user_dao: UserBaseDao<'a>,
     email_dao: EmailDao<'a>,
-    user_phone_dao: UserPhoneDao<'a>,
+    phone_dao: PhoneDao<'a>,
     user_login_dao: UserLoginDao<'a>,
     captcha_dao: CaptchaDao<'a>,
 }
@@ -133,7 +133,7 @@ impl<'a> LoginService<'a> {
         };
 
         let user = self
-            .user_phone_dao
+            .phone_dao
             .info_by_phone(phone)
             .await
             .map_err(|err| {
