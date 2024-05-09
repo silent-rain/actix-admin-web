@@ -2197,6 +2197,7 @@ dependencies = [
  "serde_repr",
  "tracing",
  "uap-rust",
+ "utils",
  "validator",
 ]
 
@@ -4698,6 +4699,7 @@ dependencies = [
  "serde_json",
  "sha2",
  "tracing",
+ "uap-rust",
 ]
 
 [[package]]

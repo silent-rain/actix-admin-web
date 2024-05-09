@@ -16,6 +16,7 @@ use jwt::encode_token;
 use nject::injectable;
 use sea_orm::Set;
 use tracing::error;
+use utils::browser::parse_user_agent;
 
 /// 服务层
 #[injectable]
@@ -46,11 +47,12 @@ impl<'a> LoginService<'a> {
         let user = self.get_user(data.clone()).await?;
         // 检查用户是否被禁用
         if user.status == user_base::enums::Status::Disabled as i8 {
-            // 添加失败登陆日志
+            // 添加登陆日志
             self.add_login_log(
-                browser_info,
                 user.clone(),
+                browser_info,
                 "".to_owned(),
+                Some("用户已被禁用".to_owned()),
                 log_user_login::enums::Status::Failed,
             )
             .await?;
@@ -63,9 +65,10 @@ impl<'a> LoginService<'a> {
         if user.password != data.password {
             // 添加失败登陆日志
             self.add_login_log(
-                browser_info,
                 user.clone(),
+                browser_info,
                 "".to_owned(),
+                Some("账号或密码错误".to_owned()),
                 log_user_login::enums::Status::Failed,
             )
             .await?;
@@ -83,9 +86,10 @@ impl<'a> LoginService<'a> {
 
         // 添加登陆日志
         self.add_login_log(
-            browser_info,
             user.clone(),
+            browser_info,
             token.clone(),
+            None,
             log_user_login::enums::Status::Success,
         )
         .await?;
@@ -181,11 +185,18 @@ impl<'a> LoginService<'a> {
     /// 添加登陆日志
     async fn add_login_log(
         &self,
-        browser_info: BrowserInfo,
         user: user_base::Model,
+        browser_info: BrowserInfo,
         token: String,
+        desc: Option<String>,
         status: log_user_login::enums::Status,
     ) -> Result<log_user_login::Model, ErrorMsg> {
+        let (device, system, browser) =
+            parse_user_agent(browser_info.user_agent.clone()).map_err(|err| {
+                error!("User-Agent解析错误, err: {:#?}", err);
+                Error::UserAgentParserError(err)
+            })?;
+
         let data = log_user_login::ActiveModel {
             user_id: Set(user.id),
             username: Set(user.username),
@@ -193,7 +204,10 @@ impl<'a> LoginService<'a> {
             remote_addr: Set(browser_info.remote_addr),
             user_agent: Set(browser_info.user_agent),
             status: Set(status as i8),
-            disabled: Set(log_user_login::enums::DisabledStatus::Enabled as i8),
+            device: Set(Some(device)),
+            system: Set(Some(system)),
+            browser: Set(Some(browser)),
+            desc: Set(desc),
             ..Default::default()
         };
 

@@ -9,6 +9,7 @@ entity = { path = "../../core/entity" }
 code = { path = "../../core/code" }
 response = { path = "../../core/response" }
 actix_validator = { path = "../../core/actix_validator" }
+utils = { path = "../../core/utils" }
 
 inject = { path = "../../inject" }
 

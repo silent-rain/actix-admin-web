@@ -11,8 +11,8 @@ CREATE TABLE IF NOT EXISTS
         `device` VARCHAR(20) NULL DEFAULT '' COMMENT '设备',
         `system` VARCHAR(20) NULL DEFAULT '' COMMENT '系统',
         `browser` VARCHAR(20) NULL DEFAULT '' COMMENT '浏览器',
-        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '登录状态(0:失败,1:成功)',
-        `is_disabled` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否被禁用(0: 有效, 1: 被禁用)',
+        `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '描述信息',
+        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '登录状态(0:登陆成功,1:登陆失败,2: 已禁用)',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`)

@@ -14,3 +14,4 @@ tracing = { workspace = true }
 captcha-rs = { workspace = true }
 sha2 = { workspace = true }
 rust-embed = { workspace = true, features = ["mime-guess"] }
+uap-rust = { workspace = true }

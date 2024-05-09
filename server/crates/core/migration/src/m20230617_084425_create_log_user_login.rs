@@ -89,18 +89,19 @@ impl MigrationTrait for Migration {
                             .comment("浏览器"),
                     )
                     .col(
+                        ColumnDef::new(LogUserLogin::Desc)
+                            .string()
+                            .string_len(200)
+                            .null()
+                            .default("")
+                            .comment("描述信息"),
+                    )
+                    .col(
                         ColumnDef::new(LogUserLogin::Status)
                             .tiny_integer()
                             .not_null()
                             .default(1)
-                            .comment("登录状态(0:失败,1:成功)"),
-                    )
-                    .col(
-                        ColumnDef::new(LogUserLogin::Disabled)
-                            .tiny_integer()
-                            .not_null()
-                            .default(0)
-                            .comment("禁用状态,0:未禁用,1:禁用"),
+                            .comment("登录状态(0:登陆成功,1:登陆失败,2: 已禁用)"),
                     )
                     .col(
                         ColumnDef::new(LogUserLogin::CreatedAt)
@@ -147,8 +148,8 @@ pub enum LogUserLogin {
     Device,
     System,
     Browser,
+    Desc,
     Status,
-    Disabled,
     CreatedAt,
     UpdatedAt,
 }

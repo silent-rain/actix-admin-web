@@ -1,16 +1,16 @@
-//! 系统日志
+//! 登陆日志管理
 use crate::{
     dao::user_login::UserLoginDao,
-    dto::user_login::{AddUserLoginInfoReq, GetUserLoginListReq},
+    dto::user_login::{AddUserLoginInfoReq, GetUserLoginListReq, UpdateUserLoginInfoReq},
 };
 
 use code::{Error, ErrorMsg};
 use entity::log_user_login;
+use utils::browser::parse_user_agent;
 
 use nject::injectable;
 use sea_orm::Set;
 use tracing::error;
-use uap_rust::parser::Parser;
 
 /// 服务层
 #[injectable]
@@ -85,32 +85,24 @@ impl<'a> UserLoginService<'a> {
     }
 
     /// 添加数据
-    pub async fn add(&self, data: AddUserLoginInfoReq) -> Result<log_user_login::Model, ErrorMsg> {
-        let (device, system, browser) = match Parser::new() {
-            Ok(p) => {
-                let client = p.parse(data.user_agent.clone());
-                let device = client.device.family;
-                let system = client.os.family;
-                let browser = client.user_agent.family;
-                (device, system, browser)
-            }
-            Err(err) => {
+    pub async fn add(&self, req: AddUserLoginInfoReq) -> Result<log_user_login::Model, ErrorMsg> {
+        let (device, system, browser) =
+            parse_user_agent(req.user_agent.clone()).map_err(|err| {
                 error!("User-Agent解析错误, err: {:#?}", err);
-                ("".to_owned(), "".to_owned(), "".to_owned())
-            }
-        };
+                Error::UserAgentParserError(err)
+            })?;
 
         let model = log_user_login::ActiveModel {
-            user_id: Set(data.user_id),
-            username: Set(data.username),
-            token: Set(data.token),
-            remote_addr: Set(data.remote_addr),
-            user_agent: Set(data.user_agent),
+            user_id: Set(req.user_id),
+            username: Set(req.username),
+            token: Set(req.token),
+            remote_addr: Set(req.remote_addr),
+            user_agent: Set(req.user_agent),
             device: Set(Some(device)),
             system: Set(Some(system)),
             browser: Set(Some(browser)),
-            status: Set(data.status as i8),
-            disabled: Set(log_user_login::enums::DisabledStatus::Enabled as i8),
+            desc: Set(req.desc),
+            status: Set(req.status as i8),
             ..Default::default()
         };
         let result = self.user_login_dao.add(model).await.map_err(|err| {
@@ -118,6 +110,25 @@ impl<'a> UserLoginService<'a> {
             Error::DbAddError
                 .into_msg()
                 .with_msg("添加登陆日志信息失败")
+        })?;
+
+        Ok(result)
+    }
+
+    /// 更新数据
+    pub async fn update(&self, id: i32, req: UpdateUserLoginInfoReq) -> Result<u64, ErrorMsg> {
+        let model = log_user_login::ActiveModel {
+            id: Set(id),
+            desc: Set(req.desc),
+            status: Set(req.status as i8),
+            ..Default::default()
+        };
+
+        let result = self.user_login_dao.update(model).await.map_err(|err| {
+            error!("更新登陆日志信息失败, err: {:#?}", err);
+            Error::DbUpdateError
+                .into_msg()
+                .with_msg("更新登陆日志信息失败")
         })?;
 
         Ok(result)
@@ -133,21 +144,6 @@ impl<'a> UserLoginService<'a> {
                 Error::DbUpdateError
                     .into_msg()
                     .with_msg("更新登录日志状态失败")
-            })?;
-
-        Ok(())
-    }
-
-    /// 更新登录日志禁用状态
-    pub async fn disabled(&self, id: i32, disabled: i8) -> Result<(), ErrorMsg> {
-        self.user_login_dao
-            .disabled(id, disabled)
-            .await
-            .map_err(|err| {
-                error!("更新登录日志禁用状态失败, err: {:#?}", err);
-                Error::DbUpdateError
-                    .into_msg()
-                    .with_msg("更新登录日志禁用状态失败")
             })?;
 
         Ok(())
