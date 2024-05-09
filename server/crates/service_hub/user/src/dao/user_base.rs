@@ -59,9 +59,21 @@ impl<'a> UserBaseDao<'a> {
 
         Ok((results, total))
     }
+
     /// 获取详情信息
     pub async fn info(&self, id: i32) -> Result<Option<user_base::Model>, DbErr> {
         UserBase::find_by_id(id).one(self.db.rdb()).await
+    }
+
+    /// 通过用户名获取详情信息
+    pub async fn info_by_username(
+        &self,
+        username: String,
+    ) -> Result<Option<user_base::Model>, DbErr> {
+        UserBase::find()
+            .filter(user_base::Column::Username.eq(username))
+            .one(self.db.rdb())
+            .await
     }
 
     /// 添加详情信息

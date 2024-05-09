@@ -16,6 +16,10 @@ pub struct RegisterReq {
     /// 邮箱
     pub email: Option<String>,
 
+    /// 密码
+    #[validate(length(min = 6, message = "密码至少需要6个字符"))]
+    pub password: String,
+
     // ==== 基础信息 ====
     /// 用户名称
     #[validate(length(min = 5, max = 20, message = "用户名必须在5到20个字符之间"))]
@@ -32,9 +36,6 @@ pub struct RegisterReq {
     pub age: Option<i32>,
     /// 出生日期
     pub date_birth: Option<String>,
-    /// 密码
-    #[validate(length(min = 6, message = "密码至少需要6个字符"))]
-    pub password: String,
     /// 头像URL
     pub avatar: Option<String>,
 

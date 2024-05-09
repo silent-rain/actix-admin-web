@@ -4,7 +4,7 @@ use crate::{
 };
 
 use system::ImageCaptchaDao;
-use user::{EmailDao, PhoneDao};
+use user::{EmailDao, PhoneDao, UserBaseDao};
 
 use code::{Error, ErrorMsg};
 use entity::user::user_base;
@@ -16,6 +16,7 @@ use tracing::error;
 /// 服务层
 #[injectable]
 pub struct RegisterService<'a> {
+    user_dao: UserBaseDao<'a>,
     email_dao: EmailDao<'a>,
     phone_dao: PhoneDao<'a>,
     register_dao: RegisterDao<'a>,
@@ -32,6 +33,9 @@ impl<'a> RegisterService<'a> {
             data.captcha.clone(),
         )
         .await?;
+
+        // 检查用户名, 查看用户名是否已注册
+        self.check_username(data.username.clone()).await?;
 
         // 根据不同注册类型进行注册
         match data.register_type {
@@ -120,5 +124,21 @@ impl<'a> RegisterService<'a> {
         // TODO 邮箱验证, 发送链接点击后确认
 
         Ok(result)
+    }
+
+    /// 检查用户名, 查看用户名是否已注册
+    async fn check_username(&self, username: String) -> Result<(), ErrorMsg> {
+        let result = self
+            .user_dao
+            .info_by_username(username)
+            .await
+            .map_err(|err| {
+                error!("查询用户信息失败, err: {:#?}", err);
+                Error::DbQueryError.into_msg().with_msg("查询用户信息失败")
+            })?;
+        if result.is_some() {
+            return Err(Error::UserAddError.into_msg().with_msg("用户名已存在"));
+        }
+        Ok(())
     }
 }

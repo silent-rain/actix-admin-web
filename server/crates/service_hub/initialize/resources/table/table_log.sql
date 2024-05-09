@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS
         `module_path` VARCHAR(100) NULL DEFAULT '' COMMENT '模块路径',
         `target` VARCHAR(100) NULL DEFAULT '' COMMENT '描述发生此元数据所描述的跨度或事件的系统部分',
         `file` VARCHAR(500) NULL DEFAULT '' COMMENT '文件',
-        `line` INT(10) NULL DEFAULT 0 COMMENT '报错行数',
+        `line` INT(10) UNSIGNED NULL DEFAULT 0 COMMENT '报错行数',
         `level` VARCHAR(10) NOT NULL DEFAULT '' COMMENT '日志级别',
         `kind` VARCHAR(10) NOT NULL DEFAULT '' COMMENT '事件类型',
         `is_event` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否为事件',

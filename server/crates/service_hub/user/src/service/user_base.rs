@@ -109,6 +109,9 @@ impl<'a> UserBaseService<'a> {
 impl<'a> UserBaseService<'a> {
     /// 后台添加用户信息及对应用户信息的角色
     pub async fn add(&self, data: AddUserBaseReq) -> Result<user_base::Model, ErrorMsg> {
+        // 检查用户名, 查看用户名是否已注册
+        self.check_username(data.username.clone()).await?;
+
         // 密码加密
         let password = sha2_256(&data.password);
 
@@ -142,8 +145,27 @@ impl<'a> UserBaseService<'a> {
         Ok(result)
     }
 
+    /// 检查用户名, 查看用户名是否已注册
+    async fn check_username(&self, username: String) -> Result<(), ErrorMsg> {
+        let result = self
+            .user_base_dao
+            .info_by_username(username)
+            .await
+            .map_err(|err| {
+                error!("查询用户信息失败, err: {:#?}", err);
+                Error::DbQueryError.into_msg().with_msg("查询用户信息失败")
+            })?;
+        if result.is_some() {
+            return Err(Error::UserAddError.into_msg().with_msg("用户名已存在"));
+        }
+        Ok(())
+    }
+
     /// 后台更新用户信息及对应用户信息的角色
     pub async fn update(&self, id: i32, data: UpdateUserBaseReq) -> Result<(), ErrorMsg> {
+        // 检查用户名, 查看用户名是否已注册
+        self.check_username(data.username.clone()).await?;
+
         // 获取原角色列表
         let (user_role_rels, _) =
             self.user_role_rel_dao
