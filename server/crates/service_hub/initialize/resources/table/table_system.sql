@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS
         `captcha` VARCHAR(10) NOT NULL COMMENT '验证码',
         `data` MEDIUMBLOB NOT NULL COMMENT '图片数据, Base64编码',
         `expire` INT(4) UNSIGNED NOT NULL DEFAULT 1 COMMENT '过期时间,秒',
-        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态(0:无效,1:有效)',
+        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态(0:失效,1:有效)',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`)

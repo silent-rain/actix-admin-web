@@ -63,9 +63,9 @@ pub mod enums {
     #[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
     #[repr(i8)]
     pub enum Status {
-        /// 成功
+        /// 登陆成功
         Success = 0,
-        /// 失败
+        /// 登陆失败
         Failed = 1,
         /// 已禁用
         Disabled = 2,
