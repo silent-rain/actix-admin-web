@@ -53,6 +53,7 @@ mod tests {
 
     #[test]
     fn test_str_to_local_date_time() {
+        #[warn(dead_code)]
         #[derive(Debug, Deserialize)]
         pub struct AddUserTokenReq {
             #[serde(
