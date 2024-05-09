@@ -10,7 +10,7 @@ pub struct ScheduleStatusLogRouter;
 impl ScheduleStatusLogRouter {
     /// 注册`任务调度状态日志管理`路由
     pub fn admin_register() -> Scope {
-        web::scope("/event-logs")
+        web::scope("/status-logs")
             .route("", web::get().to(ScheduleStatusLogController::list))
             .route("/{id}", web::get().to(ScheduleStatusLogController::info))
         // .route("", web::post().to(ScheduleJobLogController::add))

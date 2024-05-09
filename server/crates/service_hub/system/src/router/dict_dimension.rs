@@ -10,7 +10,7 @@ pub struct DictDimensionRouter;
 impl DictDimensionRouter {
     /// 注册`字典维度管理`路由
     pub fn admin_register() -> Scope {
-        web::scope("/dict-dims")
+        web::scope("/dict-dimensions")
             .route("", web::get().to(DictDimensionController::list))
             .route("/{id}", web::get().to(DictDimensionController::info))
             .route("", web::post().to(DictDimensionController::add))

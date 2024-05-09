@@ -10,7 +10,7 @@ pub struct UserBaseRouter;
 impl UserBaseRouter {
     /// 注册`用户信息管理`路由
     pub fn admin_register() -> Scope {
-        web::scope("/user-base")
+        web::scope("/base")
             .route("/profile", web::get().to(UserBaseController::profile))
             .route("", web::get().to(UserBaseController::list))
             .route("/{id}", web::get().to(UserBaseController::info))

@@ -15,8 +15,8 @@ impl SystemRouter {
     pub fn admin_register() -> Scope {
         web::scope("/system")
             .service(image_captcha::ImageCaptchaRouter::admin_register())
-            .service(config::ConfigRouter::admin_register())
             .service(image_resource::ImageResourceRouter::admin_register())
+            .service(config::ConfigRouter::admin_register())
             .service(dict_dimension::DictDimensionRouter::admin_register())
             .service(dict_data::DictDataRouter::admin_register())
     }
