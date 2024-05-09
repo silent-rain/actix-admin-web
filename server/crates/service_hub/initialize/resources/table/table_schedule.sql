@@ -1,6 +1,4 @@
-/*
-任务调度相关
- */
+/*任务调度相关*/
 -- 任务调度作业表
 CREATE TABLE IF NOT EXISTS
   `t_schedule_job` (

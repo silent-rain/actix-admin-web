@@ -5,12 +5,23 @@ use utils::asset::EmbedAssetTrait;
 
 use rust_embed::{EmbeddedFile, RustEmbed};
 
-/// 待初始化的数据库资源
+/// 库表资源
 #[derive(Debug, Clone, Default, RustEmbed)]
-#[folder = "./resources/sql"]
+#[folder = "./resources/table"]
 pub struct AssetDbTable;
 
 impl EmbedAssetTrait for AssetDbTable {
+    fn get(&self, file_path: &str) -> Option<EmbeddedFile> {
+        Self::get(file_path)
+    }
+}
+
+/// 表数据资源
+#[derive(Debug, Clone, Default, RustEmbed)]
+#[folder = "./resources/table_data"]
+pub struct AssetDbTableData;
+
+impl EmbedAssetTrait for AssetDbTableData {
     fn get(&self, file_path: &str) -> Option<EmbeddedFile> {
         Self::get(file_path)
     }

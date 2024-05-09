@@ -1,6 +1,4 @@
-/*
-权限相关的表
- */
+/*权限相关的表*/
 -- 菜单表
 CREATE TABLE IF NOT EXISTS
     `t_perm_menu` (

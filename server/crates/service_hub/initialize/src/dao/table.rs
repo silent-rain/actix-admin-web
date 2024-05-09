@@ -1,7 +1,7 @@
 //! 库表初始化
 
 use crate::dto::table::AddAdminUserReq;
-use crate::dto::table::TableSql;
+use crate::dto::table::TableDataSql;
 
 use database::DbRepo;
 use entity::{
@@ -35,11 +35,17 @@ impl<'a> TableDao<'a> {
         Ok(result)
     }
 
-    /// 获取详情信息
-    pub async fn table(
+    /// 初始化库表
+    pub async fn init_table(&self, db_sql: String) -> Result<u64, DbErr> {
+        let result: ExecResult = self.db.wdb().execute_unprepared(&db_sql).await?;
+        Ok(result.rows_affected())
+    }
+
+    /// 初始化表数据
+    pub async fn init_table_data(
         &self,
         req: AddAdminUserReq,
-        table_sql: TableSql,
+        table_sql: TableDataSql,
     ) -> Result<user_base::Model, DbErr> {
         let txn = self.db.wdb().begin().await?;
 
@@ -79,12 +85,6 @@ impl<'a> TableDao<'a> {
 
         txn.commit().await?;
         Ok(admin_user)
-    }
-
-    /// 初始化库表
-    pub async fn init_db(&self, db_sql: String) -> Result<u64, DbErr> {
-        let result: ExecResult = self.db.wdb().execute_unprepared(&db_sql).await?;
-        Ok(result.rows_affected())
     }
 
     /// 添加管理员

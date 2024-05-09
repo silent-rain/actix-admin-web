@@ -1,6 +1,4 @@
-/*
-日志相关表
- */
+/*日志相关表*/
 -- 用户登录日志表
 CREATE TABLE IF NOT EXISTS
     `t_log_user_login` (

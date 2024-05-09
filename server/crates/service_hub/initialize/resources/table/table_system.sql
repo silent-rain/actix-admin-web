@@ -1,6 +1,4 @@
-/*
-系统相关表
- */
+/*系统相关表*/
 -- 图片验证码表
 CREATE TABLE IF NOT EXISTS
     `t_sys_image_captcha` (
