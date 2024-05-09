@@ -34,7 +34,7 @@ mod tests {
     #[test]
     fn test_config() {
         let t_user_role = "t_user_role.sql";
-        let asset = AssetDbTable;
+        let asset = AssetDbTableData;
         let data = asset.get(t_user_role);
         assert!(data.is_some());
         let content = asset.to_string(t_user_role);
