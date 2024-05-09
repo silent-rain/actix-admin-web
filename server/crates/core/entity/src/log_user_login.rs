@@ -31,10 +31,10 @@ pub struct Model {
     pub system: Option<String>,
     /// 浏览器
     pub browser: Option<String>,
-    /// 登录状态,0:失败,1:成功
+    /// 描述信息
+    pub desc: Option<String>,
+    /// 登录状态
     pub status: i8,
-    /// 禁用状态,0:未禁用,1:禁用
-    pub disabled: i8,
     /// 创建时间
     pub created_at: DateTimeLocal,
     /// 更新时间
@@ -63,19 +63,11 @@ pub mod enums {
     #[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
     #[repr(i8)]
     pub enum Status {
-        /// 失败
-        Failed = 0,
-        /// 成功
-        Success = 1,
-    }
-
-    /// 用户登陆禁用状态
-    #[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
-    #[repr(i8)]
-    pub enum DisabledStatus {
-        /// 停用
-        Disabled = 0,
-        /// 正常
-        Enabled = 1,
+        /// 登陆成功
+        Success = 0,
+        /// 登陆失败
+        Failed = 1,
+        /// 已禁用
+        Disabled = 2,
     }
 }

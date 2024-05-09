@@ -18,35 +18,33 @@ pub struct Model {
     pub pid: Option<i32>,
     /// 菜单名称
     pub title: String,
-    /// Icon图标
-    pub icon: Option<String>,
-    /// Element-Icon图标
-    pub el_icon: Option<String>,
-    /// 菜单类型,0:菜单,1:按钮
+    /// Icon图标类
+    pub icon_class: Option<String>,
+    /// 菜单类型(0:菜单,1:按钮)
     pub menu_type: i8,
-    /// 打开方式,0:组件,1:内链,2:外链
-    pub open_type: i8,
+    /// 打开方式(0:组件,1:内链,2:外链)
+    pub open_method: i8,
     /// 路由地址
     pub path: Option<String>,
     /// 组件路径
-    pub component: Option<String>,
+    pub component_path: Option<String>,
     /// 路由重定向
-    pub redirect: Option<String>,
+    pub redirect_to: Option<String>,
     /// 链接地址:站内链地址/站外链地址
     pub link: Option<String>,
     /// 链接跳转方式, _blank/_self
     pub link_target: Option<String>,
-    /// 是否隐藏,0:显示,1:隐藏
-    pub hidden: Option<i8>,
-    /// 始终显示根菜单,0:显示,1:隐藏
-    pub root_always_show: Option<i8>,
+    /// 是否隐藏(0:显示,1:隐藏)
+    pub is_hidden: Option<i8>,
+    /// 是否始终显示根菜单(0:隐藏,1:显示)
+    pub is_always_show_root: Option<i8>,
     /// 权限标识
     pub permission: Option<String>,
     /// 排序
     pub sort: Option<i32>,
-    /// 备注
-    pub note: Option<String>,
-    /// 状态,0:停用,1:正常
+    /// 描述信息
+    pub desc: Option<String>,
+    /// 状态(0:停用,1:正常)
     pub status: i8,
     /// 创建时间
     pub created_at: DateTimeLocal,
@@ -107,7 +105,7 @@ pub mod enums {
     /// 菜单打开方式
     #[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
     #[repr(i8)]
-    pub enum OpenType {
+    pub enum OpenMethod {
         /// 组件
         Component = 0,
         /// 内链
@@ -139,7 +137,7 @@ pub mod enums {
     /// 菜单是否隐藏
     #[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
     #[repr(i8)]
-    pub enum Hidden {
+    pub enum IsHidden {
         /// 显示
         Visible = 0,
         /// 隐藏
@@ -149,7 +147,7 @@ pub mod enums {
     /// 始终显示根菜单
     #[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
     #[repr(i8)]
-    pub enum RootAlwaysShow {
+    pub enum IsAlwaysShowRoot {
         /// 显示
         Show = 0,
         /// 隐藏

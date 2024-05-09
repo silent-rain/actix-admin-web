@@ -1,6 +1,6 @@
 //! 定时任务示例
 use database::DbRepo;
-use entity::schedule_job;
+use entity::schedule::schedule_job;
 use scheduler::{error::Error, register::SysTaskTrait, Job};
 
 pub struct DemoTask<DB>

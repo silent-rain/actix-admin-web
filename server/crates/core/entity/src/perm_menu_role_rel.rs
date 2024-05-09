@@ -1,4 +1,4 @@
-//! 菜单角色关联表
+//! 菜单角色关系表
 
 use sea_orm::{
     prelude::DateTimeLocal, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey,
@@ -6,7 +6,7 @@ use sea_orm::{
 };
 use serde::{Deserialize, Serialize};
 
-/// 菜单角色关联表
+/// 菜单角色关系表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
 #[sea_orm(table_name = "t_perm_menu_role_rel")]
 pub struct Model {
@@ -32,13 +32,13 @@ pub enum Relation {
     )]
     PermMenu,
     #[sea_orm(
-        belongs_to = "super::perm_role::Entity",
+        belongs_to = "crate::user::user_role::Entity",
         from = "Column::RoleId",
-        to = "super::perm_role::Column::Id",
+        to = "crate::user::user_role::Column::Id",
         on_update = "Cascade",
         on_delete = "Cascade"
     )]
-    PermRole,
+    UserRole,
 }
 
 impl Related<super::perm_menu::Entity> for Entity {
@@ -47,9 +47,9 @@ impl Related<super::perm_menu::Entity> for Entity {
     }
 }
 
-impl Related<super::perm_role::Entity> for Entity {
+impl Related<super::user::user_role::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::PermRole.def()
+        Relation::UserRole.def()
     }
 }
 

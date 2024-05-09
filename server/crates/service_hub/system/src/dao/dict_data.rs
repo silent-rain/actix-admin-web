@@ -44,11 +44,11 @@ impl<'a> DictDataDao<'a> {
             .apply_if(req.lable, |query, v| {
                 query.filter(sys_dict_data::Column::Lable.like(format!("{v}%")))
             })
-            .apply_if(req.dim_id, |query, v| {
-                query.filter(sys_dict_data::Column::DimId.eq(v))
+            .apply_if(req.dimension_id, |query, v| {
+                query.filter(sys_dict_data::Column::DimensionId.eq(v))
             })
-            .apply_if(req.dim_code, |query, v| {
-                query.filter(sys_dict_data::Column::DimCode.like(format!("{v}%")))
+            .apply_if(req.dimension_code, |query, v| {
+                query.filter(sys_dict_data::Column::DimensionCode.like(format!("{v}%")))
             });
 
         let total = states.clone().count(self.db.rdb()).await?;
@@ -74,11 +74,11 @@ impl<'a> DictDataDao<'a> {
     /// 通过字典标签获取详情信息, 同一个字典维度内的字典标签需要保持唯一
     pub async fn info_by_lable(
         &self,
-        dim_id: i32,
+        dimension_id: i32,
         lable: String,
     ) -> Result<Option<sys_dict_data::Model>, DbErr> {
         SysDictData::find()
-            .filter(sys_dict_data::Column::DimId.eq(dim_id))
+            .filter(sys_dict_data::Column::DimensionId.eq(dimension_id))
             .filter(sys_dict_data::Column::Lable.eq(lable))
             .one(self.db.rdb())
             .await

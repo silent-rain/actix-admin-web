@@ -15,7 +15,9 @@ inject = { path = "../inject" }
 public = { path = "public" }
 template = { path = "template" }
 auth = { path = "auth" }
+user = { path = "user" }
 permission = { path = "permission" }
+organization = { path = "organization" }
 system = { path = "system" }
 schedule = { path = "schedule" }
 log = { path = "log" }

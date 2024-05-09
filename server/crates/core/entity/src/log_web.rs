@@ -19,7 +19,7 @@ pub struct Model {
     pub username: Option<String>,
     /// 请求ID
     pub request_id: Option<String>,
-    /// 终端类型: 0: 未知,1: 安卓,2 :ios,3 :web
+    /// 终端类型(0: 未知,1: 安卓,2 :ios,3 :web)
     pub os_type: i8,
     /// 错误类型: 1:接口报错,2:代码报错
     pub error_type: i8,
@@ -35,8 +35,8 @@ pub struct Model {
     /// 堆栈信息
     #[sea_orm(column_type = "Text", nullable)]
     pub stack: Option<String>,
-    /// 备注
-    pub note: Option<String>,
+    /// 描述信息
+    pub desc: Option<String>,
     /// 创建时间
     pub created_at: DateTimeLocal,
 }

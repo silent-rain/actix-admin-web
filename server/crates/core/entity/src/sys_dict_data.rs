@@ -14,18 +14,18 @@ pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,
     /// 字典维度ID
-    pub dim_id: i32,
+    pub dimension_id: i32,
     /// 字典维度编码
-    pub dim_code: String,
-    /// 字典标签
+    pub dimension_code: String,
+    /// 字典项标签
     pub lable: String,
-    /// 字典键值
+    /// 字典项值
     pub value: String,
     /// 排序
     pub sort: Option<i32>,
-    /// 备注
-    pub note: Option<String>,
-    /// 状态,0:停用,1:正常
+    /// 描述信息
+    pub desc: Option<String>,
+    /// 状态(0:停用,1:正常)
     pub status: i8,
     /// 创建时间
     pub created_at: DateTimeLocal,
@@ -36,18 +36,18 @@ pub struct Model {
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
     #[sea_orm(
-        belongs_to = "super::sys_dict_dim::Entity",
-        from = "Column::DimId",
-        to = "super::sys_dict_dim::Column::Id",
+        belongs_to = "super::sys_dict_dimension::Entity",
+        from = "Column::DimensionId",
+        to = "super::sys_dict_dimension::Column::Id",
         on_update = "Cascade",
         on_delete = "Cascade"
     )]
-    DcDictDim,
+    SysDictDimension,
 }
 
-impl Related<super::sys_dict_dim::Entity> for Entity {
+impl Related<super::sys_dict_dimension::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::DcDictDim.def()
+        Relation::SysDictDimension.def()
     }
 }
 

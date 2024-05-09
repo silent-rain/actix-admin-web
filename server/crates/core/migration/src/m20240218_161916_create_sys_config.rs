@@ -1,5 +1,5 @@
 //! 配置表
-//! User Entity: [`entity::prelude::SysConfig`]
+//! Entity: [`entity::prelude::SysConfig`]
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},
@@ -77,7 +77,7 @@ impl MigrationTrait for Migration {
                             .tiny_integer()
                             .not_null()
                             .default(1)
-                            .comment("状态,0:停用,1:正常"),
+                            .comment("状态(0:停用,1:正常)"),
                     )
                     .col(
                         ColumnDef::new(SysConfig::CreatedAt)

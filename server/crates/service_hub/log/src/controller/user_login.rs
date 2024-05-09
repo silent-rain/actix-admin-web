@@ -1,9 +1,8 @@
-//! 登陆日志
+//! 登陆日志管理
 
 use crate::{
     dto::user_login::{
-        AddUserLoginInfoReq, GetUserLoginListReq, UpdateUserLoginDisabledStatusReq,
-        UpdateUserLoginStatusReq,
+        AddUserLoginInfoReq, GetUserLoginListReq, UpdateUserLoginInfoReq, UpdateUserLoginStatusReq,
     },
     service::user_login::UserLoginService,
 };
@@ -56,6 +55,20 @@ impl UserLoginController {
         }
     }
 
+    /// 更新登陆日志
+    pub async fn update(
+        provider: Data<AInjectProvider>,
+        id: Path<i32>,
+        data: Json<UpdateUserLoginInfoReq>,
+    ) -> impl Responder {
+        let user_login_service: UserLoginService = provider.provide();
+        let resp = user_login_service.update(*id, data.into_inner()).await;
+        match resp {
+            Ok(_v) => Response::ok(),
+            Err(err) => Response::err(err),
+        }
+    }
+
     /// 更新登录日志状态
     pub async fn status(
         provider: Data<AInjectProvider>,
@@ -65,22 +78,6 @@ impl UserLoginController {
         let user_login_service: UserLoginService = provider.provide();
         let resp = user_login_service
             .status(*id, data.status.clone() as i8)
-            .await;
-        match resp {
-            Ok(_v) => Response::ok(),
-            Err(err) => Response::err(err),
-        }
-    }
-
-    /// 更新登录日志禁用状态
-    pub async fn disabled(
-        provider: Data<AInjectProvider>,
-        id: Path<i32>,
-        data: Json<UpdateUserLoginDisabledStatusReq>,
-    ) -> impl Responder {
-        let user_login_service: UserLoginService = provider.provide();
-        let resp = user_login_service
-            .disabled(*id, data.disabled.clone() as i8)
             .await;
         match resp {
             Ok(_v) => Response::ok(),

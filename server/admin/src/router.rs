@@ -1,11 +1,10 @@
 //! 路由集散处, 将各个模块的路由在此处进行注册。
 use context::ContextMiddleware;
-use middleware::{
-    api_operation::ApiOperation, open_api_auth::OpenApiAuth, system_auth::SystemAuth,
-};
+use middleware::{api_operation::ApiOperation, openapi_auth::OpenApiAuth, system_auth::SystemAuth};
 use service_hub::{
-    auth::AuthRouter, log::LogRouter, permission::PermissionRouter, public::HealthRouter,
-    schedule::ScheduleRouter, system::SystemRouter,
+    auth::AuthRouter, log::LogRouter, organization::OrganizationRouter,
+    permission::PermissionRouter, public::HealthRouter, schedule::ScheduleRouter,
+    system::SystemRouter, user::UserRouter,
 };
 
 use actix_web::{dev::HttpServiceFactory, web};
@@ -34,13 +33,17 @@ pub fn register() -> impl HttpServiceFactory {
         // 后台管理接口
         .service(
             web::scope("/admin")
+                // 用户管理
+                .service(UserRouter::admin_register())
+                // 组织管理
+                .service(OrganizationRouter::admin_register())
                 // 权限管理
                 .service(PermissionRouter::admin_register())
                 // 系统管理
                 .service(SystemRouter::admin_register())
-                // 日志管理
-                .service(LogRouter::admin_register())
                 // 定时任务管理
-                .service(ScheduleRouter::admin_register()),
+                .service(ScheduleRouter::admin_register())
+                // 日志管理
+                .service(LogRouter::admin_register()),
         )
 }

@@ -32,7 +32,7 @@ pub async fn start(
             .app_data(web::Data::new(config_s.clone()))
             // API 服务
             .service(router::register())
-            // 初始化管理
+            // 库表资源初始化管理
             .service(InitializeRouter::admin_register())
             // 后台管理 WEB 服务
             .service(AdminWebSiteRouter::register())

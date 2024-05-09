@@ -11,4 +11,4 @@ pub(crate) mod controller;
 pub use controller::template::AppTemplateController;
 
 pub(crate) mod router;
-pub use router::template::AppTemplateRouter;
+pub use router::{template::AppTemplateRouter, TemplateRouter};

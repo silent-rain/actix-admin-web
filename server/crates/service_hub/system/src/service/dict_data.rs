@@ -60,7 +60,7 @@ impl<'a> DictDataService<'a> {
         // 查询字典数据是否已存在
         let dict_data = self
             .dict_data_dao
-            .info_by_lable(req.dim_id, req.lable.clone())
+            .info_by_lable(req.dimension_id, req.lable.clone())
             .await
             .map_err(|err| {
                 error!("查询字典标签失败, err: {:#?}", err);
@@ -74,12 +74,12 @@ impl<'a> DictDataService<'a> {
         }
 
         let model = sys_dict_data::ActiveModel {
-            dim_id: Set(req.dim_id),
-            dim_code: Set(req.dim_code),
+            dimension_id: Set(req.dimension_id),
+            dimension_code: Set(req.dimension_code),
             lable: Set(req.lable),
             value: Set(req.value),
             sort: Set(req.sort),
-            note: Set(req.note),
+            desc: Set(req.desc),
             status: Set(sys_dict_data::enums::Status::Enabled as i8),
             ..Default::default()
         };
@@ -100,7 +100,7 @@ impl<'a> DictDataService<'a> {
             lable: Set(req.lable),
             value: Set(req.value),
             sort: Set(req.sort),
-            note: Set(req.note),
+            desc: Set(req.desc),
             status: Set(req.status as i8),
             ..Default::default()
         };

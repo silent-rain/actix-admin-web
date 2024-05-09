@@ -15,7 +15,7 @@ pub struct Model {
     pub id: i32,
     /// 用户ID
     pub user_id: i32,
-    /// 状态,0:停用,1:正常
+    /// 状态(0:停用,1:正常)
     pub status: i8,
     /// 创建时间
     pub created_at: DateTimeLocal,
@@ -26,13 +26,13 @@ pub struct Model {
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
     #[sea_orm(
-        belongs_to = "super::perm_user::Entity",
+        belongs_to = "crate::user::user_base::Entity",
         from = "Column::UserId",
-        to = "super::perm_user::Column::Id",
+        to = "crate::user::user_base::Column::Id",
         on_update = "Cascade",
         on_delete = "Cascade"
     )]
-    PermUser,
+    UserBase,
 }
 
 impl ActiveModelBehavior for ActiveModel {}

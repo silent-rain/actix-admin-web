@@ -4,24 +4,25 @@ pub mod dto;
 
 pub(crate) mod dao;
 pub use dao::{
-    captcha::CaptchaDao, config::ConfigDao, dict_data::DictDataDao, dict_dim::DictDimDao,
-    image::ImageDao,
+    config::ConfigDao, dict_data::DictDataDao, dict_dimension::DictDimensionDao,
+    image_captcha::ImageCaptchaDao, image_resource::ImageResourceDao,
 };
 
 pub(crate) mod service;
 pub use service::{
-    captcha::CaptchaService, config::ConfigService, dict_data::DictDataService,
-    dict_dim::DictDimService, image::ImageService,
+    config::ConfigService, dict_data::DictDataService, dict_dimension::DictDimensionService,
+    image_captcha::ImageCaptchaService, image_resource::ImageResourceService,
 };
 
 pub(crate) mod controller;
 pub use controller::{
-    captcha::CaptchaController, config::ConfigController, dict_data::DictDataController,
-    dict_dim::DictDimController, image::ImageController,
+    config::ConfigController, dict_data::DictDataController,
+    dict_dimension::DictDimensionController, image_captcha::ImageCaptchaController,
+    image_resource::ImageResourceController,
 };
 
 pub(crate) mod router;
 pub use router::{
-    captcha::CaptchaRouter, config::ConfigRouter, dict_data::DictDataRouter,
-    dict_dim::DictDimRouter, image::ImageRouter, SystemRouter,
+    config::ConfigRouter, dict_data::DictDataRouter, dict_dimension::DictDimensionRouter,
+    image_captcha::ImageCaptchaRouter, image_resource::ImageResourceRouter, SystemRouter,
 };

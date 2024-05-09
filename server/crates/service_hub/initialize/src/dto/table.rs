@@ -16,15 +16,13 @@ pub struct AddAdminUserReq {
     pub password: String,
 }
 
-/// 数据库SQL
+/// 库表数据
 #[derive(Serialize, Clone, Deserialize)]
-pub struct TableSql {
-    /// 数据库
-    pub db_sql: String,
+pub struct TableDataSql {
     /// 角色表
     pub role_sql: String,
     /// OpenAPi表
-    pub open_api_sql: String,
+    pub openapi_sql: String,
     /// 菜单表
     pub menu_sql: String,
 }

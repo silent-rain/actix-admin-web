@@ -1,4 +1,4 @@
-//! 登陆日志
+//! 登陆日志管理
 
 use crate::dto::user_login::GetUserLoginListReq;
 
@@ -54,6 +54,7 @@ impl<'a> UserLoginDao<'a> {
 
         Ok((results, total))
     }
+
     /// 获取详情信息
     pub async fn info(&self, id: i32) -> Result<Option<log_user_login::Model>, DbErr> {
         LogUserLogin::find_by_id(id).one(self.db.rdb()).await
@@ -79,22 +80,23 @@ impl<'a> UserLoginDao<'a> {
         active_model.insert(self.db.wdb()).await
     }
 
+    /// 更新数据
+    pub async fn update(&self, active_model: log_user_login::ActiveModel) -> Result<u64, DbErr> {
+        let id: i32 = *(active_model.id.clone().as_ref());
+        let result = LogUserLogin::update_many()
+            .set(active_model)
+            .filter(log_user_login::Column::Id.eq(id))
+            .exec(self.db.wdb())
+            .await?;
+
+        Ok(result.rows_affected)
+    }
+
     /// 更新禁用状态
     pub async fn status(&self, id: i32, status: i8) -> Result<(), DbErr> {
         let active_model = log_user_login::ActiveModel {
             id: Set(id),
             status: Set(status),
-            ..Default::default()
-        };
-        let _ = active_model.update(self.db.wdb()).await?;
-        Ok(())
-    }
-
-    /// 更新禁用状态
-    pub async fn disabled(&self, id: i32, disabled: i8) -> Result<(), DbErr> {
-        let active_model = log_user_login::ActiveModel {
-            id: Set(id),
-            disabled: Set(disabled),
             ..Default::default()
         };
         let _ = active_model.update(self.db.wdb()).await?;

@@ -1,6 +1,6 @@
 //! 注册
 
-use entity::perm_user;
+use entity::user::user_base;
 
 use actix_validator::Validate;
 
@@ -10,11 +10,15 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
 pub struct RegisterReq {
     /// 注册用户类型
-    pub register_type: perm_user::enums::UserType,
+    pub register_type: user_base::enums::UserType,
     /// 手机号码
     pub phone: Option<String>,
     /// 邮箱
     pub email: Option<String>,
+
+    /// 密码
+    #[validate(length(min = 6, message = "密码至少需要6个字符"))]
+    pub password: String,
 
     // ==== 基础信息 ====
     /// 用户名称
@@ -22,19 +26,16 @@ pub struct RegisterReq {
     pub username: String,
     /// 真实姓名
     pub real_name: Option<String>,
-    /// 性别, 0:男,1:女,2:保密
+    /// 性别(0:男,1:女,2:保密)
     /// Enum: [`permission::enums::Gender`]
-    #[validate(range(min = 0, max = 3, message = "性别, 0:男,1:女,2:保密"))]
+    #[validate(range(min = 0, max = 3, message = "性别(0:男,1:女,2:保密)"))]
     pub gender: i8,
     /// 年龄
     /// TODO 待定，可以自己计算出来
     #[validate(range(min = 18, max = 100, message = "年龄必须在18到100岁之间"))]
     pub age: Option<i32>,
     /// 出生日期
-    pub birthday: Option<String>,
-    /// 密码
-    #[validate(length(min = 6, message = "密码至少需要6个字符"))]
-    pub password: String,
+    pub date_birth: Option<String>,
     /// 头像URL
     pub avatar: Option<String>,
 
@@ -59,12 +60,12 @@ mod tests {
         let expected = RegisterReq {
             phone: Some("phone".to_owned()),
             email: Some("email".to_owned()),
-            register_type: perm_user::enums::UserType::Phone,
+            register_type: user_base::enums::UserType::Phone,
             username: "username".to_owned(),
             real_name: Some("real_name".to_owned()),
             gender: 11,
             age: Some(12),
-            birthday: Some("birthday".to_owned()),
+            date_birth: Some("date_birth".to_owned()),
             password: "password".to_owned(),
             avatar: Some("avatar".to_owned()),
             captcha_id: "captcha_id".to_owned(),
@@ -78,7 +79,7 @@ mod tests {
             "real_name": "real_name",
             "gender": 11,
             "age": 12,
-            "birthday": "birthday",
+            "date_birth": "date_birth",
             "password": "password",
             "avatar": "avatar",
             "captcha_id":"captcha_id",
@@ -95,12 +96,12 @@ mod tests {
         let expected = RegisterReq {
             phone: Some("phone".to_owned()),
             email: None,
-            register_type: perm_user::enums::UserType::Phone,
+            register_type: user_base::enums::UserType::Phone,
             username: "username".to_owned(),
             real_name: Some("real_name".to_owned()),
             gender: 1,
             age: Some(12),
-            birthday: None,
+            date_birth: None,
             password: "password".to_owned(),
             avatar: None,
             captcha_id: "captcha_id".to_owned(),
@@ -114,7 +115,7 @@ mod tests {
             "real_name": "real_name",
             "gender": 1,
             "age": 12,
-            "birthday": null,
+            "date_birth": null,
             "password": "password",
             "avatar": null,
             "captcha_id":"captcha_id",
@@ -130,12 +131,12 @@ mod tests {
         let expected = RegisterReq {
             phone: Some("phone".to_owned()),
             email: None,
-            register_type: perm_user::enums::UserType::Phone,
+            register_type: user_base::enums::UserType::Phone,
             username: "username".to_owned(),
             real_name: Some("real_name".to_owned()),
             gender: 11,
             age: Some(12),
-            birthday: None,
+            date_birth: None,
             password: "password".to_owned(),
             avatar: None,
             captcha_id: "".to_owned(),
@@ -149,7 +150,7 @@ mod tests {
             "real_name": "real_name",
             "gender": 11,
             "age": 12,
-            "birthday": null,
+            "date_birth": null,
             "password": "password",
             "avatar": null,
             // "captcha_id":"captcha_id",

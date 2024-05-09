@@ -1,8 +1,8 @@
 //! 权限拦截器
 use std::future::{ready, Ready};
 
-use entity::{log_user_login, perm_user};
-use service_hub::{inject::AInjectProvider, log::UserLoginService, permission::UserService};
+use entity::{log_user_login, user::user_base};
+use service_hub::{inject::AInjectProvider, log::UserLoginService, user::UserBaseService};
 
 use crate::constant::{
     AUTH_WHITE_LIST, HEADERS_AUTHORIZATION, HEADERS_AUTHORIZATION_BEARER,
@@ -186,9 +186,9 @@ impl<S> SystemAuthService<S> {
         provider: AInjectProvider,
         user_id: i32,
     ) -> Result<(), code::ErrorMsg> {
-        let user_service: UserService = provider.provide();
+        let user_service: UserBaseService = provider.provide();
         let user = user_service.info(user_id).await?;
-        if user.status == perm_user::enums::Status::Disabled as i8 {
+        if user.status == user_base::enums::Status::Disabled as i8 {
             error!("user_id: {}, 用户已被禁用", user.id);
             return Err(code::Error::LoginStatusDisabled
                 .into_msg()
@@ -205,11 +205,17 @@ impl<S> SystemAuthService<S> {
     ) -> Result<(), code::ErrorMsg> {
         let user_login_service: UserLoginService = provider.provide();
         let user = user_login_service.info_by_token(token.clone()).await?;
-        if user.disabled == log_user_login::enums::DisabledStatus::Disabled as i8 {
+        if user.status == log_user_login::enums::Status::Disabled as i8 {
             error!("user_id: {} token: {}, 当前登陆态已被禁用", user.id, token);
             return Err(code::Error::LoginStatusDisabled
                 .into_msg()
                 .with_msg("当前登陆态已被禁用, 请重新登陆"));
+        }
+        if user.status == log_user_login::enums::Status::Failed as i8 {
+            error!("user_id: {} token: {}, 无效鉴权", user.id, token);
+            return Err(code::Error::LoginStatusDisabled
+                .into_msg()
+                .with_msg("无效鉴权, 请重新登陆"));
         }
         Ok(())
     }

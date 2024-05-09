@@ -1,4 +1,4 @@
-//! 调度任务管理
+//! 任务调度作业管理
 
 use crate::{
     dto::schedule_job::{
@@ -20,7 +20,7 @@ use actix_web::{
 pub struct ScheduleJobController;
 
 impl ScheduleJobController {
-    /// 获取调度任务列表
+    /// 获取任务调度列表
     pub async fn list(
         provider: Data<AInjectProvider>,
         req: Query<GetScheduleJobReq>,
@@ -33,7 +33,7 @@ impl ScheduleJobController {
         }
     }
 
-    /// 获取调度任务信息
+    /// 获取任务调度作业
     pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
         let schedule_job_service: ScheduleJobService = provider.provide();
         let resp = schedule_job_service.info(*id).await;
@@ -43,7 +43,7 @@ impl ScheduleJobController {
         }
     }
 
-    /// 添加调度任务
+    /// 添加任务调度
     pub async fn add(
         provider: Data<AInjectProvider>,
         data: Json<AddcheduleJobReq>,
@@ -56,7 +56,7 @@ impl ScheduleJobController {
         }
     }
 
-    /// 更新调度任务
+    /// 更新任务调度
     pub async fn update(
         provider: Data<AInjectProvider>,
         id: Path<i32>,
@@ -70,7 +70,7 @@ impl ScheduleJobController {
         }
     }
 
-    /// 更新调度任务状态
+    /// 更新任务调度状态
     pub async fn status(
         provider: Data<AInjectProvider>,
         id: Path<i32>,
@@ -86,7 +86,7 @@ impl ScheduleJobController {
         }
     }
 
-    /// 删除调度任务
+    /// 删除任务调度
     pub async fn delete(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
         let schedule_job_service: ScheduleJobService = provider.provide();
         let resp = schedule_job_service.delete(*id).await;

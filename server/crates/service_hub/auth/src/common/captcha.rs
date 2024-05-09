@@ -1,7 +1,7 @@
 //! 验证码
 
-use entity::sys_captcha;
-use system::CaptchaDao;
+use entity::sys_image_captcha;
+use system::ImageCaptchaDao;
 
 use code::{Error, ErrorMsg};
 
@@ -10,7 +10,7 @@ use tracing::error;
 
 /// 检测验证码
 pub async fn check_captcha<'a>(
-    captcha_dao: &'a CaptchaDao<'a>,
+    captcha_dao: &'a ImageCaptchaDao<'a>,
     captcha_id: String,
     captcha: String,
 ) -> Result<(), ErrorMsg> {
@@ -29,10 +29,10 @@ pub async fn check_captcha<'a>(
         })?;
 
     // 检查验证码是否有效
-    if result.status == sys_captcha::enums::Status::Invalid as i8 {
+    if result.status == sys_image_captcha::enums::Status::Invalid as i8 {
         return {
-            error!("无效验证码, captcha: {}", captcha);
-            Err(Error::CaptchaInvalid.into_msg().with_msg("无效验证码"))
+            error!("验证码已失效, captcha: {}", captcha);
+            Err(Error::CaptchaInvalid.into_msg().with_msg("验证码已失效"))
         };
     }
 
@@ -53,6 +53,17 @@ pub async fn check_captcha<'a>(
             Err(Error::CaptchaExpire.into_msg().with_msg("验证码过期"))
         };
     }
+
+    // 验证码设置为无效
+    captcha_dao
+        .status(result.id, sys_image_captcha::enums::Status::Invalid as i8)
+        .await
+        .map_err(|err| {
+            error!("设置验证码状态失败, err: {:#?}", err);
+            Error::DbQueryError
+                .into_msg()
+                .with_msg("设置验证码状态失败")
+        })?;
 
     Ok(())
 }

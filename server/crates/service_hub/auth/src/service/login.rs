@@ -6,25 +6,26 @@ use crate::{
 };
 
 use log::UserLoginDao;
-use permission::{UserDao, UserEmailDao, UserPhoneDao};
-use system::CaptchaDao;
+use system::ImageCaptchaDao;
+use user::{EmailDao, PhoneDao, UserBaseDao};
 
 use code::{Error, ErrorMsg};
-use entity::{log_user_login, perm_user};
+use entity::{log_user_login, user::user_base};
 use jwt::encode_token;
 
 use nject::injectable;
 use sea_orm::Set;
 use tracing::error;
+use utils::browser::parse_user_agent;
 
 /// 服务层
 #[injectable]
 pub struct LoginService<'a> {
-    user_dao: UserDao<'a>,
-    user_email_dao: UserEmailDao<'a>,
-    user_phone_dao: UserPhoneDao<'a>,
+    user_dao: UserBaseDao<'a>,
+    email_dao: EmailDao<'a>,
+    phone_dao: PhoneDao<'a>,
     user_login_dao: UserLoginDao<'a>,
-    captcha_dao: CaptchaDao<'a>,
+    captcha_dao: ImageCaptchaDao<'a>,
 }
 
 impl<'a> LoginService<'a> {
@@ -45,12 +46,13 @@ impl<'a> LoginService<'a> {
         // 检测手机号码或邮件用户是否存在
         let user = self.get_user(data.clone()).await?;
         // 检查用户是否被禁用
-        if user.status == perm_user::enums::Status::Disabled as i8 {
-            // 添加失败登陆日志
+        if user.status == user_base::enums::Status::Disabled as i8 {
+            // 添加登陆日志
             self.add_login_log(
-                browser_info,
                 user.clone(),
+                browser_info,
                 "".to_owned(),
+                Some("用户已被禁用".to_owned()),
                 log_user_login::enums::Status::Failed,
             )
             .await?;
@@ -63,9 +65,10 @@ impl<'a> LoginService<'a> {
         if user.password != data.password {
             // 添加失败登陆日志
             self.add_login_log(
-                browser_info,
                 user.clone(),
+                browser_info,
                 "".to_owned(),
+                Some("账号或密码错误".to_owned()),
                 log_user_login::enums::Status::Failed,
             )
             .await?;
@@ -83,9 +86,10 @@ impl<'a> LoginService<'a> {
 
         // 添加登陆日志
         self.add_login_log(
-            browser_info,
             user.clone(),
+            browser_info,
             token.clone(),
+            None,
             log_user_login::enums::Status::Success,
         )
         .await?;
@@ -98,10 +102,10 @@ impl<'a> LoginService<'a> {
     }
 
     /// 获取用户信息
-    async fn get_user(&self, data: LoginReq) -> Result<perm_user::Model, ErrorMsg> {
+    async fn get_user(&self, data: LoginReq) -> Result<user_base::Model, ErrorMsg> {
         let user_id = match data.user_type {
-            perm_user::enums::UserType::Phone => self.get_user_phone(data).await?,
-            perm_user::enums::UserType::Email => self.get_user_email(data).await?,
+            user_base::enums::UserType::Phone => self.get_user_phone(data).await?,
+            user_base::enums::UserType::Email => self.get_user_email(data).await?,
         };
 
         // 查询用户
@@ -133,7 +137,7 @@ impl<'a> LoginService<'a> {
         };
 
         let user = self
-            .user_phone_dao
+            .phone_dao
             .info_by_phone(phone)
             .await
             .map_err(|err| {
@@ -161,7 +165,7 @@ impl<'a> LoginService<'a> {
         };
 
         let user = self
-            .user_email_dao
+            .email_dao
             .info_by_email(email)
             .await
             .map_err(|err| {
@@ -181,11 +185,18 @@ impl<'a> LoginService<'a> {
     /// 添加登陆日志
     async fn add_login_log(
         &self,
+        user: user_base::Model,
         browser_info: BrowserInfo,
-        user: perm_user::Model,
         token: String,
+        desc: Option<String>,
         status: log_user_login::enums::Status,
     ) -> Result<log_user_login::Model, ErrorMsg> {
+        let (device, system, browser) =
+            parse_user_agent(browser_info.user_agent.clone()).map_err(|err| {
+                error!("User-Agent解析错误, err: {:#?}", err);
+                Error::UserAgentParserError(err)
+            })?;
+
         let data = log_user_login::ActiveModel {
             user_id: Set(user.id),
             username: Set(user.username),
@@ -193,7 +204,10 @@ impl<'a> LoginService<'a> {
             remote_addr: Set(browser_info.remote_addr),
             user_agent: Set(browser_info.user_agent),
             status: Set(status as i8),
-            disabled: Set(log_user_login::enums::DisabledStatus::Enabled as i8),
+            device: Set(Some(device)),
+            system: Set(Some(system)),
+            browser: Set(Some(browser)),
+            desc: Set(desc),
             ..Default::default()
         };
 

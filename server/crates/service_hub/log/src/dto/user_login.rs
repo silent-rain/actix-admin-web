@@ -1,4 +1,4 @@
-//! 登陆日志
+//! 登陆日志管理
 use entity::log_user_login;
 
 use serde::{Deserialize, Serialize};
@@ -32,7 +32,18 @@ pub struct AddUserLoginInfoReq {
     pub remote_addr: String,
     /// 用户代理
     pub user_agent: String,
-    /// 登录状态,0:失败,1:成功
+    /// 描述信息
+    pub desc: Option<String>,
+    /// 登录状态
+    pub status: log_user_login::enums::Status,
+}
+
+/// 更新登陆日志信息
+#[derive(Deserialize)]
+pub struct UpdateUserLoginInfoReq {
+    /// 描述信息
+    pub desc: Option<String>,
+    /// 登录状态
     pub status: log_user_login::enums::Status,
 }
 
@@ -41,13 +52,6 @@ pub struct AddUserLoginInfoReq {
 pub struct UpdateUserLoginStatusReq {
     /// ID
     pub id: i32,
-    /// 登录状态,0:失败,1:成功
+    /// 登录状态
     pub status: log_user_login::enums::Status,
-}
-
-/// 更新登录日志禁用状态
-#[derive(Deserialize)]
-pub struct UpdateUserLoginDisabledStatusReq {
-    /// 禁用状态,0:未禁用,1:禁用
-    pub disabled: log_user_login::enums::DisabledStatus,
 }

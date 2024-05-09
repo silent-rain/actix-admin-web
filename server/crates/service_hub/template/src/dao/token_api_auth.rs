@@ -1,10 +1,10 @@
 //! API 管理
-//! 这里演示一个表关联的写法
+//! 这里演示一个表关系的写法
 use database::DbRepo;
-use entity::api_role_http_rel;
-use entity::app_template;
-use entity::log_user_login;
-use entity::prelude::{ApiRoleHttpRel, AppTemplate};
+use entity::{
+    api_role_http_rel, app_template, log_user_login,
+    prelude::{ApiRoleHttpRel, AppTemplate},
+};
 
 use nject::injectable;
 use sea_orm::{DbErr, EntityTrait, JoinType, QuerySelect, RelationTrait};
@@ -29,7 +29,7 @@ impl<'a> AppTemplateEtxDao<'a> {
             )
             .join(
                 JoinType::LeftJoin,
-                api_role_http_rel::Relation::PermRole
+                api_role_http_rel::Relation::UserRole
                     .def()
                     .rev()
                     .on_condition(|_left, right| {
@@ -59,19 +59,19 @@ impl<'a> AppTemplateEtxDao<'a> {
     /// #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
     /// pub enum Relation {
     ///            #[sea_orm(
-    ///               belongs_to = "super::perm_user::Entity",
+    ///               belongs_to = "super::user_base::Entity",
     ///                from = "Column::UserId",
-    ///                to = "super::perm_user::Column::Id",
+    ///                to = "super::user_base::Column::Id",
     ///                on_update = "Cascade",
     ///                on_delete = "Cascade"
     ///           )]
-    ///           PermUser,
+    ///           UserBase,
     ///       }
     /// ```
     pub async fn get_join_list2(&self) -> Result<Vec<app_template::Model>, DbErr> {
         let results = AppTemplate::find()
             // reuse a `Relation` from existing Entity
-            .join(JoinType::LeftJoin, app_template::Relation::PermUser.def())
+            .join(JoinType::LeftJoin, app_template::Relation::UserBase.def())
             // construct `RelationDef` on the fly
             .join_rev(
                 JoinType::InnerJoin,

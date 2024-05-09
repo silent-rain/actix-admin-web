@@ -1,5 +1,5 @@
-//! 调度任务表
-//! User Entity: [`entity::prelude::ScheduleJob`]
+//! 任务调度作业表
+//! Entity: [`entity::schedule::ScheduleJob`]
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},
@@ -19,7 +19,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(ScheduleJob::Table)
-                    .comment("调度任务")
+                    .comment("任务调度作业表")
                     .if_not_exists()
                     .col(
                         ColumnDef::new(ScheduleJob::Id)
@@ -41,13 +41,13 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(ScheduleJob::Source)
                             .integer()
                             .not_null()
-                            .comment("任务来源,0:用户定义,1:系统内部"),
+                            .comment("任务来源(0:用户定义,1:系统内部)"),
                     )
                     .col(
                         ColumnDef::new(ScheduleJob::JobType)
                             .integer()
                             .not_null()
-                            .comment("任务类型,0:定时任务,1:即时任务"),
+                            .comment("任务类型(0:定时任务,1:即时任务)"),
                     )
                     .col(
                         ColumnDef::new(ScheduleJob::SysCode)
@@ -72,7 +72,7 @@ impl MigrationTrait for Migration {
                             .comment("间隔时间,秒"),
                     )
                     .col(
-                        ColumnDef::new(ScheduleJob::Note)
+                        ColumnDef::new(ScheduleJob::Desc)
                             .string()
                             .string_len(200)
                             .default("")
@@ -84,7 +84,7 @@ impl MigrationTrait for Migration {
                             .tiny_integer()
                             .not_null()
                             .default(1)
-                            .comment("任务状态,0:下线,1:上线"),
+                            .comment("任务状态(0:下线,1:上线)"),
                     )
                     .col(
                         ColumnDef::new(ScheduleJob::CreatedAt)
@@ -130,7 +130,7 @@ pub enum ScheduleJob {
     SysCode,
     Expression,
     Interval,
-    Note,
+    Desc,
     Status,
     CreatedAt,
     UpdatedAt,

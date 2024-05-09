@@ -1,6 +1,6 @@
-//! 登陆日志
+//! 登陆日志管理
 
-use crate::UserLoginController;
+use crate::controller::user_login::UserLoginController;
 
 use actix_web::{web, Scope};
 
@@ -13,10 +13,7 @@ impl UserLoginRouter {
         web::scope("/user-logins")
             .route("", web::get().to(UserLoginController::list))
             .route("/{id}", web::get().to(UserLoginController::info))
-            // .route("/{id}/status", web::put().to(UserLoginController::status))
-            .route(
-                "/{id}/disabled",
-                web::put().to(UserLoginController::disabled),
-            )
+            .route("/{id}", web::put().to(UserLoginController::update))
+            .route("/{id}/status", web::put().to(UserLoginController::status))
     }
 }

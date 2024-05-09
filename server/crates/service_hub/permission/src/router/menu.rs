@@ -1,6 +1,6 @@
 //! 菜单管理
 
-use crate::MenuController;
+use crate::controller::menu::MenuController;
 
 use actix_web::{web, Scope};
 

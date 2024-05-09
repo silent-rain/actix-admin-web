@@ -117,8 +117,8 @@ pub enum Error {
     DbInitByAdminExistError = 10265,
 
     // 工具箱
-    #[error("User-Agent解析错误")]
-    UserAgentParserError = 10281,
+    #[error("User-Agent解析错误, {0}")]
+    UserAgentParserError(String) = 10281,
 
     #[error("未找到资源")]
     AssetNotFound = 10290,

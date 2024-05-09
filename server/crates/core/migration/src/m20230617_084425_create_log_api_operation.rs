@@ -1,5 +1,5 @@
 //! API操作日志表
-//! User Entity: [`entity::prelude::LogApiOperation`]
+//! Entity: [`entity::prelude::LogApiOperation`]
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},
@@ -116,12 +116,12 @@ impl MigrationTrait for Migration {
                             .comment("请求类型:REQ/RSP"),
                     )
                     .col(
-                        ColumnDef::new(LogApiOperation::Note)
+                        ColumnDef::new(LogApiOperation::Desc)
                             .string()
                             .string_len(200)
                             .default("")
                             .null()
-                            .comment("备注"),
+                            .comment("描述信息"),
                     )
                     .col(
                         ColumnDef::new(LogApiOperation::CreatedAt)
@@ -160,6 +160,6 @@ pub enum LogApiOperation {
     UserAgent,
     Cost,
     HttpType,
-    Note,
+    Desc,
     CreatedAt,
 }

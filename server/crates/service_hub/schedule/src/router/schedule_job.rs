@@ -1,6 +1,6 @@
-//! 调度任务管理
+//! 任务调度作业管理
 
-use crate::ScheduleJobController;
+use crate::controller::schedule_job::ScheduleJobController;
 
 use actix_web::{web, Scope};
 
@@ -8,7 +8,7 @@ use actix_web::{web, Scope};
 pub struct ScheduleJobRouter;
 
 impl ScheduleJobRouter {
-    /// 注册`调度任务管理`路由
+    /// 注册`任务调度作业管理`路由
     pub fn admin_register() -> Scope {
         web::scope("/jobs")
             .route("", web::get().to(ScheduleJobController::list))

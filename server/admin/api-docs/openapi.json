@@ -51,7 +51,7 @@
       "description": ""
     },
     {
-      "name": "用户管理",
+      "name": "用户信息管理",
       "description": ""
     },
     {
@@ -81,7 +81,9 @@
         "summary": "登录",
         "description": "系统登录",
         "apipost_tags": [],
-        "tags": ["注册/登录/登出"],
+        "tags": [
+          "注册/登录/登出"
+        ],
         "parameters": [
           {
             "name": "Authorization",
@@ -135,14 +137,16 @@
         "summary": "用户注册",
         "description": "",
         "apipost_tags": [],
-        "tags": ["注册/登录/登出"],
+        "tags": [
+          "注册/登录/登出"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"realname\": \"xxx2\",\n    \"nickname\": \"demo\",\n    \"gender\": 1,\n    \"age\": 18,\n    \"birthday\": \"xxx\",\n    \"avatar\": \"xxx\",\n    \"phone\": \"183124650222\",\n    \"email\": \"\",\n    \"intro\": \"xxx\",\n    \"note\": \"xxx\",\n    \"password\": \"888888\",\n    \"role_ids\": [],\n    \"captcha_id\": \"xx\",\n    \"captcha\": \"xxx\"\n}"
+              "example": "{\n    \"realname\": \"xxx2\",\n    \"nickname\": \"demo\",\n    \"gender\": 1,\n    \"age\": 18,\n    \"birthday\": \"xxx\",\n    \"avatar\": \"xxx\",\n    \"phone\": \"183124650222\",\n    \"email\": \"\",\n    \"intro\": \"xxx\",\n    \"desc\": \"xxx\",\n    \"password\": \"888888\",\n    \"role_ids\": [],\n    \"captcha_id\": \"xx\",\n    \"captcha\": \"xxx\"\n}"
             }
           }
         },
@@ -173,7 +177,9 @@
         "summary": "退出登录",
         "description": "系统登录",
         "apipost_tags": [],
-        "tags": ["注册/登录/登出"],
+        "tags": [
+          "注册/登录/登出"
+        ],
         "parameters": [
           {
             "name": "Authorization",
@@ -217,7 +223,9 @@
         "summary": "获取 Token令牌列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["API令牌管理"],
+        "tags": [
+          "API令牌管理"
+        ],
         "parameters": [
           {
             "name": "page",
@@ -263,7 +271,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"user_id\": 20,\n\t\t\t\t\"nickname\": \"管理员\",\n\t\t\t\t\"permission\": \"GET;POST;DELETE;PUT\",\n\t\t\t\t\"token\": \"23dfb2f62e9b55731d34d808eb8575f4\",\n\t\t\t\t\"passphrase\": \"xxx\",\n\t\t\t\t\"note\": \"xx\",\n\t\t\t\t\"status\": 0,\n\t\t\t\t\"created_at\": \"2023-03-09 22:18:36\",\n\t\t\t\t\"updated_at\": \"2023-03-09 22:39:06\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 1\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"user_id\": 20,\n\t\t\t\t\"nickname\": \"管理员\",\n\t\t\t\t\"permission\": \"GET;POST;DELETE;PUT\",\n\t\t\t\t\"token\": \"23dfb2f62e9b55731d34d808eb8575f4\",\n\t\t\t\t\"passphrase\": \"xxx\",\n\t\t\t\t\"desc\": \"xx\",\n\t\t\t\t\"status\": 0,\n\t\t\t\t\"created_at\": \"2023-03-09 22:18:36\",\n\t\t\t\t\"updated_at\": \"2023-03-09 22:39:06\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 1\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -282,7 +290,9 @@
         "summary": "批量删除 Token 令牌",
         "description": "",
         "apipost_tags": [],
-        "tags": ["API令牌管理"],
+        "tags": [
+          "API令牌管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -320,14 +330,16 @@
         "summary": "更新 Token 令牌",
         "description": "",
         "apipost_tags": [],
-        "tags": ["API令牌管理"],
+        "tags": [
+          "API令牌管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"id\": 1,\n    \"permission\": \"GET;POST;DELETE;PUT\",\n    \"passphrase\": \"xxx\",\n    \"note\": \"xx\",\n    \"status\": 0\n}"
+              "example": "{\n    \"id\": 1,\n    \"permission\": \"GET;POST;DELETE;PUT\",\n    \"passphrase\": \"xxx\",\n    \"desc\": \"xx\",\n    \"status\": 0\n}"
             }
           }
         },
@@ -358,7 +370,9 @@
         "summary": "更新 Token 令牌状态",
         "description": "",
         "apipost_tags": [],
-        "tags": ["API令牌管理"],
+        "tags": [
+          "API令牌管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -396,14 +410,16 @@
         "summary": "添加 Token 令牌",
         "description": "",
         "apipost_tags": [],
-        "tags": ["API令牌管理"],
+        "tags": [
+          "API令牌管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"user_id\": 20,\n    \"permission\": \"GET;POST;DELETE;PUT\",\n    \"passphrase\": \"xxx\",\n    \"note\": \"xx\",\n    \"status\": 0\n}"
+              "example": "{\n    \"user_id\": 20,\n    \"permission\": \"GET;POST;DELETE;PUT\",\n    \"passphrase\": \"xxx\",\n    \"desc\": \"xx\",\n    \"status\": 0\n}"
             }
           }
         },
@@ -434,7 +450,9 @@
         "summary": "删除 Token 令牌",
         "description": "",
         "apipost_tags": [],
-        "tags": ["API令牌管理"],
+        "tags": [
+          "API令牌管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -472,7 +490,9 @@
         "summary": "获取用户登录信息列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["用户登录管理"],
+        "tags": [
+          "用户登录管理"
+        ],
         "parameters": [
           {
             "name": "page",
@@ -530,7 +550,9 @@
         "summary": "更新用户登录信息状态",
         "description": "",
         "apipost_tags": [],
-        "tags": ["用户登录管理"],
+        "tags": [
+          "用户登录管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -568,14 +590,16 @@
         "summary": "添加字典数据信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["字典数据管理"],
+        "tags": [
+          "字典数据管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"dict_id\": 1,\n    \"name\": \"GET\",\n    \"value\": \"xx\",\n    \"note\": \"\",\n    \"status\": 1\n}"
+              "example": "{\n    \"dict_id\": 1,\n    \"name\": \"GET\",\n    \"value\": \"xx\",\n    \"desc\": \"\",\n    \"status\": 1\n}"
             }
           }
         },
@@ -606,7 +630,9 @@
         "summary": "批量删除字典数据信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["字典数据管理"],
+        "tags": [
+          "字典数据管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -644,14 +670,16 @@
         "summary": "更新字典数据信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["字典数据管理"],
+        "tags": [
+          "字典数据管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"id\": 1,\n   \"dict_id\": 1,\n    \"name\": \"GET\",\n    \"value\": \"xx\",\n    \"note\": \"\",\n    \"status\": 1\n}"
+              "example": "{\n    \"id\": 1,\n   \"dict_id\": 1,\n    \"name\": \"GET\",\n    \"value\": \"xx\",\n    \"desc\": \"\",\n    \"status\": 1\n}"
             }
           }
         },
@@ -682,7 +710,9 @@
         "summary": "更新字典数据信息状态",
         "description": "",
         "apipost_tags": [],
-        "tags": ["字典数据管理"],
+        "tags": [
+          "字典数据管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -720,7 +750,9 @@
         "summary": "删除字典数据信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["字典数据管理"],
+        "tags": [
+          "字典数据管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -758,7 +790,9 @@
         "summary": "获取字典数据信息列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["字典数据管理"],
+        "tags": [
+          "字典数据管理"
+        ],
         "parameters": [
           {
             "name": "page",
@@ -797,7 +831,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 5,\n\t\t\t\t\"name\": \"测试2\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:21+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:21+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 4,\n\t\t\t\t\"name\": \"测试1\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:15+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:15+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 2,\n\t\t\t\t\"name\": \"管理员\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"管理员\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T21:55:31+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 3,\n\t\t\t\t\"name\": \"普通用户\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"普通用户\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T22:06:48+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 4\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 5,\n\t\t\t\t\"name\": \"测试2\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:21+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:21+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 4,\n\t\t\t\t\"name\": \"测试1\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:15+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:15+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 2,\n\t\t\t\t\"name\": \"管理员\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"管理员\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T21:55:31+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 3,\n\t\t\t\t\"name\": \"普通用户\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"普通用户\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T22:06:48+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 4\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -816,7 +850,9 @@
         "summary": "删除菜单",
         "description": "",
         "apipost_tags": [],
-        "tags": ["菜单管理"],
+        "tags": [
+          "菜单管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -854,7 +890,9 @@
         "summary": "更新菜单状态",
         "description": "",
         "apipost_tags": [],
-        "tags": ["菜单管理"],
+        "tags": [
+          "菜单管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -892,7 +930,9 @@
         "summary": "更新菜单",
         "description": "",
         "apipost_tags": [],
-        "tags": ["菜单管理"],
+        "tags": [
+          "菜单管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -930,7 +970,9 @@
         "summary": "获取菜单列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["菜单管理"],
+        "tags": [
+          "菜单管理"
+        ],
         "parameters": [
           {
             "name": "page",
@@ -962,7 +1004,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"title\": \"系统管理\",\n\t\t\t\t\"icon\": \"\",\n\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\"open_type\": 0,\n\t\t\t\t\"path\": \"/system\",\n\t\t\t\t\"component\": \"Layout\",\n\t\t\t\t\"link\": \"\",\n\t\t\t\t\"target\": \"\",\n\t\t\t\t\"permission\": \"\",\n\t\t\t\t\"hide\": 1,\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-04 21:18:29\",\n\t\t\t\t\"updated_at\": \"2023-02-04 21:18:29\",\n\t\t\t\t\"children\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 4,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"title\": \"菜单管理\",\n\t\t\t\t\t\t\"icon\": \"\",\n\t\t\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\t\t\"open_type\": 0,\n\t\t\t\t\t\t\"path\": \"/system/menu\",\n\t\t\t\t\t\t\"component\": \"@/views/system/menu/index.vue\",\n\t\t\t\t\t\t\"link\": \"\",\n\t\t\t\t\t\t\"target\": \"\",\n\t\t\t\t\t\t\"permission\": \"\",\n\t\t\t\t\t\t\"hide\": 1,\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"note\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-04 21:22:30\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-04 21:22:30\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 3,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"title\": \"角色管理\",\n\t\t\t\t\t\t\"icon\": \"\",\n\t\t\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\t\t\"open_type\": 0,\n\t\t\t\t\t\t\"path\": \"/system/role\",\n\t\t\t\t\t\t\"component\": \"@/views/system/role/index.vue\",\n\t\t\t\t\t\t\"link\": \"\",\n\t\t\t\t\t\t\"target\": \"\",\n\t\t\t\t\t\t\"permission\": \"\",\n\t\t\t\t\t\t\"hide\": 1,\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"note\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-04 21:21:53\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-04 21:22:03\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 2,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"title\": \"用户管理\",\n\t\t\t\t\t\t\"icon\": \"\",\n\t\t\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\t\t\"open_type\": 0,\n\t\t\t\t\t\t\"path\": \"/system/user\",\n\t\t\t\t\t\t\"component\": \"@/views/system/user/index.vue\",\n\t\t\t\t\t\t\"link\": \"\",\n\t\t\t\t\t\t\"target\": \"\",\n\t\t\t\t\t\t\"permission\": \"\",\n\t\t\t\t\t\t\"hide\": 1,\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"note\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-04 21:19:01\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-04 21:19:01\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 1\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"title\": \"系统管理\",\n\t\t\t\t\"icon\": \"\",\n\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\"open_type\": 0,\n\t\t\t\t\"path\": \"/system\",\n\t\t\t\t\"component\": \"Layout\",\n\t\t\t\t\"link\": \"\",\n\t\t\t\t\"target\": \"\",\n\t\t\t\t\"permission\": \"\",\n\t\t\t\t\"hide\": 1,\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-04 21:18:29\",\n\t\t\t\t\"updated_at\": \"2023-02-04 21:18:29\",\n\t\t\t\t\"children\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 4,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"title\": \"菜单管理\",\n\t\t\t\t\t\t\"icon\": \"\",\n\t\t\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\t\t\"open_type\": 0,\n\t\t\t\t\t\t\"path\": \"/system/menu\",\n\t\t\t\t\t\t\"component\": \"@/views/system/menu/index.vue\",\n\t\t\t\t\t\t\"link\": \"\",\n\t\t\t\t\t\t\"target\": \"\",\n\t\t\t\t\t\t\"permission\": \"\",\n\t\t\t\t\t\t\"hide\": 1,\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"desc\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-04 21:22:30\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-04 21:22:30\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 3,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"title\": \"角色管理\",\n\t\t\t\t\t\t\"icon\": \"\",\n\t\t\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\t\t\"open_type\": 0,\n\t\t\t\t\t\t\"path\": \"/system/role\",\n\t\t\t\t\t\t\"component\": \"@/views/system/role/index.vue\",\n\t\t\t\t\t\t\"link\": \"\",\n\t\t\t\t\t\t\"target\": \"\",\n\t\t\t\t\t\t\"permission\": \"\",\n\t\t\t\t\t\t\"hide\": 1,\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"desc\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-04 21:21:53\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-04 21:22:03\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 2,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"title\": \"用户信息管理\",\n\t\t\t\t\t\t\"icon\": \"\",\n\t\t\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\t\t\"open_type\": 0,\n\t\t\t\t\t\t\"path\": \"/system/user\",\n\t\t\t\t\t\t\"component\": \"@/views/system/user/index.vue\",\n\t\t\t\t\t\t\"link\": \"\",\n\t\t\t\t\t\t\"target\": \"\",\n\t\t\t\t\t\t\"permission\": \"\",\n\t\t\t\t\t\t\"hide\": 1,\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"desc\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-04 21:19:01\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-04 21:19:01\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 1\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -981,7 +1023,9 @@
         "summary": "获取所有菜单列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["菜单管理"],
+        "tags": [
+          "菜单管理"
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -990,7 +1034,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"title\": \"系统管理\",\n\t\t\t\t\"icon\": \"\",\n\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\"open_type\": 0,\n\t\t\t\t\"path\": \"/system\",\n\t\t\t\t\"component\": \"Layout\",\n\t\t\t\t\"link\": \"\",\n\t\t\t\t\"target\": \"\",\n\t\t\t\t\"permission\": \"\",\n\t\t\t\t\"hide\": 1,\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-04 21:18:29\",\n\t\t\t\t\"updated_at\": \"2023-02-04 21:18:29\",\n\t\t\t\t\"children\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 4,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"title\": \"菜单管理\",\n\t\t\t\t\t\t\"icon\": \"\",\n\t\t\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\t\t\"open_type\": 0,\n\t\t\t\t\t\t\"path\": \"/system/menu\",\n\t\t\t\t\t\t\"component\": \"@/views/system/menu/index.vue\",\n\t\t\t\t\t\t\"link\": \"\",\n\t\t\t\t\t\t\"target\": \"\",\n\t\t\t\t\t\t\"permission\": \"\",\n\t\t\t\t\t\t\"hide\": 1,\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"note\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-04 21:22:30\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-04 21:22:30\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 3,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"title\": \"角色管理\",\n\t\t\t\t\t\t\"icon\": \"\",\n\t\t\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\t\t\"open_type\": 0,\n\t\t\t\t\t\t\"path\": \"/system/role\",\n\t\t\t\t\t\t\"component\": \"@/views/system/role/index.vue\",\n\t\t\t\t\t\t\"link\": \"\",\n\t\t\t\t\t\t\"target\": \"\",\n\t\t\t\t\t\t\"permission\": \"\",\n\t\t\t\t\t\t\"hide\": 1,\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"note\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-04 21:21:53\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-04 21:22:03\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 2,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"title\": \"用户管理\",\n\t\t\t\t\t\t\"icon\": \"\",\n\t\t\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\t\t\"open_type\": 0,\n\t\t\t\t\t\t\"path\": \"/system/user\",\n\t\t\t\t\t\t\"component\": \"@/views/system/user/index.vue\",\n\t\t\t\t\t\t\"link\": \"\",\n\t\t\t\t\t\t\"target\": \"\",\n\t\t\t\t\t\t\"permission\": \"\",\n\t\t\t\t\t\t\"hide\": 1,\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"note\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-04 21:19:01\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-04 21:19:01\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 1\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"title\": \"系统管理\",\n\t\t\t\t\"icon\": \"\",\n\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\"open_type\": 0,\n\t\t\t\t\"path\": \"/system\",\n\t\t\t\t\"component\": \"Layout\",\n\t\t\t\t\"link\": \"\",\n\t\t\t\t\"target\": \"\",\n\t\t\t\t\"permission\": \"\",\n\t\t\t\t\"hide\": 1,\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-04 21:18:29\",\n\t\t\t\t\"updated_at\": \"2023-02-04 21:18:29\",\n\t\t\t\t\"children\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 4,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"title\": \"菜单管理\",\n\t\t\t\t\t\t\"icon\": \"\",\n\t\t\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\t\t\"open_type\": 0,\n\t\t\t\t\t\t\"path\": \"/system/menu\",\n\t\t\t\t\t\t\"component\": \"@/views/system/menu/index.vue\",\n\t\t\t\t\t\t\"link\": \"\",\n\t\t\t\t\t\t\"target\": \"\",\n\t\t\t\t\t\t\"permission\": \"\",\n\t\t\t\t\t\t\"hide\": 1,\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"desc\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-04 21:22:30\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-04 21:22:30\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 3,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"title\": \"角色管理\",\n\t\t\t\t\t\t\"icon\": \"\",\n\t\t\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\t\t\"open_type\": 0,\n\t\t\t\t\t\t\"path\": \"/system/role\",\n\t\t\t\t\t\t\"component\": \"@/views/system/role/index.vue\",\n\t\t\t\t\t\t\"link\": \"\",\n\t\t\t\t\t\t\"target\": \"\",\n\t\t\t\t\t\t\"permission\": \"\",\n\t\t\t\t\t\t\"hide\": 1,\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"desc\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-04 21:21:53\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-04 21:22:03\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 2,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"title\": \"用户信息管理\",\n\t\t\t\t\t\t\"icon\": \"\",\n\t\t\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\t\t\"open_type\": 0,\n\t\t\t\t\t\t\"path\": \"/system/user\",\n\t\t\t\t\t\t\"component\": \"@/views/system/user/index.vue\",\n\t\t\t\t\t\t\"link\": \"\",\n\t\t\t\t\t\t\"target\": \"\",\n\t\t\t\t\t\t\"permission\": \"\",\n\t\t\t\t\t\t\"hide\": 1,\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"desc\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-04 21:19:01\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-04 21:19:01\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 1\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -1009,7 +1053,9 @@
         "summary": "批量删除菜单",
         "description": "",
         "apipost_tags": [],
-        "tags": ["菜单管理"],
+        "tags": [
+          "菜单管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1047,7 +1093,9 @@
         "summary": "添加菜单",
         "description": "",
         "apipost_tags": [],
-        "tags": ["菜单管理"],
+        "tags": [
+          "菜单管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1113,7 +1161,9 @@
         "summary": "上传图片列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["文件上传"],
+        "tags": [
+          "文件上传"
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -1160,7 +1210,9 @@
         "summary": "上传图片",
         "description": "",
         "apipost_tags": [],
-        "tags": ["文件上传"],
+        "tags": [
+          "文件上传"
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -1171,7 +1223,9 @@
                 "file": {
                   "type": "string",
                   "description": "png文件",
-                  "example": ["/home/one/Downloads/合约.png"]
+                  "example": [
+                    "/home/one/Downloads/合约.png"
+                  ]
                 }
               }
             }
@@ -1204,7 +1258,9 @@
         "summary": "上传用户头像",
         "description": "",
         "apipost_tags": [],
-        "tags": ["文件上传"],
+        "tags": [
+          "文件上传"
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -1248,7 +1304,9 @@
         "summary": "删除Http协议接口信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["Http协议接口管理"],
+        "tags": [
+          "Http协议接口管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1286,7 +1344,9 @@
         "summary": "批量删除Http协议接口信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["Http协议接口管理"],
+        "tags": [
+          "Http协议接口管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1324,7 +1384,9 @@
         "summary": "获取所有Http协议接口信息列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["Http协议接口管理"],
+        "tags": [
+          "Http协议接口管理"
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -1333,7 +1395,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 5,\n\t\t\t\t\"name\": \"测试2\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:21+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:21+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 4,\n\t\t\t\t\"name\": \"测试1\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:15+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:15+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 2,\n\t\t\t\t\"name\": \"管理员\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"管理员\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T21:55:31+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 3,\n\t\t\t\t\"name\": \"普通用户\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"普通用户\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T22:06:48+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 4\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 5,\n\t\t\t\t\"name\": \"测试2\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:21+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:21+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 4,\n\t\t\t\t\"name\": \"测试1\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:15+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:15+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 2,\n\t\t\t\t\"name\": \"管理员\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"管理员\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T21:55:31+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 3,\n\t\t\t\t\"name\": \"普通用户\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"普通用户\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T22:06:48+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 4\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -1352,7 +1414,9 @@
         "summary": "更新Http协议接口信息状态",
         "description": "",
         "apipost_tags": [],
-        "tags": ["Http协议接口管理"],
+        "tags": [
+          "Http协议接口管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1390,14 +1454,16 @@
         "summary": "更新Http协议接口信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["Http协议接口管理"],
+        "tags": [
+          "Http协议接口管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"parent_id\": 1,\n    \"id\": 1,\n    \"name\": \"xxxx2\",\n    \"method\": \"GET\",\n    \"uri\": \"xx\",\n    \"note\": \"xxx\",\n    \"status\": 1\n}"
+              "example": "{\n    \"parent_id\": 1,\n    \"id\": 1,\n    \"name\": \"xxxx2\",\n    \"method\": \"GET\",\n    \"uri\": \"xx\",\n    \"desc\": \"xxx\",\n    \"status\": 1\n}"
             }
           }
         },
@@ -1428,14 +1494,16 @@
         "summary": "添加Http协议接口信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["Http协议接口管理"],
+        "tags": [
+          "Http协议接口管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"name\": \"xxxx3\",\n    \"method\": \"GET\",\n    \"uri\": \"xx\",\n    \"note\": \"\",\n    \"status\": 1\n}"
+              "example": "{\n    \"name\": \"xxxx3\",\n    \"method\": \"GET\",\n    \"uri\": \"xx\",\n    \"desc\": \"\",\n    \"status\": 1\n}"
             }
           }
         },
@@ -1466,7 +1534,9 @@
         "summary": "获取所有Http协议接口信息树",
         "description": "",
         "apipost_tags": [],
-        "tags": ["Http协议接口管理"],
+        "tags": [
+          "Http协议接口管理"
+        ],
         "parameters": [
           {
             "name": "page",
@@ -1519,7 +1589,7 @@
                 "schema": []
               }
             },
-            "example": "{\"code\":10000,\"msg\":\"Ok\",\"data\":{\"data_list\":[{\"id\":2,\"name\":\"管理员\",\"sort\":0,\"note\":\"管理员\",\"status\":1,\"created_at\":\"2023-01-13T21:55:31+08:00\",\"UpdatedAt\":\"2023-01-13T22:14:23+08:00\"}],\"tatol\":1}}"
+            "example": "{\"code\":10000,\"msg\":\"Ok\",\"data\":{\"data_list\":[{\"id\":2,\"name\":\"管理员\",\"sort\":0,\"desc\":\"管理员\",\"status\":1,\"created_at\":\"2023-01-13T21:55:31+08:00\",\"UpdatedAt\":\"2023-01-13T22:14:23+08:00\"}],\"tatol\":1}}"
           },
           "404": {
             "description": "失败",
@@ -1538,7 +1608,9 @@
         "summary": "获角色色与Http协议接口关系列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["角色与Http协议接口关系管理"],
+        "tags": [
+          "角色与Http协议接口关系管理"
+        ],
         "parameters": [
           {
             "name": "role_id",
@@ -1582,7 +1654,9 @@
         "summary": "更新角色与Http协议接口关系",
         "description": "",
         "apipost_tags": [],
-        "tags": ["角色与Http协议接口关系管理"],
+        "tags": [
+          "角色与Http协议接口关系管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1620,7 +1694,9 @@
         "summary": "获取网络请求日志列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["网络请求管理"],
+        "tags": [
+          "网络请求管理"
+        ],
         "parameters": [
           {
             "name": "page",
@@ -1694,7 +1770,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 13700,\n\t\t\t\t\"user_id\": 20,\n\t\t\t\t\"parent_trace_id\": \"\",\n\t\t\t\t\"trace_id\": \"3fa925b39d10a6b3832135902c99d715\",\n\t\t\t\t\"error_code\": 200,\n\t\t\t\t\"method\": \"GET\",\n\t\t\t\t\"path\": \"/api/v1/httpLog/list\",\n\t\t\t\t\"query\": \"page=1&page_size=10&user_id=0&trace_id=&error_code=&method=&path=&remote_addr=&http_type=\",\n\t\t\t\t\"body\": \"\",\n\t\t\t\t\"remote_addr\": \"127.0.0.1\",\n\t\t\t\t\"user_agent\": \"PostmanRuntime-ApipostRuntime/1.1.0\",\n\t\t\t\t\"cost\": 7443,\n\t\t\t\t\"http_type\": \"REQ\",\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"created_at\": \"2023-02-18T17:04:42+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 13294\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 13700,\n\t\t\t\t\"user_id\": 20,\n\t\t\t\t\"parent_trace_id\": \"\",\n\t\t\t\t\"trace_id\": \"3fa925b39d10a6b3832135902c99d715\",\n\t\t\t\t\"error_code\": 200,\n\t\t\t\t\"method\": \"GET\",\n\t\t\t\t\"path\": \"/api/v1/httpLog/list\",\n\t\t\t\t\"query\": \"page=1&page_size=10&user_id=0&trace_id=&error_code=&method=&path=&remote_addr=&http_type=\",\n\t\t\t\t\"body\": \"\",\n\t\t\t\t\"remote_addr\": \"127.0.0.1\",\n\t\t\t\t\"user_agent\": \"PostmanRuntime-ApipostRuntime/1.1.0\",\n\t\t\t\t\"cost\": 7443,\n\t\t\t\t\"http_type\": \"REQ\",\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"created_at\": \"2023-02-18T17:04:42+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 13294\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -1738,10 +1814,12 @@
     },
     "http://127.0.0.1:8080/api/v1/roleMenuRel/list": {
       "GET": {
-        "summary": "获角色色关联的菜单列表",
+        "summary": "获角色色关系的菜单列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["角色菜单关系管理"],
+        "tags": [
+          "角色菜单关系管理"
+        ],
         "parameters": [
           {
             "name": "role_id",
@@ -1782,10 +1860,12 @@
     },
     "http://127.0.0.1:8080/api/v1/roleMenuRel/update": {
       "PUT": {
-        "summary": "更新角色菜单关联关系",
+        "summary": "更新角色菜单关系关系",
         "description": "",
         "apipost_tags": [],
-        "tags": ["角色菜单关系管理"],
+        "tags": [
+          "角色菜单关系管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1823,7 +1903,9 @@
         "summary": "批量删除角色",
         "description": "",
         "apipost_tags": [],
-        "tags": ["角色管理"],
+        "tags": [
+          "角色管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1861,7 +1943,9 @@
         "summary": "删除角色",
         "description": "",
         "apipost_tags": [],
-        "tags": ["角色管理"],
+        "tags": [
+          "角色管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1899,7 +1983,9 @@
         "summary": "获取所有角色列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["角色管理"],
+        "tags": [
+          "角色管理"
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -1908,7 +1994,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 5,\n\t\t\t\t\"name\": \"测试2\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:21+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:21+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 4,\n\t\t\t\t\"name\": \"测试1\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:15+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:15+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 2,\n\t\t\t\t\"name\": \"管理员\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"管理员\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T21:55:31+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 3,\n\t\t\t\t\"name\": \"普通用户\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"普通用户\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T22:06:48+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 4\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 5,\n\t\t\t\t\"name\": \"测试2\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:21+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:21+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 4,\n\t\t\t\t\"name\": \"测试1\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:15+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:15+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 2,\n\t\t\t\t\"name\": \"管理员\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"管理员\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T21:55:31+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 3,\n\t\t\t\t\"name\": \"普通用户\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"普通用户\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T22:06:48+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 4\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -1927,7 +2013,9 @@
         "summary": "获角色色列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["角色管理"],
+        "tags": [
+          "角色管理"
+        ],
         "parameters": [
           {
             "name": "page",
@@ -1959,7 +2047,7 @@
                 "schema": []
               }
             },
-            "example": "{\"code\":10000,\"msg\":\"Ok\",\"data\":{\"data_list\":[{\"id\":2,\"name\":\"管理员\",\"sort\":0,\"note\":\"管理员\",\"status\":1,\"created_at\":\"2023-01-13T21:55:31+08:00\",\"UpdatedAt\":\"2023-01-13T22:14:23+08:00\"}],\"tatol\":1}}"
+            "example": "{\"code\":10000,\"msg\":\"Ok\",\"data\":{\"data_list\":[{\"id\":2,\"name\":\"管理员\",\"sort\":0,\"desc\":\"管理员\",\"status\":1,\"created_at\":\"2023-01-13T21:55:31+08:00\",\"UpdatedAt\":\"2023-01-13T22:14:23+08:00\"}],\"tatol\":1}}"
           },
           "404": {
             "description": "失败",
@@ -1978,14 +2066,16 @@
         "summary": "添加角色",
         "description": "",
         "apipost_tags": [],
-        "tags": ["角色管理"],
+        "tags": [
+          "角色管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"name\": \"管理员2\",\n    \"status\": 1,\n    \"sort\": 0,\n    \"note\": \"\"\n}"
+              "example": "{\n    \"name\": \"管理员2\",\n    \"status\": 1,\n    \"sort\": 0,\n    \"desc\": \"\"\n}"
             }
           }
         },
@@ -2016,7 +2106,9 @@
         "summary": "更新角色状态",
         "description": "",
         "apipost_tags": [],
-        "tags": ["角色管理"],
+        "tags": [
+          "角色管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2054,14 +2146,16 @@
         "summary": "更新角色",
         "description": "",
         "apipost_tags": [],
-        "tags": ["角色管理"],
+        "tags": [
+          "角色管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"id\":2,\n    \"name\": \"管理员\",\n    \"status\": 0,\n    \"sort\": 0,\n    \"note\": \"管理员\"\n}"
+              "example": "{\n    \"id\":2,\n    \"name\": \"管理员\",\n    \"status\": 0,\n    \"sort\": 0,\n    \"desc\": \"管理员\"\n}"
             }
           }
         },
@@ -2092,7 +2186,9 @@
         "summary": "更新用户手机号码",
         "description": "",
         "apipost_tags": [],
-        "tags": ["用户管理"],
+        "tags": [
+          "用户信息管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2130,7 +2226,9 @@
         "summary": "获取用户列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["用户管理"],
+        "tags": [
+          "用户信息管理"
+        ],
         "parameters": [
           {
             "name": "nickname",
@@ -2176,7 +2274,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 4,\n\t\t\t\t\"realname\": \"xxx2\",\n\t\t\t\t\"nickname\": \"xxxa\",\n\t\t\t\t\"gender\": 1,\n\t\t\t\t\"age\": 18,\n\t\t\t\t\"birthday\": \"xxx\",\n\t\t\t\t\"avatar\": \"xxx\",\n\t\t\t\t\"phone\": \"xxx\",\n\t\t\t\t\"email\": \"xxx\",\n\t\t\t\t\"intro\": \"xxx\",\n\t\t\t\t\"note\": \"xxx\",\n\t\t\t\t\"password\": \"\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-08T18:09:22+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T14:13:10+08:00\",\n\t\t\t\t\"roles\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 2,\n\t\t\t\t\t\t\"name\": \"管理员\",\n\t\t\t\t\t\t\"sort\": 0,\n\t\t\t\t\t\t\"note\": \"管理员\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-01-13T21:55:31+08:00\",\n\t\t\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 5\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 4,\n\t\t\t\t\"realname\": \"xxx2\",\n\t\t\t\t\"nickname\": \"xxxa\",\n\t\t\t\t\"gender\": 1,\n\t\t\t\t\"age\": 18,\n\t\t\t\t\"birthday\": \"xxx\",\n\t\t\t\t\"avatar\": \"xxx\",\n\t\t\t\t\"phone\": \"xxx\",\n\t\t\t\t\"email\": \"xxx\",\n\t\t\t\t\"intro\": \"xxx\",\n\t\t\t\t\"desc\": \"xxx\",\n\t\t\t\t\"password\": \"\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-08T18:09:22+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T14:13:10+08:00\",\n\t\t\t\t\"roles\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 2,\n\t\t\t\t\t\t\"name\": \"管理员\",\n\t\t\t\t\t\t\"sort\": 0,\n\t\t\t\t\t\t\"desc\": \"管理员\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-01-13T21:55:31+08:00\",\n\t\t\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 5\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -2195,7 +2293,9 @@
         "summary": "更新用户密码",
         "description": "",
         "apipost_tags": [],
-        "tags": ["用户管理"],
+        "tags": [
+          "用户信息管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2233,7 +2333,9 @@
         "summary": "获取所有用户列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["用户管理"],
+        "tags": [
+          "用户信息管理"
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -2242,7 +2344,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 19,\n\t\t\t\t\"realname\": \"xxx2\",\n\t\t\t\t\"nickname\": \"xxxx\",\n\t\t\t\t\"gender\": 0,\n\t\t\t\t\"age\": 18,\n\t\t\t\t\"birthday\": \"ffffffff\",\n\t\t\t\t\"avatar\": \"fffffff\",\n\t\t\t\t\"phone\": \"aaaa234\",\n\t\t\t\t\"email\": \"aaaa234\",\n\t\t\t\t\"intro\": \"xxx\",\n\t\t\t\t\"note\": \"xxx\",\n\t\t\t\t\"password\": \"\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"status\": 0,\n\t\t\t\t\"created_at\": \"2023-01-14T13:37:42+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:08:36+08:00\",\n\t\t\t\t\"roles\": null\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 7,\n\t\t\t\t\"realname\": \"xxx2\",\n\t\t\t\t\"nickname\": \"xxxx\",\n\t\t\t\t\"gender\": 1,\n\t\t\t\t\"age\": 18,\n\t\t\t\t\"birthday\": \"xxx\",\n\t\t\t\t\"avatar\": \"xxx\",\n\t\t\t\t\"phone\": \"555555555\",\n\t\t\t\t\"email\": \"555555555\",\n\t\t\t\t\"intro\": \"xxx\",\n\t\t\t\t\"note\": \"xxx\",\n\t\t\t\t\"password\": \"\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"status\": 0,\n\t\t\t\t\"created_at\": \"2023-01-13T22:06:48+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T14:17:20+08:00\",\n\t\t\t\t\"roles\": null\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 4,\n\t\t\t\t\"realname\": \"xxx2\",\n\t\t\t\t\"nickname\": \"xxxa\",\n\t\t\t\t\"gender\": 1,\n\t\t\t\t\"age\": 18,\n\t\t\t\t\"birthday\": \"xxx\",\n\t\t\t\t\"avatar\": \"xxx\",\n\t\t\t\t\"phone\": \"xxx\",\n\t\t\t\t\"email\": \"xxx\",\n\t\t\t\t\"intro\": \"xxx\",\n\t\t\t\t\"note\": \"xxx\",\n\t\t\t\t\"password\": \"\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-08T18:09:22+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T14:13:10+08:00\",\n\t\t\t\t\"roles\": null\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 6,\n\t\t\t\t\"realname\": \"xxx2\",\n\t\t\t\t\"nickname\": \"xxxx\",\n\t\t\t\t\"gender\": 1,\n\t\t\t\t\"age\": 18,\n\t\t\t\t\"birthday\": \"xxx\",\n\t\t\t\t\"avatar\": \"xxx\",\n\t\t\t\t\"phone\": \"aaaa\",\n\t\t\t\t\"email\": \"aaaa\",\n\t\t\t\t\"intro\": \"xxx\",\n\t\t\t\t\"note\": \"xxx\",\n\t\t\t\t\"password\": \"\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T21:34:44+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T21:34:44+08:00\",\n\t\t\t\t\"roles\": null\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 5,\n\t\t\t\t\"realname\": \"xxx2\",\n\t\t\t\t\"nickname\": \"xxx\",\n\t\t\t\t\"gender\": 1,\n\t\t\t\t\"age\": 18,\n\t\t\t\t\"birthday\": \"xxx\",\n\t\t\t\t\"avatar\": \"xxx\",\n\t\t\t\t\"phone\": \"xxxx\",\n\t\t\t\t\"email\": \"xxxx\",\n\t\t\t\t\"intro\": \"xxx\",\n\t\t\t\t\"note\": \"xxx\",\n\t\t\t\t\"password\": \"\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T21:15:20+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T21:15:20+08:00\",\n\t\t\t\t\"roles\": null\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 5\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 19,\n\t\t\t\t\"realname\": \"xxx2\",\n\t\t\t\t\"nickname\": \"xxxx\",\n\t\t\t\t\"gender\": 0,\n\t\t\t\t\"age\": 18,\n\t\t\t\t\"birthday\": \"ffffffff\",\n\t\t\t\t\"avatar\": \"fffffff\",\n\t\t\t\t\"phone\": \"aaaa234\",\n\t\t\t\t\"email\": \"aaaa234\",\n\t\t\t\t\"intro\": \"xxx\",\n\t\t\t\t\"desc\": \"xxx\",\n\t\t\t\t\"password\": \"\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"status\": 0,\n\t\t\t\t\"created_at\": \"2023-01-14T13:37:42+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:08:36+08:00\",\n\t\t\t\t\"roles\": null\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 7,\n\t\t\t\t\"realname\": \"xxx2\",\n\t\t\t\t\"nickname\": \"xxxx\",\n\t\t\t\t\"gender\": 1,\n\t\t\t\t\"age\": 18,\n\t\t\t\t\"birthday\": \"xxx\",\n\t\t\t\t\"avatar\": \"xxx\",\n\t\t\t\t\"phone\": \"555555555\",\n\t\t\t\t\"email\": \"555555555\",\n\t\t\t\t\"intro\": \"xxx\",\n\t\t\t\t\"desc\": \"xxx\",\n\t\t\t\t\"password\": \"\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"status\": 0,\n\t\t\t\t\"created_at\": \"2023-01-13T22:06:48+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T14:17:20+08:00\",\n\t\t\t\t\"roles\": null\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 4,\n\t\t\t\t\"realname\": \"xxx2\",\n\t\t\t\t\"nickname\": \"xxxa\",\n\t\t\t\t\"gender\": 1,\n\t\t\t\t\"age\": 18,\n\t\t\t\t\"birthday\": \"xxx\",\n\t\t\t\t\"avatar\": \"xxx\",\n\t\t\t\t\"phone\": \"xxx\",\n\t\t\t\t\"email\": \"xxx\",\n\t\t\t\t\"intro\": \"xxx\",\n\t\t\t\t\"desc\": \"xxx\",\n\t\t\t\t\"password\": \"\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-08T18:09:22+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T14:13:10+08:00\",\n\t\t\t\t\"roles\": null\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 6,\n\t\t\t\t\"realname\": \"xxx2\",\n\t\t\t\t\"nickname\": \"xxxx\",\n\t\t\t\t\"gender\": 1,\n\t\t\t\t\"age\": 18,\n\t\t\t\t\"birthday\": \"xxx\",\n\t\t\t\t\"avatar\": \"xxx\",\n\t\t\t\t\"phone\": \"aaaa\",\n\t\t\t\t\"email\": \"aaaa\",\n\t\t\t\t\"intro\": \"xxx\",\n\t\t\t\t\"desc\": \"xxx\",\n\t\t\t\t\"password\": \"\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T21:34:44+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T21:34:44+08:00\",\n\t\t\t\t\"roles\": null\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 5,\n\t\t\t\t\"realname\": \"xxx2\",\n\t\t\t\t\"nickname\": \"xxx\",\n\t\t\t\t\"gender\": 1,\n\t\t\t\t\"age\": 18,\n\t\t\t\t\"birthday\": \"xxx\",\n\t\t\t\t\"avatar\": \"xxx\",\n\t\t\t\t\"phone\": \"xxxx\",\n\t\t\t\t\"email\": \"xxxx\",\n\t\t\t\t\"intro\": \"xxx\",\n\t\t\t\t\"desc\": \"xxx\",\n\t\t\t\t\"password\": \"\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T21:15:20+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T21:15:20+08:00\",\n\t\t\t\t\"roles\": null\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 5\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -2261,7 +2363,9 @@
         "summary": "获取用户信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["用户管理"],
+        "tags": [
+          "用户信息管理"
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -2270,7 +2374,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"user\": {\n\t\t\t\"id\": 20,\n\t\t\t\"realname\": \"xxx2\",\n\t\t\t\"nickname\": \"demo\",\n\t\t\t\"gender\": 1,\n\t\t\t\"age\": 18,\n\t\t\t\"birthday\": \"xxx\",\n\t\t\t\"avatar\": \"xxx\",\n\t\t\t\"phone\": \"18312465088\",\n\t\t\t\"email\": \"\",\n\t\t\t\"intro\": \"xxx\",\n\t\t\t\"note\": \"xxx\",\n\t\t\t\"password\": \"\",\n\t\t\t\"sort\": 1,\n\t\t\t\"status\": 1,\n\t\t\t\"created_at\": \"2023-01-15 17:25:17\",\n\t\t\t\"updated_at\": \"2023-02-05 19:24:48\",\n\t\t\t\"roles\": null\n\t\t},\n\t\t\"roles\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"name\": \"管理员\",\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-01 22:39:38\",\n\t\t\t\t\"updated_at\": \"2023-02-01 22:41:48\"\n\t\t\t}\n\t\t],\n\t\t\"menus\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"title\": \"系统管理\",\n\t\t\t\t\"icon\": \"\",\n\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\"open_type\": 0,\n\t\t\t\t\"path\": \"/system\",\n\t\t\t\t\"component\": \"Layout\",\n\t\t\t\t\"link\": \"\",\n\t\t\t\t\"target\": \"\",\n\t\t\t\t\"permission\": \"\",\n\t\t\t\t\"hide\": 0,\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-04 21:18:29\",\n\t\t\t\t\"updated_at\": \"2023-02-05 20:22:07\",\n\t\t\t\t\"children\": null\n\t\t\t}\n\t\t],\n\t\t\"permissions\": [\n\t\t\t\"sys:user:list\"\n\t\t]\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"user\": {\n\t\t\t\"id\": 20,\n\t\t\t\"realname\": \"xxx2\",\n\t\t\t\"nickname\": \"demo\",\n\t\t\t\"gender\": 1,\n\t\t\t\"age\": 18,\n\t\t\t\"birthday\": \"xxx\",\n\t\t\t\"avatar\": \"xxx\",\n\t\t\t\"phone\": \"18312465088\",\n\t\t\t\"email\": \"\",\n\t\t\t\"intro\": \"xxx\",\n\t\t\t\"desc\": \"xxx\",\n\t\t\t\"password\": \"\",\n\t\t\t\"sort\": 1,\n\t\t\t\"status\": 1,\n\t\t\t\"created_at\": \"2023-01-15 17:25:17\",\n\t\t\t\"updated_at\": \"2023-02-05 19:24:48\",\n\t\t\t\"roles\": null\n\t\t},\n\t\t\"roles\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"name\": \"管理员\",\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-01 22:39:38\",\n\t\t\t\t\"updated_at\": \"2023-02-01 22:41:48\"\n\t\t\t}\n\t\t],\n\t\t\"menus\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"title\": \"系统管理\",\n\t\t\t\t\"icon\": \"\",\n\t\t\t\t\"menu_type\": 0,\n\t\t\t\t\"open_type\": 0,\n\t\t\t\t\"path\": \"/system\",\n\t\t\t\t\"component\": \"Layout\",\n\t\t\t\t\"link\": \"\",\n\t\t\t\t\"target\": \"\",\n\t\t\t\t\"permission\": \"\",\n\t\t\t\t\"hide\": 0,\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-04 21:18:29\",\n\t\t\t\t\"updated_at\": \"2023-02-05 20:22:07\",\n\t\t\t\t\"children\": null\n\t\t\t}\n\t\t],\n\t\t\"permissions\": [\n\t\t\t\"sys:user:list\"\n\t\t]\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -2289,14 +2393,16 @@
         "summary": "添加用户",
         "description": "",
         "apipost_tags": [],
-        "tags": ["用户管理"],
+        "tags": [
+          "用户信息管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"realname\": \"xxx2\",\n    \"nickname\": \"xxxx\",\n    \"gender\": 1,\n    \"age\": 18,\n    \"birthday\": \"xxx\",\n    \"avatar\": \"xxx\",\n    \"phone\": \"aaaa234\",\n    \"email\": \"aaaa234\",\n    \"intro\": \"xxx\",\n    \"note\": \"xxx\",\n    \"password\": \"xxx\",\n    \"role_ids\": [\n        2\n    ]\n}"
+              "example": "{\n    \"realname\": \"xxx2\",\n    \"nickname\": \"xxxx\",\n    \"gender\": 1,\n    \"age\": 18,\n    \"birthday\": \"xxx\",\n    \"avatar\": \"xxx\",\n    \"phone\": \"aaaa234\",\n    \"email\": \"aaaa234\",\n    \"intro\": \"xxx\",\n    \"desc\": \"xxx\",\n    \"password\": \"xxx\",\n    \"role_ids\": [\n        2\n    ]\n}"
             }
           }
         },
@@ -2327,7 +2433,9 @@
         "summary": "删除用户",
         "description": "",
         "apipost_tags": [],
-        "tags": ["用户管理"],
+        "tags": [
+          "用户信息管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2365,7 +2473,9 @@
         "summary": "更新用户状态",
         "description": "",
         "apipost_tags": [],
-        "tags": ["用户管理"],
+        "tags": [
+          "用户信息管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2403,7 +2513,9 @@
         "summary": "重置用户密码",
         "description": "",
         "apipost_tags": [],
-        "tags": ["用户管理"],
+        "tags": [
+          "用户信息管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2441,14 +2553,16 @@
         "summary": "更新用户详情信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["用户管理"],
+        "tags": [
+          "用户信息管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"id\": 19,\n    \"realname\": \"xxx2\",\n    \"nickname\": \"xxxx\",\n    \"gender\": 0,\n    \"age\": 18,\n    \"birthday\": \"ffffffff\",\n    \"avatar\": \"fffffff\",\n    \"phone\": \"aaaa234\",\n    \"email\": \"aaaa234\",\n    \"intro\": \"xxx\",\n    \"note\": \"xxx\",\n    \"password\": \"xxx\",\n    \"role_ids\": [\n        4,\n        3\n    ]\n}"
+              "example": "{\n    \"id\": 19,\n    \"realname\": \"xxx2\",\n    \"nickname\": \"xxxx\",\n    \"gender\": 0,\n    \"age\": 18,\n    \"birthday\": \"ffffffff\",\n    \"avatar\": \"fffffff\",\n    \"phone\": \"aaaa234\",\n    \"email\": \"aaaa234\",\n    \"intro\": \"xxx\",\n    \"desc\": \"xxx\",\n    \"password\": \"xxx\",\n    \"role_ids\": [\n        4,\n        3\n    ]\n}"
             }
           }
         },
@@ -2479,7 +2593,9 @@
         "summary": "更新用户邮箱",
         "description": "",
         "apipost_tags": [],
-        "tags": ["用户管理"],
+        "tags": [
+          "用户信息管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2517,14 +2633,16 @@
         "summary": "更新字典维度信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["字典维度管理"],
+        "tags": [
+          "字典维度管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"id\": 1,\n    \"name\": \"xxxx3\",\n    \"code\": \"GET\",\n    \"note\": \"\",\n    \"status\": 1\n}"
+              "example": "{\n    \"id\": 1,\n    \"name\": \"xxxx3\",\n    \"code\": \"GET\",\n    \"desc\": \"\",\n    \"status\": 1\n}"
             }
           }
         },
@@ -2555,7 +2673,9 @@
         "summary": "批量删除字典维度信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["字典维度管理"],
+        "tags": [
+          "字典维度管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2593,7 +2713,9 @@
         "summary": "删除字典维度信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["字典维度管理"],
+        "tags": [
+          "字典维度管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2631,7 +2753,9 @@
         "summary": "获取字典维度信息列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["字典维度管理"],
+        "tags": [
+          "字典维度管理"
+        ],
         "parameters": [
           {
             "name": "page",
@@ -2670,7 +2794,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 5,\n\t\t\t\t\"name\": \"测试2\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:21+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:21+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 4,\n\t\t\t\t\"name\": \"测试1\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:15+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:15+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 2,\n\t\t\t\t\"name\": \"管理员\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"管理员\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T21:55:31+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 3,\n\t\t\t\t\"name\": \"普通用户\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"note\": \"普通用户\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T22:06:48+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 4\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 5,\n\t\t\t\t\"name\": \"测试2\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:21+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:21+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 4,\n\t\t\t\t\"name\": \"测试1\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-14T17:01:15+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-14T17:01:15+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 2,\n\t\t\t\t\"name\": \"管理员\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"管理员\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T21:55:31+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": 3,\n\t\t\t\t\"name\": \"普通用户\",\n\t\t\t\t\"sort\": 0,\n\t\t\t\t\"desc\": \"普通用户\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-01-13T22:06:48+08:00\",\n\t\t\t\t\"updated_at\": \"2023-01-13T22:14:23+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 4\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -2689,14 +2813,16 @@
         "summary": "添加字典维度信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["字典维度管理"],
+        "tags": [
+          "字典维度管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"name\": \"xxxx3\",\n    \"code\": \"GET\",\n    \"note\": \"\",\n    \"status\": 1\n}"
+              "example": "{\n    \"name\": \"xxxx3\",\n    \"code\": \"GET\",\n    \"desc\": \"\",\n    \"status\": 1\n}"
             }
           }
         },
@@ -2727,7 +2853,9 @@
         "summary": "更新字典维度信息状态",
         "description": "",
         "apipost_tags": [],
-        "tags": ["字典维度管理"],
+        "tags": [
+          "字典维度管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2765,7 +2893,9 @@
         "summary": "获取 WEB 日志列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["WEB 日志管理"],
+        "tags": [
+          "WEB 日志管理"
+        ],
         "parameters": [
           {
             "name": "page",
@@ -2832,7 +2962,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"user_id\": 20,\n\t\t\t\t\"nickname\": \"管理员\",\n\t\t\t\t\"trace_id\": \"514d136905e0ab659a3f863661b61e24\",\n\t\t\t\t\"os_type\": 0,\n\t\t\t\t\"error_type\": 0,\n\t\t\t\t\"level\": \"x\",\n\t\t\t\t\"caller_line\": \"x\",\n\t\t\t\t\"url\": \"x\",\n\t\t\t\t\"msg\": \"x\",\n\t\t\t\t\"stack\": \"x\",\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"created_at\": \"2023-02-26 21:37:01\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 1\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"user_id\": 20,\n\t\t\t\t\"nickname\": \"管理员\",\n\t\t\t\t\"trace_id\": \"514d136905e0ab659a3f863661b61e24\",\n\t\t\t\t\"os_type\": 0,\n\t\t\t\t\"error_type\": 0,\n\t\t\t\t\"level\": \"x\",\n\t\t\t\t\"caller_line\": \"x\",\n\t\t\t\t\"url\": \"x\",\n\t\t\t\t\"msg\": \"x\",\n\t\t\t\t\"stack\": \"x\",\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"created_at\": \"2023-02-26 21:37:01\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 1\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -2851,7 +2981,9 @@
         "summary": "添加 WEB 日志",
         "description": "",
         "apipost_tags": [],
-        "tags": ["WEB 日志管理"],
+        "tags": [
+          "WEB 日志管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2889,7 +3021,9 @@
         "summary": "获取系统日志列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["系统日志管理"],
+        "tags": [
+          "系统日志管理"
+        ],
         "parameters": [
           {
             "name": "page",
@@ -2956,7 +3090,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 13700,\n\t\t\t\t\"user_id\": 20,\n\t\t\t\t\"parent_trace_id\": \"\",\n\t\t\t\t\"trace_id\": \"3fa925b39d10a6b3832135902c99d715\",\n\t\t\t\t\"error_code\": 200,\n\t\t\t\t\"method\": \"GET\",\n\t\t\t\t\"path\": \"/api/v1/httpLog/list\",\n\t\t\t\t\"query\": \"page=1&page_size=10&user_id=0&trace_id=&error_code=&method=&path=&remote_addr=&http_type=\",\n\t\t\t\t\"body\": \"\",\n\t\t\t\t\"remote_addr\": \"127.0.0.1\",\n\t\t\t\t\"user_agent\": \"PostmanRuntime-ApipostRuntime/1.1.0\",\n\t\t\t\t\"cost\": 7443,\n\t\t\t\t\"http_type\": \"REQ\",\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"created_at\": \"2023-02-18T17:04:42+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 13294\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 13700,\n\t\t\t\t\"user_id\": 20,\n\t\t\t\t\"parent_trace_id\": \"\",\n\t\t\t\t\"trace_id\": \"3fa925b39d10a6b3832135902c99d715\",\n\t\t\t\t\"error_code\": 200,\n\t\t\t\t\"method\": \"GET\",\n\t\t\t\t\"path\": \"/api/v1/httpLog/list\",\n\t\t\t\t\"query\": \"page=1&page_size=10&user_id=0&trace_id=&error_code=&method=&path=&remote_addr=&http_type=\",\n\t\t\t\t\"body\": \"\",\n\t\t\t\t\"remote_addr\": \"127.0.0.1\",\n\t\t\t\t\"user_agent\": \"PostmanRuntime-ApipostRuntime/1.1.0\",\n\t\t\t\t\"cost\": 7443,\n\t\t\t\t\"http_type\": \"REQ\",\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"created_at\": \"2023-02-18T17:04:42+08:00\"\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 13294\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -2975,7 +3109,9 @@
         "summary": "验证码验证",
         "description": "",
         "apipost_tags": [],
-        "tags": ["验证码"],
+        "tags": [
+          "验证码"
+        ],
         "parameters": [
           {
             "name": "captcha",
@@ -3019,7 +3155,9 @@
         "summary": "获取验证码",
         "description": "",
         "apipost_tags": [],
-        "tags": ["验证码"],
+        "tags": [
+          "验证码"
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -3047,14 +3185,16 @@
         "summary": "更新配置",
         "description": "",
         "apipost_tags": [],
-        "tags": ["配置管理"],
+        "tags": [
+          "配置管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "string"
               },
-              "example": "{\n    \"id\": 2,\n    \"parent_id\": 1,\n    \"name\": \"1\",\n    \"key\": \"1\",\n    \"value\": \"1\",\n    \"sort\": 0,\n    \"note\": \"\",\n    \"status\": 1\n}"
+              "example": "{\n    \"id\": 2,\n    \"parent_id\": 1,\n    \"name\": \"1\",\n    \"key\": \"1\",\n    \"value\": \"1\",\n    \"sort\": 0,\n    \"desc\": \"\",\n    \"status\": 1\n}"
             }
           }
         },
@@ -3085,7 +3225,9 @@
         "summary": "查询网站配置列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["配置管理"],
+        "tags": [
+          "配置管理"
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -3094,7 +3236,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"name\": \"系统配置\",\n\t\t\t\t\"key\": \"system\",\n\t\t\t\t\"value\": \"\",\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"note\": \"系统配置\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-14 22:17:20\",\n\t\t\t\t\"updated_at\": \"2023-02-25 21:01:44\",\n\t\t\t\t\"children\": null\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 19\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"name\": \"系统配置\",\n\t\t\t\t\"key\": \"system\",\n\t\t\t\t\"value\": \"\",\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"desc\": \"系统配置\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-14 22:17:20\",\n\t\t\t\t\"updated_at\": \"2023-02-25 21:01:44\",\n\t\t\t\t\"children\": null\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 19\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -3113,7 +3255,9 @@
         "summary": "通过上级 key 获取子配置列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["配置管理"],
+        "tags": [
+          "配置管理"
+        ],
         "parameters": [
           {
             "name": "page",
@@ -3145,7 +3289,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": [\n\t\t{\n\t\t\t\"id\": 5,\n\t\t\t\"parent_id\": 4,\n\t\t\t\"name\": \"网站全称\",\n\t\t\t\"key\": \"website_title\",\n\t\t\t\"value\": \"后台管理系统\",\n\t\t\t\"sort\": 1,\n\t\t\t\"note\": \"\",\n\t\t\t\"status\": 1,\n\t\t\t\"created_at\": \"2023-02-25 20:33:49\",\n\t\t\t\"updated_at\": \"2023-02-25 20:33:49\",\n\t\t\t\"children\": null\n\t\t}\n\t]\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": [\n\t\t{\n\t\t\t\"id\": 5,\n\t\t\t\"parent_id\": 4,\n\t\t\t\"name\": \"网站全称\",\n\t\t\t\"key\": \"website_title\",\n\t\t\t\"value\": \"后台管理系统\",\n\t\t\t\"sort\": 1,\n\t\t\t\"desc\": \"\",\n\t\t\t\"status\": 1,\n\t\t\t\"created_at\": \"2023-02-25 20:33:49\",\n\t\t\t\"updated_at\": \"2023-02-25 20:33:49\",\n\t\t\t\"children\": null\n\t\t}\n\t]\n}"
           },
           "404": {
             "description": "失败",
@@ -3164,7 +3308,9 @@
         "summary": "获取配置树",
         "description": "",
         "apipost_tags": [],
-        "tags": ["配置管理"],
+        "tags": [
+          "配置管理"
+        ],
         "parameters": [
           {
             "name": "page",
@@ -3203,7 +3349,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"name\": \"系统配置\",\n\t\t\t\t\"key\": \"system\",\n\t\t\t\t\"value\": \"\",\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-14T22:17:20+08:00\",\n\t\t\t\t\"updated_at\": \"2023-02-14T22:38:06+08:00\",\n\t\t\t\t\"children\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 2,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"name\": \"应用名称\",\n\t\t\t\t\t\t\"key\": \"sys_app_name\",\n\t\t\t\t\t\t\"value\": \"系统后台配置\",\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"note\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-14T22:38:32+08:00\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-14T22:38:52+08:00\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 1\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"name\": \"系统配置\",\n\t\t\t\t\"key\": \"system\",\n\t\t\t\t\"value\": \"\",\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-14T22:17:20+08:00\",\n\t\t\t\t\"updated_at\": \"2023-02-14T22:38:06+08:00\",\n\t\t\t\t\"children\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 2,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"name\": \"应用名称\",\n\t\t\t\t\t\t\"key\": \"sys_app_name\",\n\t\t\t\t\t\t\"value\": \"系统后台配置\",\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"desc\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-14T22:38:32+08:00\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-14T22:38:52+08:00\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 1\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -3222,7 +3368,9 @@
         "summary": "获取配置列表",
         "description": "",
         "apipost_tags": [],
-        "tags": ["配置管理"],
+        "tags": [
+          "配置管理"
+        ],
         "parameters": [
           {
             "name": "page",
@@ -3261,7 +3409,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"name\": \"系统配置\",\n\t\t\t\t\"key\": \"system\",\n\t\t\t\t\"value\": \"\",\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"note\": \"系统配置\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-14 22:17:20\",\n\t\t\t\t\"updated_at\": \"2023-02-25 21:01:44\",\n\t\t\t\t\"children\": null\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 19\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"name\": \"系统配置\",\n\t\t\t\t\"key\": \"system\",\n\t\t\t\t\"value\": \"\",\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"desc\": \"系统配置\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-14 22:17:20\",\n\t\t\t\t\"updated_at\": \"2023-02-25 21:01:44\",\n\t\t\t\t\"children\": null\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 19\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -3280,7 +3428,9 @@
         "summary": "更新配置状态",
         "description": "",
         "apipost_tags": [],
-        "tags": ["配置管理"],
+        "tags": [
+          "配置管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -3318,7 +3468,9 @@
         "summary": "删除配置",
         "description": "",
         "apipost_tags": [],
-        "tags": ["配置管理"],
+        "tags": [
+          "配置管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -3356,7 +3508,9 @@
         "summary": "获取所有配置树",
         "description": "",
         "apipost_tags": [],
-        "tags": ["配置管理"],
+        "tags": [
+          "配置管理"
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -3365,7 +3519,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"name\": \"系统配置\",\n\t\t\t\t\"key\": \"system\",\n\t\t\t\t\"value\": \"\",\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"note\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-14T22:17:20+08:00\",\n\t\t\t\t\"updated_at\": \"2023-02-14T22:38:06+08:00\",\n\t\t\t\t\"children\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 2,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"name\": \"应用名称\",\n\t\t\t\t\t\t\"key\": \"sys_app_name\",\n\t\t\t\t\t\t\"value\": \"系统后台配置\",\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"note\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-14T22:38:32+08:00\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-14T22:38:52+08:00\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 1\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"data_list\": [\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"parent_id\": null,\n\t\t\t\t\"name\": \"系统配置\",\n\t\t\t\t\"key\": \"system\",\n\t\t\t\t\"value\": \"\",\n\t\t\t\t\"sort\": 1,\n\t\t\t\t\"desc\": \"\",\n\t\t\t\t\"status\": 1,\n\t\t\t\t\"created_at\": \"2023-02-14T22:17:20+08:00\",\n\t\t\t\t\"updated_at\": \"2023-02-14T22:38:06+08:00\",\n\t\t\t\t\"children\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 2,\n\t\t\t\t\t\t\"parent_id\": 1,\n\t\t\t\t\t\t\"name\": \"应用名称\",\n\t\t\t\t\t\t\"key\": \"sys_app_name\",\n\t\t\t\t\t\t\"value\": \"系统后台配置\",\n\t\t\t\t\t\t\"sort\": 1,\n\t\t\t\t\t\t\"desc\": \"\",\n\t\t\t\t\t\t\"status\": 1,\n\t\t\t\t\t\t\"created_at\": \"2023-02-14T22:38:32+08:00\",\n\t\t\t\t\t\t\"updated_at\": \"2023-02-14T22:38:52+08:00\",\n\t\t\t\t\t\t\"children\": []\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\t\"tatol\": 1\n\t}\n}"
           },
           "404": {
             "description": "失败",
@@ -3384,14 +3538,16 @@
         "summary": "添加配置",
         "description": "",
         "apipost_tags": [],
-        "tags": ["配置管理"],
+        "tags": [
+          "配置管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "string"
               },
-              "example": "{\n  \"parent_id\": 1,\n  \"name\": \"1\",\n  \"key\": \"1\",\n  \"value\": \"1\",\n  \"sort\": 0,\n  \"note\": \"\",\n  \"status\": 1\n}"
+              "example": "{\n  \"parent_id\": 1,\n  \"name\": \"1\",\n  \"key\": \"1\",\n  \"value\": \"1\",\n  \"sort\": 0,\n  \"desc\": \"\",\n  \"status\": 1\n}"
             }
           }
         },
@@ -3422,7 +3578,9 @@
         "summary": "批量删除配置",
         "description": "",
         "apipost_tags": [],
-        "tags": ["配置管理"],
+        "tags": [
+          "配置管理"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -3460,7 +3618,9 @@
         "summary": "获取配置信息",
         "description": "",
         "apipost_tags": [],
-        "tags": ["配置管理"],
+        "tags": [
+          "配置管理"
+        ],
         "parameters": [
           {
             "name": "key",
@@ -3478,7 +3638,7 @@
                 "schema": []
               }
             },
-            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"id\": 26,\n\t\t\"parent_id\": 25,\n\t\t\"name\": \"可申请最大令牌数\",\n\t\t\"key\": \"api_auth_max_token_num\",\n\t\t\"value\": \"5\",\n\t\t\"sort\": 1,\n\t\t\"note\": \"\",\n\t\t\"status\": 1,\n\t\t\"created_at\": \"2023-03-10 00:25:41\",\n\t\t\"updated_at\": \"2023-03-10 00:25:41\",\n\t\t\"children\": null\n\t}\n}"
+            "example": "{\n\t\"code\": 10000,\n\t\"msg\": \"Ok\",\n\t\"data\": {\n\t\t\"id\": 26,\n\t\t\"parent_id\": 25,\n\t\t\"name\": \"可申请最大令牌数\",\n\t\t\"key\": \"api_auth_max_token_num\",\n\t\t\"value\": \"5\",\n\t\t\"sort\": 1,\n\t\t\"desc\": \"\",\n\t\t\"status\": 1,\n\t\t\"created_at\": \"2023-03-10 00:25:41\",\n\t\t\"updated_at\": \"2023-03-10 00:25:41\",\n\t\t\"children\": null\n\t}\n}"
           },
           "404": {
             "description": "失败",

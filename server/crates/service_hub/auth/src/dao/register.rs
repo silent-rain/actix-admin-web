@@ -1,7 +1,7 @@
 //! 注册
 
 use database::DbRepo;
-use entity::{perm_user, perm_user_email, perm_user_phone};
+use entity::user::{user_base, user_email, user_phone};
 
 use nject::injectable;
 use sea_orm::{ActiveModelTrait, DatabaseTransaction, DbErr, Set, TransactionTrait};
@@ -16,7 +16,7 @@ pub struct RegisterDao<'a> {
 
 impl<'a> RegisterDao<'a> {
     /// 添加用户
-    pub async fn add_user(&self, req: RegisterReq) -> Result<perm_user::Model, DbErr> {
+    pub async fn add_user(&self, req: RegisterReq) -> Result<user_base::Model, DbErr> {
         let txn = self.db.wdb().begin().await?;
 
         // 添加用户
@@ -39,16 +39,16 @@ impl<'a> RegisterDao<'a> {
         &self,
         txn: &DatabaseTransaction,
         req: RegisterReq,
-    ) -> Result<perm_user::Model, DbErr> {
-        let active_model = perm_user::ActiveModel {
+    ) -> Result<user_base::Model, DbErr> {
+        let active_model = user_base::ActiveModel {
             username: Set(req.username),
             real_name: Set(req.real_name),
             gender: Set(req.gender),
             age: Set(req.age),
-            birthday: Set(req.birthday),
+            date_birth: Set(req.date_birth),
             avatar: Set(req.avatar),
             password: Set(req.password),
-            status: Set(perm_user::enums::Status::Enabled as i8),
+            status: Set(user_base::enums::Status::Enabled as i8),
             ..Default::default()
         };
         active_model.insert(txn).await
@@ -60,8 +60,8 @@ impl<'a> RegisterDao<'a> {
         txn: &DatabaseTransaction,
         user_id: i32,
         phone: String,
-    ) -> Result<perm_user_phone::Model, DbErr> {
-        let active_model = perm_user_phone::ActiveModel {
+    ) -> Result<user_phone::Model, DbErr> {
+        let active_model = user_phone::ActiveModel {
             user_id: Set(user_id),
             phone: Set(phone),
             ..Default::default()
@@ -75,8 +75,8 @@ impl<'a> RegisterDao<'a> {
         txn: &DatabaseTransaction,
         user_id: i32,
         email: String,
-    ) -> Result<perm_user_email::Model, DbErr> {
-        let active_model = perm_user_email::ActiveModel {
+    ) -> Result<user_email::Model, DbErr> {
+        let active_model = user_email::ActiveModel {
             user_id: Set(user_id),
             email: Set(email),
             ..Default::default()

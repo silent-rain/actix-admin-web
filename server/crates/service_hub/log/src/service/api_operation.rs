@@ -68,7 +68,7 @@ impl<'a> ApiOperationService<'a> {
             user_agent: Set(req.user_agent),
             cost: Set(req.cost),
             http_type: Set(req.http_type.into()),
-            note: Set(req.note),
+            desc: Set(req.desc),
             ..Default::default()
         };
         let result = self.system_dao.add(data).await.map_err(|err| {

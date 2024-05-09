@@ -1,7 +1,7 @@
-//! 菜单角色关联表
-//! User Entity: [`entity::prelude::PermMenuRoleRel`]
+//! 菜单角色关系表
+//! Entity: [`entity::prelude::PermMenuRoleRel`]
 use crate::{
-    m20240218_145453_create_perm_menu::PermMenu, m20240218_145453_create_perm_role::PermRole,
+    m20240218_145453_create_perm_menu::PermMenu, m20240218_145453_create_user_role::UserRole,
 };
 
 use sea_orm::{
@@ -21,7 +21,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(PermMenuRoleRel::Table)
-                    .comment("菜单角色关联表")
+                    .comment("菜单角色关系表")
                     .if_not_exists()
                     .col(
                         ColumnDef::new(PermMenuRoleRel::Id)
@@ -32,16 +32,16 @@ impl MigrationTrait for Migration {
                             .comment("自增ID"),
                     )
                     .col(
-                        ColumnDef::new(PermMenuRoleRel::RoleId)
-                            .integer()
-                            .not_null()
-                            .comment("角色ID"),
-                    )
-                    .col(
                         ColumnDef::new(PermMenuRoleRel::MenuId)
                             .integer()
                             .not_null()
                             .comment("菜单ID"),
+                    )
+                    .col(
+                        ColumnDef::new(PermMenuRoleRel::RoleId)
+                            .integer()
+                            .not_null()
+                            .comment("角色ID"),
                     )
                     .col(
                         ColumnDef::new(PermMenuRoleRel::CreatedAt)
@@ -104,7 +104,7 @@ impl MigrationTrait for Migration {
                     ForeignKey::create()
                         .name("fk_perm_menu_role_rel_role_id")
                         .from(PermMenuRoleRel::Table, PermMenuRoleRel::RoleId)
-                        .to(PermRole::Table, PermRole::Id)
+                        .to(UserRole::Table, UserRole::Id)
                         .on_update(ForeignKeyAction::Cascade)
                         .on_delete(ForeignKeyAction::Cascade)
                         .to_owned(),

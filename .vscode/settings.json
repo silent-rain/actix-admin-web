@@ -1,21 +1,48 @@
 {
-  "editor.formatOnSave": true, // 保存格式化
-  // Rust
-  "rust-analyzer.linkedProjects": [
-    "server/Cargo.toml",
-  ],
-  "rust-analyzer.check.allTargets": true,
-  "rust-analyzer.check.command": "clippy", // Rust 代码检查工具
-  "rust-analyzer.procMacro.enable": true, // 开启宏检测
-  "rust-analyzer.diagnostics.disabled": [
-    // "macro-error",
-    // "unresolved-proc-macro"
-  ],
+  // >>> Rust
+  "[rust]": {
+    // 定义一个默认格式化程序, 该格式化程序优先于所有其他格式化程序设置。必须是提供格式化程序的扩展的标识符。
+    "editor.defaultFormatter": "rust-lang.rust-analyzer",
+    // 在保存时格式化文件。格式化程序必须可用，延迟后文件不能保存，并且编辑器不能关闭。
+    "editor.formatOnSave": true,
+    // 控制在保存时设置格式是设置整个文件格式还是仅设置修改内容的格式。仅当 "#editor.formatOnSave#" 处于启用状态时适用。
+    "editor.formatOnSaveMode": "file"
+  },
+  // 将传递给锈蚀分析器可执行文件的额外环境变量。用于传递例如RA_LOG进行调试。
   "rust-analyzer.server.extraEnv": {
     "RUSTUP_TOOLCHAIN": "stable"
     // "RUSTUP_TOOLCHAIN": "nightly"
   },
-  "rust-analyzer.checkOnSave": true,
+  // 禁用项目自动发现以支持显式指定的项目集。
+  "rust-analyzer.linkedProjects": [
+    "server/Cargo.toml"
+  ],
+  // 检查所有目标和测试
+  "rust-analyzer.check.allTargets": true,
+  // 启用对程序宏的支持
+  "rust-analyzer.procMacro.enable": true,
+  // 要禁用的锈蚀分析仪诊断列表。
+  "rust-analyzer.diagnostics.disabled": [
+    // "macro-error",
+    // "unresolved-proc-macro"
+  ],
+  // 保存时运行check命令进行诊断。
+  // "rust-analyzer.checkOnSave": true,
+  // 用于货物检查的货物命令。
+  "rust-analyzer.check.command": "clippy",
+  // 是否在完成文档中显示完整的函数/方法签名。
+  "rust-analyzer.completion.fullFunctionSignatures.enable": true,
+  // 悬停在上时要显示的枚举变体的数量。如果为空，则不显示。
+  "rust-analyzer.hover.show.enumVariants": 20,
+  // 悬停在结构、变量或并集上时要显示的字段数。如果为空，则不显示。
+  "rust-analyzer.hover.show.fields": 20,
+  // 是否显示闭合捕捉的镶嵌提示。
+  "rust-analyzer.inlayHints.closureCaptureHints.enable": true,
+  // 是否在函数签名中显示消隐生存期的嵌入类型提示。
+  "rust-analyzer.inlayHints.lifetimeElisionHints.enable": "always",
+  // <<< Rust
+  // >>> Mysql
   "Prettier-SQL.SQLFlavourOverride": "mysql",
   "Prettier-SQL.keywordCase": "upper"
+  // <<< Mysql
 }

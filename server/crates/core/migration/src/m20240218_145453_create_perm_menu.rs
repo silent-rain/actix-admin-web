@@ -1,5 +1,5 @@
 //! 菜单表
-//! User Entity: [`entity::prelude::PermMenu`]
+//! Entity: [`entity::prelude::PermMenu`]
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},
@@ -44,32 +44,24 @@ impl MigrationTrait for Migration {
                             .comment("菜单名称"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::Icon)
+                        ColumnDef::new(PermMenu::IconClass)
                             .string()
                             .string_len(20)
                             .null()
                             .default("")
-                            .comment("Icon图标"),
-                    )
-                    .col(
-                        ColumnDef::new(PermMenu::ElIcon)
-                            .string()
-                            .string_len(20)
-                            .null()
-                            .default("")
-                            .comment("Element-Ico图标"),
+                            .comment("Icon图标类"),
                     )
                     .col(
                         ColumnDef::new(PermMenu::MenuType)
                             .integer()
                             .not_null()
-                            .comment("菜单类型,0:菜单,1:按钮"),
+                            .comment("菜单类型(0:菜单,1:按钮)"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::OpenType)
+                        ColumnDef::new(PermMenu::OpenMethod)
                             .integer()
                             .not_null()
-                            .comment("打开方式,0:组件,1:内链,2:外链"),
+                            .comment("打开方式(0:组件,1:内链,2:外链)"),
                     )
                     .col(
                         ColumnDef::new(PermMenu::Path)
@@ -80,7 +72,7 @@ impl MigrationTrait for Migration {
                             .comment("路由地址"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::Component)
+                        ColumnDef::new(PermMenu::ComponentPath)
                             .string()
                             .string_len(500)
                             .null()
@@ -88,7 +80,7 @@ impl MigrationTrait for Migration {
                             .comment("组件路径"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::Redirect)
+                        ColumnDef::new(PermMenu::RedirectTo)
                             .string()
                             .string_len(200)
                             .null()
@@ -112,18 +104,18 @@ impl MigrationTrait for Migration {
                             .comment("链接跳转方式,_blank/_self"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::Hidden)
+                        ColumnDef::new(PermMenu::IsHidden)
                             .integer()
                             .null()
                             .default(1)
-                            .comment("是否隐藏,0:显示,1:隐藏"),
+                            .comment("是否隐藏(0:显示,1:隐藏)"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::RootAlwaysShow)
+                        ColumnDef::new(PermMenu::IsAlwaysDisplayed)
                             .integer()
                             .null()
                             .default(1)
-                            .comment("始终显示根菜单,0:显示,1:隐藏"),
+                            .comment("是否始终显示根菜单(0:隐藏,1:显示)"),
                     )
                     .col(
                         ColumnDef::new(PermMenu::Permission)
@@ -141,19 +133,19 @@ impl MigrationTrait for Migration {
                             .comment("排序"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::Note)
+                        ColumnDef::new(PermMenu::Desc)
                             .string()
                             .string_len(200)
                             .null()
                             .default("")
-                            .comment("备注"),
+                            .comment("描述信息"),
                     )
                     .col(
                         ColumnDef::new(PermMenu::Status)
                             .tiny_integer()
                             .not_null()
                             .default(1)
-                            .comment("状态,0:停用,1:正常"),
+                            .comment("状态(0:停用,1:正常)"),
                     )
                     .col(
                         ColumnDef::new(PermMenu::CreatedAt)
@@ -195,20 +187,19 @@ pub enum PermMenu {
     Id,
     Pid,
     Title,
-    Icon,
-    ElIcon,
+    IconClass,
     MenuType,
-    OpenType,
+    OpenMethod,
     Path,
-    Component,
-    Redirect,
+    ComponentPath,
+    RedirectTo,
     Link,
     LinkTarget,
-    Hidden,
-    RootAlwaysShow,
+    IsHidden,
+    IsAlwaysDisplayed,
     Permission,
     Sort,
-    Note,
+    Desc,
     Status,
     CreatedAt,
     UpdatedAt,

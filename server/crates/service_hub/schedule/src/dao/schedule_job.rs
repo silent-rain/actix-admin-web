@@ -1,8 +1,8 @@
-//! 调度任务管理
+//! 任务调度作业管理
 use crate::dto::schedule_job::GetScheduleJobReq;
 
 use database::{DbRepo, Pagination};
-use entity::{prelude::ScheduleJob, schedule_job};
+use entity::schedule::{schedule_job, ScheduleJob};
 use nject::injectable;
 
 use sea_orm::{

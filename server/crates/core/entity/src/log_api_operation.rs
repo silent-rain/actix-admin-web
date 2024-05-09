@@ -38,8 +38,8 @@ pub struct Model {
     pub cost: u64,
     /// 请求类型:REQ/RSP
     pub http_type: String,
-    /// 备注
-    pub note: Option<String>,
+    /// 描述信息
+    pub desc: Option<String>,
     /// 创建时间
     pub created_at: DateTimeLocal,
 }
