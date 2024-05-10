@@ -5,6 +5,8 @@ mod m20230617_084425_create_log_system;
 mod m20230617_084425_create_log_user_login;
 mod m20240218_145453_create_org_department;
 mod m20240218_145453_create_org_department_role_rel;
+mod m20240218_145453_create_org_position;
+mod m20240218_145453_create_org_rank;
 mod m20240218_145453_create_perm_menu;
 mod m20240218_145453_create_perm_menu_role_rel;
 mod m20240218_145453_create_perm_openapi;
@@ -51,6 +53,8 @@ impl MigratorTrait for Migrator {
             // 组织管理
             Box::new(m20240218_145453_create_org_department::Migration),
             Box::new(m20240218_145453_create_org_department_role_rel::Migration),
+            Box::new(m20240218_145453_create_org_position::Migration),
+            Box::new(m20240218_145453_create_org_rank::Migration),
             // 系统管理
             Box::new(m20240218_161916_create_sys_config::Migration),
             Box::new(m20240218_161916_create_sys_dict_dimension::Migration),

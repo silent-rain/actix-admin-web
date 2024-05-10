@@ -73,25 +73,14 @@ impl<'a> DepartmentService<'a> {
     /// 添加数据
     pub async fn add(&self, req: AddDepartmentReq) -> Result<department::Model, ErrorMsg> {
         // 查询部门是否已存在
-        let department = self
-            .department_dao
-            .info_by_name(req.name.clone())
-            .await
-            .map_err(|err| {
-                error!("查询部门信息失败, err: {:#?}", err);
-                Error::DbQueryError.into_msg().with_msg("查询部门信息失败")
-            })?;
-        if department.is_some() {
-            error!("部门已存在");
-            return Err(Error::DbDataExistError.into_msg().with_msg("部门已存在"));
-        }
+        self.check_department(req.name.clone()).await?;
 
         let model = department::ActiveModel {
             pid: Set(req.pid),
             name: Set(req.name),
             sort: Set(req.sort),
             desc: Set(req.desc),
-            status: Set(department::enums::Status::Enabled as i8),
+            status: Set(req.status as i8),
             ..Default::default()
         };
         let mut department =
@@ -128,6 +117,9 @@ impl<'a> DepartmentService<'a> {
 
     /// 更新数据
     pub async fn update(&self, id: i32, req: UpdateDepartmentReq) -> Result<u64, ErrorMsg> {
+        // 查询部门是否已存在
+        self.check_department(req.name.clone()).await?;
+
         // 获取所有部门数据
         let (departments, _) = self.department_dao.all().await.map_err(|err| {
             error!("查询所有部门失败, err: {:#?}", err);
@@ -157,6 +149,24 @@ impl<'a> DepartmentService<'a> {
         })?;
 
         Ok(result)
+    }
+
+    /// 查询部门是否已存在
+    async fn check_department(&self, name: String) -> Result<(), ErrorMsg> {
+        let result = self
+            .department_dao
+            .info_by_name(name)
+            .await
+            .map_err(|err| {
+                error!("查询部门信息失败, err: {:#?}", err);
+                Error::DbQueryError.into_msg().with_msg("查询部门信息失败")
+            })?;
+        if result.is_some() {
+            error!("部门已存在");
+            return Err(Error::DbDataExistError.into_msg().with_msg("部门已存在"));
+        }
+
+        Ok(())
     }
 
     /// 更新数据状态

@@ -1,6 +1,7 @@
 //! 路由层
 pub mod department;
 pub mod department_role_rel;
+pub mod position;
 
 use actix_web::{web, Scope};
 
@@ -15,5 +16,7 @@ impl OrganizationRouter {
             .service(department::DepartmentRouter::admin_register())
             // 部门角色关系管理
             .service(department_role_rel::DepartmentRoleRelRouter::admin_register())
+            // 岗位管理
+            .service(position::PositionRouter::admin_register())
     }
 }
