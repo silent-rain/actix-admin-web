@@ -57,6 +57,8 @@ pub enum Relation {
     UserPhone,
     #[sea_orm(has_many = "super::user_email::Entity")]
     UserEmail,
+    #[sea_orm(has_many = "super::blockchain_wallet::Entity")]
+    UserBlockchainWallet,
 }
 
 impl Related<super::user_role_rel::Entity> for Entity {
@@ -74,6 +76,12 @@ impl Related<super::user_phone::Entity> for Entity {
 impl Related<super::user_email::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::UserEmail.def()
+    }
+}
+
+impl Related<super::blockchain_wallet::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::UserBlockchainWallet.def()
     }
 }
 

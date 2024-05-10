@@ -62,10 +62,10 @@ CREATE TABLE IF NOT EXISTS
         CONSTRAINT `fk_user_phone_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_user_base` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户手机号';
 
--- TODO 用户区块链钱包
+-- 用户区块链钱包表
 CREATE TABLE IF NOT EXISTS
     `t_user_blockchain_wallet` (
-        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '手机号ID',
+        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '钱包ID',
         `user_id` INT(10) UNIQUE NOT NULL COMMENT '用户ID',
         `wallet_address` VARCHAR(255) UNIQUE NOT NULL COMMENT '钱包地址',
         `mnemonic` VARCHAR(255) NULL DEFAULT '' COMMENT '助记词',
@@ -75,8 +75,8 @@ CREATE TABLE IF NOT EXISTS
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`),
-        CONSTRAINT `fk_perm_user_blockchain_wallet_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_user_base` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户区块链钱包';
+        CONSTRAINT `fk_user_blockchain_wallet_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_user_base` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户区块链钱包表';
 
 -- 用户角色关系表
 CREATE TABLE IF NOT EXISTS
@@ -91,21 +91,22 @@ CREATE TABLE IF NOT EXISTS
         CONSTRAINT `fk_user_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_user_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户角色关系表';
 
--- TODO 用户地理位置
+-- 用户地理位置表
 CREATE TABLE IF NOT EXISTS
     `t_user_location` (
         `id` INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '地理位置ID',
-        `province` VARCHAR(100) NOT NULL COMMENT '省份',
-        `city` VARCHAR(100) NOT NULL COMMENT '城市',
-        `district` VARCHAR(100) NOT NULL COMMENT '区/县',
-        `address` VARCHAR(255) DEFAULT NULL COMMENT '详细地址',
-        `postal_code` VARCHAR(20) DEFAULT NULL COMMENT '邮政编码',
-        `longitude` DECIMAL(11, 8) DEFAULT NULL COMMENT '经度',
-        `latitude` DECIMAL(10, 8) DEFAULT NULL COMMENT '纬度',
+        `province` VARCHAR(50) NOT NULL COMMENT '省份',
+        `city` VARCHAR(50) NOT NULL COMMENT '城市',
+        `district` VARCHAR(50) NOT NULL COMMENT '区/县',
+        `address` VARCHAR(255) NOT NULL COMMENT '详细地址',
+        `postal_code` VARCHAR(20) NULL DEFAULT '' COMMENT '邮政编码',
+        `longitude` DECIMAL(11, 8) NULL DEFAULT 0 COMMENT '经度',
+        `latitude` DECIMAL(10, 8) NULL DEFAULT 0 COMMENT '纬度',
+        `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '描述信息',
         `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`)
-    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '地理位置表';
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户地理位置表';
 
 /*
 -- user表触发器，更新其他表冗余字段

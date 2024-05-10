@@ -14,7 +14,9 @@ mod m20240218_145453_create_perm_openapi_role_rel;
 mod m20240218_145453_create_perm_token;
 mod m20240218_145453_create_perm_token_role_rel;
 mod m20240218_145453_create_user_base;
+mod m20240218_145453_create_user_blockchain_wallet;
 mod m20240218_145453_create_user_email;
+mod m20240218_145453_create_user_location;
 mod m20240218_145453_create_user_phone;
 mod m20240218_145453_create_user_role;
 mod m20240218_145453_create_user_role_rel;
@@ -43,6 +45,8 @@ impl MigratorTrait for Migrator {
             Box::new(m20240218_145453_create_user_email::Migration),
             Box::new(m20240218_145453_create_user_phone::Migration),
             Box::new(m20240218_145453_create_user_role_rel::Migration),
+            Box::new(m20240218_145453_create_user_blockchain_wallet::Migration),
+            Box::new(m20240218_145453_create_user_location::Migration),
             // 权限管理
             Box::new(m20240218_145453_create_perm_menu::Migration),
             Box::new(m20240218_145453_create_perm_menu_role_rel::Migration),

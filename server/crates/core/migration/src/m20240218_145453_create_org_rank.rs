@@ -102,7 +102,7 @@ impl MigrationTrait for Migration {
 
 #[derive(DeriveIden)]
 pub enum Rank {
-    #[sea_orm(iden = "t_org_position")]
+    #[sea_orm(iden = "t_org_rank")]
     Table,
     Id,
     Name,
