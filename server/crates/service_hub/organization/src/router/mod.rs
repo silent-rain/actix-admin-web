@@ -2,6 +2,7 @@
 pub mod department;
 pub mod department_role_rel;
 pub mod position;
+pub mod rank;
 
 use actix_web::{web, Scope};
 
@@ -18,5 +19,7 @@ impl OrganizationRouter {
             .service(department_role_rel::DepartmentRoleRelRouter::admin_register())
             // 岗位管理
             .service(position::PositionRouter::admin_register())
+            // 职级管理
+            .service(rank::RankRouter::admin_register())
     }
 }
