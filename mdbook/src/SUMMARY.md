@@ -11,6 +11,8 @@
   - [Sea-Orm迁移表](sea_orm/Sea-Orm迁移表.md)
   - [手工初始化表](sea_orm/手工初始化表.md)
 
+- [RESTful API设计(GPT)](api/RESTful_API设计.md)
+
 ---
 
 # 前端开发

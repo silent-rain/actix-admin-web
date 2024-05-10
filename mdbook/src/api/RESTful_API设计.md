@@ -1,4 +1,4 @@
-# RESTful API 设计
+# RESTful API 设计(GPT)
 
 ## 接口命名
 
