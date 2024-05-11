@@ -1,6 +1,8 @@
 //! 路由层
 
+pub mod blockchain_wallet;
 pub mod email;
+pub mod location;
 pub mod phone;
 pub mod role;
 pub mod user_base;
@@ -23,7 +25,9 @@ impl UserRouter {
             .service(phone::PhoneRouter::admin_register())
             // 用户邮箱管理
             .service(email::EmailRouter::admin_register())
-            // 用户角色关系管理
-            .service(user_role_rel::UserRoleRelRouter::admin_register())
+            // 用户区块链钱包管理
+            .service(blockchain_wallet::BlockchainWalletRouter::admin_register())
+            // 用户地理位置管理
+            .service(location::LocationRouter::admin_register())
     }
 }

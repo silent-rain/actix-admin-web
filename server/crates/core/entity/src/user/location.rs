@@ -13,6 +13,8 @@ pub struct Model {
     /// 地理位置ID
     #[sea_orm(primary_key)]
     pub id: i32,
+    /// 用户ID
+    pub user_id: i32,
     /// 省份
     pub province: i32,
     /// 城市

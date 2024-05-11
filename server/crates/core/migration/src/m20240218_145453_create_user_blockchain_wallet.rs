@@ -3,7 +3,7 @@
 use crate::m20240218_145453_create_user_base::UserBase;
 
 use sea_orm::{
-    sea_query::{ColumnDef, Expr, ForeignKey, ForeignKeyAction, Table},
+    sea_query::{ColumnDef, Expr, ForeignKey, ForeignKeyAction, Index, Table},
     DatabaseBackend, DeriveIden, DeriveMigrationName, Iden,
 };
 use sea_orm_migration::{async_trait, DbErr, MigrationTrait, SchemaManager};
@@ -95,6 +95,38 @@ impl MigrationTrait for Migration {
                     .to_owned(),
             )
             .await?;
+
+        if !manager
+            .has_index(BlockchainWallet::Table.to_string(), "idx_user_id")
+            .await?
+        {
+            manager
+                .create_index(
+                    Index::create()
+                        .if_not_exists()
+                        .name("idx_user_id")
+                        .table(BlockchainWallet::Table)
+                        .col(BlockchainWallet::UserId)
+                        .to_owned(),
+                )
+                .await?;
+        }
+
+        if !manager
+            .has_index(BlockchainWallet::Table.to_string(), "idx_wallet_address")
+            .await?
+        {
+            manager
+                .create_index(
+                    Index::create()
+                        .if_not_exists()
+                        .name("idx_wallet_address")
+                        .table(BlockchainWallet::Table)
+                        .col(BlockchainWallet::WalletAddress)
+                        .to_owned(),
+                )
+                .await?;
+        }
 
         if !manager
             .has_index(

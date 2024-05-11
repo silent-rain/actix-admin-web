@@ -2,8 +2,8 @@
 //! Entity: [`entity::user::Location`]
 
 use sea_orm::{
-    sea_query::{ColumnDef, Expr, Table},
-    DatabaseBackend, DeriveIden, DeriveMigrationName,
+    sea_query::{ColumnDef, Expr, Index, Table},
+    DatabaseBackend, DeriveIden, DeriveMigrationName, Iden,
 };
 use sea_orm_migration::{async_trait, DbErr, MigrationTrait, SchemaManager};
 
@@ -28,6 +28,13 @@ impl MigrationTrait for Migration {
                             .auto_increment()
                             .not_null()
                             .comment("地理位置ID"),
+                    )
+                    .col(
+                        ColumnDef::new(Location::UserId)
+                            .integer()
+                            .unique_key()
+                            .not_null()
+                            .comment("用户ID"),
                     )
                     .col(
                         ColumnDef::new(Location::Province)
@@ -110,7 +117,25 @@ impl MigrationTrait for Migration {
                     )
                     .to_owned(),
             )
-            .await
+            .await?;
+
+        if !manager
+            .has_index(Location::Table.to_string(), "idx_user_id")
+            .await?
+        {
+            manager
+                .create_index(
+                    Index::create()
+                        .if_not_exists()
+                        .name("idx_user_id")
+                        .table(Location::Table)
+                        .col(Location::UserId)
+                        .to_owned(),
+                )
+                .await?;
+        }
+
+        Ok(())
     }
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
@@ -127,6 +152,7 @@ pub enum Location {
     #[sea_orm(iden = "t_user_location")]
     Table,
     Id,
+    UserId,
     Province,
     City,
     District,

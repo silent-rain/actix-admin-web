@@ -16,7 +16,7 @@ pub struct Model {
     /// 用户ID
     pub user_id: i32,
     /// 钱包地址
-    pub wallet_address: i32,
+    pub wallet_address: String,
     /// 助记词
     pub mnemonic: Option<String>,
     /// 私钥

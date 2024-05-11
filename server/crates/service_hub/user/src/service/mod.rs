@@ -1,6 +1,8 @@
 //! 服务层
 
+pub mod blockchain_wallet;
 pub mod email;
+pub mod location;
 pub mod phone;
 pub mod role;
 pub mod user_base;

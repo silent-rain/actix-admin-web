@@ -2,8 +2,8 @@
 //! Entity: [`entity::prelude::UserRole`]
 
 use sea_orm::{
-    sea_query::{ColumnDef, Expr, Table},
-    DatabaseBackend, DeriveIden, DeriveMigrationName,
+    sea_query::{ColumnDef, Expr, Index, Table},
+    DatabaseBackend, DeriveIden, DeriveMigrationName, Iden,
 };
 use sea_orm_migration::{async_trait, DbErr, MigrationTrait, SchemaManager};
 
@@ -80,7 +80,25 @@ impl MigrationTrait for Migration {
                     )
                     .to_owned(),
             )
-            .await
+            .await?;
+
+        if !manager
+            .has_index(UserRole::Table.to_string(), "idx_name")
+            .await?
+        {
+            manager
+                .create_index(
+                    Index::create()
+                        .if_not_exists()
+                        .name("idx_name")
+                        .table(UserRole::Table)
+                        .col(UserRole::Name)
+                        .to_owned(),
+                )
+                .await?;
+        }
+
+        Ok(())
     }
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
