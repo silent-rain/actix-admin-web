@@ -2,6 +2,7 @@
 
 use actix_validator::Validate;
 
+use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
 
 /// 查询用户地理位置列表
@@ -25,9 +26,9 @@ pub struct AddLocationReq {
     /// 用户ID
     pub user_id: i32,
     /// 省份
-    pub province: i32,
+    pub province: String,
     /// 城市
-    pub city: i32,
+    pub city: String,
     /// 区/县
     pub district: String,
     /// 详细地址
@@ -35,9 +36,9 @@ pub struct AddLocationReq {
     /// 邮政编码
     pub postal_code: Option<String>,
     /// 经度
-    pub longitude: Option<f32>,
+    pub longitude: Option<Decimal>,
     /// 纬度
-    pub latitude: Option<f32>,
+    pub latitude: Option<Decimal>,
     /// 描述信息
     pub desc: Option<String>,
 }
@@ -46,9 +47,9 @@ pub struct AddLocationReq {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
 pub struct UpdateLocationReq {
     /// 省份
-    pub province: i32,
+    pub province: String,
     /// 城市
-    pub city: i32,
+    pub city: String,
     /// 区/县
     pub district: String,
     /// 详细地址
@@ -56,9 +57,9 @@ pub struct UpdateLocationReq {
     /// 邮政编码
     pub postal_code: Option<String>,
     /// 经度
-    pub longitude: Option<f32>,
+    pub longitude: Option<Decimal>,
     /// 纬度
-    pub latitude: Option<f32>,
+    pub latitude: Option<Decimal>,
     /// 描述信息
     pub desc: Option<String>,
 }

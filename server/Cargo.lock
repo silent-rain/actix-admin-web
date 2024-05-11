@@ -1360,6 +1360,7 @@ name = "entity"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "rust_decimal",
  "sea-orm",
  "serde",
  "serde_repr",
@@ -4664,6 +4665,7 @@ dependencies = [
  "permission",
  "regex 1.10.4",
  "response",
+ "rust_decimal",
  "sea-orm",
  "serde",
  "serde_json",

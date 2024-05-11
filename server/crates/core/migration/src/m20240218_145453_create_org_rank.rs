@@ -33,6 +33,7 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Rank::Name)
                             .string()
                             .string_len(20)
+                            .unique_key()
                             .not_null()
                             .comment("职级名称"),
                     )
@@ -40,6 +41,7 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Rank::Level)
                             .integer()
                             .unsigned()
+                            .unique_key()
                             .not_null()
                             .comment("职级等级"),
                     )

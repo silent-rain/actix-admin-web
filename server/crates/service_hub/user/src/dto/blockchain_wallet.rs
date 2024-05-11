@@ -33,7 +33,7 @@ pub struct AddBlockchainWalletReq {
     /// 私钥
     pub private_key: Option<String>,
     /// 区块链ID
-    pub chain_id: Option<String>,
+    pub chain_id: Option<i32>,
     /// 描述信息
     pub desc: Option<String>,
 }
@@ -46,7 +46,7 @@ pub struct UpdateBlockchainWalletReq {
     /// 私钥
     pub private_key: Option<String>,
     /// 区块链ID
-    pub chain_id: Option<String>,
+    pub chain_id: Option<i32>,
     /// 描述信息
     pub desc: Option<String>,
 }

@@ -10,7 +10,7 @@ pub struct LocationRouter;
 impl LocationRouter {
     /// 注册`用户地理位置管理`路由
     pub fn admin_register() -> Scope {
-        web::scope("/roles")
+        web::scope("/locations")
             .route("", web::get().to(LocationController::list))
             .route("/{id}", web::get().to(LocationController::info))
             .route("", web::post().to(LocationController::add))

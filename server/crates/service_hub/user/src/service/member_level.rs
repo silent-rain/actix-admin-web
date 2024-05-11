@@ -115,7 +115,7 @@ impl<'a> MemberLevelService<'a> {
         Ok(result)
     }
 
-    /// 查询会员等级是否已存在
+    /// 查询会员等级名称是否已存在
     async fn check_member_level(&self, name: String) -> Result<(), ErrorMsg> {
         let result = self
             .member_level_dao
@@ -128,10 +128,10 @@ impl<'a> MemberLevelService<'a> {
                     .with_msg("查询会员等级信息失败")
             })?;
         if result.is_some() {
-            error!("会员等级已存在");
+            error!("会员等级名称已存在");
             return Err(Error::DbDataExistError
                 .into_msg()
-                .with_msg("会员等级已存在"));
+                .with_msg("会员等级名称已存在"));
         }
 
         Ok(())

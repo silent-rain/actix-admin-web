@@ -102,8 +102,8 @@ CREATE TABLE IF NOT EXISTS
 CREATE TABLE
     `t_user_member_level` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '会员等级ID',
-        `name` VARCHAR(20) UNSIGNED NOT NULL COMMENT '会员等级名称',
-        `level` INT UNSIGNED NOT NULL COMMENT '会员等级',
+        `name` VARCHAR(20) UNIQUE NOT NULL COMMENT '会员等级名称',
+        `level` INT(11) UNSIGNED UNIQUE NOT NULL COMMENT '会员等级',
         `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
         `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '会员描述',
         `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态(0:停用,1:正常)',
@@ -115,7 +115,7 @@ CREATE TABLE
 -- 用户地理位置表
 CREATE TABLE IF NOT EXISTS
     `t_user_location` (
-        `id` INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '地理位置ID',
+        `id` INT AUTO_INCREMENT NOT NULL COMMENT '地理位置ID',
         `user_id` INT(10) UNIQUE NOT NULL COMMENT '用户ID',
         `province` VARCHAR(50) NOT NULL COMMENT '省份',
         `city` VARCHAR(50) NOT NULL COMMENT '城市',
