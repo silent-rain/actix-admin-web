@@ -27,27 +27,30 @@ CREATE TABLE IF NOT EXISTS
         CONSTRAINT `fk_org_department_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_user_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '部门角色关系表';
 
--- TODO 岗位表
+-- 岗位表
 CREATE TABLE IF NOT EXISTS
     `t_org_position` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '岗位ID',
-        `name` VARCHAR(100) NOT NULL COMMENT '岗位名称',
+        `name` VARCHAR(100) UNIQUE NOT NULL COMMENT '岗位名称',
+        `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
         `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '岗位描述',
         `department_id` INT(11) DEFAULT 0 COMMENT '所属部门ID',
+        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态(0:停用,1:正常)',
         `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`),
-        UNIQUE KEY `uk_name` (`name`),
         CONSTRAINT `fk_org_position_department_id` FOREIGN KEY (`department_id`) REFERENCES `t_org_department` (`id`)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '岗位表';
 
--- TODO 职级表
+-- 职级表
 CREATE TABLE IF NOT EXISTS
     `t_org_rank` (
-        `id` INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '职级ID',
-        `name` VARCHAR(100) NOT NULL COMMENT '职级名称',
-        `level` INT UNSIGNED NOT NULL COMMENT '职级等级',
+        `id` INT AUTO_INCREMENT NOT NULL COMMENT '职级ID',
+        `name` VARCHAR(20) UNIQUE NOT NULL COMMENT '职级名称',
+        `level` INT UNSIGNED UNIQUE NOT NULL COMMENT '职级等级',
+        `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
         `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '职级描述',
+        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态(0:停用,1:正常)',
         `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`)

@@ -1,0 +1,6 @@
+[book]
+title = "开发文档"
+authors = ["silent-rain"]
+language = "zh"
+multilingual = false
+src = "src"

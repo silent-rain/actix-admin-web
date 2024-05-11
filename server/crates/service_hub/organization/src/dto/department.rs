@@ -17,7 +17,7 @@ pub struct GetDepartmentListReq {
     pub start_time: Option<String>,
     /// 结束时间
     pub end_time: Option<String>,
-    /// 角色名称
+    /// 部门名称
     pub name: Option<String>,
     /// 返回所有数据
     pub all: Option<bool>,
@@ -37,6 +37,8 @@ pub struct AddDepartmentReq {
     pub sort: Option<i32>,
     /// 描述信息
     pub desc: Option<String>,
+    /// 状态(0:停用,1:正常)
+    pub status: department::enums::Status,
 }
 
 /// 更新数据

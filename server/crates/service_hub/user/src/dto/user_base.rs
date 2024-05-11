@@ -54,6 +54,8 @@ pub struct AddUserBaseReq {
     pub position_id: Option<i32>,
     /// 所属职级ID
     pub rank_id: Option<i32>,
+    /// 用户会员等级ID
+    pub member_level_id: Option<i32>,
     /// 角色ID列表
     pub role_ids: Vec<i32>,
 }
@@ -89,6 +91,8 @@ pub struct UpdateUserBaseReq {
     pub position_id: Option<i32>,
     /// 所属职级ID
     pub rank_id: Option<i32>,
+    /// 用户会员等级ID
+    pub member_level_id: Option<i32>,
     /// 角色ID列表
     pub role_ids: Vec<i32>,
 }

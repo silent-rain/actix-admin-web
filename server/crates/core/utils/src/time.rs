@@ -60,10 +60,11 @@ mod tests {
                 deserialize_with = "str_to_local_date_time",
                 default = "default_local_date_time"
             )]
-            pub expire: DateTime<Local>,
+            expire: DateTime<Local>,
         }
         let value = json!({"expire": "2023-12-02 00:00:00"});
         let result: AddUserTokenReq = serde_json::from_value(value).expect("时间解析失败");
         println!("result: {:#?}", result);
+        println!("result: {:#?}", result.expire);
     }
 }

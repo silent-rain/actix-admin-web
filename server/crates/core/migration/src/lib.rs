@@ -5,6 +5,8 @@ mod m20230617_084425_create_log_system;
 mod m20230617_084425_create_log_user_login;
 mod m20240218_145453_create_org_department;
 mod m20240218_145453_create_org_department_role_rel;
+mod m20240218_145453_create_org_position;
+mod m20240218_145453_create_org_rank;
 mod m20240218_145453_create_perm_menu;
 mod m20240218_145453_create_perm_menu_role_rel;
 mod m20240218_145453_create_perm_openapi;
@@ -12,7 +14,10 @@ mod m20240218_145453_create_perm_openapi_role_rel;
 mod m20240218_145453_create_perm_token;
 mod m20240218_145453_create_perm_token_role_rel;
 mod m20240218_145453_create_user_base;
+mod m20240218_145453_create_user_blockchain_wallet;
 mod m20240218_145453_create_user_email;
+mod m20240218_145453_create_user_location;
+mod m20240218_145453_create_user_member_level;
 mod m20240218_145453_create_user_phone;
 mod m20240218_145453_create_user_role;
 mod m20240218_145453_create_user_role_rel;
@@ -41,6 +46,9 @@ impl MigratorTrait for Migrator {
             Box::new(m20240218_145453_create_user_email::Migration),
             Box::new(m20240218_145453_create_user_phone::Migration),
             Box::new(m20240218_145453_create_user_role_rel::Migration),
+            Box::new(m20240218_145453_create_user_blockchain_wallet::Migration),
+            Box::new(m20240218_145453_create_user_member_level::Migration),
+            Box::new(m20240218_145453_create_user_location::Migration),
             // 权限管理
             Box::new(m20240218_145453_create_perm_menu::Migration),
             Box::new(m20240218_145453_create_perm_menu_role_rel::Migration),
@@ -51,6 +59,8 @@ impl MigratorTrait for Migrator {
             // 组织管理
             Box::new(m20240218_145453_create_org_department::Migration),
             Box::new(m20240218_145453_create_org_department_role_rel::Migration),
+            Box::new(m20240218_145453_create_org_position::Migration),
+            Box::new(m20240218_145453_create_org_rank::Migration),
             // 系统管理
             Box::new(m20240218_161916_create_sys_config::Migration),
             Box::new(m20240218_161916_create_sys_dict_dimension::Migration),
