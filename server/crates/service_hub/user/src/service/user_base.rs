@@ -131,6 +131,7 @@ impl<'a> UserBaseService<'a> {
             department_id: Set(data.department_id),
             position_id: Set(data.position_id),
             rank_id: Set(data.rank_id),
+            member_level_id: Set(data.member_level_id),
             ..Default::default()
         };
 
@@ -197,6 +198,7 @@ impl<'a> UserBaseService<'a> {
             department_id: Set(data.department_id),
             position_id: Set(data.position_id),
             rank_id: Set(data.rank_id),
+            member_level_id: Set(data.member_level_id),
             ..Default::default()
         };
         self.user_base_dao

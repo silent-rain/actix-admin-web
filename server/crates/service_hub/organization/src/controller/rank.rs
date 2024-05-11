@@ -23,8 +23,8 @@ impl RankController {
         provider: Data<AInjectProvider>,
         req: Query<GetRankListReq>,
     ) -> impl Responder {
-        let department_service: RankService = provider.provide();
-        let resp = department_service.list(req.into_inner()).await;
+        let rank_service: RankService = provider.provide();
+        let resp = rank_service.list(req.into_inner()).await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::err(err),
@@ -33,8 +33,8 @@ impl RankController {
 
     /// 获取职级信息
     pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let department_service: RankService = provider.provide();
-        let resp = department_service.info(*id).await;
+        let rank_service: RankService = provider.provide();
+        let resp = rank_service.info(*id).await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::err(err),
@@ -43,8 +43,8 @@ impl RankController {
 
     /// 添加职级
     pub async fn add(provider: Data<AInjectProvider>, data: Json<AddRankReq>) -> impl Responder {
-        let department_service: RankService = provider.provide();
-        let resp = department_service.add(data.into_inner()).await;
+        let rank_service: RankService = provider.provide();
+        let resp = rank_service.add(data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -57,8 +57,8 @@ impl RankController {
         id: Path<i32>,
         data: Json<UpdateRankReq>,
     ) -> impl Responder {
-        let department_service: RankService = provider.provide();
-        let resp = department_service.update(*id, data.into_inner()).await;
+        let rank_service: RankService = provider.provide();
+        let resp = rank_service.update(*id, data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -71,10 +71,8 @@ impl RankController {
         id: Path<i32>,
         data: Json<UpdateRankStatusReq>,
     ) -> impl Responder {
-        let department_service: RankService = provider.provide();
-        let resp = department_service
-            .status(*id, data.status.clone() as i8)
-            .await;
+        let rank_service: RankService = provider.provide();
+        let resp = rank_service.status(*id, data.status.clone() as i8).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
@@ -83,8 +81,8 @@ impl RankController {
 
     /// 删除职级
     pub async fn delete(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let department_service: RankService = provider.provide();
-        let resp = department_service.delete(*id).await;
+        let rank_service: RankService = provider.provide();
+        let resp = rank_service.delete(*id).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),

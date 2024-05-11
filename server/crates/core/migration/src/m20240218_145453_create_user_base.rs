@@ -142,6 +142,13 @@ impl MigrationTrait for Migration {
                             .comment("所属职级ID"),
                     )
                     .col(
+                        ColumnDef::new(UserBase::MemberLevelId)
+                            .integer()
+                            .null()
+                            .default(0)
+                            .comment("用户会员等级ID"),
+                    )
+                    .col(
                         ColumnDef::new(UserBase::CreatedAt)
                             .date_time()
                             .not_null()
@@ -211,6 +218,7 @@ pub enum UserBase {
     DepartmentId,
     PositionId,
     RankId,
+    MemberLevelId,
     CreatedAt,
     UpdatedAt,
 }

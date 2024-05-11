@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS
 CREATE TABLE IF NOT EXISTS
     `t_org_rank` (
         `id` INT AUTO_INCREMENT NOT NULL COMMENT '职级ID',
-        `name` VARCHAR(100) NOT NULL COMMENT '职级名称',
+        `name` VARCHAR(20) NOT NULL COMMENT '职级名称',
         `level` INT UNSIGNED NOT NULL COMMENT '职级等级',
         `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
         `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '职级描述',

@@ -75,15 +75,3 @@ CREATE TABLE IF NOT EXISTS
         KEY `idx_dimension_code` (`dimension_code`),
         CONSTRAINT `fk_sys_dict_data_dimension_id` FOREIGN KEY (`dimension_id`) REFERENCES `t_sys_dict_dimension` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '字典数据表';
-
--- TODO 会员等级表
--- CONSTRAINT `fk_perm_user_member_level_id` FOREIGN KEY (`member_level_id`) REFERENCES `t_sys_member_level` (`id`) ON DELETE CASCADE
-CREATE TABLE
-    `t_sys_member_level` (
-        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '会员等级ID',
-        `name` VARCHAR(660) NOT NULL COMMENT '会员等级名称',
-        `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '描述信息',
-        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-        `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-        PRIMARY KEY (`id`)
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '会员等级表';

@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS
         `department_id` INT(11) DEFAULT 0 COMMENT '所属部门ID',
         `position_id` INT(11) DEFAULT 0 COMMENT '所属岗位ID',
         `rank_id` INT(11) DEFAULT 0 COMMENT '所属职级ID',
+        `member_level_id` INT(11) DEFAULT 0 COMMENT '用户会员等级ID',
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         PRIMARY KEY (`id`),
@@ -96,6 +97,20 @@ CREATE TABLE IF NOT EXISTS
         CONSTRAINT `fk_user_role_rel_user_id` FOREIGN KEY (`user_id`) REFERENCES `t_user_base` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
         CONSTRAINT `fk_user_role_rel_role_id` FOREIGN KEY (`role_id`) REFERENCES `t_user_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户角色关系表';
+
+-- 用户会员等级表
+CREATE TABLE
+    `t_user_member_level` (
+        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '会员等级ID',
+        `name` VARCHAR(20) UNSIGNED NOT NULL COMMENT '会员等级名称',
+        `level` INT UNSIGNED NOT NULL COMMENT '会员等级',
+        `sort` INT(11) NULL DEFAULT 0 COMMENT '排序',
+        `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '会员描述',
+        `status` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '状态(0:停用,1:正常)',
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+        `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+        PRIMARY KEY (`id`)
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT '用户会员等级表';
 
 -- 用户地理位置表
 CREATE TABLE IF NOT EXISTS

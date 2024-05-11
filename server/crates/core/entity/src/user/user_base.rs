@@ -43,6 +43,8 @@ pub struct Model {
     pub position_id: Option<i32>,
     /// 所属职级ID
     pub rank_id: Option<i32>,
+    /// 用户会员等级ID
+    pub member_level_id: Option<i32>,
     /// 创建时间
     pub created_at: DateTimeLocal,
     /// 更新时间

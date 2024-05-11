@@ -1,6 +1,7 @@
 //! 任务调度相关表
 pub mod blockchain_wallet;
 pub mod location;
+pub mod member_level;
 pub mod user_base;
 pub mod user_email;
 pub mod user_phone;
@@ -9,6 +10,7 @@ pub mod user_role_rel;
 
 pub use blockchain_wallet::Entity as BlockchainWallet;
 pub use location::Entity as Location;
+pub use member_level::Entity as MemberLevel;
 pub use user_base::Entity as UserBase;
 pub use user_email::Entity as UserEmail;
 pub use user_phone::Entity as UserPhone;

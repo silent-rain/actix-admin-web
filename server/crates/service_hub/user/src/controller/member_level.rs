@@ -1,10 +1,10 @@
-//! 岗位管理
+//! 会员等级管理
 
 use crate::{
-    dto::position::{
-        AddPositionReq, GetPositionListReq, UpdatePositionReq, UpdatePositionStatusReq,
+    dto::member_level::{
+        AddMemberLevelReq, GetMemberLevelListReq, UpdateMemberLevelReq, UpdateMemberLevelStatusReq,
     },
-    service::position::PositionService,
+    service::member_level::MemberLevelService,
 };
 
 use actix_validator::{Json, Query};
@@ -17,67 +17,67 @@ use actix_web::{
 };
 
 /// 控制器
-pub struct PositionController;
+pub struct MemberLevelController;
 
-impl PositionController {
-    /// 获取岗位列表
+impl MemberLevelController {
+    /// 获取会员等级列表
     pub async fn list(
         provider: Data<AInjectProvider>,
-        req: Query<GetPositionListReq>,
+        req: Query<GetMemberLevelListReq>,
     ) -> impl Responder {
-        let position_service: PositionService = provider.provide();
-        let resp = position_service.list(req.into_inner()).await;
+        let member_level_service: MemberLevelService = provider.provide();
+        let resp = member_level_service.list(req.into_inner()).await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::err(err),
         }
     }
 
-    /// 获取岗位信息
+    /// 获取会员等级信息
     pub async fn info(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let position_service: PositionService = provider.provide();
-        let resp = position_service.info(*id).await;
+        let member_level_service: MemberLevelService = provider.provide();
+        let resp = member_level_service.info(*id).await;
         match resp {
             Ok(v) => Response::ok().data(v),
             Err(err) => Response::err(err),
         }
     }
 
-    /// 添加岗位
+    /// 添加会员等级
     pub async fn add(
         provider: Data<AInjectProvider>,
-        data: Json<AddPositionReq>,
+        data: Json<AddMemberLevelReq>,
     ) -> impl Responder {
-        let position_service: PositionService = provider.provide();
-        let resp = position_service.add(data.into_inner()).await;
+        let member_level_service: MemberLevelService = provider.provide();
+        let resp = member_level_service.add(data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
         }
     }
 
-    /// 更新岗位
+    /// 更新会员等级
     pub async fn update(
         provider: Data<AInjectProvider>,
         id: Path<i32>,
-        data: Json<UpdatePositionReq>,
+        data: Json<UpdateMemberLevelReq>,
     ) -> impl Responder {
-        let position_service: PositionService = provider.provide();
-        let resp = position_service.update(*id, data.into_inner()).await;
+        let member_level_service: MemberLevelService = provider.provide();
+        let resp = member_level_service.update(*id, data.into_inner()).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
         }
     }
 
-    /// 更新岗位状态
+    /// 更新会员等级状态
     pub async fn status(
         provider: Data<AInjectProvider>,
         id: Path<i32>,
-        data: Json<UpdatePositionStatusReq>,
+        data: Json<UpdateMemberLevelStatusReq>,
     ) -> impl Responder {
-        let position_service: PositionService = provider.provide();
-        let resp = position_service
+        let member_level_service: MemberLevelService = provider.provide();
+        let resp = member_level_service
             .status(*id, data.status.clone() as i8)
             .await;
         match resp {
@@ -86,10 +86,10 @@ impl PositionController {
         }
     }
 
-    /// 删除岗位
+    /// 删除会员等级
     pub async fn delete(provider: Data<AInjectProvider>, id: Path<i32>) -> impl Responder {
-        let position_service: PositionService = provider.provide();
-        let resp = position_service.delete(*id).await;
+        let member_level_service: MemberLevelService = provider.provide();
+        let resp = member_level_service.delete(*id).await;
         match resp {
             Ok(_v) => Response::ok(),
             Err(err) => Response::err(err),
