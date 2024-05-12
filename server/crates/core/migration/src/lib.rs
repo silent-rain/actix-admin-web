@@ -1,6 +1,7 @@
 use sea_orm_migration::{async_trait, MigrationTrait, MigratorTrait};
 
 mod m20230617_084425_create_log_api_operation;
+mod m20230617_084425_create_log_log_web;
 mod m20230617_084425_create_log_system;
 mod m20230617_084425_create_log_user_login;
 mod m20240218_145453_create_org_department;
@@ -36,10 +37,6 @@ pub struct Migrator;
 impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
         vec![
-            // 日志管理
-            Box::new(m20230617_084425_create_log_api_operation::Migration),
-            Box::new(m20230617_084425_create_log_system::Migration),
-            Box::new(m20230617_084425_create_log_user_login::Migration),
             // 用户管理
             Box::new(m20240218_145453_create_user_role::Migration),
             Box::new(m20240218_145453_create_user_base::Migration),
@@ -71,6 +68,11 @@ impl MigratorTrait for Migrator {
             Box::new(m20240415_161916_create_schedule_job::Migration),
             Box::new(m20240415_161916_create_schedule_status_log::Migration),
             Box::new(m20240415_161916_create_schedule_event_log::Migration),
+            // 日志管理
+            Box::new(m20230617_084425_create_log_api_operation::Migration),
+            Box::new(m20230617_084425_create_log_system::Migration),
+            Box::new(m20230617_084425_create_log_user_login::Migration),
+            Box::new(m20230617_084425_create_log_log_web::Migration),
         ]
     }
 }

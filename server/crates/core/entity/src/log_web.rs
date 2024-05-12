@@ -19,16 +19,16 @@ pub struct Model {
     pub username: Option<String>,
     /// 请求ID
     pub request_id: Option<String>,
-    /// 终端类型(0: 未知,1: 安卓,2 :ios,3 :web)
+    /// 终端类型
     pub os_type: i8,
-    /// 错误类型: 1:接口报错,2:代码报错
+    /// 错误类型
     pub error_type: i8,
     /// 日志级别
     pub level: String,
     /// 日发生位置
     pub caller_line: String,
     /// 错误页面
-    pub url: String,
+    pub url: Option<String>,
     /// 日志消息
     #[sea_orm(column_type = "Text", nullable)]
     pub msg: Option<String>,
@@ -45,3 +45,30 @@ pub struct Model {
 pub enum Relation {}
 
 impl ActiveModelBehavior for ActiveModel {}
+
+/// 枚举
+pub mod enums {
+    use serde_repr::{Deserialize_repr, Serialize_repr};
+
+    /// 终端类型(0:未知, 1:安卓, 2:IOS, 3:WEB)
+    #[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
+    #[repr(i8)]
+    pub enum OsType {
+        /// 未知
+        Unknown = 0,
+        /// 安卓
+        Android = 1,
+        /// IOS
+        IOS = 2,
+        /// WEB
+        Web = 3,
+    }
+
+    /// 错误类型(0:代码报错, 1:接口报错)
+    #[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
+    #[repr(i8)]
+    pub enum ErrorType {
+        CodeError = 0,
+        InterfaceError = 1,
+    }
+}

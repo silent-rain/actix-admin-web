@@ -70,15 +70,15 @@ CREATE TABLE IF NOT EXISTS
 -- TODO WEB日志表
 CREATE TABLE IF NOT EXISTS
     `t_log_web` (
-        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
+        `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '日志ID',
         `user_id` INT(11) NULL DEFAULT 0 COMMENT '用户ID',
         `username` VARCHAR(32) NULL DEFAULT '' COMMENT '用户名称',
         `request_id` VARCHAR(32) NULL DEFAULT '' COMMENT '请求ID',
-        `os_type` TINYINT(2) NOT NULL DEFAULT 0 COMMENT '终端类型(0: 未知,1: 安卓,2 :ios,3 :web)',
-        `error_type` TINYINT(2) NOT NULL COMMENT '错误类型: 1:接口报错,2:代码报错',
+        `os_type` TINYINT(1) NOT NULL COMMENT '终端类型(0:未知, 1:安卓, 2:IOS, 3:WEB)',
+        `error_type` TINYINT(1) NOT NULL COMMENT '错误类型(1:接口报错, 2:代码报错)',
         `level` VARCHAR(10) NOT NULL COMMENT '日志级别',
         `caller_line` VARCHAR(100) NOT NULL COMMENT '日发生位置',
-        `url` VARCHAR(500) NOT NULL COMMENT '错误页面',
+        `url` VARCHAR(500) NULL COMMENT '请求地址',
         `msg` TEXT NULL COMMENT '日志消息',
         `stack` TEXT NULL COMMENT '堆栈信息',
         `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '描述信息',
