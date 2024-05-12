@@ -73,6 +73,14 @@ impl<'a> MemberLevelDao<'a> {
             .await
     }
 
+    /// 通过级别获取详情信息
+    pub async fn info_by_level(&self, level: u16) -> Result<Option<member_level::Model>, DbErr> {
+        MemberLevel::find()
+            .filter(member_level::Column::Level.eq(level))
+            .one(self.db.rdb())
+            .await
+    }
+
     /// 添加详情信息
     pub async fn add(
         &self,

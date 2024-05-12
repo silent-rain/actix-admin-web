@@ -73,19 +73,8 @@ impl<'a> ConfigService<'a> {
 
     /// 添加数据
     pub async fn add(&self, req: AddConfigReq) -> Result<sys_config::Model, ErrorMsg> {
-        // 查询配置是否存在
-        let config = self
-            .config_dao
-            .info_by_code(req.name.clone())
-            .await
-            .map_err(|err| {
-                error!("查询配置信息失败, err: {:#?}", err);
-                Error::DbQueryError.into_msg().with_msg("查询配置信息失败")
-            })?;
-        if config.is_some() {
-            error!("配置已存在");
-            return Err(Error::DbDataExistError.into_msg().with_msg("配置已存在"));
-        }
+        // 查询配置编码是否存在
+        self.check_code_exist(req.code.clone(), None).await?;
 
         let model = sys_config::ActiveModel {
             pid: Set(req.pid),
@@ -107,6 +96,9 @@ impl<'a> ConfigService<'a> {
 
     /// 更新配置
     pub async fn update(&self, id: i32, req: UpdateConfigReq) -> Result<u64, ErrorMsg> {
+        // 查询配置编码是否存在且不属于当前ID
+        self.check_code_exist(req.code.clone(), Some(id)).await?;
+
         let model = sys_config::ActiveModel {
             id: Set(id),
             pid: Set(req.pid),
@@ -125,6 +117,31 @@ impl<'a> ConfigService<'a> {
         })?;
 
         Ok(result)
+    }
+
+    /// 检查配置编码是否存在
+    async fn check_code_exist(
+        &self,
+        code: String,
+        current_id: Option<i32>,
+    ) -> Result<(), ErrorMsg> {
+        let result = self.config_dao.info_by_code(code).await.map_err(|err| {
+            error!("查询配置编码失败, err: {:#?}", err);
+            Error::DbQueryError.into_msg().with_msg("查询配置编码失败")
+        })?;
+
+        // 存在
+        if let Some(model) = result {
+            if current_id.is_none() || Some(model.id) != current_id {
+                error!("配置编码已存在");
+                return Err(Error::DbDataExistError
+                    .into_msg()
+                    .with_msg("配置编码已存在"));
+            }
+        }
+
+        // 不存在
+        Ok(())
     }
 
     /// 更新数据状态

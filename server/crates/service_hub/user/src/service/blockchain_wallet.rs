@@ -72,7 +72,8 @@ impl<'a> BlockchainWalletService<'a> {
         req: AddBlockchainWalletReq,
     ) -> Result<blockchain_wallet::Model, ErrorMsg> {
         // 查询用户区块链钱包是否已存在
-        self.check_username(req.wallet_address.clone()).await?;
+        self.check_wallet_address_exist(req.wallet_address.clone(), None)
+            .await?;
 
         let model = blockchain_wallet::ActiveModel {
             user_id: Set(req.user_id),
@@ -115,10 +116,13 @@ impl<'a> BlockchainWalletService<'a> {
         Ok(result)
     }
 
-    /// 检查用户区块链钱包, 查看用户区块链钱包是否已注册
-    async fn check_username(&self, wallet_address: String) -> Result<(), ErrorMsg> {
-        // 查询用户区块链钱包是否已存在
-        let blockchain_wallet = self
+    /// 检查用户区块链钱包是否存在
+    async fn check_wallet_address_exist(
+        &self,
+        wallet_address: String,
+        current_id: Option<i32>,
+    ) -> Result<(), ErrorMsg> {
+        let result = self
             .blockchain_wallet_dao
             .info_by_wallet_address(wallet_address)
             .await
@@ -128,12 +132,18 @@ impl<'a> BlockchainWalletService<'a> {
                     .into_msg()
                     .with_msg("查询用户区块链钱包信息失败")
             })?;
-        if blockchain_wallet.is_some() {
-            error!("用户区块链钱包已存在");
-            return Err(Error::DbDataExistError
-                .into_msg()
-                .with_msg("用户区块链钱包已存在"));
+
+        // 存在
+        if let Some(model) = result {
+            if current_id.is_none() || Some(model.id) != current_id {
+                error!("用户区块链钱包已存在");
+                return Err(Error::DbDataExistError
+                    .into_msg()
+                    .with_msg("用户区块链钱包已存在"));
+            }
         }
+
+        // 不存在
         Ok(())
     }
 

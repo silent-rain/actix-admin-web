@@ -70,6 +70,14 @@ impl<'a> RankDao<'a> {
             .await
     }
 
+    /// 通过级别获取详情信息
+    pub async fn info_by_level(&self, level: u16) -> Result<Option<rank::Model>, DbErr> {
+        Rank::find()
+            .filter(rank::Column::Level.eq(level))
+            .one(self.db.rdb())
+            .await
+    }
+
     /// 添加详情信息
     pub async fn add(&self, active_model: rank::ActiveModel) -> Result<rank::Model, DbErr> {
         active_model.insert(self.db.wdb()).await

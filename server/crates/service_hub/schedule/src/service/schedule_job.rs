@@ -57,23 +57,8 @@ impl<'a> ScheduleJobService<'a> {
 
     /// 添加数据
     pub async fn add(&self, req: AddcheduleJobReq) -> Result<schedule_job::Model, ErrorMsg> {
-        // 查询任务调度是否已存在
-        let job = self
-            .schedule_job_dao
-            .info_by_name(req.name.clone())
-            .await
-            .map_err(|err| {
-                error!("查询任务调度作业失败, err: {:#?}", err);
-                Error::DbQueryError
-                    .into_msg()
-                    .with_msg("查询任务调度作业失败")
-            })?;
-        if job.is_some() {
-            error!("任务调度已存在");
-            return Err(Error::DbDataExistError
-                .into_msg()
-                .with_msg("任务调度已存在"));
-        }
+        // 检查任务名称是否已存在
+        self.check_name_exist(req.name.clone(), None).await?;
 
         let model = schedule_job::ActiveModel {
             name: Set(req.name),
@@ -98,6 +83,9 @@ impl<'a> ScheduleJobService<'a> {
 
     /// 更新任务调度
     pub async fn update(&self, id: i32, req: UpdatecheduleJobReq) -> Result<u64, ErrorMsg> {
+        // 检查任务名称是否已存在且不属于当前ID
+        self.check_name_exist(req.name.clone(), Some(id)).await?;
+
         let model = schedule_job::ActiveModel {
             id: Set(id),
             name: Set(req.name),
@@ -114,6 +102,35 @@ impl<'a> ScheduleJobService<'a> {
         })?;
 
         Ok(result)
+    }
+
+    /// 检查任务名称是否存在
+    async fn check_name_exist(
+        &self,
+        name: String,
+        current_id: Option<i32>,
+    ) -> Result<(), ErrorMsg> {
+        let result = self
+            .schedule_job_dao
+            .info_by_name(name)
+            .await
+            .map_err(|err| {
+                error!("查询任务名称失败, err: {:#?}", err);
+                Error::DbQueryError.into_msg().with_msg("查询任务名称失败")
+            })?;
+
+        // 存在
+        if let Some(model) = result {
+            if current_id.is_none() || Some(model.id) != current_id {
+                error!("任务名称已存在");
+                return Err(Error::DbDataExistError
+                    .into_msg()
+                    .with_msg("任务名称已存在"));
+            }
+        }
+
+        // 不存在
+        Ok(())
     }
 
     /// 更新数据状态

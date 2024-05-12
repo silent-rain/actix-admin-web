@@ -67,8 +67,10 @@ impl<'a> MemberLevelService<'a> {
 
     /// 添加数据
     pub async fn add(&self, req: AddMemberLevelReq) -> Result<member_level::Model, ErrorMsg> {
-        // 查询会员等级是否已存在
-        self.check_member_level(req.name.clone()).await?;
+        // 查询会员等级名称是否已存在
+        self.check_name_exist(req.name.clone(), None).await?;
+        // 检查会员等级是否已存在且不属于当前ID
+        self.check_level_exist(req.level, None).await?;
 
         let model = member_level::ActiveModel {
             name: Set(req.name),
@@ -94,8 +96,10 @@ impl<'a> MemberLevelService<'a> {
 
     /// 更新数据
     pub async fn update(&self, id: i32, req: UpdateMemberLevelReq) -> Result<u64, ErrorMsg> {
-        // 查询会员等级是否已存在
-        self.check_member_level(req.name.clone()).await?;
+        // 查询会员等级名称是否已存在且不属于当前ID
+        self.check_name_exist(req.name.clone(), Some(id)).await?;
+        // 检查会员等级是否已存在且不属于当前ID
+        self.check_level_exist(req.level, Some(id)).await?;
 
         let model = member_level::ActiveModel {
             id: Set(id),
@@ -116,7 +120,11 @@ impl<'a> MemberLevelService<'a> {
     }
 
     /// 查询会员等级名称是否已存在
-    async fn check_member_level(&self, name: String) -> Result<(), ErrorMsg> {
+    async fn check_name_exist(
+        &self,
+        name: String,
+        current_id: Option<i32>,
+    ) -> Result<(), ErrorMsg> {
         let result = self
             .member_level_dao
             .info_by_name(name)
@@ -127,13 +135,43 @@ impl<'a> MemberLevelService<'a> {
                     .into_msg()
                     .with_msg("查询会员等级信息失败")
             })?;
-        if result.is_some() {
-            error!("会员等级名称已存在");
-            return Err(Error::DbDataExistError
-                .into_msg()
-                .with_msg("会员等级名称已存在"));
+
+        // 存在
+        if let Some(model) = result {
+            if current_id.is_none() || Some(model.id) != current_id {
+                error!("会员等级名称已存在");
+                return Err(Error::DbDataExistError
+                    .into_msg()
+                    .with_msg("会员等级名称已存在"));
+            }
         }
 
+        // 不存在
+        Ok(())
+    }
+
+    /// 检查会员等级是否存在
+    async fn check_level_exist(&self, level: u16, current_id: Option<i32>) -> Result<(), ErrorMsg> {
+        let result = self
+            .member_level_dao
+            .info_by_level(level)
+            .await
+            .map_err(|err| {
+                error!("查询会员等级失败, err: {:#?}", err);
+                Error::DbQueryError.into_msg().with_msg("查询会员等级失败")
+            })?;
+
+        // 存在
+        if let Some(model) = result {
+            if current_id.is_none() || Some(model.id) != current_id {
+                error!("会员等级已存在");
+                return Err(Error::DbDataExistError
+                    .into_msg()
+                    .with_msg("会员等级已存在"));
+            }
+        }
+
+        // 不存在
         Ok(())
     }
 

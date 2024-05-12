@@ -71,40 +71,10 @@ impl<'a> DictDimensionService<'a> {
         req: AddDictDimensionReq,
     ) -> Result<sys_dict_dimension::Model, ErrorMsg> {
         // 查询字典维度名称是否已存在
-        let dict_dim = self
-            .dict_dimension_dao
-            .info_by_name(req.name.clone())
-            .await
-            .map_err(|err| {
-                error!("查询字典维度名称失败, err: {:#?}", err);
-                Error::DbQueryError
-                    .into_msg()
-                    .with_msg("查询字典维度名称失败")
-            })?;
-        if dict_dim.is_some() {
-            error!("字典维度名称已存在");
-            return Err(Error::DbDataExistError
-                .into_msg()
-                .with_msg("字典维度名称已存在"));
-        }
+        self.check_name_exist(req.name.clone(), None).await?;
 
         // 查询字典维度编码是否存在
-        let dict_dim = self
-            .dict_dimension_dao
-            .info_by_code(req.code.clone())
-            .await
-            .map_err(|err| {
-                error!("查询字典维度编码失败, err: {:#?}", err);
-                Error::DbQueryError
-                    .into_msg()
-                    .with_msg("查询字典维度编码失败")
-            })?;
-        if dict_dim.is_some() {
-            error!("字典维度编码已存在");
-            return Err(Error::DbDataExistError
-                .into_msg()
-                .with_msg("字典维度编码已存在"));
-        }
+        self.check_code_exist(req.code.clone(), None).await?;
 
         let model = sys_dict_dimension::ActiveModel {
             name: Set(req.name),
@@ -126,6 +96,12 @@ impl<'a> DictDimensionService<'a> {
 
     /// 更新字典维度
     pub async fn update(&self, id: i32, req: UpdateDictDimensionReq) -> Result<u64, ErrorMsg> {
+        // 查询字典维度名称是否已存在且不属于当前ID
+        self.check_name_exist(req.name.clone(), Some(id)).await?;
+
+        // 查询字典维度编码是否存在且不属于当前ID
+        self.check_code_exist(req.code.clone(), Some(id)).await?;
+
         let model = sys_dict_dimension::ActiveModel {
             id: Set(id),
             name: Set(req.name),
@@ -142,6 +118,68 @@ impl<'a> DictDimensionService<'a> {
         })?;
 
         Ok(result)
+    }
+
+    /// 查询字典维度名称是否已存在
+    async fn check_name_exist(
+        &self,
+        name: String,
+        current_id: Option<i32>,
+    ) -> Result<(), ErrorMsg> {
+        let result = self
+            .dict_dimension_dao
+            .info_by_code(name)
+            .await
+            .map_err(|err| {
+                error!("查询字典维度名称失败, err: {:#?}", err);
+                Error::DbQueryError
+                    .into_msg()
+                    .with_msg("查询字典维度名称失败")
+            })?;
+
+        // 存在
+        if let Some(model) = result {
+            if current_id.is_none() || Some(model.id) != current_id {
+                error!("字典维度名称已存在");
+                return Err(Error::DbDataExistError
+                    .into_msg()
+                    .with_msg("字典维度名称已存在"));
+            }
+        }
+
+        // 不存在
+        Ok(())
+    }
+
+    /// 查询字典维度编码是否存在
+    async fn check_code_exist(
+        &self,
+        code: String,
+        current_id: Option<i32>,
+    ) -> Result<(), ErrorMsg> {
+        let result = self
+            .dict_dimension_dao
+            .info_by_code(code)
+            .await
+            .map_err(|err| {
+                error!("查询字典维度编码失败, err: {:#?}", err);
+                Error::DbQueryError
+                    .into_msg()
+                    .with_msg("查询字典维度编码失败")
+            })?;
+
+        // 存在
+        if let Some(model) = result {
+            if current_id.is_none() || Some(model.id) != current_id {
+                error!("字典维度编码已存在");
+                return Err(Error::DbDataExistError
+                    .into_msg()
+                    .with_msg("字典维度编码已存在"));
+            }
+        }
+
+        // 不存在
+        Ok(())
     }
 
     /// 更新数据状态

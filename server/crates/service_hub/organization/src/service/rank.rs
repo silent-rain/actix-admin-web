@@ -56,8 +56,10 @@ impl<'a> RankService<'a> {
 
     /// 添加数据
     pub async fn add(&self, req: AddRankReq) -> Result<rank::Model, ErrorMsg> {
-        // 查询职级是否已存在
-        self.check_rank(req.name.clone()).await?;
+        // 检查职级名称是否已存在
+        self.check_name_exist(req.name.clone(), None).await?;
+        // 检查职级等级是否已存在
+        self.check_level_exist(req.level, None).await?;
 
         let model = rank::ActiveModel {
             name: Set(req.name),
@@ -81,15 +83,17 @@ impl<'a> RankService<'a> {
 
     /// 更新数据
     pub async fn update(&self, id: i32, req: UpdateRankReq) -> Result<u64, ErrorMsg> {
-        // 查询职级是否已存在
-        self.check_rank(req.name.clone()).await?;
+        // 检查职级名称是否已存在且不属于当前ID
+        self.check_name_exist(req.name.clone(), Some(id)).await?;
+        // 检查职级等级是否已存在且不属于当前ID
+        self.check_level_exist(req.level, Some(id)).await?;
 
         let model = rank::ActiveModel {
             id: Set(id),
             name: Set(req.name),
+            level: Set(req.level),
             sort: Set(req.sort),
             desc: Set(req.desc),
-            level: Set(req.level),
             status: Set(req.status as i8),
             ..Default::default()
         };
@@ -102,17 +106,49 @@ impl<'a> RankService<'a> {
         Ok(result)
     }
 
-    /// 查询职级是否已存在
-    async fn check_rank(&self, name: String) -> Result<(), ErrorMsg> {
+    /// 检查职级名称是否存在
+    async fn check_name_exist(
+        &self,
+        name: String,
+        current_id: Option<i32>,
+    ) -> Result<(), ErrorMsg> {
         let result = self.rank_dao.info_by_name(name).await.map_err(|err| {
-            error!("查询职级信息失败, err: {:#?}", err);
-            Error::DbQueryError.into_msg().with_msg("查询职级信息失败")
+            error!("查询职级名称失败, err: {:#?}", err);
+            Error::DbQueryError.into_msg().with_msg("查询职级名称失败")
         })?;
-        if result.is_some() {
-            error!("职级已存在");
-            return Err(Error::DbDataExistError.into_msg().with_msg("职级已存在"));
+
+        // 存在
+        if let Some(model) = result {
+            if current_id.is_none() || Some(model.id) != current_id {
+                error!("职级名称已存在");
+                return Err(Error::DbDataExistError
+                    .into_msg()
+                    .with_msg("职级名称已存在"));
+            }
         }
 
+        // 不存在
+        Ok(())
+    }
+
+    /// 检查职级等级是否存在
+    async fn check_level_exist(&self, level: u16, current_id: Option<i32>) -> Result<(), ErrorMsg> {
+        let result = self.rank_dao.info_by_level(level).await.map_err(|err| {
+            error!("查询职级等级失败, err: {:#?}", err);
+            Error::DbQueryError.into_msg().with_msg("查询职级等级失败")
+        })?;
+
+        // 存在
+        if let Some(model) = result {
+            if current_id.is_none() || Some(model.id) != current_id {
+                error!("职级等级已存在");
+                return Err(Error::DbDataExistError
+                    .into_msg()
+                    .with_msg("职级等级已存在"));
+            }
+        }
+
+        // 不存在
         Ok(())
     }
 

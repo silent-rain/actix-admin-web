@@ -59,8 +59,8 @@ impl<'a> PositionService<'a> {
 
     /// 添加数据
     pub async fn add(&self, req: AddPositionReq) -> Result<position::Model, ErrorMsg> {
-        // 查询岗位是否已存在
-        self.check_position(req.name.clone()).await?;
+        // 检查岗位名称是否已存在
+        self.check_name_exist(req.name.clone(), None).await?;
 
         let model = position::ActiveModel {
             name: Set(req.name),
@@ -84,8 +84,8 @@ impl<'a> PositionService<'a> {
 
     /// 更新数据
     pub async fn update(&self, id: i32, req: UpdatePositionReq) -> Result<u64, ErrorMsg> {
-        // 查询岗位是否已存在
-        self.check_position(req.name.clone()).await?;
+        // 检查岗位名称是否已存在且不属于当前ID
+        self.check_name_exist(req.name.clone(), Some(id)).await?;
 
         let model = position::ActiveModel {
             id: Set(id),
@@ -105,17 +105,28 @@ impl<'a> PositionService<'a> {
         Ok(result)
     }
 
-    /// 查询岗位是否已存在
-    async fn check_position(&self, name: String) -> Result<(), ErrorMsg> {
+    /// 检查岗位名称是否存在
+    async fn check_name_exist(
+        &self,
+        name: String,
+        current_id: Option<i32>,
+    ) -> Result<(), ErrorMsg> {
         let result = self.position_dao.info_by_name(name).await.map_err(|err| {
             error!("查询岗位信息失败, err: {:#?}", err);
             Error::DbQueryError.into_msg().with_msg("查询岗位信息失败")
         })?;
-        if result.is_some() {
-            error!("岗位已存在");
-            return Err(Error::DbDataExistError.into_msg().with_msg("岗位已存在"));
+
+        // 存在
+        if let Some(model) = result {
+            if current_id.is_none() || Some(model.id) != current_id {
+                error!("岗位名称已存在");
+                return Err(Error::DbDataExistError
+                    .into_msg()
+                    .with_msg("岗位名称已存在"));
+            }
         }
 
+        // 不存在
         Ok(())
     }
 

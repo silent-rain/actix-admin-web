@@ -59,19 +59,8 @@ impl<'a> RoleService<'a> {
 
     /// 添加数据
     pub async fn add(&self, req: AddRoleReq) -> Result<user_role::Model, ErrorMsg> {
-        // 查询角色是否已存在
-        let role = self
-            .role_dao
-            .info_by_name(req.name.clone())
-            .await
-            .map_err(|err| {
-                error!("查询角色信息失败, err: {:#?}", err);
-                Error::DbQueryError.into_msg().with_msg("查询角色信息失败")
-            })?;
-        if role.is_some() {
-            error!("角色已存在");
-            return Err(Error::DbDataExistError.into_msg().with_msg("角色已存在"));
-        }
+        // 检查角色名称是否已存在
+        self.check_name_exist(req.name.clone(), None).await?;
 
         let model = user_role::ActiveModel {
             name: Set(req.name),
@@ -90,6 +79,9 @@ impl<'a> RoleService<'a> {
 
     /// 更新角色
     pub async fn update(&self, id: i32, req: UpdateRoleReq) -> Result<u64, ErrorMsg> {
+        // 检查角色名称是否已存在且不属于当前ID
+        self.check_name_exist(req.name.clone(), Some(id)).await?;
+
         let model = user_role::ActiveModel {
             id: Set(id),
             name: Set(req.name),
@@ -105,6 +97,31 @@ impl<'a> RoleService<'a> {
         })?;
 
         Ok(result)
+    }
+
+    /// 检查角色名称是否存在
+    async fn check_name_exist(
+        &self,
+        name: String,
+        current_id: Option<i32>,
+    ) -> Result<(), ErrorMsg> {
+        let result = self.role_dao.info_by_name(name).await.map_err(|err| {
+            error!("查询角色信息失败, err: {:#?}", err);
+            Error::DbQueryError.into_msg().with_msg("查询角色信息失败")
+        })?;
+
+        // 存在
+        if let Some(model) = result {
+            if current_id.is_none() || Some(model.id) != current_id {
+                error!("角色名称已存在");
+                return Err(Error::DbDataExistError
+                    .into_msg()
+                    .with_msg("角色名称已存在"));
+            }
+        }
+
+        // 不存在
+        Ok(())
     }
 
     /// 更新数据状态
