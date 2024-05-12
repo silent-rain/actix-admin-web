@@ -16,6 +16,10 @@ impl UserBaseRouter {
             .route("/{id}", web::get().to(UserBaseController::info))
             .route("", web::post().to(UserBaseController::add))
             .route("/{id}", web::put().to(UserBaseController::update))
+            .route(
+                "/{id}/share-code",
+                web::put().to(UserBaseController::update_share_code),
+            )
             .route("/{id}/status", web::put().to(UserBaseController::status))
             .route("/{id}", web::delete().to(UserBaseController::delete))
             .route("/{id}/roles", web::get().to(UserBaseController::roles))

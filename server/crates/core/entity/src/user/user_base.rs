@@ -35,6 +35,8 @@ pub struct Model {
     pub desc: Option<String>,
     /// 用户的居住或邮寄地址
     pub address: Option<String>,
+    /// 用户分享码
+    pub share_code: Option<String>,
     /// 偏好设置
     pub preferences: Option<String>,
     /// 所属部门ID

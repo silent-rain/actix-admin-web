@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS
         `intro` VARCHAR(200) NULL DEFAULT '' COMMENT '用户个人介绍',
         `desc` VARCHAR(200) NULL DEFAULT '' COMMENT '用户描述',
         `address` VARCHAR(200) NULL DEFAULT '' COMMENT '用户的居住或邮寄地址',
+        `share_code` VARCHAR(16) NULL DEFAULT '' COMMENT '用户分享码',
         `preferences` VARCHAR(200) NULL DEFAULT '' COMMENT '偏好设置',
         `department_id` INT(11) DEFAULT 0 COMMENT '所属部门ID',
         `position_id` INT(11) DEFAULT 0 COMMENT '所属岗位ID',

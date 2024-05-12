@@ -4656,6 +4656,7 @@ version = "0.1.0"
 dependencies = [
  "actix-web",
  "actix_validator",
+ "base64 0.22.1",
  "code",
  "context",
  "database",
@@ -4672,6 +4673,7 @@ dependencies = [
  "serde_repr",
  "tracing",
  "utils",
+ "uuid",
  "validator",
 ]
 

@@ -10,7 +10,7 @@ use crate::constant::{
 };
 
 use context::Context;
-use jwt::decode_token;
+use jwt::decode_token_with_verify;
 use response::Response;
 
 use actix_web::{
@@ -93,7 +93,7 @@ where
             Ok(v) => v,
             Err(err) => {
                 return Box::pin(async move {
-                    error!("获取系统鉴权标识 Token 失败");
+                    error!("获取系统鉴权标识 Token 失败, err: {:#?}", err);
                     Err(Response::err(err).into())
                 })
             }
@@ -103,7 +103,7 @@ where
             Ok(v) => v,
             Err(err) => {
                 return Box::pin(async move {
-                    error!("检查系统鉴权异常");
+                    error!("检查系统鉴权异常, err: {:#?}", err);
                     Err(Response::code(err).into())
                 })
             }
@@ -149,8 +149,8 @@ impl<S> SystemAuthService<S> {
     /// 检查系统鉴权
     fn check_system_auth(token: String) -> Result<(i32, String), code::Error> {
         // 解码 Token
-        let claims =
-            decode_token(&token).map_err(|err| code::Error::TokenDecode(err.to_string()))?;
+        let claims = decode_token_with_verify(&token)
+            .map_err(|err| code::Error::TokenDecode(err.to_string()))?;
         Ok((claims.user_id, claims.username))
     }
 

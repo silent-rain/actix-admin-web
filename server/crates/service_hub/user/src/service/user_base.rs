@@ -7,10 +7,15 @@ use crate::{
 use code::{Error, ErrorMsg};
 use entity::user::{user_base, user_role, user_role_rel};
 
+use base64::Engine;
 use nject::injectable;
 use sea_orm::Set;
 use tracing::error;
 use utils::crypto::sha2_256;
+use uuid::Uuid;
+
+/// 用户分享码生成次数
+const SHARE_CODE_COUNT: i32 = 100;
 
 /// 服务层
 #[injectable]
@@ -25,19 +30,24 @@ impl<'a> UserBaseService<'a> {
         &self,
         req: GetUserBaserListReq,
     ) -> Result<(Vec<user_base::Model>, u64), ErrorMsg> {
-        let (results, total) = self.user_base_dao.list(req).await.map_err(|err| {
+        let (mut results, total) = self.user_base_dao.list(req).await.map_err(|err| {
             error!("查询用户信息列表失败, err: {:#?}", err);
             Error::DbQueryError
                 .into_msg()
                 .with_msg("查询用户信息列表失败")
         })?;
 
+        // 屏蔽敏感信息
+        for result in results.iter_mut() {
+            result.password = "".to_string();
+        }
+
         Ok((results, total))
     }
 
     /// 获取详情数据
     pub async fn info(&self, id: i32) -> Result<user_base::Model, ErrorMsg> {
-        let result = self
+        let mut result = self
             .user_base_dao
             .info(id)
             .await
@@ -52,6 +62,8 @@ impl<'a> UserBaseService<'a> {
                     .with_msg("用户信息不存在")
             })?;
 
+        // 屏蔽敏感信息
+        result.password = "".to_string();
         Ok(result)
     }
 
@@ -81,6 +93,64 @@ impl<'a> UserBaseService<'a> {
             avatar: user.avatar,
         };
         Ok(result)
+    }
+
+    /// 更新用户分享码
+    pub async fn update_share_code(&self, id: i32) -> Result<(), ErrorMsg> {
+        // 获取分享码
+        let mut share_code = String::new();
+        for _i in 0..SHARE_CODE_COUNT {
+            let share_code_uuid = Uuid::new_v4().to_string().replace('-', "");
+            let share_code_hash =
+                base64::engine::general_purpose::STANDARD.encode(&share_code_uuid);
+            let half_share_code = share_code_hash[0..16].to_string();
+
+            // 检查分享码是否存在
+            if !self.check_share_code_exist(half_share_code.clone()).await? {
+                share_code = half_share_code.to_string();
+                break;
+            }
+        }
+
+        if share_code.is_empty() {
+            error!("生成用户分享码失败, 请重试");
+            return Err(Error::UserShareCore
+                .into_msg()
+                .with_msg("生成用户分享码失败, 请重试"));
+        }
+
+        self.user_base_dao
+            .update_share_code(id, share_code)
+            .await
+            .map_err(|err| {
+                error!("更新用户分享码失败, err: {:#?}", err);
+                Error::DbUpdateError
+                    .into_msg()
+                    .with_msg("更新用户分享码失败")
+            })?;
+
+        Ok(())
+    }
+
+    /// 检查分享码是否存在
+    async fn check_share_code_exist(&self, share_code: String) -> Result<bool, ErrorMsg> {
+        let result = self
+            .user_base_dao
+            .info_by_share_code(share_code)
+            .await
+            .map_err(|err| {
+                error!("查询用户分享码失败, err: {:#?}", err);
+                Error::DbUpdateError
+                    .into_msg()
+                    .with_msg("查询用户分享码失败")
+            })?;
+
+        if result.is_some() {
+            error!("用户分享码已存在");
+            return Ok(true);
+        }
+
+        Ok(false)
     }
 
     /// 更新数据状态

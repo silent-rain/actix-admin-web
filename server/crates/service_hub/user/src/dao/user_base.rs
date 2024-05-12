@@ -76,6 +76,17 @@ impl<'a> UserBaseDao<'a> {
             .await
     }
 
+    /// 通过分享码获取详情信息
+    pub async fn info_by_share_code(
+        &self,
+        share_code: String,
+    ) -> Result<Option<user_base::Model>, DbErr> {
+        UserBase::find()
+            .filter(user_base::Column::ShareCode.eq(share_code))
+            .one(self.db.rdb())
+            .await
+    }
+
     /// 添加详情信息
     pub async fn add(
         &self,
@@ -94,6 +105,17 @@ impl<'a> UserBaseDao<'a> {
             .await?;
 
         Ok(result.rows_affected)
+    }
+
+    /// 更新分享码信息
+    pub async fn update_share_code(&self, id: i32, share_code: String) -> Result<(), DbErr> {
+        let active_model = user_base::ActiveModel {
+            id: Set(id),
+            share_code: Set(Some(share_code)),
+            ..Default::default()
+        };
+        let _ = active_model.update(self.db.wdb()).await?;
+        Ok(())
     }
 
     /// 更新状态

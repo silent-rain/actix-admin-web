@@ -98,7 +98,6 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(UserBase::Desc)
                             .string()
                             .string_len(200)
-                            .default("")
                             .null()
                             .default("")
                             .comment("用户描述"),
@@ -112,10 +111,17 @@ impl MigrationTrait for Migration {
                             .comment("用户的居住或邮寄地址"),
                     )
                     .col(
+                        ColumnDef::new(UserBase::ShareCode)
+                            .string()
+                            .string_len(16)
+                            .null()
+                            .default("")
+                            .comment("用户分享码"),
+                    )
+                    .col(
                         ColumnDef::new(UserBase::Preferences)
                             .string()
                             .string_len(200)
-                            .default("")
                             .null()
                             .default("")
                             .comment("偏好设置"),
@@ -214,6 +220,7 @@ pub enum UserBase {
     Intro,
     Desc,
     Address,
+    ShareCode,
     Preferences,
     DepartmentId,
     PositionId,

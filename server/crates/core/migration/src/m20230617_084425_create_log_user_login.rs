@@ -44,8 +44,8 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(LogUserLogin::Token)
                             .string()
-                            .string_len(250)
-                            .not_null()
+                            .string_len(300)
+                            .null()
                             .comment("登陆令牌"),
                     )
                     .col(

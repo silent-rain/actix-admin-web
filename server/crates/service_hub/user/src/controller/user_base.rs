@@ -72,6 +72,19 @@ impl UserBaseController {
         }
     }
 
+    /// 更新用户分享码
+    pub async fn update_share_code(
+        provider: Data<AInjectProvider>,
+        id: Path<i32>,
+    ) -> impl Responder {
+        let user_base_service: UserBaseService = provider.provide();
+        let resp = user_base_service.update_share_code(*id).await;
+        match resp {
+            Ok(_v) => Response::ok(),
+            Err(err) => Response::err(err),
+        }
+    }
+
     /// 更新用户信息状态
     pub async fn status(
         provider: Data<AInjectProvider>,

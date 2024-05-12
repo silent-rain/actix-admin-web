@@ -98,7 +98,7 @@ pub enum Error {
     LoginUserDisableError = 10255,
     #[error("获取密匙异常")]
     TokenEncode = 10256,
-    #[error("解析密匙异常, {0}")]
+    #[error("鉴权解析失败, err: {0}")]
     TokenDecode(String) = 10257,
     #[error("获取鉴权标识失败")]
     HeadersNotAuthorization = 10258,
@@ -112,6 +112,9 @@ pub enum Error {
     UserAddError = 10262,
     #[error("获取鉴权标识失败")]
     HeadersNotAuthorizationPassphrase = 10263,
+
+    #[error("生成用户分享码失败")]
+    UserShareCore = 10264,
 
     #[error("数据库初始化失败, 管理员已存在无需重复初始化")]
     DbInitByAdminExistError = 10265,
