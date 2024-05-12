@@ -25,19 +25,25 @@ impl<'a> BlockchainWalletService<'a> {
         &self,
         req: GetBlockchainWalletListReq,
     ) -> Result<(Vec<blockchain_wallet::Model>, u64), ErrorMsg> {
-        let (results, total) = self.blockchain_wallet_dao.list(req).await.map_err(|err| {
+        let (mut results, total) = self.blockchain_wallet_dao.list(req).await.map_err(|err| {
             error!("查询用户区块链钱包列表失败, err: {:#?}", err);
             Error::DbQueryError
                 .into_msg()
                 .with_msg("查询用户区块链钱包列表失败")
         })?;
 
+        // 屏蔽敏感信息
+        for result in results.iter_mut() {
+            result.mnemonic = None;
+            result.private_key = None;
+        }
+
         Ok((results, total))
     }
 
     /// 获取详情数据
     pub async fn info(&self, id: i32) -> Result<blockchain_wallet::Model, ErrorMsg> {
-        let result = self
+        let mut result = self
             .blockchain_wallet_dao
             .info(id)
             .await
@@ -54,6 +60,9 @@ impl<'a> BlockchainWalletService<'a> {
                     .with_msg("用户区块链钱包不存在")
             })?;
 
+        // 屏蔽敏感信息
+        result.mnemonic = None;
+        result.private_key = None;
         Ok(result)
     }
 
@@ -88,9 +97,6 @@ impl<'a> BlockchainWalletService<'a> {
     pub async fn update(&self, id: i32, req: UpdateBlockchainWalletReq) -> Result<u64, ErrorMsg> {
         let model = blockchain_wallet::ActiveModel {
             id: Set(id),
-            mnemonic: Set(req.mnemonic),
-            private_key: Set(req.private_key),
-            chain_id: Set(req.chain_id),
             desc: Set(req.desc),
             ..Default::default()
         };

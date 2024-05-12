@@ -41,10 +41,6 @@ pub struct AddBlockchainWalletReq {
 /// 更新数据 请求体
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
 pub struct UpdateBlockchainWalletReq {
-    /// 助记词
-    pub mnemonic: Option<String>,
-    /// 私钥
-    pub private_key: Option<String>,
     /// 区块链ID
     pub chain_id: Option<i32>,
     /// 描述信息

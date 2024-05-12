@@ -120,12 +120,10 @@
   - open api 接口 rbac
   - 系统用户接口鉴权
 - 用户分享码 share_code
-- 用户会员等级
 - 任务调度接口验证
   - 任务运行失败，日志回收
   - 耗时
   - 状态
-- 图片资源的hash值
 
 <https://github.com/actix/actix-extras/tree/master/actix-identity>
 <https://crates.io/crates/actix-ws>
