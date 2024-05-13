@@ -10,8 +10,8 @@
   },
   // 将传递给锈蚀分析器可执行文件的额外环境变量。用于传递例如RA_LOG进行调试。
   "rust-analyzer.server.extraEnv": {
-    "RUSTUP_TOOLCHAIN": "stable"
-    // "RUSTUP_TOOLCHAIN": "nightly"
+    // "RUSTUP_TOOLCHAIN": "stable"
+    "RUSTUP_TOOLCHAIN": "nightly"
   },
   // 禁用项目自动发现以支持显式指定的项目集。
   "rust-analyzer.linkedProjects": [
