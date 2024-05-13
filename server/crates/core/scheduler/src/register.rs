@@ -106,8 +106,8 @@ where
     ) -> Result<(), Error> {
         let uuid = sys_job.guid().to_string();
         info!(
-            "register sys task id:{} name: {} sys_code: {:?} uuid: {:?}",
-            job_model.id, job_model.name, job_model.sys_code, uuid
+            "register sys task id:{} name: {} sys_code: {:?} status: {}uuid: {:?}",
+            job_model.id, job_model.name, job_model.sys_code, job_model.status, uuid,
         );
 
         // 创建任务
@@ -127,7 +127,7 @@ where
             .await
             .map_err(|err| Error::ScheduleJobListError(err.to_string()))?
             .into_iter()
-            .filter(|v| v.status == schedule_job::enums::Source::System as i8)
+            .filter(|v| v.source == schedule_job::enums::Source::System as i8)
             .collect::<Vec<schedule_job::Model>>();
         Ok(job_list)
     }
@@ -165,8 +165,8 @@ where
             };
             let uuid = user_job.guid().to_string();
             info!(
-                "register user task id:{} name: {} sys_code: {:?} uuid: {:?}",
-                job_model.id, job_model.name, job_model.sys_code, uuid
+                "register user task id:{} name: {} sys_code: {:?} status: {:?} uuid: {:?}",
+                job_model.id, job_model.name, job_model.sys_code, job_model.status, uuid
             );
 
             // 将任务添加到任务队列中

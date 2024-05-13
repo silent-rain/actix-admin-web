@@ -74,7 +74,6 @@ impl<'a> ScheduleJobService<'a> {
             expression: Set(req.expression),
             interval: Set(req.interval),
             desc: Set(req.desc),
-            status: Set(req.status as i8),
             ..Default::default()
         };
         let result = self.schedule_job_dao.add(model).await.map_err(|err| {
@@ -98,7 +97,6 @@ impl<'a> ScheduleJobService<'a> {
             expression: Set(req.expression),
             interval: Set(req.interval),
             desc: Set(req.desc),
-            status: Set(req.status as i8),
             ..Default::default()
         };
 

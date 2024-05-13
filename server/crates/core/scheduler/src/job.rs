@@ -91,7 +91,7 @@ where
             + 'static,
     {
         let dao = self.dao.clone();
-        let sys_id = self.sys_id;
+        let sys_id: i32 = self.sys_id;
 
         move |uuid: Uuid, scheduler: JobScheduler| {
             let before = Instant::now();
@@ -226,34 +226,29 @@ where
     pub async fn on_start_notification(&mut self, sched: JobScheduler) -> Result<(), Error> {
         let dao = self.dao.clone();
         let sys_id = self.sys_id;
+
         self.job
             .on_start_notification_add(
                 &sched,
                 Box::new(move |job_id, notification_id, type_of_notification| {
                     let dao = dao.clone();
-                    trace!(
-                        "TokioJob {:?} was started, notification {:?} ran ({:?})",
-                        job_id,
-                        notification_id,
-                        type_of_notification
-                    );
 
                     Box::pin(async move {
+                        trace!(
+                            "TokioJob {:?} was started, notification {:?} ran ({:?})",
+                            job_id,
+                            notification_id,
+                            type_of_notification
+                        );
+
                         // 添加任务运行事件日志
-                        if let Err(err) = dao
-                            .schedule_event_log_dao
-                            .add(
-                                sys_id,
-                                job_id.to_string(),
-                                schedule_event_log::enums::Status::Start,
-                            )
-                            .await
-                        {
-                            error!(
-                                "job_id: {} add schedule job event log, err: {:?}",
-                                job_id, err
-                            );
-                        };
+                        Self::add_schedule_event_log(
+                            dao,
+                            sys_id,
+                            job_id,
+                            schedule_event_log::enums::Status::Start,
+                        )
+                        .await;
                     })
                 }),
             )
@@ -272,26 +267,23 @@ where
                 &sched,
                 Box::new(move |job_id, notification_id, type_of_notification| {
                     let dao = dao.clone();
-                    trace!(
-                        "TokioJob {:?} was done, notification {:?} ran ({:?})",
-                        job_id,
-                        notification_id,
-                        type_of_notification
-                    );
 
                     Box::pin(async move {
+                        trace!(
+                            "TokioJob {:?} was done, notification {:?} ran ({:?})",
+                            job_id,
+                            notification_id,
+                            type_of_notification
+                        );
+
                         // 添加任务运行事件日志
-                        if let Err(err) = dao
-                            .schedule_event_log_dao
-                            .add(
-                                sys_id,
-                                job_id.to_string(),
-                                schedule_event_log::enums::Status::Done,
-                            )
-                            .await
-                        {
-                            error!("TokioJob {:?} was done, err: {:?}", job_id, err);
-                        };
+                        Self::add_schedule_event_log(
+                            dao,
+                            sys_id,
+                            job_id,
+                            schedule_event_log::enums::Status::Done,
+                        )
+                        .await;
                     })
                 }),
             )
@@ -310,26 +302,23 @@ where
                 &sched,
                 Box::new(move |job_id, notification_id, type_of_notification| {
                     let dao = dao.clone();
-                    trace!(
-                        "TokioJob {:?} was stop, notification {:?} ran ({:?})",
-                        job_id,
-                        notification_id,
-                        type_of_notification
-                    );
 
                     Box::pin(async move {
+                        trace!(
+                            "TokioJob {:?} was stop, notification {:?} ran ({:?})",
+                            job_id,
+                            notification_id,
+                            type_of_notification
+                        );
+
                         // 添加任务运行事件日志
-                        if let Err(err) = dao
-                            .schedule_event_log_dao
-                            .add(
-                                sys_id,
-                                job_id.to_string(),
-                                schedule_event_log::enums::Status::Stop,
-                            )
-                            .await
-                        {
-                            error!("TokioJob {:?} was done, err: {:?}", job_id, err);
-                        };
+                        Self::add_schedule_event_log(
+                            dao,
+                            sys_id,
+                            job_id,
+                            schedule_event_log::enums::Status::Stop,
+                        )
+                        .await;
                     })
                 }),
             )
@@ -348,32 +337,64 @@ where
                 &sched,
                 Box::new(move |job_id, notification_id, type_of_notification| {
                     let dao = dao.clone();
-                    trace!(
-                        "TokioJob {:?} was removed, notification {:?} ran ({:?})",
-                        job_id,
-                        notification_id,
-                        type_of_notification
-                    );
 
                     Box::pin(async move {
+                        trace!(
+                            "TokioJob {:?} was removed, notification {:?} ran ({:?})",
+                            job_id,
+                            notification_id,
+                            type_of_notification
+                        );
                         // 添加任务运行事件日志
-                        if let Err(err) = dao
-                            .schedule_event_log_dao
-                            .add(
-                                sys_id,
-                                job_id.to_string(),
-                                schedule_event_log::enums::Status::Removed,
-                            )
-                            .await
-                        {
-                            error!("TokioJob {:?} was done, err: {:?}", job_id, err);
-                        };
+                        Self::add_schedule_event_log(
+                            dao,
+                            sys_id,
+                            job_id,
+                            schedule_event_log::enums::Status::Removed,
+                        )
+                        .await;
                     })
                 }),
             )
             .await
             .map_err(Error::JobSchedulerError)?;
         Ok(())
+    }
+
+    /// 添加任务运行事件日志
+    async fn add_schedule_event_log(
+        dao: Arc<Dao<DB>>,
+        sys_id: i32,
+        uuid: Uuid,
+        status: schedule_event_log::enums::Status,
+    ) {
+        let sys_model = match dao.schedule_job_dao.info(sys_id).await {
+            Ok(model) => match model {
+                Some(v) => v,
+                None => {
+                    error!("job_id: {} schedule job not found", sys_id);
+                    return;
+                }
+            },
+            Err(err) => {
+                error!("job_id: {} get schedule job, err: {:?}", sys_id, err);
+                return;
+            }
+        };
+        if sys_model.status == schedule_job::enums::Status::Offline as i8 {
+            return;
+        }
+
+        if let Err(err) = dao
+            .schedule_event_log_dao
+            .add(sys_id, uuid.to_string(), status)
+            .await
+        {
+            error!(
+                "task job {:?} add schedule event log, err: {:?}",
+                sys_id, err
+            );
+        };
     }
 
     /// 设置任务消息通知事件

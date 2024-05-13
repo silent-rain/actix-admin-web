@@ -42,8 +42,6 @@ pub struct AddcheduleJobReq {
     pub interval: Option<i32>,
     /// 描述信息
     pub desc: Option<String>,
-    /// 任务状态(0:下线,1:上线)
-    pub status: schedule_job::enums::Status,
 }
 
 /// 更新数据 请求体
@@ -57,8 +55,6 @@ pub struct UpdatecheduleJobReq {
     pub interval: Option<i32>,
     /// 描述信息
     pub desc: Option<String>,
-    /// 任务状态(0:下线,1:上线)
-    pub status: schedule_job::enums::Status,
 }
 
 /// 更新数据状态
