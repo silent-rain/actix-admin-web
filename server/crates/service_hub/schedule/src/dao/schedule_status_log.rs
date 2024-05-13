@@ -62,6 +62,18 @@ impl<'a> ScheduleStatusLogDao<'a> {
         ScheduleStatusLog::find_by_id(id).one(self.db.rdb()).await
     }
 
+    /// 获取最新的UUID数据
+    pub async fn last_by_job_id(
+        &self,
+        job_id: i32,
+    ) -> Result<Option<schedule_status_log::Model>, DbErr> {
+        ScheduleStatusLog::find()
+            .filter(schedule_status_log::Column::JobId.eq(job_id))
+            .order_by_desc(schedule_status_log::Column::Id)
+            .one(self.db.rdb())
+            .await
+    }
+
     /// 添加详情信息
     pub async fn add(
         &self,

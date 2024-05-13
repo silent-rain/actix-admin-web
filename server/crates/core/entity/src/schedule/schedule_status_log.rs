@@ -21,7 +21,7 @@ pub struct Model {
     pub error: Option<String>,
     /// 耗时,毫秒
     pub cost: u64,
-    /// 任务状态(0:开始,1:完成,2:停止,3:移除)
+    /// 任务状态
     pub status: i8,
     /// 创建时间
     pub created_at: DateTimeLocal,
@@ -42,13 +42,11 @@ pub mod enums {
     #[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
     #[repr(i8)]
     pub enum Status {
-        /// 开始
-        Start = 0,
+        /// 运行中
+        Running = 0,
         /// 完成
-        Done = 1,
-        /// 停止
-        Stop = 2,
-        /// 移除
-        Removed = 3,
+        Completed = 1,
+        /// 失败
+        Failed = 2,
     }
 }

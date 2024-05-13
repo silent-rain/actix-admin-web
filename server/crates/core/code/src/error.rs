@@ -122,6 +122,12 @@ pub enum Error {
     // 工具箱
     #[error("User-Agent解析错误, {0}")]
     UserAgentParserError(String) = 10281,
+    #[error("Uuid解析失败, {0}")]
+    UuidParseError(String) = 10282,
+    #[error("调度任务移除解析失败, {0}")]
+    ScheduleRemoveError(String) = 10283,
+    #[error("Get Schedule Instance Error")]
+    ScheduleInstance = 10284,
 
     #[error("未找到资源")]
     AssetNotFound = 10290,

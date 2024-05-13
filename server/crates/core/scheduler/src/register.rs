@@ -127,7 +127,6 @@ where
             .await
             .map_err(|err| Error::ScheduleJobListError(err.to_string()))?
             .into_iter()
-            .filter(|v| v.status == schedule_job::enums::Status::Online as i8)
             .filter(|v| v.status == schedule_job::enums::Source::System as i8)
             .collect::<Vec<schedule_job::Model>>();
         Ok(job_list)
@@ -239,7 +238,6 @@ where
             .await
             .map_err(|err| Error::ScheduleJobListError(err.to_string()))?
             .into_iter()
-            .filter(|v| v.status == schedule_job::enums::Status::Online as i8)
             .filter(|v| v.source == schedule_job::enums::Source::User as i8)
             .collect::<Vec<schedule_job::Model>>();
 

@@ -14,7 +14,7 @@ use std::{
 use crate::{dao::Dao, error::Error};
 
 use database::DbRepo;
-use entity::schedule::{schedule_event_log, schedule_status_log};
+use entity::schedule::{schedule_event_log, schedule_job, schedule_status_log};
 
 use chrono::Local;
 use tokio_cron_scheduler::{Job as TokioJob, JobBuilder, JobScheduler};
@@ -102,6 +102,25 @@ where
 
             // After the future completes, log the completion time and report to the database
             Box::pin(async move {
+                // 判断是否启动任务
+                // TODO 后续性能优化可以使用缓存
+                let sys_model = match dao.schedule_job_dao.info(sys_id).await {
+                    Ok(model) => match model {
+                        Some(v) => v,
+                        None => {
+                            error!("job_id: {} schedule job not found", sys_id);
+                            return;
+                        }
+                    },
+                    Err(err) => {
+                        error!("job_id: {} get schedule job, err: {:?}", sys_id, err);
+                        return;
+                    }
+                };
+                if sys_model.status == schedule_job::enums::Status::Offline as i8 {
+                    return;
+                }
+
                 // 添加任务运行状态日志
                 let sys_status_id = match dao
                     .schedule_status_log_dao
@@ -128,7 +147,7 @@ where
                             sys_status_id,
                             elapsed,
                             Some(err.to_string()),
-                            schedule_status_log::enums::Status::Done,
+                            schedule_status_log::enums::Status::Failed,
                         )
                         .await
                     {
@@ -147,7 +166,7 @@ where
                         sys_status_id,
                         elapsed,
                         None,
-                        schedule_status_log::enums::Status::Done,
+                        schedule_status_log::enums::Status::Completed,
                     )
                     .await
                 {

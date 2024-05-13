@@ -49,6 +49,11 @@ where
     pub async fn list(&self) -> Result<Vec<schedule_job::Model>, DbErr> {
         ScheduleJob::find().all(self.db.rdb()).await
     }
+
+    /// 获取任务调度详情
+    pub async fn info(&self, id: i32) -> Result<Option<schedule_job::Model>, DbErr> {
+        ScheduleJob::find_by_id(id).one(self.db.rdb()).await
+    }
 }
 
 pub struct ScheduleStatusLogDao<DB>
@@ -77,7 +82,7 @@ where
             job_id: Set(job_id),
             uuid: Set(uuid),
             cost: Set(0),
-            status: Set(schedule_status_log::enums::Status::Start as i8),
+            status: Set(schedule_status_log::enums::Status::Running as i8),
             ..Default::default()
         };
         active_model.insert(self.db.wdb()).await
