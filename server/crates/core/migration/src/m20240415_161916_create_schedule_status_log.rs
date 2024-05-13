@@ -2,8 +2,8 @@
 //! Entity: [`entity::schedule::ScheduleStatusLog`]
 
 use sea_orm::{
-    sea_query::{ColumnDef, Expr, Table},
-    DatabaseBackend, DeriveIden, DeriveMigrationName,
+    sea_query::{ColumnDef, Expr, Index, Table},
+    DatabaseBackend, DeriveIden, DeriveMigrationName, Iden,
 };
 use sea_orm_migration::{async_trait, DbErr, MigrationTrait, SchemaManager};
 
@@ -38,7 +38,6 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(ScheduleStatusLog::Uuid)
                             .string()
                             .string_len(50)
-                            .unique_key()
                             .comment("任务调度ID"),
                     )
                     .col(
@@ -81,7 +80,25 @@ impl MigrationTrait for Migration {
                     )
                     .to_owned(),
             )
-            .await
+            .await?;
+
+        if !manager
+            .has_index(ScheduleStatusLog::Table.to_string(), "idx_uuid")
+            .await?
+        {
+            manager
+                .create_index(
+                    Index::create()
+                        .if_not_exists()
+                        .table(ScheduleStatusLog::Table)
+                        .name("idx_uuid")
+                        .col(ScheduleStatusLog::Uuid)
+                        .to_owned(),
+                )
+                .await?;
+        }
+
+        Ok(())
     }
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {

@@ -55,6 +55,10 @@ impl<'a> TableDao<'a> {
         let _ = self.txn_init_menu(&txn, table_sql.menu_sql).await?;
         // 初始化OpenApi表
         let _ = self.txn_init_open_api(&txn, table_sql.openapi_sql).await?;
+        // 初始化任务调度作业表
+        let _ = self
+            .txn_init_schedule_job(&txn, table_sql.schedule_job_sql)
+            .await?;
 
         // 添加管理员
         let admin_user = self.txn_add_admin_user(&txn, req.clone()).await?;
@@ -237,5 +241,15 @@ impl<'a> TableDao<'a> {
 
         let result = PermOpenapiRoleRel::insert_many(models).exec(txn).await?;
         Ok(result.last_insert_id)
+    }
+
+    /// 初始化任务调度作业表
+    async fn txn_init_schedule_job(
+        &self,
+        txn: &DatabaseTransaction,
+        schedule_job_sql: String,
+    ) -> Result<u64, DbErr> {
+        let result: ExecResult = txn.execute_unprepared(&schedule_job_sql).await?;
+        Ok(result.rows_affected())
     }
 }

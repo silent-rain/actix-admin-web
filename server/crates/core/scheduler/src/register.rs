@@ -24,8 +24,14 @@ where
 {
     /// 系统定时任务编码
     fn sys_code(&self) -> String;
-    /// 执行的任务
-    fn task(&self, job_model: schedule_job::Model) -> Result<Job<DB>, Error>;
+    /// 即时任务
+    fn task_interval(&self, _sys_id: i32, _interval: i32) -> Result<Job<DB>, Error> {
+        Err(Error::NotInitJob)
+    }
+    /// 定时任务
+    fn task_cron(&self, _sys_id: i32, _expression: String) -> Result<Job<DB>, Error> {
+        Err(Error::NotInitJob)
+    }
 }
 
 /// 系统定时任务注册
@@ -62,54 +68,26 @@ where
                 Some(v) => v,
                 None => continue,
             };
+            // 判读配置是否为系统任务
+            if job_model.source != schedule_job::enums::Source::System as i8 {
+                continue;
+            }
 
-            let sys_job = match task.task(job_model.clone()) {
-                Ok(v) => v,
-                Err(err) => {
-                    error!(
-                        "id:{} task name: {} sys_code: {:?}, err: {}",
-                        job_model.id,
-                        job_model.name,
-                        job_model.sys_code,
-                        err.to_string()
-                    );
-                    continue;
-                }
+            let sys_job = if job_model.job_type == schedule_job::enums::JobType::Interval as i8 {
+                let interval = job_model.interval.ok_or(Error::NotIntervalError)?;
+                task.task_interval(job_model.id, interval)?
+            } else if job_model.job_type == schedule_job::enums::JobType::Timer as i8 {
+                let expression = job_model
+                    .expression
+                    .clone()
+                    .ok_or(Error::NotExpressionError)?;
+                task.task_cron(job_model.id, expression)?
+            } else {
+                continue;
             };
-            let uuid = sys_job.guid().to_string();
-            info!(
-                "register sys task id:{} name: {} sys_code: {:?} uuid: {:?}",
-                job_model.id, job_model.name, job_model.sys_code, uuid
-            );
 
-            // 创建任务
-            let sched = match JobScheduler::new().await {
-                Ok(v) => v,
-                Err(err) => {
-                    error!(
-                        "id:{} task name: {} sys_code: {:?}, err: {}",
-                        job_model.id,
-                        job_model.name,
-                        job_model.sys_code,
-                        err.to_string()
-                    );
-                    continue;
-                }
-            };
-            // 将任务添加到任务队列中
-            match sched.add_job(sys_job.clone()).await {
-                Ok(v) => v,
-                Err(err) => {
-                    error!(
-                        "id:{} task name: {} sys_code: {:?}, err: {}",
-                        job_model.id,
-                        job_model.name,
-                        job_model.sys_code,
-                        err.to_string()
-                    );
-                    continue;
-                }
-            };
+            // 将job添加到调度任务中
+            self.add_sched_job(sys_job, job_model.clone()).await?;
         }
 
         Ok(())
@@ -118,6 +96,26 @@ where
     /// 添加任务
     pub fn add_task(&mut self, task: Box<dyn SysTaskTrait<DB>>) {
         self.tasks.push(task);
+    }
+
+    /// 将job添加到调度任务中
+    async fn add_sched_job(
+        &self,
+        sys_job: Job<DB>,
+        job_model: schedule_job::Model,
+    ) -> Result<(), Error> {
+        let uuid = sys_job.guid().to_string();
+        info!(
+            "register sys task id:{} name: {} sys_code: {:?} uuid: {:?}",
+            job_model.id, job_model.name, job_model.sys_code, uuid
+        );
+
+        // 创建任务
+        let sched = JobScheduler::new().await?;
+        // 将任务添加到任务队列中
+        sched.add_job(sys_job.clone()).await?;
+
+        Ok(())
     }
 
     /// 获取所有的系统定时任务
@@ -212,6 +210,7 @@ where
             Box::pin(async move {
                 // TODO 执行脚本
                 println!("I run async every 5 seconds uuid: {uuid} job11");
+                Ok(())
             })
         })?;
         Ok(job)
@@ -224,6 +223,7 @@ where
             Box::pin(async move {
                 // TODO 执行脚本
                 println!("I run async every 5 seconds uuid: {uuid} job11");
+                Ok(())
             })
         })?;
 

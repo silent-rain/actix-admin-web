@@ -4,7 +4,12 @@
 //!     Box::pin(async move {})
 //! }
 //! ```
-use std::{future::Future, pin::Pin, sync::Arc, time::Duration};
+use std::{
+    future::Future,
+    pin::Pin,
+    sync::Arc,
+    time::{Duration, Instant},
+};
 
 use crate::{dao::Dao, error::Error};
 
@@ -12,8 +17,7 @@ use database::DbRepo;
 use entity::schedule::{schedule_event_log, schedule_status_log};
 
 use chrono::Local;
-use tokio::sync::RwLock;
-use tokio_cron_scheduler::{Job as TokioJob, JobBuilder, JobScheduler, JobSchedulerError};
+use tokio_cron_scheduler::{Job as TokioJob, JobBuilder, JobScheduler};
 use tracing::{error, trace};
 use uuid::Uuid;
 
@@ -25,7 +29,6 @@ where
     dao: Arc<Dao<DB>>,
     job: TokioJob,
     sys_id: i32,
-    sys_status_id: Arc<RwLock<i32>>,
 }
 
 impl<DB> Job<DB>
@@ -35,7 +38,6 @@ where
     pub fn new(sys_id: i32, db: DB) -> Result<Self, Error> {
         let job = Job {
             sys_id,
-            sys_status_id: Arc::new(RwLock::new(0)),
             job: TokioJob::new_one_shot(Duration::from_secs(0), |_uuid, _jobs| {})
                 .map_err(Error::JobSchedulerError)?,
             dao: Arc::new(Dao::new(db)),
@@ -47,12 +49,15 @@ where
     /// 添加定时任务作业
     pub fn with_cron_job<JobRun>(mut self, schedule: &str, run: JobRun) -> Result<Self, Error>
     where
-        JobRun: FnMut(Uuid, JobScheduler) -> Pin<Box<dyn Future<Output = ()> + Send>>
+        JobRun: FnMut(Uuid, JobScheduler) -> Pin<Box<dyn Future<Output = Result<(), Error>> + Send>>
             + Send
             + Sync
             + 'static,
     {
-        let job = TokioJob::new_async_tz(schedule, Local, run).map_err(Error::JobSchedulerError)?;
+        let decorated_run = self.create_decorated_run(run);
+
+        let job = TokioJob::new_async_tz(schedule, Local, decorated_run)
+            .map_err(Error::JobSchedulerError)?;
         self.job = job;
 
         Ok(self)
@@ -61,16 +66,98 @@ where
     /// 添加即时任务作业
     pub fn with_interval_job<JobRun>(mut self, secs: u64, run: JobRun) -> Result<Self, Error>
     where
-        JobRun: FnMut(Uuid, JobScheduler) -> Pin<Box<dyn Future<Output = ()> + Send>>
+        JobRun: FnMut(Uuid, JobScheduler) -> Pin<Box<dyn Future<Output = Result<(), Error>> + Send>>
             + Send
             + Sync
             + 'static,
     {
-        let job = TokioJob::new_repeated_async(Duration::from_secs(secs), run)
+        let decorated_run = self.create_decorated_run(run);
+
+        let job = TokioJob::new_repeated_async(Duration::from_secs(secs), decorated_run)
             .map_err(Error::JobSchedulerError)?;
         self.job = job;
 
         Ok(self)
+    }
+    // Method to create a decorated run function
+    fn create_decorated_run<JobRun>(
+        &self,
+        mut run: JobRun,
+    ) -> impl FnMut(Uuid, JobScheduler) -> Pin<Box<dyn Future<Output = ()> + Send>>
+    where
+        JobRun: FnMut(Uuid, JobScheduler) -> Pin<Box<dyn Future<Output = Result<(), Error>> + Send>>
+            + Send
+            + Sync
+            + 'static,
+    {
+        let dao = self.dao.clone();
+        let sys_id = self.sys_id;
+
+        move |uuid: Uuid, scheduler: JobScheduler| {
+            let before = Instant::now();
+            let dao = dao.clone();
+
+            // Call the original `run` function
+            let fut = run(uuid, scheduler);
+
+            // After the future completes, log the completion time and report to the database
+            Box::pin(async move {
+                // 添加任务运行状态日志
+                let sys_status_id = match dao
+                    .schedule_status_log_dao
+                    .add(sys_id, uuid.to_string())
+                    .await
+                {
+                    Ok(v) => v.id,
+                    Err(err) => {
+                        error!(
+                            "job_id: {} add schedule job log status, err: {:?}",
+                            sys_id, err
+                        );
+                        return;
+                    }
+                };
+
+                let result = fut.await;
+                let elapsed = before.elapsed().as_millis() as u64;
+                if let Err(err) = result {
+                    // 更新任务运行状态日志
+                    if let Err(err) = dao
+                        .schedule_status_log_dao
+                        .update(
+                            sys_status_id,
+                            elapsed,
+                            Some(err.to_string()),
+                            schedule_status_log::enums::Status::Done,
+                        )
+                        .await
+                    {
+                        error!(
+                            "job_id: {} update schedule job log status, err: {:?}",
+                            sys_id, err
+                        );
+                    };
+                    return;
+                }
+
+                // 更新任务运行状态日志
+                if let Err(err) = dao
+                    .schedule_status_log_dao
+                    .update(
+                        sys_status_id,
+                        elapsed,
+                        None,
+                        schedule_status_log::enums::Status::Done,
+                    )
+                    .await
+                {
+                    error!(
+                        "job_id: {} update schedule job log status, err: {:?}",
+                        sys_id, err
+                    );
+                };
+            })
+        }
     }
 
     /// 重置已有定时任务
@@ -86,7 +173,7 @@ where
             + Sync
             + 'static,
     {
-        let job_id = Uuid::parse_str(uuid).map_err(|_err| JobSchedulerError::ErrorLoadingJob)?;
+        let job_id = Uuid::parse_str(uuid).map_err(|err| Error::ParseUuidError(err.to_string()))?;
         let job = JobBuilder::new()
             .with_timezone(Local)
             .with_cron_job_type()
@@ -120,7 +207,6 @@ where
     pub async fn on_start_notification(&mut self, sched: JobScheduler) -> Result<(), Error> {
         let dao = self.dao.clone();
         let sys_id = self.sys_id;
-        let sys_status_id = self.sys_status_id.clone();
         self.job
             .on_start_notification_add(
                 &sched,
@@ -132,28 +218,8 @@ where
                         notification_id,
                         type_of_notification
                     );
-                    let sys_status_id = sys_status_id.clone();
 
                     Box::pin(async move {
-                        // 添加任务运行状态日志
-                        match dao
-                            .schedule_status_log_dao
-                            .add(sys_id, job_id.to_string())
-                            .await
-                        {
-                            Ok(v) => {
-                                let mut w = sys_status_id.write().await;
-                                *w = v.id;
-                            }
-                            Err(err) => {
-                                error!(
-                                    "job_id: {} add schedule job status log, err: {:?}",
-                                    job_id, err
-                                );
-                                return;
-                            }
-                        };
-
                         // 添加任务运行事件日志
                         if let Err(err) = dao
                             .schedule_event_log_dao
@@ -181,10 +247,6 @@ where
     pub async fn on_done_notification(&mut self, sched: JobScheduler) -> Result<(), Error> {
         let dao = self.dao.clone();
         let sys_id: i32 = self.sys_id;
-        let sys_status_id = {
-            let r = self.sys_status_id.read().await;
-            *r
-        };
 
         self.job
             .on_done_notification_add(
@@ -198,21 +260,7 @@ where
                         type_of_notification
                     );
 
-                    // TODO 抽象出公共方法
                     Box::pin(async move {
-                        // 更新任务运行状态日志
-                        if let Err(err) = dao
-                            .schedule_status_log_dao
-                            .status(sys_status_id, schedule_status_log::enums::Status::Done)
-                            .await
-                        {
-                            error!(
-                                "job_id: {} add schedule job status log, err: {:?}",
-                                job_id, err
-                            );
-                            return;
-                        };
-
                         // 添加任务运行事件日志
                         if let Err(err) = dao
                             .schedule_event_log_dao
@@ -237,10 +285,6 @@ where
     pub async fn on_stop_notification(&mut self, sched: JobScheduler) -> Result<(), Error> {
         let dao = self.dao.clone();
         let sys_id = self.sys_id;
-        let sys_status_id = {
-            let r = self.sys_status_id.read().await;
-            *r
-        };
 
         self.job
             .on_stop_notification_add(
@@ -255,19 +299,6 @@ where
                     );
 
                     Box::pin(async move {
-                        // 更新任务运行状态日志
-                        if let Err(err) = dao
-                            .schedule_status_log_dao
-                            .status(sys_status_id, schedule_status_log::enums::Status::Stop)
-                            .await
-                        {
-                            error!(
-                                "job_id: {} add schedule job status log, err: {:?}",
-                                job_id, err
-                            );
-                            return;
-                        };
-
                         // 添加任务运行事件日志
                         if let Err(err) = dao
                             .schedule_event_log_dao
@@ -292,10 +323,6 @@ where
     pub async fn on_removed_notification(&mut self, sched: JobScheduler) -> Result<(), Error> {
         let dao = self.dao.clone();
         let sys_id = self.sys_id;
-        let sys_status_id = {
-            let r = self.sys_status_id.read().await;
-            *r
-        };
 
         self.job
             .on_removed_notification_add(
@@ -310,19 +337,6 @@ where
                     );
 
                     Box::pin(async move {
-                        // 更新任务运行状态日志
-                        if let Err(err) = dao
-                            .schedule_status_log_dao
-                            .status(sys_status_id, schedule_status_log::enums::Status::Removed)
-                            .await
-                        {
-                            error!(
-                                "job_id: {} add schedule job status log, err: {:?}",
-                                job_id, err
-                            );
-                            return;
-                        };
-
                         // 添加任务运行事件日志
                         if let Err(err) = dao
                             .schedule_event_log_dao

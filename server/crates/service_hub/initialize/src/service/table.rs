@@ -107,11 +107,18 @@ impl<'a> TableService<'a> {
                 .into_msg()
                 .with_msg("菜单表源解析错误")
         })?;
+        let schedule_job_sql = asset.to_string("t_schedule_job.sql").map_err(|err| {
+            error!("任务调度作业表资源解析错误, err: {err}");
+            Error::AssetParseError
+                .into_msg()
+                .with_msg("任务调度作业表源解析错误")
+        })?;
 
         let table_sql = TableDataSql {
             role_sql,
             openapi_sql,
             menu_sql,
+            schedule_job_sql,
         };
 
         // 初始化库表

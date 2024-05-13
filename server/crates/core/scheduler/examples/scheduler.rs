@@ -18,6 +18,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let job1 = Job::new(1, db.clone())?.with_interval_job(8, |uuid, _jobs| {
         Box::pin(async move {
             println!("I run async every 8 seconds uuid: {uuid} job1");
+            Ok(())
         })
     })?;
     let job1_uuid = job1.guid().to_string();
@@ -39,6 +40,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let job2 = Job::new(1, db)?.with_interval_job(5, |uuid, _jobs| {
         Box::pin(async move {
             println!("I run async every 5 seconds uuid: {uuid} job2");
+            Ok(())
         })
     })?;
     let job2_uuid = job2.guid();

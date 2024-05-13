@@ -1,6 +1,5 @@
 //! 定时任务示例2
 use database::DbRepo;
-use entity::schedule::schedule_job;
 use scheduler::{error::Error, register::SysTaskTrait, Job};
 
 pub struct DemoTask2<DB>
@@ -29,17 +28,15 @@ where
         "task_demo2".to_owned()
     }
 
-    fn task(&self, job_model: schedule_job::Model) -> Result<Job<DB>, Error> {
-        if job_model.source != schedule_job::enums::Source::System as i8 {
-            return Err(Error::ModelSourceError);
-        }
-        let expression = job_model.expression.ok_or(Error::NotExpressionError)?;
+    fn task_cron(&self, sys_id: i32, expression: String) -> Result<Job<DB>, Error> {
+        let job =
+            Job::new(sys_id, self.db.clone())?.with_cron_job(&expression, |uuid, _jobs| {
+                Box::pin(async move {
+                    println!("I run async expression demo2 uuid: {uuid}");
 
-        let job = Job::new(1, self.db.clone())?.with_cron_job(&expression, |uuid, _jobs| {
-            Box::pin(async move {
-                println!("I run async expression demo uuid: {uuid}");
-            })
-        })?;
+                    Ok(())
+                })
+            })?;
 
         Ok(job)
     }

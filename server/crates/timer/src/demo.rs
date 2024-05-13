@@ -1,6 +1,5 @@
 //! 定时任务示例
 use database::DbRepo;
-use entity::schedule::schedule_job;
 use scheduler::{error::Error, register::SysTaskTrait, Job};
 
 pub struct DemoTask<DB>
@@ -26,21 +25,19 @@ where
     Self: Sized,
 {
     fn sys_code(&self) -> String {
-        "task_demo".to_owned()
+        "task_demo1".to_owned()
     }
 
-    fn task(&self, job_model: schedule_job::Model) -> Result<Job<DB>, Error> {
-        if job_model.source != schedule_job::enums::Source::System as i8 {
-            return Err(Error::ModelSourceError);
-        }
-        let interval = job_model.interval.ok_or(Error::NotIntervalError)?;
-
-        let job =
-            Job::new(1, self.db.clone())?.with_interval_job(interval as u64, |uuid, _jobs| {
+    fn task_interval(&self, sys_id: i32, interval: i32) -> Result<Job<DB>, Error> {
+        let job = Job::new(sys_id, self.db.clone())?.with_interval_job(
+            interval as u64,
+            |uuid, _jobs| {
                 Box::pin(async move {
-                    println!("I run async interval demo uuid: {uuid}");
+                    println!("I run async interval demo1 uuid: {uuid}");
+                    Ok(())
                 })
-            })?;
+            },
+        )?;
 
         Ok(job)
     }

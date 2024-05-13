@@ -20,4 +20,8 @@ pub enum Error {
     NotIntervalError,
     #[error("任务来源错误")]
     ModelSourceError,
+    #[error("解析 Uuid 失败, {0}")]
+    ParseUuidError(String),
+    #[error("为初始化Job")]
+    NotInitJob,
 }

@@ -25,4 +25,6 @@ pub struct TableDataSql {
     pub openapi_sql: String,
     /// 菜单表
     pub menu_sql: String,
+    /// 任务调度作业表
+    pub schedule_job_sql: String,
 }
