@@ -182,7 +182,7 @@ impl<S> ApiOperationMiddlewareService<S> {
 
     /// 解析请求信息
     fn parse_req(req: &HttpRequest) -> AddApiOperationReq {
-        // 添加上下文
+        // 获取上下文
         let (user_id, username, request_id) = match req.extensions_mut().get::<Context>() {
             Some(ctx) => (
                 Some(ctx.get_user_id()),
