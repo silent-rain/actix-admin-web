@@ -118,6 +118,11 @@
   - 路由匹配
   - open api 接口 rbac
   - 系统用户接口鉴权
+  - 外部接口与内部接口之间的权限关系？
+- 缓存与非缓存之间的逻辑处理
+- router 接口集成单元测试
+- dao/service单元测试
+- controller 单元测试？待定
 
 <https://github.com/actix/actix-extras/tree/master/actix-identity>
 <https://crates.io/crates/actix-ws>

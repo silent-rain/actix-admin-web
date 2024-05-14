@@ -2355,6 +2355,7 @@ dependencies = [
  "response",
  "serde_json",
  "service_hub",
+ "tokio",
  "tracing",
 ]
 
