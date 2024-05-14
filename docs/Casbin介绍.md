@@ -164,7 +164,11 @@ m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act
 
 这部分定义了如何匹配请求和策略规则。在这个例子中：
 
-- m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act：这是一个表达式，用于确定请求是否应该被允许。它的含义是：g(r.sub, p.sub)：检查请求的主体r.sub是否拥有策略中定义的角色p.sub，或者是该角色的继承者。
+> m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act
+
+这是一个表达式，用于确定请求是否应该被允许。它的含义是：
+
+- g(r.sub, p.sub)：检查请求的主体r.sub是否拥有策略中定义的角色p.sub，或者是该角色的继承者。
 
 - r.obj == p.obj：请求的对象必须与策略中定义的对象相匹配。
 
