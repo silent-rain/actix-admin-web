@@ -19,6 +19,7 @@ service_hub = { path = "../service_hub" }
 actix-web = { workspace = true }
 actix-http = { workspace = true }
 actix-cors = { workspace = true }
+casbin = { workspace = true }
 
 tracing = { workspace = true }
 futures = { workspace = true }

@@ -28,12 +28,12 @@ use tracing::{error, info};
 
 /// 接口鉴权
 #[derive(Default)]
-pub struct SystemAuth {}
+pub struct SystemApiAuth {}
 
 // Middleware factory is `Transform` trait
 // `S` - type of the next service
 // `B` - type of response's body
-impl<S, B> Transform<S, ServiceRequest> for SystemAuth
+impl<S, B> Transform<S, ServiceRequest> for SystemApiAuth
 where
     S: Service<ServiceRequest, Response = ServiceResponse<B>, Error = Error>,
     S::Future: 'static,

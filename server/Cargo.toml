@@ -71,6 +71,7 @@ actix-cors = "0.7"
 actix-web-requestid = "2.1"
 actix-request-identifier = "4.2"
 tracing-actix-web = "0.7"
+casbin = "2.2"
 listenfd = "1.0"
 
 # 序列化
