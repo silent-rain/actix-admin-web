@@ -123,6 +123,7 @@
 - router 接口集成单元测试
 - dao/service单元测试
 - controller 单元测试？待定
+- 用户登陆接口比较卡的问题
 
 <https://github.com/actix/actix-extras/tree/master/actix-identity>
 <https://crates.io/crates/actix-ws>
