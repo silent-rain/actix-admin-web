@@ -2,6 +2,13 @@
 
 use std::cell::{Cell, RefCell};
 
+/// 接口鉴权类型
+#[derive(Debug, Clone)]
+pub enum ApiAuthType {
+    System,
+    Openapi,
+}
+
 /// 上下文模型
 #[derive(Debug, Clone)]
 pub struct Context {
@@ -11,6 +18,8 @@ pub struct Context {
     pub user_name: RefCell<String>,
     /// 接口请求UUID
     pub request_id: RefCell<String>,
+    /// 接口鉴权类型
+    pub api_auth_type: RefCell<Option<ApiAuthType>>,
 }
 
 impl Default for Context {
@@ -19,6 +28,7 @@ impl Default for Context {
             user_id: Cell::new(0),
             user_name: RefCell::new("".to_owned()),
             request_id: RefCell::new("".to_owned()),
+            api_auth_type: RefCell::new(None),
         }
     }
 }
@@ -41,6 +51,16 @@ impl Context {
     pub fn set_user_name(&mut self, user_name: String) {
         let mut x = self.user_name.borrow_mut();
         *x = user_name;
+    }
+
+    /// 获取接口鉴权类型
+    pub fn get_api_auth_type(&self) -> Option<ApiAuthType> {
+        self.api_auth_type.clone().into_inner()
+    }
+    /// 设置接口鉴权类型
+    pub fn set_api_auth_type(&mut self, api_auth_type: ApiAuthType) {
+        let mut x = self.api_auth_type.borrow_mut();
+        *x = Some(api_auth_type);
     }
 
     /// 设置接口请求UUID

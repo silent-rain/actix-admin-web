@@ -1,4 +1,4 @@
-//! OpenApi权限拦截器
+//! OpenApi权限中间件
 use std::{
     future::{ready, Ready},
     pin::Pin,
@@ -6,11 +6,10 @@ use std::{
 };
 
 use crate::constant::{
-    AUTH_WHITE_LIST, HEADERS_AUTHORIZATION, HEADERS_OPEN_API_AUTHORIZATION,
-    HEADERS_OPEN_API_PASSPHRASE,
+    AUTH_WHITE_LIST, OPENAPI_AUTHORIZATION, OPENAPI_PASSPHRASE, SYSTEM_API_AUTHORIZATION,
 };
 
-use context::Context;
+use context::{ApiAuthType, Context};
 use entity::{perm_token, user::user_base};
 use response::Response;
 use service_hub::{inject::AInjectProvider, permission::TokenService, user::UserBaseService};
@@ -65,38 +64,6 @@ where
     fn call(&self, req: ServiceRequest) -> Self::Future {
         let service = Rc::clone(&self.service);
 
-        let path = req.path();
-        // 白名单放行
-        if AUTH_WHITE_LIST.contains(&path) {
-            let fut = self.service.call(req);
-            return Box::pin(async move {
-                let resp = fut.await?;
-                Ok(resp)
-            });
-        }
-
-        let inner_req = req.request();
-
-        // 存在检查系统鉴权时, 则直接通过
-        if req.headers().get(HEADERS_AUTHORIZATION).is_some() {
-            let fut = self.service.call(req);
-            return Box::pin(async move {
-                let resp = fut.await?;
-                Ok(resp)
-            });
-        }
-
-        // 获取 Openapi 鉴权
-        let (openapi_token, passphras) = match Self::get_openapi_token(inner_req.clone()) {
-            Ok(v) => v,
-            Err(err) => {
-                return Box::pin(async move {
-                    error!("获取鉴权标识失败, err: {:#?}", err);
-                    Err(Response::err(err).with_msg("获取鉴权标识失败").into())
-                })
-            }
-        };
-
         let provider = match req.app_data::<Data<AInjectProvider>>() {
             Some(v) => v.as_ref().clone(),
             None => {
@@ -107,19 +74,47 @@ where
             }
         };
         Box::pin(async move {
-            // 验证 OpenApi Token 及用户在状态
-            let user = Self::verify_user_status(provider.clone(), openapi_token, passphras)
+            let inner_req = req.request();
+
+            // 白名单放行
+            let path = req.path();
+            if AUTH_WHITE_LIST.contains(&path) {
+                let resp = service.call(req).await?;
+                return Ok(resp);
+            }
+
+            // 存在系统鉴权标识时, 则直接通过
+            // TODO 带优化掉
+            if req.headers().get(SYSTEM_API_AUTHORIZATION).is_some() {
+                let resp = service.call(req).await?;
+                return Ok(resp);
+            }
+            // 获取 Openapi 鉴权
+            let (openapi_token, passphras) = match Self::get_openapi_token(inner_req.clone()) {
+                Ok(v) => v,
+                Err(err) => {
+                    error!("获取鉴权标识失败, err: {:#?}", err);
+                    return Err(Response::err(err).into());
+                }
+            };
+            // 验证 OpenApi Token 及用户
+            let (user_id, username) = Self::verify_user(provider.clone(), openapi_token, passphras)
                 .await
                 .map_err(Response::err)?;
 
-            // 添加上下文
+            // TODO 获取权限
+
+            // 设置上下文
             if let Some(ctx) = req.extensions_mut().get_mut::<Context>() {
-                ctx.set_user_id(user.id);
-                ctx.set_user_name(user.username.clone());
+                ctx.set_user_id(user_id);
+                ctx.set_user_name(username.clone());
+                ctx.set_api_auth_type(ApiAuthType::Openapi);
             }
             info!(
-                "openapi auth user req, user_id: {}, user_name: {}",
-                user.id, user.username
+                "auth user req, auth_type: {:?}, user_id: {}, username: {}",
+                ApiAuthType::Openapi,
+                user_id,
+                username
             );
 
             // 响应
@@ -130,14 +125,14 @@ where
 }
 
 impl<S> OpenApiAuthService<S> {
-    /// 验证 OpenApi Token 及用户在状态
+    /// 验证 OpenApi Token 及用户
     ///
     /// TODO 登陆态后期可调整为缓存
-    async fn verify_user_status(
+    async fn verify_user(
         provider: AInjectProvider,
         openapi_token: String,
         passphrase: String,
-    ) -> Result<user_base::Model, code::ErrorMsg> {
+    ) -> Result<(i32, String), code::ErrorMsg> {
         let token_service: TokenService = provider.provide();
         let token = token_service
             .info_by_token(openapi_token.clone(), passphrase)
@@ -157,14 +152,14 @@ impl<S> OpenApiAuthService<S> {
                 .into_msg()
                 .with_msg("用户已被禁用"));
         }
-        Ok(user)
+        Ok((user.id, user.username))
     }
 
     /// 获取OPEN API鉴权标识Token
     fn get_openapi_token(req: HttpRequest) -> Result<(String, String), code::ErrorMsg> {
         let token = req
             .headers()
-            .get(HEADERS_OPEN_API_AUTHORIZATION)
+            .get(OPENAPI_AUTHORIZATION)
             .map_or("", |v| v.to_str().map_or("", |v| v));
 
         if token.is_empty() {
@@ -174,7 +169,7 @@ impl<S> OpenApiAuthService<S> {
                 .with_msg("鉴权标识为空"));
         }
 
-        let passphras = match req.headers().get(HEADERS_OPEN_API_PASSPHRASE) {
+        let passphras = match req.headers().get(OPENAPI_PASSPHRASE) {
             Some(v) => v.to_str().map_or("", |v| v),
             None => {
                 return Err(code::Error::HeadersNotAuthorizationPassphrase

@@ -5,9 +5,7 @@ use std::{
     rc::Rc,
 };
 
-use crate::constant::{
-    AUTH_WHITE_LIST, HEADERS_OPEN_API_AUTHORIZATION, HEADERS_OPEN_API_PASSPHRASE,
-};
+use crate::constant::{AUTH_WHITE_LIST, OPENAPI_AUTHORIZATION, OPENAPI_PASSPHRASE};
 
 use context::Context;
 use entity::{perm_token, user::user_base};
@@ -182,7 +180,7 @@ impl<S> CasbinAuthService<S> {
     fn get_openapi_token(req: HttpRequest) -> Result<(String, String), code::ErrorMsg> {
         let token = req
             .headers()
-            .get(HEADERS_OPEN_API_AUTHORIZATION)
+            .get(OPENAPI_AUTHORIZATION)
             .map_or("", |v| v.to_str().map_or("", |v| v));
 
         if token.is_empty() {
@@ -192,7 +190,7 @@ impl<S> CasbinAuthService<S> {
                 .with_msg("鉴权标识为空"));
         }
 
-        let passphras = match req.headers().get(HEADERS_OPEN_API_PASSPHRASE) {
+        let passphras = match req.headers().get(OPENAPI_PASSPHRASE) {
             Some(v) => v.to_str().map_or("", |v| v),
             None => {
                 return Err(code::Error::HeadersNotAuthorizationPassphrase
