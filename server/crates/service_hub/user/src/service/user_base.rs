@@ -1,14 +1,20 @@
 //! 用户信息管理
 use crate::{
     dao::{user_base::UserBaseDao, user_role_rel::UserRoleRelDao},
-    dto::user_base::{AddUserBaseReq, GetUserBaserListReq, ProfileRsp, UpdateUserBaseReq},
+    dto::user_base::{
+        AddUserBaseReq, GetUserBaserListReq, ProfileRsp, UpdateUserBaseReq, UserPermission,
+    },
 };
 
 use code::{Error, ErrorMsg};
-use entity::user::{user_base, user_role, user_role_rel};
+use entity::{
+    perm_openapi, perm_token,
+    user::{user_base, user_role, user_role_rel},
+};
 
 use base64::Engine;
 use nject::injectable;
+use permission::{OpenapiDao, TokenDao};
 use sea_orm::Set;
 use tracing::error;
 use utils::crypto::sha2_256;
@@ -22,6 +28,8 @@ const SHARE_CODE_COUNT: i32 = 100;
 pub struct UserBaseService<'a> {
     user_base_dao: UserBaseDao<'a>,
     user_role_rel_dao: UserRoleRelDao<'a>,
+    token_dao: TokenDao<'a>,
+    openapi_dao: OpenapiDao<'a>,
 }
 
 impl<'a> UserBaseService<'a> {
@@ -333,5 +341,156 @@ impl<'a> UserBaseService<'a> {
         })?;
 
         Ok((results, total))
+    }
+}
+
+impl<'a> UserBaseService<'a> {
+    /// 获取系统用户权限
+    pub async fn get_sys_user_permission(&self, user_id: i32) -> Result<UserPermission, ErrorMsg> {
+        // 获取用户信息
+        let user = self.get_user(user_id).await?;
+
+        let (user_role_rels, _) = self
+            .user_role_rel_dao
+            .list_by_user_id(user_id)
+            .await
+            .map_err(|err| {
+                error!("获取用户角色关系列表失败, err: {:#?}", err);
+                Error::DbQueryError
+                    .into_msg()
+                    .with_msg("获取用户角色关系列表失败")
+            })?;
+        let role_ids: Vec<i32> = user_role_rels.iter().map(|v| v.role_id).collect();
+
+        // 获取接口列表
+        let openapis = self.openapi_list_by_role_id(role_ids.clone()).await?;
+
+        Ok(UserPermission {
+            user_id: user.id,
+            username: user.username,
+            role_ids,
+            openapis,
+        })
+    }
+
+    /// 获取Token用户权限
+    pub async fn get_token_user_permission(
+        &self,
+        openapi_token: String,
+        passphrase: String,
+    ) -> Result<UserPermission, ErrorMsg> {
+        // 获取token信息
+        let token = self.get_token_user(openapi_token, passphrase).await?;
+        let user_id = token.user_id;
+        let methods = token
+            .permission
+            .split(",")
+            .map(|v| v.to_string())
+            .collect::<Vec<String>>();
+
+        // 获取用户信息
+        let user = self.get_user(user_id).await?;
+
+        let (user_role_rels, _) = self
+            .user_role_rel_dao
+            .list_by_user_id(user_id)
+            .await
+            .map_err(|err| {
+                error!("获取用户角色关系列表失败, err: {:#?}", err);
+                Error::DbQueryError
+                    .into_msg()
+                    .with_msg("获取用户角色关系列表失败")
+            })?;
+        let role_ids: Vec<i32> = user_role_rels.iter().map(|v| v.role_id).collect();
+
+        // 获取接口列表
+        let openapis = self.openapi_list_by_role_id(role_ids.clone()).await?;
+
+        let openapis = openapis
+            .iter()
+            // 权限过滤
+            .filter(|v| !methods.contains(&v.method))
+            .cloned()
+            .collect();
+
+        Ok(UserPermission {
+            user_id: user.id,
+            username: user.username,
+            role_ids,
+            openapis,
+        })
+    }
+
+    /// 获取token信息
+    async fn get_token_user(
+        &self,
+        openapi_token: String,
+        passphrase: String,
+    ) -> Result<perm_token::Model, ErrorMsg> {
+        let token = self
+            .token_dao
+            .info_by_token(openapi_token.clone(), passphrase)
+            .await
+            .map_err(|err| {
+                error!("openapi_token: {openapi_token}, 查询用户令牌失败, err: {err}",);
+                Error::DbQueryError.into_msg().with_msg("查询用户令牌失败")
+            })?
+            .ok_or_else(|| {
+                error!("openapi_token: {openapi_token}, 用户令牌不存在");
+                Error::DbQueryEmptyError
+                    .into_msg()
+                    .with_msg("用户令牌不存在")
+            })?;
+        if token.status == perm_token::enums::Status::Disabled as i8 {
+            error!("openapi_token: {}, 用户令牌已被禁用", openapi_token.clone());
+            return Err(code::Error::LoginStatusDisabled
+                .into_msg()
+                .with_msg("用户令牌已被禁用"));
+        }
+
+        Ok(token)
+    }
+
+    /// 获取用户信息
+    async fn get_user(&self, user_id: i32) -> Result<user_base::Model, ErrorMsg> {
+        let user = self
+            .user_base_dao
+            .info(user_id)
+            .await
+            .map_err(|err| {
+                error!("user_id: {user_id}, 查询用户信息失败, err: {err}",);
+                Error::DbQueryError.into_msg().with_msg("查询用户信息失败")
+            })?
+            .ok_or_else(|| {
+                error!("user_id: {user_id}, 用户不存在");
+                Error::DbQueryEmptyError.into_msg().with_msg("用户不存在")
+            })?;
+        if user.status == user_base::enums::Status::Disabled as i8 {
+            error!("user_id: {user_id}, 用户已被禁用");
+            return Err(code::Error::LoginStatusDisabled
+                .into_msg()
+                .with_msg("用户已被禁用"));
+        }
+
+        Ok(user)
+    }
+
+    /// 获取接口列表
+    async fn openapi_list_by_role_id(
+        &self,
+        role_ids: Vec<i32>,
+    ) -> Result<Vec<perm_openapi::Model>, ErrorMsg> {
+        let results = self
+            .openapi_dao
+            .list_by_role_id(role_ids, perm_openapi::enums::Status::Enabled as i8)
+            .await
+            .map_err(|err| {
+                error!("查询OpenApi接口信息失败, err: {:#?}", err);
+                Error::DbQueryError
+                    .into_msg()
+                    .with_msg("查询OpenApi接口信息失败")
+            })?;
+
+        Ok(results)
     }
 }

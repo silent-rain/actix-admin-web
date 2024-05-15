@@ -5,17 +5,16 @@ use std::{
     rc::Rc,
 };
 
-use crate::constant::{AUTH_WHITE_LIST, OPENAPI_AUTHORIZATION, OPENAPI_PASSPHRASE};
+use crate::constant::AUTH_WHITE_LIST;
 
 use context::Context;
-use entity::{perm_token, user::user_base};
 use response::Response;
-use service_hub::{inject::AInjectProvider, permission::TokenService, user::UserBaseService};
+use service_hub::inject::AInjectProvider;
 
 use actix_web::{
     dev::{forward_ready, Service, ServiceRequest, ServiceResponse, Transform},
     web::Data,
-    Error, HttpMessage, HttpRequest,
+    Error, HttpMessage,
 };
 use casbin::{
     prelude::{DefaultModel, Enforcer, MemoryAdapter},
@@ -111,95 +110,49 @@ where
             // 获取上下文
             let ctx_resp = req.extensions().get::<Context>().cloned();
             let user_id = match ctx_resp {
-                Some(ctx) => ctx.get_user_id(),
+                Some(ctx) => {
+                    // 判断是否已经鉴权, 如果没有则拒绝请求
+                    if ctx.get_api_auth_type().is_none() {
+                        error!("非法请求");
+                        return Err(Response::code(code::Error::AuthIllegalRequest).into());
+                    }
+
+                    ctx.get_user_id()
+                }
                 None => {
                     let resp = service.call(req).await?;
                     return Ok(resp);
                 }
             };
-            // 获取权限标识
 
-            // 获取权限信息
+            // 获取接口权限列表
+            // 获取角色权限列表
 
-            // 加载模型
-            let m = DefaultModel::from_str(MODEL).await.unwrap();
-            // 加载策略
-            let mut policy_model = DefaultModel::from_str(POLICY).await.unwrap();
-            let mut a = MemoryAdapter::default();
-            a.load_policy(&mut policy_model).await.unwrap();
+            /*
+             // 加载模型
+             let m = DefaultModel::from_str(MODEL).await.unwrap();
+             // 加载策略
+             let mut policy_model = DefaultModel::from_str(POLICY).await.unwrap();
+             let mut a = MemoryAdapter::default();
+             a.load_policy(&mut policy_model).await.unwrap();
 
-            // 创建 Enforcer
-            let mut e = Enforcer::new(m, a).await.unwrap();
+             // 创建 Enforcer
+             let e = Enforcer::new(m, a).await.unwrap();
 
-            // 执行权限检查
-            if e.enforce(("alice", "domain1", "data1", "read")).unwrap() {
-                println!("权限允许");
-            } else {
-                println!("权限不允许");
-            }
+             // 执行权限检查
+             if e.enforce(("alice", "domain1", "data1", "read")).unwrap() {
+                 println!("权限允许");
+             } else {
+                 println!("权限不允许");
+             }
+
+            */
+            // 添加接口缓存
 
             // 响应
             let resp = service.call(req).await?;
             Ok(resp)
         })
-    }
-}
-
-impl<S> CasbinAuthService<S> {
-    /// 验证 OpenApi Token 及用户在状态
-    ///
-    /// TODO 登陆态后期可调整为缓存
-    async fn verify_user_status(
-        provider: AInjectProvider,
-        openapi_token: String,
-        passphrase: String,
-    ) -> Result<user_base::Model, code::ErrorMsg> {
-        let token_service: TokenService = provider.provide();
-        let token = token_service
-            .info_by_token(openapi_token.clone(), passphrase)
-            .await?;
-        if token.status == perm_token::enums::Status::Disabled as i8 {
-            error!("user_id: {}, Token已被禁用", openapi_token.clone());
-            return Err(code::Error::LoginStatusDisabled
-                .into_msg()
-                .with_msg("Token已被禁用"));
-        }
-
-        let user_service: UserBaseService = provider.provide();
-        let user = user_service.info(token.user_id).await?;
-        if user.status == user_base::enums::Status::Disabled as i8 {
-            error!("user_id: {}, 用户已被禁用", user.id);
-            return Err(code::Error::LoginStatusDisabled
-                .into_msg()
-                .with_msg("用户已被禁用"));
-        }
-        Ok(user)
-    }
-
-    /// 获取OPEN API鉴权标识Token
-    fn get_openapi_token(req: HttpRequest) -> Result<(String, String), code::ErrorMsg> {
-        let token = req
-            .headers()
-            .get(OPENAPI_AUTHORIZATION)
-            .map_or("", |v| v.to_str().map_or("", |v| v));
-
-        if token.is_empty() {
-            error!("鉴权标识为空");
-            return Err(code::Error::HeadersNotAuthorization
-                .into_msg()
-                .with_msg("鉴权标识为空"));
-        }
-
-        let passphras = match req.headers().get(OPENAPI_PASSPHRASE) {
-            Some(v) => v.to_str().map_or("", |v| v),
-            None => {
-                return Err(code::Error::HeadersNotAuthorizationPassphrase
-                    .into_msg()
-                    .with_msg("鉴权口令不能为空"))
-            }
-        };
-
-        Ok((token.to_string(), passphras.to_owned()))
     }
 }
 

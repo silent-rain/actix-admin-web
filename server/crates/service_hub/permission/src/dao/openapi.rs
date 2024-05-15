@@ -2,12 +2,12 @@
 use crate::dto::openapi::GetOpenapiListReq;
 
 use database::{DbRepo, Pagination};
-use entity::{perm_openapi, prelude::PermOpenapi};
+use entity::{perm_openapi, perm_openapi_role_rel, prelude::PermOpenapi};
 use nject::injectable;
 
 use sea_orm::{
-    ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, PaginatorTrait, QueryFilter, QueryOrder,
-    QuerySelect, QueryTrait, Set,
+    ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, JoinType, PaginatorTrait, QueryFilter,
+    QueryOrder, QuerySelect, QueryTrait, Set,
 };
 
 /// 数据访问
@@ -121,5 +121,53 @@ impl<'a> OpenapiDao<'a> {
     pub async fn delete(&self, id: i32) -> Result<u64, DbErr> {
         let result = PermOpenapi::delete_by_id(id).exec(self.db.wdb()).await?;
         Ok(result.rows_affected)
+    }
+}
+
+impl<'a> OpenapiDao<'a> {
+    pub async fn list_by_role_id(
+        &self,
+        role_ids: Vec<i32>,
+        status: i8,
+    ) -> Result<Vec<perm_openapi::Model>, DbErr> {
+        let results = PermOpenapi::find()
+            .join_rev(
+                JoinType::InnerJoin,
+                perm_openapi_role_rel::Entity::belongs_to(perm_openapi::Entity)
+                    .from(perm_openapi_role_rel::Column::OpenapiId)
+                    .to(perm_openapi::Column::Id)
+                    .into(),
+            )
+            .filter(perm_openapi_role_rel::Column::RoleId.is_in(role_ids))
+            .filter(perm_openapi::Column::Status.eq(status))
+            .all(self.db.rdb())
+            .await?;
+        Ok(results)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use entity::perm_openapi_role_rel;
+    use sea_orm::{DatabaseBackend, JoinType};
+
+    #[tokio::test]
+    async fn test_sys_user_permission() {
+        let results = PermOpenapi::find()
+            .join_rev(
+                JoinType::InnerJoin,
+                perm_openapi_role_rel::Entity::belongs_to(perm_openapi::Entity)
+                    .from(perm_openapi_role_rel::Column::OpenapiId)
+                    .to(perm_openapi::Column::Id)
+                    .into(),
+            )
+            .filter(perm_openapi_role_rel::Column::RoleId.is_in([1, 2, 3]))
+            .build(DatabaseBackend::MySql)
+            .to_string();
+
+        println!("{results}");
+        assert!(!results.is_empty());
     }
 }

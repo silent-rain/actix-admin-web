@@ -1,4 +1,5 @@
 //! 用户信息管理
+pub mod cached;
 pub mod dto;
 
 pub(crate) mod dao;

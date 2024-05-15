@@ -1,7 +1,8 @@
 //! 路由集散处, 将各个模块的路由在此处进行注册。
 use context::ContextMiddleware;
 use middleware::{
-    api_operation::ApiOperation, openapi_auth::OpenApiAuth, system_api_auth::SystemApiAuth,
+    api_operation::ApiOperation, casbin_auth::CasbinAuth, openapi_auth::OpenApiAuth,
+    system_api_auth::SystemApiAuth,
 };
 use service_hub::{
     auth::AuthRouter, log::LogRouter, organization::OrganizationRouter,
@@ -23,6 +24,7 @@ pub fn register() -> impl HttpServiceFactory {
         .wrap(TracingLogger::default())
         .wrap(middleware::cors::wrap_cors())
         // 接口鉴权
+        .wrap(CasbinAuth::default())
         .wrap(SystemApiAuth::default())
         .wrap(OpenApiAuth::default())
         // 上下文中间件

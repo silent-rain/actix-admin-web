@@ -5,13 +5,14 @@ use std::{
     rc::Rc,
 };
 
-use crate::constant::{
-    AUTH_WHITE_LIST, OPENAPI_AUTHORIZATION, SYSTEM_API_AUTHORIZATION,
-    SYSTEM_API_AUTHORIZATION_BEARER,
-};
+use crate::constant::{AUTH_WHITE_LIST, SYSTEM_API_AUTHORIZATION, SYSTEM_API_AUTHORIZATION_BEARER};
 
-use entity::{log_user_login, user::user_base};
-use service_hub::{inject::AInjectProvider, log::UserLoginService, user::UserBaseService};
+use entity::log_user_login;
+use service_hub::{
+    inject::AInjectProvider,
+    log::UserLoginService,
+    user::{cached::UserCached, dto::user_base::UserPermission, UserBaseService},
+};
 
 use context::{ApiAuthType, Context};
 use jwt::decode_token_with_verify;
@@ -94,12 +95,12 @@ where
                 return Ok(resp);
             }
 
-            // 存在 Openapi key 时, 则直接通过
-            // TODO 带优化掉
-            if req.headers().get(OPENAPI_AUTHORIZATION).is_some() {
+            // 不存在系统鉴权标识时, 则直接通过
+            if req.headers().get(SYSTEM_API_AUTHORIZATION).is_none() {
                 let resp = service.call(req).await?;
                 return Ok(resp);
             }
+
             // 获取系统鉴权标识Token
             let system_token = match Self::get_system_api_token(inner_req) {
                 Ok(v) => v,
@@ -109,36 +110,57 @@ where
                 }
             };
             // 解析系统接口Token
-            let (user_id, username) = match Self::parse_system_token(system_token.clone()) {
+            let (user_id, _) = match Self::parse_system_token(system_token.clone()) {
                 Ok(v) => v,
                 Err(err) => {
                     error!("检查系统鉴权异常, err: {:#?}", err);
                     return Err(Response::code(err).into());
                 }
             };
-
-            // 验证用户
-            if let Err(err) = Self::verify_user(provider.clone(), user_id).await {
-                return Err(Response::err(err).into());
+            // 获取缓存
+            if let Ok(permission) = UserCached::get_user_system_api_auth(user_id).await {
+                // 设置上下文
+                if let Some(ctx) = req.extensions_mut().get_mut::<Context>() {
+                    ctx.set_user_id(permission.user_id);
+                    ctx.set_user_name(permission.username.clone());
+                    ctx.set_api_auth_type(ApiAuthType::System);
+                }
+                info!(
+                    "auth user req, cached, auth_type: {:?}, user_id: {}, username: {}",
+                    ApiAuthType::System,
+                    permission.user_id,
+                    permission.username
+                );
+                let resp = service.call(req).await?;
+                return Ok(resp);
             }
+
             // 验证登陆状态
-            if let Err(err) = Self::verify_user_login(provider, system_token).await {
+            if let Err(err) = Self::verify_user_login(provider.clone(), system_token).await {
                 return Err(Response::err(err).into());
             }
-
-            // TODO 获取权限
+            // 获取用户权限
+            let permission = match Self::user_permission(provider, user_id).await {
+                Ok(v) => v,
+                Err(err) => {
+                    error!("获取权限失败, err: {:#?}", err);
+                    return Err(Response::err(err).into());
+                }
+            };
 
             // 设置上下文
             if let Some(ctx) = req.extensions_mut().get_mut::<Context>() {
-                ctx.set_user_id(user_id);
-                ctx.set_user_name(username.clone());
+                ctx.set_user_id(permission.user_id);
+                ctx.set_user_name(permission.username.clone());
                 ctx.set_api_auth_type(ApiAuthType::System);
             }
+            // 设置缓存
+            UserCached::set_user_system_api_auth(user_id, permission.clone()).await;
             info!(
                 "auth user req, auth_type: {:?}, user_id: {}, username: {}",
-                ApiAuthType::Openapi,
-                user_id,
-                username
+                ApiAuthType::System,
+                permission.user_id,
+                permission.username
             );
 
             // 响应
@@ -184,17 +206,14 @@ impl<S> SystemApiAuthService<S> {
         Ok(token)
     }
 
-    /// 验证用户
-    async fn verify_user(provider: AInjectProvider, user_id: i32) -> Result<(), code::ErrorMsg> {
+    /// 获取用户权限
+    async fn user_permission(
+        provider: AInjectProvider,
+        user_id: i32,
+    ) -> Result<UserPermission, code::ErrorMsg> {
         let user_service: UserBaseService = provider.provide();
-        let user = user_service.info(user_id).await?;
-        if user.status == user_base::enums::Status::Disabled as i8 {
-            error!("user_id: {}, 用户已被禁用", user.id);
-            return Err(code::Error::LoginStatusDisabled
-                .into_msg()
-                .with_msg("用户已被禁用"));
-        }
-        Ok(())
+        let user = user_service.get_sys_user_permission(user_id).await?;
+        Ok(user)
     }
 
     /// 验证登陆状态

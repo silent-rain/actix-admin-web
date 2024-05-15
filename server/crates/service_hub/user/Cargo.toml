@@ -11,6 +11,7 @@ response = { path = "../../core/response" }
 context = { path = "../../core/context" }
 actix_validator = { path = "../../core/actix_validator" }
 utils = { path = "../../core/utils" }
+cache = { path = "../../core/cache" }
 
 inject = { path = "../../inject" }
 
@@ -24,6 +25,7 @@ nject = { workspace = true }
 tracing = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
 serde_repr = { workspace = true }
+serde_json = { workspace = true }
 regex = { workspace = true }
 rust_decimal = { workspace = true }
 uuid = { workspace = true, features = ["v4"] }

@@ -118,12 +118,12 @@ impl Cache {
     }
 
     /// 设置缓存条目。
-    async fn set<T: Serialize>(&self, key: &str, value: T) {
+    pub async fn set<T: Serialize>(&self, key: &str, value: T) {
         self.cache.insert(key.to_string(), Entry::new(value)).await; // 插入新的缓存条目。
     }
 
     /// 获取缓存条目。
-    async fn get(&self, key: &str) -> Option<Value> {
+    pub async fn get(&self, key: &str) -> Option<Value> {
         self.cache
             .get(&key.to_string())
             .await
@@ -131,13 +131,13 @@ impl Cache {
     }
 
     /// 设置缓存条目并指定过期时间。
-    async fn set_with_expiry<T: Serialize>(&self, key: &str, value: T, ttl: Duration) {
+    pub async fn set_with_expiry<T: Serialize>(&self, key: &str, value: T, ttl: Duration) {
         let timed_entry = Entry::new_with_ttl(value, ttl); // 创建带有过期时间的缓存条目。
         self.cache.insert(key.to_string(), timed_entry).await; // 插入缓存条目。
     }
 
     /// 获取缓存条目，如果过期则移除。
-    async fn get_with_expiry(&self, key: &str) -> Option<Entry> {
+    pub async fn get_with_expiry(&self, key: &str) -> Option<Entry> {
         if let Some(entry) = self.cache.get(&key.to_string()).await {
             if entry.is_expired() {
                 self.cache.invalidate(&key.to_string()).await; // 如果过期，则移除缓存条目。

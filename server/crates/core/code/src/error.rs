@@ -112,6 +112,8 @@ pub enum Error {
     UserAddError = 10262,
     #[error("获取鉴权标识失败")]
     HeadersNotAuthorizationPassphrase = 10263,
+    #[error("Illegal Request")]
+    AuthIllegalRequest = 10266,
 
     #[error("生成用户分享码失败")]
     UserShareCore = 10264,
@@ -133,6 +135,8 @@ pub enum Error {
     AssetNotFound = 10290,
     #[error("资源解析错误")]
     AssetParseError = 10291,
+    #[error("缓存不存在")]
+    CacheNotFound = 10292,
 
     // 文件或目录操作
     #[error("获取目录失败")]

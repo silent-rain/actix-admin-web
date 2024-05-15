@@ -5,14 +5,14 @@ use std::{
     rc::Rc,
 };
 
-use crate::constant::{
-    AUTH_WHITE_LIST, OPENAPI_AUTHORIZATION, OPENAPI_PASSPHRASE, SYSTEM_API_AUTHORIZATION,
-};
+use crate::constant::{AUTH_WHITE_LIST, OPENAPI_AUTHORIZATION, OPENAPI_PASSPHRASE};
 
 use context::{ApiAuthType, Context};
-use entity::{perm_token, user::user_base};
 use response::Response;
-use service_hub::{inject::AInjectProvider, permission::TokenService, user::UserBaseService};
+use service_hub::{
+    inject::AInjectProvider,
+    user::{cached::UserCached, dto::user_base::UserPermission, UserBaseService},
+};
 
 use actix_web::{
     dev::{forward_ready, Service, ServiceRequest, ServiceResponse, Transform},
@@ -83,9 +83,8 @@ where
                 return Ok(resp);
             }
 
-            // 存在系统鉴权标识时, 则直接通过
-            // TODO 带优化掉
-            if req.headers().get(SYSTEM_API_AUTHORIZATION).is_some() {
+            // 不存在Openapi鉴权标识时, 则直接通过
+            if req.headers().get(OPENAPI_AUTHORIZATION).is_none() {
                 let resp = service.call(req).await?;
                 return Ok(resp);
             }
@@ -97,24 +96,51 @@ where
                     return Err(Response::err(err).into());
                 }
             };
-            // 验证 OpenApi Token 及用户
-            let (user_id, username) = Self::verify_user(provider.clone(), openapi_token, passphras)
-                .await
-                .map_err(Response::err)?;
+            // 获取缓存
+            if let Ok(permission) =
+                UserCached::get_user_openapi_api_auth(openapi_token.clone()).await
+            {
+                // 设置上下文
+                if let Some(ctx) = req.extensions_mut().get_mut::<Context>() {
+                    ctx.set_user_id(permission.user_id);
+                    ctx.set_user_name(permission.username.clone());
+                    ctx.set_api_auth_type(ApiAuthType::Openapi);
+                }
+                info!(
+                    "auth user req, cached, auth_type: {:?}, user_id: {}, username: {}",
+                    ApiAuthType::Openapi,
+                    permission.user_id,
+                    permission.username
+                );
+                let resp = service.call(req).await?;
+                return Ok(resp);
+            }
 
-            // TODO 获取权限
+            // 获取用户权限
+            let permission =
+                match Self::user_permission(provider.clone(), openapi_token.clone(), passphras)
+                    .await
+                {
+                    Ok(v) => v,
+                    Err(err) => {
+                        error!("获取权限失败, err: {:#?}", err);
+                        return Err(Response::err(err).into());
+                    }
+                };
 
             // 设置上下文
             if let Some(ctx) = req.extensions_mut().get_mut::<Context>() {
-                ctx.set_user_id(user_id);
-                ctx.set_user_name(username.clone());
+                ctx.set_user_id(permission.user_id);
+                ctx.set_user_name(permission.username.clone());
                 ctx.set_api_auth_type(ApiAuthType::Openapi);
             }
+            // 设置缓存
+            UserCached::set_user_openapi_api_auth(openapi_token, permission.clone()).await;
             info!(
                 "auth user req, auth_type: {:?}, user_id: {}, username: {}",
                 ApiAuthType::Openapi,
-                user_id,
-                username
+                permission.user_id,
+                permission.username
             );
 
             // 响应
@@ -125,34 +151,17 @@ where
 }
 
 impl<S> OpenApiAuthService<S> {
-    /// 验证 OpenApi Token 及用户
-    ///
-    /// TODO 登陆态后期可调整为缓存
-    async fn verify_user(
+    /// 获取用户权限
+    async fn user_permission(
         provider: AInjectProvider,
         openapi_token: String,
         passphrase: String,
-    ) -> Result<(i32, String), code::ErrorMsg> {
-        let token_service: TokenService = provider.provide();
-        let token = token_service
-            .info_by_token(openapi_token.clone(), passphrase)
-            .await?;
-        if token.status == perm_token::enums::Status::Disabled as i8 {
-            error!("user_id: {}, Token已被禁用", openapi_token.clone());
-            return Err(code::Error::LoginStatusDisabled
-                .into_msg()
-                .with_msg("Token已被禁用"));
-        }
-
+    ) -> Result<UserPermission, code::ErrorMsg> {
         let user_service: UserBaseService = provider.provide();
-        let user = user_service.info(token.user_id).await?;
-        if user.status == user_base::enums::Status::Disabled as i8 {
-            error!("user_id: {}, 用户已被禁用", user.id);
-            return Err(code::Error::LoginStatusDisabled
-                .into_msg()
-                .with_msg("用户已被禁用"));
-        }
-        Ok((user.id, user.username))
+        let user = user_service
+            .get_token_user_permission(openapi_token, passphrase)
+            .await?;
+        Ok(user)
     }
 
     /// 获取OPEN API鉴权标识Token

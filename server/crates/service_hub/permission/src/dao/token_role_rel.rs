@@ -51,6 +51,20 @@ impl<'a> TokenRoleRelDao<'a> {
         Ok((results, total))
     }
 
+    /// 获取数据列表
+    pub async fn list_by_token_id(
+        &self,
+        token_id: i32,
+    ) -> Result<(Vec<perm_token_role_rel::Model>, u64), DbErr> {
+        let results = PermTokenRoleRel::find()
+            .filter(perm_token_role_rel::Column::TokenId.eq(token_id))
+            .all(self.db.rdb())
+            .await?;
+
+        let total = results.len() as u64;
+        Ok((results, total))
+    }
+
     /// 添加数据
     pub async fn add(
         &self,
