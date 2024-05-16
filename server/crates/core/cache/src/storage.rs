@@ -29,16 +29,16 @@ impl Entry {
     /// 创建一个新的 Entry 实例，带有指定的过期时间。
     fn new_with_ttl<T: Serialize>(value: T, ttl: Duration) -> Self {
         Entry {
-            value: json!(value),                    // 将值序列化为JSON。
-            expires_at: Some(Instant::now() + ttl), // 设置过期时间。
+            value: json!(value),                         // 将值序列化为JSON。
+            expires_at: Instant::now().checked_add(ttl), // 设置过期时间。
         }
     }
 
     /// 检查条目是否已过期。
     pub fn is_expired(&self) -> bool {
         match self.expires_at {
-            Some(expiry) => Instant::now() >= expiry, // 如果当前时间超过过期时间，则过期。
-            None => false,                            // 永不过期。
+            Some(expiry) => Instant::now() > expiry, // 如果当前时间超过过期时间，则过期。
+            None => false,                           // 永不过期。
         }
     }
 }
@@ -101,8 +101,8 @@ impl Default for Cache {
     fn default() -> Self {
         let cache = GLOBAL_SCHED.get_or_init(|| {
             MokaCache::builder()
-                .max_capacity(10000) // 设置最大容量。
-                .time_to_live(Duration::from_millis(10000)) // 设置默认的全局过期时间。
+                .max_capacity(100000) // 设置最大容量。
+                .time_to_live(Duration::from_secs(60 * 60 * 24)) // 设置默认的全局过期时间, 默认1day。
                 .build() // 构建缓存。
         });
         Cache {
@@ -153,7 +153,7 @@ impl Cache {
 
 #[cfg(test)]
 mod tests {
-    use std::time;
+    use std::{ops::Add, time};
 
     use super::*;
 
@@ -185,5 +185,15 @@ mod tests {
         tokio::time::sleep(time::Duration::from_secs(3)).await;
 
         assert!((cache.get_with_expiry("silent").await).is_none());
+    }
+
+    #[tokio::test]
+    async fn test_instatnt_time() {
+        let ttl = Duration::from_secs(60);
+        let now = Instant::now().add(ttl);
+        tokio::time::sleep(time::Duration::from_secs(5)).await;
+        let expiry = Instant::now();
+
+        assert!(now > expiry)
     }
 }
