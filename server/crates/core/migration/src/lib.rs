@@ -1,5 +1,6 @@
 use sea_orm_migration::{async_trait, MigrationTrait, MigratorTrait};
 
+pub mod m20230210_145453_create_app_template;
 mod m20230617_084425_create_log_api_operation;
 mod m20230617_084425_create_log_log_web;
 mod m20230617_084425_create_log_system;
@@ -37,6 +38,8 @@ pub struct Migrator;
 impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
         vec![
+            // 应用模板表
+            // Box::new(m20230210_145453_create_app_template::Migration),
             // 用户管理
             Box::new(m20240218_145453_create_user_role::Migration),
             Box::new(m20240218_145453_create_user_base::Migration),

@@ -20,3 +20,13 @@ nject = { workspace = true }
 tracing = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
 serde_repr = { workspace = true }
+
+
+[dev-dependencies]
+migration = { path = "../../core/migration" }
+
+tokio = { workspace = true, features = [
+    "macros",
+    "rt-multi-thread",
+    "test-util",
+] }

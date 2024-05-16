@@ -6,7 +6,7 @@ use crate::{
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, ForeignKey, ForeignKeyAction, Index, Table},
-    DeriveIden, DeriveMigrationName, Iden,
+    DatabaseBackend, DeriveIden, DeriveMigrationName, Iden,
 };
 use sea_orm_migration::{async_trait, DbErr, MigrationTrait, SchemaManager};
 
@@ -70,6 +70,11 @@ impl MigrationTrait for Migration {
                         .to_owned(),
                 )
                 .await?;
+        }
+
+        // Sqlite 不支持外键
+        if manager.get_database_backend() == DatabaseBackend::Sqlite {
+            return Ok(());
         }
 
         if !manager

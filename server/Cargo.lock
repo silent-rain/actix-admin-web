@@ -4353,11 +4353,13 @@ dependencies = [
  "database",
  "entity",
  "inject",
+ "migration",
  "nject",
  "response",
  "sea-orm",
  "serde",
  "serde_repr",
+ "tokio",
  "tracing",
  "validator",
 ]

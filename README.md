@@ -40,11 +40,12 @@
   - [x] 跨域
   - [x] Actix Request Identifier
   - [x] Tracing Logger
-  - [x] JWT 令牌
+  - [x] 系统接口鉴权
   - [x] OpenApi 鉴权
+  - [x] 接口权限鉴权
   - [ ] 访问频率限制
   - [ ] 访问 IP 限制
-  - [x] Api 操作日志
+  - [x] 接口操作日志
 - [ ] API 文档
   - [ ] ApiPost 接口工具
   - [ ] 内置接口文档

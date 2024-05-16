@@ -90,6 +90,11 @@ impl MigrationTrait for Migration {
             )
             .await?;
 
+        // Sqlite 不支持外键
+        if manager.get_database_backend() == DatabaseBackend::Sqlite {
+            return Ok(());
+        }
+
         if !manager
             .has_index(Position::Table.to_string(), "fk_org_position_department_id")
             .await?

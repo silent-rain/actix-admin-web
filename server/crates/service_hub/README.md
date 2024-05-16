@@ -10,7 +10,3 @@
 - organization: 组织管理
 - system: 系统管理
 - schedule: 任务调度作业管理
-
-## 参考文档
-
-- [tokio-cron-scheduler](https://crates.io/crates/tokio-cron-scheduler)

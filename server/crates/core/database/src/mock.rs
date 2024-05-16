@@ -3,7 +3,7 @@
 use sea_orm::{ConnectionTrait, DbErr, EntityTrait, Schema, Statement};
 use sea_orm_migration::{MigrationTrait, SchemaManager};
 
-use crate::{DbOptions, DbRepo, Pool};
+use crate::{config::Level, DbOptions, DbRepo, Pool};
 
 #[derive(Debug, Default)]
 pub struct Mock {}
@@ -46,9 +46,12 @@ impl Mock {
     pub async fn connect() -> Box<dyn DbRepo> {
         // Connecting SQLite
         let db_url = "sqlite::memory:".to_string();
-        let db = Pool::connect(db_url, DbOptions::default())
-            .await
-            .expect("db init failed");
+        let opt = DbOptions {
+            logging_enable: true,
+            logging_level: Level::Info,
+            ..Default::default()
+        };
+        let db = Pool::connect(db_url, opt).await.expect("db init failed");
         let pool = Pool::form_connect(db.clone(), db);
 
         Box::new(pool)

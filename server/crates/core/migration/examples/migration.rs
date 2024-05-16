@@ -1,4 +1,5 @@
 //! 数据库库表迁移
+//! cargo run --package migration --example migration
 use std::env;
 
 use database::DbOptions;

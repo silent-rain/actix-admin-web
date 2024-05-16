@@ -133,6 +133,11 @@ impl MigrationTrait for Migration {
                 .await?;
         }
 
+        // Sqlite 不支持外键
+        if manager.get_database_backend() == DatabaseBackend::Sqlite {
+            return Ok(());
+        }
+
         if !manager
             .has_index(
                 SysDictData::Table.to_string(),

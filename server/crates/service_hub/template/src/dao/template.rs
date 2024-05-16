@@ -130,9 +130,12 @@ impl<'a> AppTemplateDao<'a> {
 
 #[cfg(test)]
 mod tests {
-    use sea_orm::DbBackend;
-
     use super::*;
+
+    use database::mock::Mock;
+    use migration::m20230210_145453_create_app_template::Migration;
+
+    use sea_orm::DbBackend;
 
     #[test]
     fn test_all() {
@@ -259,5 +262,70 @@ mod tests {
         let sql = r#"DELETE FROM `t_app_template` WHERE `t_app_template`.`id` IN (1, 2, 3, 4)"#;
 
         assert_eq!(result, sql);
+    }
+
+    #[tokio::test]
+    async fn test_mock_all() -> Result<(), Box<DbErr>> {
+        let pool = Mock::from_migration(&Migration).await?;
+
+        let dao = AppTemplateDao { db: pool.as_ref() };
+
+        let (results, total) = dao.all().await?;
+        assert!(results.is_empty());
+        assert!(total == 0);
+        Ok(())
+    }
+
+    #[tokio::test]
+    async fn test_mock_info() -> Result<(), Box<DbErr>> {
+        let pool = Mock::from_migration(&Migration).await?;
+
+        let dao = AppTemplateDao { db: pool.as_ref() };
+
+        let result = dao.info(1).await?;
+        assert!(result.is_none());
+        Ok(())
+    }
+
+    #[tokio::test]
+    async fn test_mock_add() -> Result<(), Box<DbErr>> {
+        let pool = Mock::from_migration(&Migration).await?;
+
+        let dao = AppTemplateDao { db: pool.as_ref() };
+
+        // 添加模板1
+        let active_model = app_template::ActiveModel {
+            user_id: Set(1),
+            desc: Set(Some("desc".to_string())),
+            status: Set(1),
+            ..Default::default()
+        };
+        let result = dao.add(active_model).await?;
+        println!("add result1: {result:#?}");
+        assert!(result.user_id == 1);
+
+        // 添加模板2
+        let active_model = app_template::ActiveModel {
+            user_id: Set(2),
+            desc: Set(Some("desc2".to_string())),
+            status: Set(0),
+            ..Default::default()
+        };
+        let result = dao.add(active_model).await?;
+        println!("add result2: {result:#?}");
+        assert!(result.user_id == 2);
+
+        // 查询模板1
+        let result = dao.info(1).await?;
+        println!("info result: {result:#?}");
+        assert!(result.is_some());
+
+        // 查询所有的模板
+        let (results, total) = dao.all().await?;
+        println!("all results: {result:#?}");
+        assert!(!results.is_empty());
+        assert!(total == 2);
+
+        Ok(())
     }
 }
