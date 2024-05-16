@@ -1,5 +1,5 @@
 //! OpenApi接口管理
-use crate::dto::openapi::GetOpenapiListReq;
+use crate::dto::openapi::{GetOpenapiListReq, RoleOpenapiPermission};
 
 use database::{DbRepo, Pagination};
 use entity::{perm_openapi, perm_openapi_role_rel, prelude::PermOpenapi};
@@ -125,12 +125,12 @@ impl<'a> OpenapiDao<'a> {
 }
 
 impl<'a> OpenapiDao<'a> {
-    pub async fn list_by_role_id(
-        &self,
-        role_ids: Vec<i32>,
-        status: i8,
-    ) -> Result<Vec<perm_openapi::Model>, DbErr> {
+    /// 角色接口关系权限
+    pub async fn role_openapi_permissions(&self) -> Result<Vec<RoleOpenapiPermission>, DbErr> {
         let results = PermOpenapi::find()
+            .select_only()
+            .columns([perm_openapi::Column::Path, perm_openapi::Column::Method])
+            .columns([perm_openapi_role_rel::Column::RoleId])
             .join_rev(
                 JoinType::InnerJoin,
                 perm_openapi_role_rel::Entity::belongs_to(perm_openapi::Entity)
@@ -138,8 +138,8 @@ impl<'a> OpenapiDao<'a> {
                     .to(perm_openapi::Column::Id)
                     .into(),
             )
-            .filter(perm_openapi_role_rel::Column::RoleId.is_in(role_ids))
-            .filter(perm_openapi::Column::Status.eq(status))
+            .filter(perm_openapi::Column::Status.eq(perm_openapi::enums::Status::Enabled as i8))
+            .into_model::<RoleOpenapiPermission>()
             .all(self.db.rdb())
             .await?;
         Ok(results)

@@ -8,13 +8,13 @@ use crate::{
 
 use code::{Error, ErrorMsg};
 use entity::{
-    perm_openapi, perm_token,
+    perm_token,
     user::{user_base, user_role, user_role_rel},
 };
 
 use base64::Engine;
 use nject::injectable;
-use permission::{OpenapiDao, TokenDao};
+use permission::TokenDao;
 use sea_orm::Set;
 use tracing::error;
 use utils::crypto::sha2_256;
@@ -29,7 +29,6 @@ pub struct UserBaseService<'a> {
     user_base_dao: UserBaseDao<'a>,
     user_role_rel_dao: UserRoleRelDao<'a>,
     token_dao: TokenDao<'a>,
-    openapi_dao: OpenapiDao<'a>,
 }
 
 impl<'a> UserBaseService<'a> {
@@ -362,14 +361,10 @@ impl<'a> UserBaseService<'a> {
             })?;
         let role_ids: Vec<i32> = user_role_rels.iter().map(|v| v.role_id).collect();
 
-        // 获取接口列表
-        let openapis = self.openapi_list_by_role_id(role_ids.clone()).await?;
-
         Ok(UserPermission {
             user_id: user.id,
             username: user.username,
             role_ids,
-            openapis,
         })
     }
 
@@ -382,11 +377,6 @@ impl<'a> UserBaseService<'a> {
         // 获取token信息
         let token = self.get_token_user(openapi_token, passphrase).await?;
         let user_id = token.user_id;
-        let methods = token
-            .permission
-            .split(",")
-            .map(|v| v.to_string())
-            .collect::<Vec<String>>();
 
         // 获取用户信息
         let user = self.get_user(user_id).await?;
@@ -403,21 +393,10 @@ impl<'a> UserBaseService<'a> {
             })?;
         let role_ids: Vec<i32> = user_role_rels.iter().map(|v| v.role_id).collect();
 
-        // 获取接口列表
-        let openapis = self.openapi_list_by_role_id(role_ids.clone()).await?;
-
-        let openapis = openapis
-            .iter()
-            // 权限过滤
-            .filter(|v| !methods.contains(&v.method))
-            .cloned()
-            .collect();
-
         Ok(UserPermission {
             user_id: user.id,
             username: user.username,
             role_ids,
-            openapis,
         })
     }
 
@@ -473,24 +452,5 @@ impl<'a> UserBaseService<'a> {
         }
 
         Ok(user)
-    }
-
-    /// 获取接口列表
-    async fn openapi_list_by_role_id(
-        &self,
-        role_ids: Vec<i32>,
-    ) -> Result<Vec<perm_openapi::Model>, ErrorMsg> {
-        let results = self
-            .openapi_dao
-            .list_by_role_id(role_ids, perm_openapi::enums::Status::Enabled as i8)
-            .await
-            .map_err(|err| {
-                error!("查询OpenApi接口信息失败, err: {:#?}", err);
-                Error::DbQueryError
-                    .into_msg()
-                    .with_msg("查询OpenApi接口信息失败")
-            })?;
-
-        Ok(results)
     }
 }

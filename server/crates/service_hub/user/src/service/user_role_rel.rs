@@ -18,6 +18,18 @@ pub struct UserRoleRelService<'a> {
 }
 
 impl<'a> UserRoleRelService<'a> {
+    /// 获取所有数据
+    pub async fn all(&self) -> Result<(Vec<user_role_rel::Model>, u64), ErrorMsg> {
+        let (results, total) = self.user_role_rel_dao.all().await.map_err(|err| {
+            error!("查询所有用户角色关系列表失败, err: {:#?}", err);
+            Error::DbQueryError
+                .into_msg()
+                .with_msg("查询所有用户角色关系列表失败")
+        })?;
+
+        Ok((results, total))
+    }
+
     /// 获取列表数据
     pub async fn list(
         &self,

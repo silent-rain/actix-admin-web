@@ -9,7 +9,9 @@ use crate::constant::AUTH_WHITE_LIST;
 
 use context::Context;
 use response::Response;
-use service_hub::inject::AInjectProvider;
+use service_hub::permission::OpenapiService;
+use service_hub::user::UserRoleRelService;
+use service_hub::{inject::AInjectProvider, user::cached::UserCached};
 
 use actix_web::{
     dev::{forward_ready, Service, ServiceRequest, ServiceResponse, Transform},
@@ -18,10 +20,10 @@ use actix_web::{
 };
 use casbin::{
     prelude::{DefaultModel, Enforcer, MemoryAdapter},
-    Adapter, CoreApi,
+    CoreApi, MgmtApi,
 };
 use futures::Future;
-use tracing::error;
+use tracing::{error, info};
 
 const MODEL: &str = "
 [request_definition]
@@ -40,7 +42,7 @@ e = some(where (p.eft == allow))
 m = g(r.sub, p.sub) && (r.obj == p.obj) && (r.act == p.act)
 ";
 
-const POLICY: &str = "
+const _POLICY: &str = "
 p, alice, /users, GET
 p, bob, /users/1/status, PUT
 g, alice, admin
@@ -88,7 +90,7 @@ where
     fn call(&self, req: ServiceRequest) -> Self::Future {
         let service = Rc::clone(&self.service);
 
-        let _provider = match req.app_data::<Data<AInjectProvider>>() {
+        let provider = match req.app_data::<Data<AInjectProvider>>() {
             Some(v) => v.as_ref().clone(),
             None => {
                 return Box::pin(async move {
@@ -98,8 +100,8 @@ where
             }
         };
         Box::pin(async move {
-            let inner_req = req.request();
-            let path = req.path();
+            let path = req.match_info().as_str();
+            let method = req.method().as_str();
 
             // 白名单放行
             if AUTH_WHITE_LIST.contains(&path) {
@@ -125,29 +127,93 @@ where
                 }
             };
 
-            // 获取接口权限列表
-            // 获取角色权限列表
+            // 获取缓存
+            if let Ok(permission) = UserCached::get_user_openapi_access_permission(
+                user_id,
+                path.to_string(),
+                method.to_string(),
+            )
+            .await
+            {
+                if permission {
+                    info!(
+                        "openapi access permission, cached, user_id: {user_id}, method: {method}, path: {path}"
+                    );
+                    let resp = service.call(req).await?;
+                    return Ok(resp);
+                }
+            }
 
-            /*
-             // 加载模型
-             let m = DefaultModel::from_str(MODEL).await.unwrap();
-             // 加载策略
-             let mut policy_model = DefaultModel::from_str(POLICY).await.unwrap();
-             let mut a = MemoryAdapter::default();
-             a.load_policy(&mut policy_model).await.unwrap();
+            // 获取接口角色关系列表
+            let openapi_service: OpenapiService = provider.provide();
+            let role_openapi_permissions = match openapi_service.role_openapi_permissions().await {
+                Ok(v) => v,
+                Err(err) => {
+                    error!("{err:?}");
+                    return Err(Response::err(err).into());
+                }
+            };
+            // 获取用户角色关系列表
+            let user_role_rel_service: UserRoleRelService = provider.provide();
+            let user_role_rels = match user_role_rel_service.all().await {
+                Ok((v, _)) => v,
+                Err(err) => {
+                    error!("{err:?}");
+                    return Err(Response::err(err).into());
+                }
+            };
 
-             // 创建 Enforcer
-             let e = Enforcer::new(m, a).await.unwrap();
+            // ["admin", "/users/1/status", "PUT"]
+            let p_policies: Vec<Vec<String>> = role_openapi_permissions
+                .iter()
+                .map(|v| vec![v.role_id.to_string(), v.path.clone(), v.method.clone()])
+                .collect();
 
-             // 执行权限检查
-             if e.enforce(("alice", "domain1", "data1", "read")).unwrap() {
-                 println!("权限允许");
-             } else {
-                 println!("权限不允许");
-             }
+            // ["alice", "admin"]
+            let g_policies: Vec<Vec<String>> = user_role_rels
+                .iter()
+                .map(|v| vec![v.user_id.to_string(), v.role_id.to_string()])
+                .collect();
 
-            */
-            // 添加接口缓存
+            // 加载模型
+            let m = DefaultModel::from_str(MODEL).await.unwrap();
+            // 加载策略
+            let adapter = MemoryAdapter::default();
+            // 创建 Enforcer
+            let mut e = Enforcer::new(m, adapter).await.unwrap();
+
+            // 添加策略
+            e.add_policies(p_policies).await.unwrap();
+            // 添加角色
+            e.add_grouping_policies(g_policies).await.unwrap();
+
+            // 执行权限检查
+            // ("alice", "/users", "GET")
+            let result =
+                match e.enforce((user_id.to_string(), path.to_string(), method.to_string())) {
+                    Ok(v) => v,
+                    Err(err) => {
+                        error!("Casbin 策略执行失败, {err:?}");
+                        return Err(Response::code(code::Error::CasbinEnforceError(
+                            err.to_string(),
+                        ))
+                        .into());
+                    }
+                };
+            if !result {
+                error!("{user_id} {method} {path}, No access permission");
+                return Err(Response::code(code::Error::CasbinNoAccessPermission).into());
+            }
+
+            // 设置缓存
+            UserCached::set_user_openapi_access_permission(
+                user_id,
+                path.to_string(),
+                method.to_string(),
+            )
+            .await;
+
+            info!("openapi access permission, user_id: {user_id}, method: {method}, path: {path}");
 
             // 响应
             let resp = service.call(req).await?;

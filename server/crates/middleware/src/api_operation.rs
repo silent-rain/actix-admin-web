@@ -205,10 +205,6 @@ impl<S> ApiOperationMiddlewareService<S> {
             .get("User-Agent")
             .map_or("".to_owned(), |ua| ua.to_str().unwrap_or("").to_owned());
 
-        // TODO 调研中
-        let match_pattern = req.match_pattern();
-        println!("match_pattern: {:?}", match_pattern);
-
         AddApiOperationReq {
             user_id,
             username,

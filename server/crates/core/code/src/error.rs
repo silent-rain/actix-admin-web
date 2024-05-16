@@ -17,16 +17,16 @@ pub enum Error {
     // 服务错误
     /// 内部服务错误
     #[error("内部服务错误")]
-    InternalServerError = 10100,
+    InternalServerError = 10101,
     /// 请求异常
     #[error("请求异常")]
-    RequestError = 10101,
+    RequestError,
     /// 请求超时
     #[error("请求超时")]
-    RequestTimeout = 10102,
+    RequestTimeout,
     /// 无效请求参数
     #[error("无效请求参数")]
-    InvalidParameterError = 10103,
+    InvalidParameterError,
     /// 配置解析错误
     #[error("配置解析错误")]
     ConfigParseError = 10105,
@@ -137,6 +137,10 @@ pub enum Error {
     AssetParseError = 10291,
     #[error("缓存不存在")]
     CacheNotFound = 10292,
+    #[error("Casbin 策略执行失败, {0}")]
+    CasbinEnforceError(String),
+    #[error("No access permission")]
+    CasbinNoAccessPermission,
 
     // 文件或目录操作
     #[error("获取目录失败")]

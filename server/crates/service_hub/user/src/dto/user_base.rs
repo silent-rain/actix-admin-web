@@ -1,6 +1,6 @@
 //! 用户信息管理
 
-use entity::{perm_openapi, user::user_base};
+use entity::user::user_base;
 
 use actix_validator::Validate;
 
@@ -127,5 +127,4 @@ pub struct UserPermission {
     pub user_id: i32,
     pub username: String,
     pub role_ids: Vec<i32>,
-    pub openapis: Vec<perm_openapi::Model>,
 }

@@ -18,6 +18,16 @@ pub struct UserRoleRelDao<'a> {
 }
 
 impl<'a> UserRoleRelDao<'a> {
+    /// 获取所有数据
+    pub async fn all(&self) -> Result<(Vec<user_role_rel::Model>, u64), DbErr> {
+        let results = UserRoleRel::find()
+            .order_by_asc(user_role_rel::Column::Id)
+            .all(self.db.rdb())
+            .await?;
+        let total = results.len() as u64;
+        Ok((results, total))
+    }
+
     /// 获取数据列表
     pub async fn list(
         &self,

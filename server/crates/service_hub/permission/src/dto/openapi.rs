@@ -4,6 +4,7 @@ use entity::perm_openapi;
 
 use actix_validator::Validate;
 
+use sea_orm::FromQueryResult;
 use serde::{Deserialize, Serialize};
 
 /// 查询OpenApi接口列表
@@ -70,4 +71,15 @@ pub struct UpdateOpenapiReq {
 pub struct UpdateOpenapiStatusReq {
     /// 状态(0:停用,1:正常)
     pub status: perm_openapi::enums::Status,
+}
+
+/// 角色接口关系权限
+#[derive(Clone, Serialize, Deserialize, Validate, FromQueryResult)]
+pub struct RoleOpenapiPermission {
+    /// 角色ID
+    pub role_id: i32,
+    /// 请求类型
+    pub method: String,
+    /// 资源路径
+    pub path: String,
 }

@@ -1,7 +1,7 @@
 //! OpenApi接口管理
 use crate::{
     dao::openapi::OpenapiDao,
-    dto::openapi::{AddOpenapiReq, GetOpenapiListReq, UpdateOpenapiReq},
+    dto::openapi::{AddOpenapiReq, GetOpenapiListReq, RoleOpenapiPermission, UpdateOpenapiReq},
 };
 
 use code::{Error, ErrorMsg};
@@ -185,5 +185,23 @@ impl<'a> OpenapiService<'a> {
         })?;
 
         Ok(result)
+    }
+}
+
+impl<'a> OpenapiService<'a> {
+    /// 角色接口关系权限
+    pub async fn role_openapi_permissions(&self) -> Result<Vec<RoleOpenapiPermission>, ErrorMsg> {
+        let results = self
+            .openapi_dao
+            .role_openapi_permissions()
+            .await
+            .map_err(|err| {
+                error!("查询OpenApi接口列表失败, err: {:#?}", err);
+                Error::DbQueryError
+                    .into_msg()
+                    .with_msg("查询OpenApi接口列表失败")
+            })?;
+
+        Ok(results)
     }
 }
