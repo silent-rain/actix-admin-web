@@ -73,6 +73,7 @@ impl<'a> AppTemplateService<'a> {
     pub async fn add(&self, data: AddAppTemplateReq) -> Result<app_template::Model, ErrorMsg> {
         let model = app_template::ActiveModel {
             user_id: Set(data.user_id),
+            desc: Set(data.desc),
             status: Set(data.status as i8),
             ..Default::default()
         };
@@ -93,6 +94,7 @@ impl<'a> AppTemplateService<'a> {
         for item in data.data {
             let model = app_template::ActiveModel {
                 user_id: Set(item.user_id),
+                desc: Set(item.desc),
                 status: Set(item.status as i8),
                 ..Default::default()
             };
@@ -117,6 +119,7 @@ impl<'a> AppTemplateService<'a> {
     pub async fn update(&self, id: i32, data: UpdateAppTemplateReq) -> Result<u64, ErrorMsg> {
         let model = app_template::ActiveModel {
             id: Set(id),
+            desc: Set(data.desc),
             status: Set(data.status as i8),
             ..Default::default()
         };
@@ -172,5 +175,59 @@ impl<'a> AppTemplateService<'a> {
             })?;
 
         Ok(result)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use database::mock::Mock;
+    use migration::m20230210_145453_create_app_template::Migration;
+
+    #[tokio::test]
+    async fn test_mock_add() -> Result<(), ErrorMsg> {
+        let pool = Mock::from_migration(&Migration)
+            .await
+            .expect("init mock db failed");
+
+        let dao = AppTemplateDao { db: pool.as_ref() };
+
+        let service = AppTemplateService {
+            app_template_dao: dao,
+        };
+
+        // 添加模板1
+        let data = AddAppTemplateReq {
+            user_id: 1,
+            desc: Some("desc".to_string()),
+            status: app_template::enums::Status::Enabled,
+        };
+        let result = service.add(data).await?;
+        println!("add result1: {result:#?}");
+        assert!(result.user_id == 1);
+
+        // 添加模板2
+        let data = AddAppTemplateReq {
+            user_id: 2,
+            desc: Some("desc".to_string()),
+            status: app_template::enums::Status::Enabled,
+        };
+        let result = service.add(data).await?;
+        println!("add result2: {result:#?}");
+        assert!(result.user_id == 2);
+
+        // 查询模板1
+        let result = service.info(1).await?;
+        println!("info result: {result:#?}");
+        assert!(result.user_id == 1);
+
+        // 查询所有的模板
+        let (results, total) = service.all().await?;
+        println!("all results: {results:#?}");
+        assert!(!results.is_empty());
+        assert!(total == 2);
+
+        Ok(())
     }
 }

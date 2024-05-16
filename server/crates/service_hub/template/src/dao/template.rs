@@ -16,7 +16,7 @@ use sea_orm::{
 /// 数据访问
 #[injectable]
 pub struct AppTemplateDao<'a> {
-    db: &'a dyn DbRepo,
+    pub db: &'a dyn DbRepo,
 }
 
 impl<'a> AppTemplateDao<'a> {
@@ -265,7 +265,7 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn test_mock_all() -> Result<(), Box<DbErr>> {
+    async fn test_mock_all() -> Result<(), DbErr> {
         let pool = Mock::from_migration(&Migration).await?;
 
         let dao = AppTemplateDao { db: pool.as_ref() };
@@ -288,7 +288,7 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn test_mock_add() -> Result<(), Box<DbErr>> {
+    async fn test_mock_add() -> Result<(), DbErr> {
         let pool = Mock::from_migration(&Migration).await?;
 
         let dao = AppTemplateDao { db: pool.as_ref() };
@@ -322,7 +322,7 @@ mod tests {
 
         // 查询所有的模板
         let (results, total) = dao.all().await?;
-        println!("all results: {result:#?}");
+        println!("all results: {results:#?}");
         assert!(!results.is_empty());
         assert!(total == 2);
 

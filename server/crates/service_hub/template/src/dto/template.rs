@@ -26,6 +26,8 @@ pub struct GetAppTemplateListReq {
 pub struct AddAppTemplateReq {
     /// 用户ID
     pub user_id: i32,
+    /// 描述信息
+    pub desc: Option<String>,
     /// 状态(0:停用,1:正常)
     pub status: Status,
 }
@@ -35,6 +37,8 @@ pub struct AddAppTemplateReq {
 pub struct BatchAddAppTemplateNode {
     /// 用户ID
     pub user_id: i32,
+    /// 描述信息
+    pub desc: Option<String>,
     /// 状态(0:停用,1:正常)
     pub status: Status,
 }
@@ -49,6 +53,10 @@ pub struct BatchAddAppTemplateReq {
 /// 更新数据 请求体
 #[derive(Deserialize)]
 pub struct UpdateAppTemplateReq {
+    /// 用户ID
+    pub user_id: i32,
+    /// 描述信息
+    pub desc: Option<String>,
     /// 状态(0:停用,1:正常)
     pub status: Status,
 }
