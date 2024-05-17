@@ -69,5 +69,7 @@ pub mod enums {
         Failed = 1,
         /// 已禁用
         Disabled = 2,
+        /// 登出
+        Logout = 3,
     }
 }

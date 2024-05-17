@@ -7,6 +7,7 @@ edition = "2021"
 database = { path = "../../core/database" }
 entity = { path = "../../core/entity" }
 code = { path = "../../core/code" }
+context = { path = "../../core/context" }
 response = { path = "../../core/response" }
 actix_validator = { path = "../../core/actix_validator" }
 utils = { path = "../../core/utils" }

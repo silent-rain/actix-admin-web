@@ -1,11 +1,8 @@
 //! 路由层
 pub mod captcha;
 pub mod login;
+pub mod logout;
 pub mod register;
-
-use captcha::GenCaptchaRouter;
-use login::LoginRouter;
-use register::RegisterRouter;
 
 use actix_web::{web, Scope};
 
@@ -17,10 +14,12 @@ impl AuthRouter {
     pub fn register() -> Scope {
         web::scope("/auth")
             // 生成验证码
-            .service(GenCaptchaRouter::register())
+            .service(captcha::GenCaptchaRouter::register())
             // 登陆
-            .service(LoginRouter::register())
+            .service(login::LoginRouter::register())
+            // 登出
+            .service(logout::LogoutRouter::register())
             // 注册用户
-            .service(RegisterRouter::register())
+            .service(register::RegisterRouter::register())
     }
 }

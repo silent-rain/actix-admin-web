@@ -136,9 +136,11 @@ where
             }
 
             // 验证登陆状态
-            if let Err(err) = Self::verify_user_login(provider.clone(), system_token).await {
-                return Err(Response::err(err).into());
-            }
+            let user_login_id = match Self::verify_user_login(provider.clone(), system_token).await
+            {
+                Ok(v) => v,
+                Err(err) => return Err(Response::err(err).into()),
+            };
             // 获取用户权限
             let permission = match Self::user_permission(provider, user_id).await {
                 Ok(v) => v,
@@ -151,6 +153,7 @@ where
             // 设置上下文
             if let Some(ctx) = req.extensions_mut().get_mut::<Context>() {
                 ctx.set_user_id(permission.user_id);
+                ctx.set_user_login_id(user_login_id);
                 ctx.set_user_name(permission.username.clone());
                 ctx.set_api_auth_type(ApiAuthType::System);
             }
@@ -221,7 +224,7 @@ impl<S> SystemApiAuthService<S> {
     async fn verify_user_login(
         provider: AInjectProvider,
         token: String,
-    ) -> Result<(), code::ErrorMsg> {
+    ) -> Result<i32, code::ErrorMsg> {
         let user_login_service: UserLoginService = provider.provide();
         let user = user_login_service.info_by_token(token.clone()).await?;
         if user.status == log_user_login::enums::Status::Disabled as i8 {
@@ -236,6 +239,12 @@ impl<S> SystemApiAuthService<S> {
                 .into_msg()
                 .with_msg("无效鉴权, 请重新登陆"));
         }
-        Ok(())
+        if user.status == log_user_login::enums::Status::Logout as i8 {
+            error!("user_id: {} token: {}, 已登出", user.id, token);
+            return Err(code::Error::LoginStatusDisabled
+                .into_msg()
+                .with_msg("已登出, 请重新登陆"));
+        }
+        Ok(user.id)
     }
 }

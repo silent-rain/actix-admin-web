@@ -101,7 +101,7 @@ impl MigrationTrait for Migration {
                             .tiny_integer()
                             .not_null()
                             .default(0)
-                            .comment("登录状态(0:登陆成功,1:登陆失败,2: 已禁用)"),
+                            .comment("登录状态(0:登陆成功,1:登陆失败,2:已禁用,3:登出)"),
                     )
                     .col(
                         ColumnDef::new(LogUserLogin::CreatedAt)

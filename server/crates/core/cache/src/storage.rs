@@ -149,6 +149,11 @@ impl Cache {
             None // 如果缓存条目不存在，则返回None。
         }
     }
+
+    /// 移除缓存
+    pub async fn remove(&self, key: &str) -> Option<Entry> {
+        self.cache.remove(key).await
+    }
 }
 
 #[cfg(test)]

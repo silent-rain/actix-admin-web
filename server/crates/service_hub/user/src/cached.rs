@@ -46,6 +46,16 @@ impl UserCached {
         Ok(permission)
     }
 
+    /// 移除用户鉴权缓存
+    pub async fn remove_user_api_auth(user_id: i32) {
+        Cache::default()
+            .remove(&format!("{}_{}", USER_SYSTEM_API_AUTH, user_id))
+            .await;
+        Cache::default()
+            .remove(&format!("{}_{}", USER_SYSTEM_API_AUTH, user_id))
+            .await;
+    }
+
     /// 设置Openapi用户鉴权
     pub async fn set_user_openapi_api_auth(openapi_token: String, data: UserPermission) {
         Cache::default()

@@ -16,6 +16,8 @@ pub struct Context {
     pub user_id: Cell<i32>,
     /// 用户名称
     pub user_name: RefCell<String>,
+    /// 登陆日志ID
+    pub user_login_id: Cell<i32>,
     /// 接口请求UUID
     pub request_id: RefCell<String>,
     /// 接口鉴权类型
@@ -27,6 +29,7 @@ impl Default for Context {
         Self {
             user_id: Cell::new(0),
             user_name: RefCell::new("".to_owned()),
+            user_login_id: Cell::new(0),
             request_id: RefCell::new("".to_owned()),
             api_auth_type: RefCell::new(None),
         }
@@ -51,6 +54,14 @@ impl Context {
     pub fn set_user_name(&mut self, user_name: String) {
         let mut x = self.user_name.borrow_mut();
         *x = user_name;
+    }
+    /// 获取登陆日志ID
+    pub fn get_user_login_id(&self) -> i32 {
+        self.user_login_id.get()
+    }
+    /// 设置登陆日志ID
+    pub fn set_user_login_id(&self, user_login_id: i32) {
+        self.user_login_id.set(user_login_id)
     }
 
     /// 获取接口鉴权类型
