@@ -1,7 +1,7 @@
 //! 用户区块链钱包管理
 use crate::dto::blockchain_wallet::GetBlockchainWalletListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::user::{blockchain_wallet, BlockchainWallet};
 use nject::injectable;
 
@@ -12,11 +12,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct BlockchainWalletDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct BlockchainWalletDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> BlockchainWalletDao<'a> {
+impl BlockchainWalletDao {
     /// 获取数据列表
     pub async fn list(
         &self,

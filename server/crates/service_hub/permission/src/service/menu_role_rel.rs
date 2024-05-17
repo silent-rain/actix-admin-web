@@ -13,11 +13,11 @@ use tracing::error;
 
 /// 服务层
 #[injectable]
-pub struct MenuRoleRelService<'a> {
-    menu_role_rel_dao: MenuRoleRelDao<'a>,
+pub struct MenuRoleRelService {
+    menu_role_rel_dao: MenuRoleRelDao,
 }
 
-impl<'a> MenuRoleRelService<'a> {
+impl MenuRoleRelService {
     /// 获取列表数据
     pub async fn list(
         &self,

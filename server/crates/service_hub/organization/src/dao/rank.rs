@@ -1,7 +1,7 @@
 //! 职级管理
 use crate::dto::rank::GetRankListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::organization::{rank, Rank};
 use nject::injectable;
 
@@ -12,11 +12,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct RankDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct RankDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> RankDao<'a> {
+impl RankDao {
     /// 获取所有数据
     pub async fn all(&self) -> Result<(Vec<rank::Model>, u64), DbErr> {
         let results = Rank::find()

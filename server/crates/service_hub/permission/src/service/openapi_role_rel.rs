@@ -13,11 +13,11 @@ use tracing::error;
 
 /// 服务层
 #[injectable]
-pub struct OpenapiRoleRelService<'a> {
-    openapi_role_rel_dao: OpenapiRoleRelDao<'a>,
+pub struct OpenapiRoleRelService {
+    openapi_role_rel_dao: OpenapiRoleRelDao,
 }
 
-impl<'a> OpenapiRoleRelService<'a> {
+impl OpenapiRoleRelService {
     /// 获取列表数据
     pub async fn list(
         &self,

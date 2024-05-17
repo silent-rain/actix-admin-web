@@ -2,7 +2,7 @@
 
 use crate::dto::token_role_rel::GetTokenRoleRelListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::{perm_token_role_rel, prelude::PermTokenRoleRel};
 
 use nject::injectable;
@@ -13,11 +13,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct TokenRoleRelDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct TokenRoleRelDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> TokenRoleRelDao<'a> {
+impl TokenRoleRelDao {
     /// 获取数据列表
     pub async fn list(
         &self,

@@ -15,11 +15,11 @@ use tracing::error;
 
 /// 服务层
 #[injectable]
-pub struct AppTemplateService<'a> {
-    app_template_dao: AppTemplateDao<'a>,
+pub struct AppTemplateService {
+    pub app_template_dao: AppTemplateDao,
 }
 
-impl<'a> AppTemplateService<'a> {
+impl AppTemplateService {
     /// 获取所有{{InterfaceName}}数据
     pub async fn all(&self) -> Result<(Vec<app_template::Model>, u64), ErrorMsg> {
         let (results, total) = self.app_template_dao.all().await.map_err(|err| {
@@ -191,7 +191,7 @@ mod tests {
             .await
             .expect("init mock db failed");
 
-        let dao = AppTemplateDao { db: pool.as_ref() };
+        let dao = AppTemplateDao { db: pool.into() };
 
         let service = AppTemplateService {
             app_template_dao: dao,

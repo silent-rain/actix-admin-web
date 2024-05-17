@@ -15,11 +15,11 @@ use tracing::error;
 
 /// 服务层
 #[injectable]
-pub struct ScheduleStatusLogService<'a> {
-    schedule_status_log_dao: ScheduleStatusLogDao<'a>,
+pub struct ScheduleStatusLogService {
+    schedule_status_log_dao: ScheduleStatusLogDao,
 }
 
-impl<'a> ScheduleStatusLogService<'a> {
+impl ScheduleStatusLogService {
     /// 获取列表数据
     pub async fn list(
         &self,

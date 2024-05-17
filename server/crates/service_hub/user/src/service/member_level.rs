@@ -13,11 +13,11 @@ use tracing::error;
 
 /// 服务层
 #[injectable]
-pub struct MemberLevelService<'a> {
-    member_level_dao: MemberLevelDao<'a>,
+pub struct MemberLevelService {
+    member_level_dao: MemberLevelDao,
 }
 
-impl<'a> MemberLevelService<'a> {
+impl MemberLevelService {
     /// 获取列表数据
     pub async fn list(
         &self,

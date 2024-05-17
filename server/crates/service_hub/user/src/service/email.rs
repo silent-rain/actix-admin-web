@@ -13,11 +13,11 @@ use tracing::error;
 
 /// 服务层
 #[injectable]
-pub struct EmailService<'a> {
-    email_dao: EmailDao<'a>,
+pub struct EmailService {
+    email_dao: EmailDao,
 }
 
-impl<'a> EmailService<'a> {
+impl EmailService {
     /// 获取列表数据
     pub async fn list(
         &self,

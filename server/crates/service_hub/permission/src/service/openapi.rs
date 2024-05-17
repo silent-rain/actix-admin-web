@@ -14,11 +14,11 @@ use utils::list_tree::GenericTree;
 
 /// 服务层
 #[injectable]
-pub struct OpenapiService<'a> {
-    openapi_dao: OpenapiDao<'a>,
+pub struct OpenapiService {
+    openapi_dao: OpenapiDao,
 }
 
-impl<'a> OpenapiService<'a> {
+impl OpenapiService {
     /// 获取列表数据
     pub async fn list(
         &self,
@@ -188,7 +188,7 @@ impl<'a> OpenapiService<'a> {
     }
 }
 
-impl<'a> OpenapiService<'a> {
+impl OpenapiService {
     /// 角色接口关系权限
     pub async fn role_openapi_permissions(&self) -> Result<Vec<RoleOpenapiPermission>, ErrorMsg> {
         let results = self

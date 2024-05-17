@@ -1,7 +1,7 @@
 //! 图片资源管理
 use crate::dto::image_resource::GetImageResourceListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::{prelude::SysImageResource, sys_image_resource};
 use nject::injectable;
 
@@ -12,11 +12,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct ImageResourceDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct ImageResourceDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> ImageResourceDao<'a> {
+impl ImageResourceDao {
     /// 获取数据列表
     pub async fn list(
         &self,

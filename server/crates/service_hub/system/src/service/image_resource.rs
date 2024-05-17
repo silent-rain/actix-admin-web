@@ -19,11 +19,11 @@ use uuid::Uuid;
 
 /// 服务层
 #[injectable]
-pub struct ImageResourceService<'a> {
-    image_resource_dao: ImageResourceDao<'a>,
+pub struct ImageResourceService {
+    image_resource_dao: ImageResourceDao,
 }
 
-impl<'a> ImageResourceService<'a> {
+impl ImageResourceService {
     /// 获取列表数据
     pub async fn list(
         &self,

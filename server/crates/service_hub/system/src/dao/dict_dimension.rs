@@ -1,7 +1,7 @@
 //! 字典维度管理
 use crate::dto::dict_dimension::GetDictDimensionListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::{prelude::SysDictDimension, sys_dict_dimension};
 use nject::injectable;
 
@@ -12,11 +12,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct DictDimensionDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct DictDimensionDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> DictDimensionDao<'a> {
+impl DictDimensionDao {
     /// 获取所有数据
     pub async fn all(&self) -> Result<(Vec<sys_dict_dimension::Model>, u64), DbErr> {
         let results = SysDictDimension::find()

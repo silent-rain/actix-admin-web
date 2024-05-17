@@ -2,7 +2,7 @@
 
 use crate::dto::user_role_rel::GetUserRoleRelListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::user::{user_role_rel, UserRoleRel};
 
 use nject::injectable;
@@ -13,11 +13,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct UserRoleRelDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct UserRoleRelDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> UserRoleRelDao<'a> {
+impl UserRoleRelDao {
     /// 获取所有数据
     pub async fn all(&self) -> Result<(Vec<user_role_rel::Model>, u64), DbErr> {
         let results = UserRoleRel::find()
@@ -99,7 +99,7 @@ impl<'a> UserRoleRelDao<'a> {
     }
 }
 
-impl<'a> UserRoleRelDao<'a> {
+impl UserRoleRelDao {
     /// 获取数据列表
     pub async fn list_by_user_id(
         &self,

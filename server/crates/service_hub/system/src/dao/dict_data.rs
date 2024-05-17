@@ -1,7 +1,7 @@
 //! 字典数据管理
 use crate::dto::dict_data::GetDictDataListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::{prelude::SysDictData, sys_dict_data};
 use nject::injectable;
 
@@ -12,11 +12,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct DictDataDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct DictDataDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> DictDataDao<'a> {
+impl DictDataDao {
     /// 获取所有数据
     pub async fn all(&self) -> Result<(Vec<sys_dict_data::Model>, u64), DbErr> {
         let results = SysDictData::find()

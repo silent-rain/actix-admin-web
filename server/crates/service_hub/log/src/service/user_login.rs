@@ -14,11 +14,11 @@ use tracing::error;
 
 /// 服务层
 #[injectable]
-pub struct UserLoginService<'a> {
-    user_login_dao: UserLoginDao<'a>,
+pub struct UserLoginService {
+    user_login_dao: UserLoginDao,
 }
 
-impl<'a> UserLoginService<'a> {
+impl UserLoginService {
     /// 获取列表数据
     pub async fn list(
         &self,

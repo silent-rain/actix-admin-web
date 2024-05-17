@@ -1,7 +1,7 @@
 //! 任务调度作业管理
 use crate::dto::schedule_job::GetScheduleJobReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::schedule::{schedule_job, ScheduleJob};
 use nject::injectable;
 
@@ -12,11 +12,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct ScheduleJobDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct ScheduleJobDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> ScheduleJobDao<'a> {
+impl ScheduleJobDao {
     /// 获取数据列表
     pub async fn list(
         &self,

@@ -2,7 +2,7 @@
 
 use crate::dto::api_operation::GetApiOperationListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::log_api_operation;
 use entity::prelude::LogApiOperation;
 
@@ -14,11 +14,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct ApiOperationDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct ApiOperationDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> ApiOperationDao<'a> {
+impl ApiOperationDao {
     /// 获取数据列表
     pub async fn list(
         &self,

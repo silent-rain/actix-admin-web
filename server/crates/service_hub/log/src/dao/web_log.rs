@@ -2,7 +2,7 @@
 
 use crate::dto::web_log::GetWebLogListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::log_web;
 use entity::prelude::LogWeb;
 
@@ -14,11 +14,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct WebLogDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct WebLogDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> WebLogDao<'a> {
+impl WebLogDao {
     /// 获取数据列表
     pub async fn list(&self, req: GetWebLogListReq) -> Result<(Vec<log_web::Model>, u64), DbErr> {
         let page = Pagination::new(req.page, req.page_size);

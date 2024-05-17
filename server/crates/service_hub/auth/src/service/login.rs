@@ -20,15 +20,15 @@ use utils::browser::parse_user_agent;
 
 /// 服务层
 #[injectable]
-pub struct LoginService<'a> {
-    user_dao: UserBaseDao<'a>,
-    email_dao: EmailDao<'a>,
-    phone_dao: PhoneDao<'a>,
-    user_login_dao: UserLoginDao<'a>,
-    captcha_dao: ImageCaptchaDao<'a>,
+pub struct LoginService {
+    user_dao: UserBaseDao,
+    email_dao: EmailDao,
+    phone_dao: PhoneDao,
+    user_login_dao: UserLoginDao,
+    captcha_dao: ImageCaptchaDao,
 }
 
-impl<'a> LoginService<'a> {
+impl LoginService {
     /// 登陆
     pub async fn login(
         &self,

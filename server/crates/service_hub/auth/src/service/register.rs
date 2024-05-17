@@ -15,15 +15,15 @@ use tracing::error;
 
 /// 服务层
 #[injectable]
-pub struct RegisterService<'a> {
-    user_dao: UserBaseDao<'a>,
-    email_dao: EmailDao<'a>,
-    phone_dao: PhoneDao<'a>,
-    register_dao: RegisterDao<'a>,
-    captcha_dao: ImageCaptchaDao<'a>,
+pub struct RegisterService {
+    user_dao: UserBaseDao,
+    email_dao: EmailDao,
+    phone_dao: PhoneDao,
+    register_dao: RegisterDao,
+    captcha_dao: ImageCaptchaDao,
 }
 
-impl<'a> RegisterService<'a> {
+impl RegisterService {
     /// 根据不同的注册类型进行注册用户
     pub async fn register(&self, data: RegisterReq) -> Result<user_base::Model, ErrorMsg> {
         // 检测验证码

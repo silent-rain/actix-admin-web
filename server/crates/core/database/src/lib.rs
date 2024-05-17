@@ -7,7 +7,7 @@ mod pagination;
 pub use pagination::Pagination;
 
 mod pool;
-pub use pool::{DatabaseConnection, DbRepo, Pool};
+pub use pool::{ArcDbRepo, DatabaseConnection, DbRepo, Pool};
 
 pub mod config;
 pub use config::DbOptions;

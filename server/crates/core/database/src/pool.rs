@@ -1,5 +1,5 @@
 //! 数据库连接池
-use std::time::Duration;
+use std::{sync::Arc, time::Duration};
 
 use crate::config::DbOptions;
 
@@ -8,8 +8,10 @@ use code::Error;
 pub use sea_orm::DatabaseConnection;
 use sea_orm::{ConnectOptions, ConnectionTrait, Database, DatabaseBackend};
 
+pub type ArcDbRepo = Arc<dyn DbRepo + 'static>;
+
 /// 数据库特征
-pub trait DbRepo {
+pub trait DbRepo: Send + Sync {
     /// 获取只读数据库实例
     fn rdb(&self) -> &DatabaseConnection;
     /// 获取读写数据库实例

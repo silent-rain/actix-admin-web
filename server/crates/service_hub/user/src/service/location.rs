@@ -13,11 +13,11 @@ use tracing::error;
 
 /// 服务层
 #[injectable]
-pub struct LocationService<'a> {
-    location_dao: LocationDao<'a>,
+pub struct LocationService {
+    location_dao: LocationDao,
 }
 
-impl<'a> LocationService<'a> {
+impl LocationService {
     /// 获取列表数据
     pub async fn list(
         &self,

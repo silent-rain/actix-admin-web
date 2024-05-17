@@ -15,11 +15,11 @@ use tracing::error;
 
 /// 服务层
 #[injectable]
-pub struct BlockchainWalletService<'a> {
-    blockchain_wallet_dao: BlockchainWalletDao<'a>,
+pub struct BlockchainWalletService {
+    blockchain_wallet_dao: BlockchainWalletDao,
 }
 
-impl<'a> BlockchainWalletService<'a> {
+impl BlockchainWalletService {
     /// 获取列表数据
     pub async fn list(
         &self,

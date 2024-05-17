@@ -4,7 +4,7 @@ use std::str::FromStr;
 
 use crate::dto::template::GetAppTemplateListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::{app_template, prelude::AppTemplate};
 
 use nject::injectable;
@@ -15,11 +15,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct AppTemplateDao<'a> {
-    pub db: &'a dyn DbRepo,
+pub struct AppTemplateDao {
+    pub db: ArcDbRepo,
 }
 
-impl<'a> AppTemplateDao<'a> {
+impl AppTemplateDao {
     /// 获取所有数据
     pub async fn all(&self) -> Result<(Vec<app_template::Model>, u64), DbErr> {
         let results = AppTemplate::find()
@@ -268,7 +268,7 @@ mod tests {
     async fn test_mock_all() -> Result<(), DbErr> {
         let pool = Mock::from_migration(&Migration).await?;
 
-        let dao = AppTemplateDao { db: pool.as_ref() };
+        let dao = AppTemplateDao { db: pool.into() };
 
         let (results, total) = dao.all().await?;
         assert!(results.is_empty());
@@ -280,7 +280,7 @@ mod tests {
     async fn test_mock_info() -> Result<(), Box<DbErr>> {
         let pool = Mock::from_migration(&Migration).await?;
 
-        let dao = AppTemplateDao { db: pool.as_ref() };
+        let dao = AppTemplateDao { db: pool.into() };
 
         let result = dao.info(1).await?;
         assert!(result.is_none());
@@ -291,7 +291,7 @@ mod tests {
     async fn test_mock_add() -> Result<(), DbErr> {
         let pool = Mock::from_migration(&Migration).await?;
 
-        let dao = AppTemplateDao { db: pool.as_ref() };
+        let dao = AppTemplateDao { db: pool.into() };
 
         // 添加模板1
         let active_model = app_template::ActiveModel {
