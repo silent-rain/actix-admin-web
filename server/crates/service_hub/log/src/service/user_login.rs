@@ -6,7 +6,7 @@ use crate::{
 
 use code::{Error, ErrorMsg};
 use entity::log_user_login;
-use utils::browser::parse_user_agent;
+use utils::browser::parse_user_agent_async;
 
 use nject::injectable;
 use sea_orm::Set;
@@ -86,8 +86,9 @@ impl UserLoginService {
 
     /// 添加数据
     pub async fn add(&self, req: AddUserLoginInfoReq) -> Result<log_user_login::Model, ErrorMsg> {
-        let (device, system, browser) =
-            parse_user_agent(req.user_agent.clone()).map_err(|err| {
+        let (device, system, browser) = parse_user_agent_async(req.user_agent.clone())
+            .await
+            .map_err(|err| {
                 error!("User-Agent解析错误, err: {:#?}", err);
                 Error::UserAgentParserError(err)
             })?;

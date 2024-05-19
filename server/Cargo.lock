@@ -677,6 +677,7 @@ dependencies = [
  "serde",
  "serde_json",
  "system",
+ "tokio",
  "tracing",
  "user",
  "utils",
@@ -4875,6 +4876,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sha2",
+ "tokio",
  "tracing",
  "uap-rust",
 ]

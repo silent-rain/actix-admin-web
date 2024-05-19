@@ -19,6 +19,10 @@ pub struct UserLoginDao {
 }
 
 impl UserLoginDao {
+    pub fn new(db: ArcDbRepo) -> Self {
+        UserLoginDao { db }
+    }
+
     /// 获取数据列表
     pub async fn list(
         &self,
