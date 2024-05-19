@@ -1,6 +1,6 @@
 //! Mock Request
 
 mod request;
-mod router;
 
+pub use request::Error;
 pub use request::MockRequest;

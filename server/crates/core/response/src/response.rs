@@ -73,6 +73,11 @@ impl Response {
         self.data = Some(json!(DataList { data_list, total }));
         self
     }
+
+    /// 获取当前状态
+    pub fn status(&self) -> u16 {
+        self.code
+    }
 }
 
 /// 打印 Response

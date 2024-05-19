@@ -268,7 +268,7 @@ mod tests {
     async fn test_mock_all() -> Result<(), DbErr> {
         let pool = Mock::from_migration(&Migration).await?;
 
-        let dao = AppTemplateDao { db: pool.into() };
+        let dao = AppTemplateDao { db: pool };
 
         let (results, total) = dao.all().await?;
         assert!(results.is_empty());
@@ -280,7 +280,7 @@ mod tests {
     async fn test_mock_info() -> Result<(), Box<DbErr>> {
         let pool = Mock::from_migration(&Migration).await?;
 
-        let dao = AppTemplateDao { db: pool.into() };
+        let dao = AppTemplateDao { db: pool };
 
         let result = dao.info(1).await?;
         assert!(result.is_none());
@@ -291,7 +291,7 @@ mod tests {
     async fn test_mock_add() -> Result<(), DbErr> {
         let pool = Mock::from_migration(&Migration).await?;
 
-        let dao = AppTemplateDao { db: pool.into() };
+        let dao = AppTemplateDao { db: pool };
 
         // 添加模板1
         let active_model = app_template::ActiveModel {

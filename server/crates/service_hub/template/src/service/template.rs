@@ -191,7 +191,7 @@ mod tests {
             .await
             .expect("init mock db failed");
 
-        let dao = AppTemplateDao { db: pool.into() };
+        let dao = AppTemplateDao { db: pool };
 
         let service = AppTemplateService {
             app_template_dao: dao,

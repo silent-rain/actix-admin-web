@@ -25,6 +25,8 @@ serde_repr = { workspace = true }
 [dev-dependencies]
 migration = { path = "../../core/migration" }
 
+mock_request = { path = "../../mock_request" }
+
 tokio = { workspace = true, features = [
     "macros",
     "rt-multi-thread",
