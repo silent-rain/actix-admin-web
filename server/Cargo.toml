@@ -26,6 +26,8 @@ members = [
     "crates/inject",
     # 应用状态
     "crates/app_state",
+    # mock 服务
+    "crates/mock_request",
 
     # 服务集
     "crates/service_hub",

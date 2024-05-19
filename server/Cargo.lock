@@ -2421,6 +2421,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "mock_request"
+version = "0.1.0"
+dependencies = [
+ "actix-http",
+ "actix-web",
+ "database",
+ "entity",
+ "inject",
+ "migration",
+ "response",
+ "sea-orm-migration",
+ "serde",
+ "serde_json",
+ "serde_repr",
+ "service_hub",
+ "thiserror",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "moka"
 version = "0.12.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"

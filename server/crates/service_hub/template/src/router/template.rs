@@ -14,6 +14,7 @@ impl AppTemplateRouter {
     /// 注册路由
     pub fn admin_register() -> Scope {
         scope("/app-templates")
+            .route("/all", get().to(AppTemplateController::all))
             .route("", get().to(AppTemplateController::list))
             .route("/{id}", get().to(AppTemplateController::info))
             .route("", post().to(AppTemplateController::add))

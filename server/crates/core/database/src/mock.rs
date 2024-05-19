@@ -19,6 +19,20 @@ impl Mock {
         Ok(pool)
     }
 
+    /// 从多个迁移文件创建表
+    pub async fn from_migrations(
+        migrations: Vec<&dyn MigrationTrait>,
+    ) -> Result<Box<dyn DbRepo>, DbErr> {
+        let pool = Self::connect().await;
+
+        for migration in migrations {
+            let manager = SchemaManager::new(pool.wdb());
+            migration.up(&manager).await?;
+        }
+
+        Ok(pool)
+    }
+
     /// 从实体创建表
     pub async fn from_entity<E: EntityTrait>(entity: E) -> Result<Box<dyn DbRepo>, DbErr> {
         let pool = Self::connect().await;
