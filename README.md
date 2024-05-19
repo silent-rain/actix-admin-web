@@ -116,7 +116,6 @@
 - 定时器-用户任务
 - doc 文档，细化为接口文档；
 - 用户权限封装；
-- 用户登陆接口比较卡的问题
 
 <https://github.com/actix/actix-extras/tree/master/actix-identity>
 <https://crates.io/crates/actix-ws>
