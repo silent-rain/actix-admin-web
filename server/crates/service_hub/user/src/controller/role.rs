@@ -26,7 +26,7 @@ impl RoleController {
         let role_service: RoleService = provider.provide();
         let resp = role_service.list(req.into_inner()).await;
         match resp {
-            Ok(v) => Response::ok().data(v),
+            Ok((results, total)) => Response::ok().data_list(results, total),
             Err(err) => Response::err(err),
         }
     }

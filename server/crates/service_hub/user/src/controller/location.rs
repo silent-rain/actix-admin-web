@@ -26,7 +26,7 @@ impl LocationController {
         let location_service: LocationService = provider.provide();
         let resp = location_service.list(req.into_inner()).await;
         match resp {
-            Ok(v) => Response::ok().data(v),
+            Ok((results, total)) => Response::ok().data_list(results, total),
             Err(err) => Response::err(err),
         }
     }

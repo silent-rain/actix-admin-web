@@ -26,7 +26,7 @@ impl PhoneController {
         let phone_service: PhoneService = provider.provide();
         let resp = phone_service.list(req.into_inner()).await;
         match resp {
-            Ok(v) => Response::ok().data(v),
+            Ok((results, total)) => Response::ok().data_list(results, total),
             Err(err) => Response::err(err),
         }
     }

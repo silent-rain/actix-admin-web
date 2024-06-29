@@ -26,7 +26,7 @@ impl TokenController {
         let token_service: TokenService = provider.provide();
         let resp = token_service.list(req.into_inner()).await;
         match resp {
-            Ok(v) => Response::ok().data(v),
+            Ok((results, total)) => Response::ok().data_list(results, total),
             Err(err) => Response::err(err),
         }
     }

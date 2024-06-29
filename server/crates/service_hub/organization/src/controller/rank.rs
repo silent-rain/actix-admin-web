@@ -26,7 +26,7 @@ impl RankController {
         let rank_service: RankService = provider.provide();
         let resp = rank_service.list(req.into_inner()).await;
         match resp {
-            Ok(v) => Response::ok().data(v),
+            Ok((results, total)) => Response::ok().data_list(results, total),
             Err(err) => Response::err(err),
         }
     }

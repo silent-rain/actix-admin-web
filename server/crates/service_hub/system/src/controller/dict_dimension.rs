@@ -29,7 +29,7 @@ impl DictDimensionController {
         let dict_dimension_service: DictDimensionService = provider.provide();
         let resp = dict_dimension_service.list(req.into_inner()).await;
         match resp {
-            Ok(v) => Response::ok().data(v),
+            Ok((results, total)) => Response::ok().data_list(results, total),
             Err(err) => Response::err(err),
         }
     }

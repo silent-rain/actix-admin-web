@@ -28,7 +28,7 @@ impl DepartmentController {
         let department_service: DepartmentService = provider.provide();
         let resp = department_service.list(req.into_inner()).await;
         match resp {
-            Ok(v) => Response::ok().data(v),
+            Ok((results, total)) => Response::ok().data_list(results, total),
             Err(err) => Response::err(err),
         }
     }
