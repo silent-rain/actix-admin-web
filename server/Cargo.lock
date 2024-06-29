@@ -1308,7 +1308,6 @@ name = "database"
 version = "0.1.0"
 dependencies = [
  "async-trait",
- "code",
  "log 0.4.22",
  "sea-orm",
  "sea-orm-migration",

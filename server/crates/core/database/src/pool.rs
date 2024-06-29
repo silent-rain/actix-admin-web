@@ -3,10 +3,9 @@ use std::time::Duration;
 
 use crate::config::DbOptions;
 
-use code::Error;
-
-pub use sea_orm::DatabaseConnection;
-use sea_orm::{ConnectOptions, ConnectionTrait, Database, DatabaseBackend};
+use sea_orm::{
+    ConnectOptions, ConnectionTrait, Database, DatabaseBackend, DatabaseConnection, DbErr,
+};
 
 /// 数据库特征
 pub trait DbRepo {
@@ -27,7 +26,7 @@ pub struct Pool {
 
 impl Pool {
     /// 初始化数据库连接池
-    pub async fn init(rdb_url: String, wdb_url: String, options: DbOptions) -> Result<Pool, Error> {
+    pub async fn init(rdb_url: String, wdb_url: String, options: DbOptions) -> Result<Pool, DbErr> {
         let rdb = Self::connect(rdb_url, options.clone()).await?;
         let wdb = Self::connect(wdb_url, options).await?;
         let pool = Pool { rdb, wdb };
@@ -48,7 +47,7 @@ impl Pool {
     /// ```sql
     /// SHOW VARIABLES LIKE 'max_connections';
     /// ```
-    pub async fn connect(db_url: String, options: DbOptions) -> Result<DatabaseConnection, Error> {
+    pub async fn connect(db_url: String, options: DbOptions) -> Result<DatabaseConnection, DbErr> {
         let mut opt = ConnectOptions::new(db_url);
         opt.max_connections(options.max_connections)
             .min_connections(options.min_connections)
@@ -58,14 +57,10 @@ impl Pool {
             .max_lifetime(Duration::from_secs(options.max_lifetime))
             .sqlx_logging(options.logging_enable)
             .sqlx_logging_level(options.logging_level.into());
-        let db = Database::connect(opt)
-            .await
-            .map_err(|err| Error::DbConnectionError(err.to_string()))?;
+        let db = Database::connect(opt).await?;
 
         // 检查连接是否有效
-        db.ping()
-            .await
-            .map_err(|err| Error::DbConnectionAcquire(err.to_string()))?;
+        db.ping().await?;
 
         // 设置 Time Zone
         Self::set_time_zone(&db).await?;
@@ -79,24 +74,16 @@ impl Pool {
     }
 
     /// 关闭数据库
-    pub async fn close(&self) -> Result<(), Error> {
-        self.rdb
-            .clone()
-            .close()
-            .await
-            .map_err(|_e| Error::DbCloseError)?;
-
-        self.rdb
-            .clone()
-            .close()
-            .await
-            .map_err(|_e| Error::DbCloseError)
+    pub async fn close(&self) -> Result<(), DbErr> {
+        self.rdb.clone().close().await?;
+        self.wdb.clone().close().await?;
+        Ok(())
     }
 
     /// 设置 Time Zone
     /// 不支持SQLite3
     #[allow(unused)]
-    async fn set_time_zone(db: &DatabaseConnection) -> Result<(), Error> {
+    async fn set_time_zone(db: &DatabaseConnection) -> Result<(), DbErr> {
         if db.get_database_backend() == DatabaseBackend::Sqlite {
             return Ok(());
         }
@@ -104,9 +91,7 @@ impl Pool {
             db.get_database_backend(),
             "SET time_zone = '+08:00'".to_owned(),
         );
-        db.execute(stmt)
-            .await
-            .map_err(|err| Error::DbTimeZoneError(err.to_string()))?;
+        db.execute(stmt).await?;
         Ok(())
     }
 }
@@ -127,10 +112,11 @@ mod tests {
     use super::*;
 
     #[tokio::test]
-    async fn test_connect() {
+    async fn test_connect() -> Result<(), DbErr> {
         let db_url = "sqlite://./data.dat?mode=rwc";
         let options = DbOptions::default();
-        let db = Pool::connect(db_url.to_owned(), options).await.unwrap();
+        let db = Pool::connect(db_url.to_owned(), options).await?;
         let _ = db.close().await;
+        Ok(())
     }
 }
