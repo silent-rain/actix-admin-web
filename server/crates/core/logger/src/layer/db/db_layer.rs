@@ -161,7 +161,7 @@ mod tests {
 
     /// 模拟产生一个错误
     fn create_err() -> Result<(), Box<dyn std::error::Error + 'static>> {
-        Err(Box::new(Error::UnknownError))
+        Err(Box::new(Error::Unknown("this is test".to_owned())))
     }
 
     #[tokio::test]
@@ -169,7 +169,7 @@ mod tests {
         let (_trace_guard, _guard) = setup();
 
         info!("second example");
-        error!("{}", Error::UnknownError);
+        error!("{}", Error::Unknown("this is test".to_owned()));
         if let Err(err) = create_err() {
             error!(err);
         }

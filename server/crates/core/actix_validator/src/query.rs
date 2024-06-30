@@ -60,7 +60,7 @@ where
             Err(e) => {
                 error!("请求参数解析失败, err: {e}");
                 let resp = Response::err(
-                    code::Error::InvalidParameterError
+                    code::Error::InvalidParameter
                         .into_msg()
                         .with_msg("请求参数解析失败"),
                 );
@@ -72,7 +72,7 @@ where
         if let Err(e) = inner_query.validate() {
             error!("请求参数验证失败, err: {e}");
             let resp = Response::err(
-                code::Error::InvalidParameterError
+                code::Error::InvalidParameter
                     .into_msg()
                     .with_msg("请求参数验证失败"),
             );

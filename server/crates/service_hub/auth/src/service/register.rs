@@ -51,7 +51,7 @@ impl<'a> RegisterService<'a> {
         let phone = match data.phone.clone() {
             Some(v) => v,
             None => {
-                return Err(code::Error::InvalidParameterError
+                return Err(code::Error::InvalidParameter
                     .into_msg()
                     .with_msg("请求参数错误, phone 不能为空"))
             }

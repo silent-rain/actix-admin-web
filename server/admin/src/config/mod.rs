@@ -27,10 +27,9 @@ static GLOBAL_CONFIG: OnceLock<AppConfig> = OnceLock::new();
 /// ```
 pub fn init(path: &str) -> Result<AppConfig, Error> {
     let content = read_to_string(path)?;
-    let config: AppConfig = serde_yaml::from_str(&content).map_err(|e| {
-        error!("{}, err: {e}", Error::ConfigParseError);
-        eprintln!("{:#?}", e);
-        Error::ConfigParseError
+    let config: AppConfig = serde_yaml::from_str(&content).map_err(|err| {
+        error!("{}, err: {err}", Error::ConfigFileParseError);
+        Error::ConfigFileParseError
     })?;
     GLOBAL_CONFIG.get_or_init(|| config.clone());
     Ok(config)

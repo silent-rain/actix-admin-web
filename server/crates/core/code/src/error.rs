@@ -7,29 +7,27 @@ use serde::{ser::Serializer, Serialize};
 #[derive(Debug, thiserror::Error)]
 #[repr(u16)]
 pub enum Error {
-    /// 成功
+    /// ok
     #[error("ok")]
     OK = 0,
-    /// 未知错误
-    #[error("未知错误")]
-    UnknownError = 10001,
-
-    // 服务错误
-    /// 内部服务错误
-    #[error("内部服务错误")]
-    InternalServerError = 10101,
-    /// 请求异常
-    #[error("请求异常")]
-    RequestError,
-    /// 请求超时
-    #[error("请求超时")]
-    RequestTimeout,
-    /// 无效请求参数
-    #[error("无效请求参数")]
-    InvalidParameterError,
-    /// 配置解析错误
-    #[error("配置解析错误")]
-    ConfigParseError = 10105,
+    /// unknown error
+    #[error("unknown error, {0}")]
+    Unknown(String) = 10001,
+    /// internal server error
+    #[error("internal server error, {0}")]
+    InternalServer(String),
+    /// request error
+    #[error("request error, {0}")]
+    RequestError(String),
+    /// request timeout error
+    #[error("request timeout, {0}")]
+    RequestTimeout(String),
+    /// invalid request parameter
+    #[error("invalid request parameter")]
+    InvalidParameter = 10105,
+    /// config file parse error
+    #[error("config file parse error")]
+    ConfigFileParseError = 10106,
 
     // 数据处理异常
     /// Serialize the given data structure as a String of JSON.
@@ -40,30 +38,22 @@ pub enum Error {
     JsonDeserialization(String) = 10151,
     #[error("JSON转换错误")]
     JsonConvert = 10152,
-    /// No data available
-    #[error("No data available")]
+
+    /// io error, no data available
+    #[error("io error, no data available")]
     NoDataAvailable = 10153,
-    /// An input/output error
-    #[error("An input/output error, {0}")]
-    IoError(io::Error) = 10154,
-    /// A possible error value when converting a String from a UTF-8 byte vector.
-    #[error("A possible error value when converting a String from a UTF-8 byte vector, {0}")]
-    FromUtf8Error(std::string::FromUtf8Error) = 10155,
+    /// io error, from io::Error
+    #[error("io error, {0}")]
+    Io(io::Error) = 10154,
+    /// from utf8 error, from std::string::FromUtf8Error
+    #[error("from utf8 error, {0}")]
+    FromUtf8(#[from] std::string::FromUtf8Error) = 10155,
+
     #[error("{0}")]
     DeserializerError(String) = 10156,
     #[error("{0}")]
     DateTimeParseError(String) = 10157,
 
-    #[error("数据库初始化失败, {0}")]
-    DbInitError(String) = 10200,
-    #[error("数据库连接失败, {0}")]
-    DbConnectionError(String) = 10202,
-    #[error("设置 Time Zone 失败, {0}")]
-    DbTimeZoneError(String) = 10203,
-    #[error("数据库ping失败, {0}")]
-    DbConnectionAcquire(String) = 10204,
-    #[error("数据库关闭失败")]
-    DbCloseError = 10205,
     #[error("查询数据失败")]
     DbQueryError = 10206,
     #[error("未查到数据")]
@@ -85,17 +75,20 @@ pub enum Error {
     #[error("数据已存在子项")]
     DbDataExistChildrenError = 10215,
 
-    // 鉴权
+    // 验证码
     #[error("未知的验证码")]
     CaptchaNotExist = 10251,
     #[error("验证码已过期, 请刷新重试")]
     CaptchaExpire = 10252,
     #[error("验证码错误")]
     CaptchaInvalid = 10253,
+
+    // 鉴权
     #[error("账号或密码错误")]
     LoginPasswordError = 10254,
     #[error("用户已被禁用")]
     LoginUserDisableError = 10255,
+
     #[error("获取密匙异常")]
     TokenEncode = 10256,
     #[error("鉴权解析失败, err: {0}")]
@@ -156,11 +149,6 @@ pub enum Error {
     #[error("写入文件失败, {0}")]
     FsWriterFileError(String) = 10306,
 
-    #[error("{0}")]
-    SchedulerInitError(String) = 10401,
-    #[error("获取实例错误")]
-    SchedulerInstanceError = 10402,
-
     // 内部框架错误
     #[error("日志初始化失败, {0}")]
     LoggerInitError(String) = 10351,
@@ -202,16 +190,16 @@ impl From<io::Error> for Error {
         if err.kind() == io::ErrorKind::UnexpectedEof {
             return Error::NoDataAvailable;
         }
-        Error::IoError(err)
+        Error::Io(err)
     }
 }
 
 /// Utf8 错误转换
-impl From<std::string::FromUtf8Error> for Error {
-    fn from(err: std::string::FromUtf8Error) -> Error {
-        Error::FromUtf8Error(err)
-    }
-}
+// impl From<std::string::FromUtf8Error> for Error {
+//     fn from(err: std::string::FromUtf8Error) -> Error {
+//         Error::FromUtf8Error(err)
+//     }
+// }
 
 #[cfg(test)]
 mod tests {
@@ -220,14 +208,12 @@ mod tests {
     #[test]
     fn test_error_code() {
         let mut err = Error::LoggerInitError("0".to_string());
-        println!("== {}", err);
         assert!(err.to_string() == "日志初始化失败, 0");
         let code = unsafe {
             let mul_err = &mut err;
             let ptr: *const u16 = mul_err as *mut Error as *const u16;
             ptr.read_volatile()
         };
-        println!("== {}", code);
         assert!(code == 10351);
     }
 
@@ -235,7 +221,6 @@ mod tests {
     fn test_error_code2() {
         let err = Error::LoggerInitError("0".to_string());
         let code = err.code();
-        println!("== {}", code);
         assert!(code == 10351);
     }
 }

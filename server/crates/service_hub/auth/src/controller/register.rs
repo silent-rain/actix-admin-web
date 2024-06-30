@@ -26,7 +26,7 @@ impl RegisterController {
                 if data.phone.is_none() {
                     error!("请输入手机号码");
                     return Response::err(
-                        Error::InvalidParameterError
+                        Error::InvalidParameter
                             .into_msg()
                             .with_msg("请输入手机号码"),
                     );
@@ -36,9 +36,7 @@ impl RegisterController {
                 if data.email.is_none() {
                     error!("请输入邮箱");
                     return Response::err(
-                        Error::InvalidParameterError
-                            .into_msg()
-                            .with_msg("请输入邮箱"),
+                        Error::InvalidParameter.into_msg().with_msg("请输入邮箱"),
                     );
                 }
             }

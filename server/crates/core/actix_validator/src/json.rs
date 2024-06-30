@@ -66,7 +66,7 @@ where
             inner_body.validate().map_err(|e| {
                 error!("参数验证失败, err: {e}");
                 Response::err(
-                    code::Error::InvalidParameterError
+                    code::Error::InvalidParameter
                         .into_msg()
                         .with_msg("参数验证失败"),
                 )
