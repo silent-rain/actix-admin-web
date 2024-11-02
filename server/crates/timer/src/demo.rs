@@ -1,17 +1,17 @@
 //! 定时任务示例
-use database::DbRepo;
+use database::PoolTrait;
 use scheduler::{error::Error, register::SysTaskTrait, Job};
 
 pub struct DemoTask<DB>
 where
-    DB: DbRepo + Clone + Send + Sync + 'static,
+    DB: PoolTrait + Clone + Send + Sync + 'static,
 {
     db: DB,
 }
 
 impl<DB> DemoTask<DB>
 where
-    DB: DbRepo + Clone + Send + Sync + 'static,
+    DB: PoolTrait + Clone + Send + Sync + 'static,
     Self: Sized,
 {
     pub fn new(db: DB) -> Self {
@@ -21,7 +21,7 @@ where
 
 impl<DB> SysTaskTrait<DB> for DemoTask<DB>
 where
-    DB: DbRepo + Clone + Send + Sync + 'static,
+    DB: PoolTrait + Clone + Send + Sync + 'static,
     Self: Sized,
 {
     fn sys_code(&self) -> String {

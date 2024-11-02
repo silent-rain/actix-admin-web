@@ -1,8 +1,10 @@
 //! 菜单角色关系管理
 
+use std::sync::Arc;
+
 use crate::dto::menu_role_rel::GetMenuRoleRelListReq;
 
-use database::{ArcDbRepo, Pagination};
+use database::{Pagination, PoolTrait};
 use entity::{perm_menu_role_rel, prelude::PermMenuRoleRel};
 
 use nject::injectable;
@@ -14,7 +16,7 @@ use sea_orm::{
 /// 数据访问
 #[injectable]
 pub struct MenuRoleRelDao {
-    db: ArcDbRepo,
+    db: Arc<dyn PoolTrait>,
 }
 
 impl MenuRoleRelDao {
@@ -36,7 +38,7 @@ impl MenuRoleRelDao {
                 query.filter(perm_menu_role_rel::Column::MenuId.eq(v))
             });
 
-        let total = states.clone().count(self.db.rdb()).await?;
+        let total = states.clone().count(self.db.db()).await?;
         if total == 0 {
             return Ok((vec![], total));
         }
@@ -45,7 +47,7 @@ impl MenuRoleRelDao {
             .order_by_desc(perm_menu_role_rel::Column::Id)
             .offset(page.offset())
             .limit(page.page_size())
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
 
         Ok((results, total))
@@ -56,7 +58,7 @@ impl MenuRoleRelDao {
         &self,
         active_model: perm_menu_role_rel::ActiveModel,
     ) -> Result<perm_menu_role_rel::Model, DbErr> {
-        active_model.insert(self.db.wdb()).await
+        active_model.insert(self.db.db()).await
     }
 
     /// 批量添加数据
@@ -65,7 +67,7 @@ impl MenuRoleRelDao {
         active_models: Vec<perm_menu_role_rel::ActiveModel>,
     ) -> Result<i32, DbErr> {
         let result = PermMenuRoleRel::insert_many(active_models)
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
         Ok(result.last_insert_id)
     }
@@ -74,7 +76,7 @@ impl MenuRoleRelDao {
     pub async fn delete(&self, id: i32) -> Result<u64, DbErr> {
         let result = PermMenuRoleRel::delete_many()
             .filter(perm_menu_role_rel::Column::Id.eq(id))
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
         Ok(result.rows_affected)
     }
@@ -83,7 +85,7 @@ impl MenuRoleRelDao {
     pub async fn batch_delete(&self, ids: Vec<i32>) -> Result<u64, DbErr> {
         let result = PermMenuRoleRel::delete_many()
             .filter(perm_menu_role_rel::Column::Id.is_in(ids))
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
         Ok(result.rows_affected)
     }

@@ -1,7 +1,9 @@
 //! 用户信息管理
+use std::sync::Arc;
+
 use crate::dto::user_base::GetUserBaserListReq;
 
-use database::{ArcDbRepo, Pagination};
+use database::{Pagination, PoolTrait};
 use entity::user::{user_base, user_role, user_role_rel, UserBase, UserRole, UserRoleRel};
 
 use nject::injectable;
@@ -13,7 +15,7 @@ use sea_orm::{
 /// 数据访问
 #[injectable]
 pub struct UserBaseDao {
-    db: ArcDbRepo,
+    db: Arc<dyn PoolTrait>,
 }
 
 impl UserBaseDao {
@@ -21,7 +23,7 @@ impl UserBaseDao {
     pub async fn all(&self) -> Result<(Vec<user_base::Model>, u64), DbErr> {
         let results = UserBase::find()
             .order_by_asc(user_base::Column::Id)
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
         let total = results.len() as u64;
         Ok((results, total))
@@ -45,7 +47,7 @@ impl UserBaseDao {
                 query.filter(user_base::Column::Username.like(format!("{v}%")))
             });
 
-        let total = states.clone().count(self.db.rdb()).await?;
+        let total = states.clone().count(self.db.db()).await?;
         if total == 0 {
             return Ok((vec![], total));
         }
@@ -54,7 +56,7 @@ impl UserBaseDao {
             .order_by_desc(user_base::Column::Id)
             .offset(page.offset())
             .limit(page.page_size())
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
 
         Ok((results, total))
@@ -62,7 +64,7 @@ impl UserBaseDao {
 
     /// 获取详情信息
     pub async fn info(&self, id: i32) -> Result<Option<user_base::Model>, DbErr> {
-        UserBase::find_by_id(id).one(self.db.rdb()).await
+        UserBase::find_by_id(id).one(self.db.db()).await
     }
 
     /// 通过用户名获取详情信息
@@ -72,7 +74,7 @@ impl UserBaseDao {
     ) -> Result<Option<user_base::Model>, DbErr> {
         UserBase::find()
             .filter(user_base::Column::Username.eq(username))
-            .one(self.db.rdb())
+            .one(self.db.db())
             .await
     }
 
@@ -83,7 +85,7 @@ impl UserBaseDao {
     ) -> Result<Option<user_base::Model>, DbErr> {
         UserBase::find()
             .filter(user_base::Column::ShareCode.eq(share_code))
-            .one(self.db.rdb())
+            .one(self.db.db())
             .await
     }
 
@@ -92,7 +94,7 @@ impl UserBaseDao {
         &self,
         active_model: user_base::ActiveModel,
     ) -> Result<user_base::Model, DbErr> {
-        active_model.insert(self.db.wdb()).await
+        active_model.insert(self.db.db()).await
     }
 
     /// 更新信息
@@ -101,7 +103,7 @@ impl UserBaseDao {
         let result = UserBase::update_many()
             .set(active_model)
             .filter(user_base::Column::Id.eq(id))
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
 
         Ok(result.rows_affected)
@@ -114,7 +116,7 @@ impl UserBaseDao {
             share_code: Set(Some(share_code)),
             ..Default::default()
         };
-        let _ = active_model.update(self.db.wdb()).await?;
+        let _ = active_model.update(self.db.db()).await?;
         Ok(())
     }
 
@@ -125,13 +127,13 @@ impl UserBaseDao {
             status: Set(status),
             ..Default::default()
         };
-        let _ = active_model.update(self.db.wdb()).await?;
+        let _ = active_model.update(self.db.db()).await?;
         Ok(())
     }
 
     /// 按主键删除信息
     pub async fn delete(&self, id: i32) -> Result<u64, DbErr> {
-        let result = UserBase::delete_by_id(id).exec(self.db.wdb()).await?;
+        let result = UserBase::delete_by_id(id).exec(self.db.db()).await?;
         Ok(result.rows_affected)
     }
 
@@ -139,7 +141,7 @@ impl UserBaseDao {
     pub async fn delete_by_name(&self, username: String) -> Result<u64, DbErr> {
         let result = UserBase::delete_many()
             .filter(user_base::Column::Username.contains(&username))
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
 
         Ok(result.rows_affected)
@@ -153,7 +155,7 @@ impl UserBaseDao {
         active_model: user_base::ActiveModel,
         add_role_ids: Vec<i32>,
     ) -> Result<user_base::Model, DbErr> {
-        let txn = self.db.wdb().begin().await?;
+        let txn = self.db.db().begin().await?;
 
         // 添加用户
         let user = self.txn_add_user(&txn, active_model).await?;
@@ -176,7 +178,7 @@ impl UserBaseDao {
         del_role_ids: Vec<i32>,
     ) -> Result<(), DbErr> {
         let user_id: i32 = *(active_model.id.clone().as_ref());
-        let txn = self.db.wdb().begin().await?;
+        let txn = self.db.db().begin().await?;
 
         // 更新用户
         let _ = self.txn_update_user(&txn, active_model).await?;
@@ -274,7 +276,7 @@ impl UserBaseDao {
             )
             .filter(user_role_rel::Column::UserId.eq(user_id))
             .order_by_asc(user_role::Column::Id)
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
         let total = results.len() as u64;
 

@@ -1,7 +1,9 @@
 //! 用户手机号管理
+use std::sync::Arc;
+
 use crate::dto::phone::GetPhoneListReq;
 
-use database::{ArcDbRepo, Pagination};
+use database::{Pagination, PoolTrait};
 use entity::user::{user_phone, UserPhone};
 
 use nject::injectable;
@@ -13,7 +15,7 @@ use sea_orm::{
 /// 数据访问
 #[injectable]
 pub struct PhoneDao {
-    db: ArcDbRepo,
+    db: Arc<dyn PoolTrait>,
 }
 
 impl PhoneDao {
@@ -35,7 +37,7 @@ impl PhoneDao {
                 query.filter(user_phone::Column::Phone.like(format!("{v}%")))
             });
 
-        let total = states.clone().count(self.db.rdb()).await?;
+        let total = states.clone().count(self.db.db()).await?;
         if total == 0 {
             return Ok((vec![], total));
         }
@@ -44,7 +46,7 @@ impl PhoneDao {
             .order_by_desc(user_phone::Column::Id)
             .offset(page.offset())
             .limit(page.page_size())
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
 
         Ok((results, total))
@@ -52,14 +54,14 @@ impl PhoneDao {
 
     /// 获取详情信息
     pub async fn info(&self, id: i32) -> Result<Option<user_phone::Model>, DbErr> {
-        UserPhone::find_by_id(id).one(self.db.rdb()).await
+        UserPhone::find_by_id(id).one(self.db.db()).await
     }
 
     /// 通过手机号码获取详情信息
     pub async fn info_by_phone(&self, phone: String) -> Result<Option<user_phone::Model>, DbErr> {
         UserPhone::find()
             .filter(user_phone::Column::Phone.eq(phone))
-            .one(self.db.rdb())
+            .one(self.db.db())
             .await
     }
 
@@ -68,7 +70,7 @@ impl PhoneDao {
         &self,
         active_model: user_phone::ActiveModel,
     ) -> Result<user_phone::Model, DbErr> {
-        active_model.insert(self.db.wdb()).await
+        active_model.insert(self.db.db()).await
     }
 
     /// 更新信息
@@ -77,7 +79,7 @@ impl PhoneDao {
         let result = UserPhone::update_many()
             .set(active_model)
             .filter(user_phone::Column::Id.eq(id))
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
 
         Ok(result.rows_affected)
@@ -85,7 +87,7 @@ impl PhoneDao {
 
     /// 按主键删除信息
     pub async fn delete(&self, id: i32) -> Result<u64, DbErr> {
-        let result = UserPhone::delete_by_id(id).exec(self.db.wdb()).await?;
+        let result = UserPhone::delete_by_id(id).exec(self.db.db()).await?;
         Ok(result.rows_affected)
     }
 }

@@ -1,7 +1,9 @@
 //! 图片资源管理
+use std::sync::Arc;
+
 use crate::dto::image_resource::GetImageResourceListReq;
 
-use database::{ArcDbRepo, Pagination};
+use database::{Pagination, PoolTrait};
 use entity::{prelude::SysImageResource, sys_image_resource};
 use nject::injectable;
 
@@ -13,7 +15,7 @@ use sea_orm::{
 /// 数据访问
 #[injectable]
 pub struct ImageResourceDao {
-    db: ArcDbRepo,
+    db: Arc<dyn PoolTrait>,
 }
 
 impl ImageResourceDao {
@@ -35,7 +37,7 @@ impl ImageResourceDao {
                 query.filter(sys_image_resource::Column::Name.like(format!("{v}%")))
             });
 
-        let total = states.clone().count(self.db.rdb()).await?;
+        let total = states.clone().count(self.db.db()).await?;
         if total == 0 {
             return Ok((vec![], total));
         }
@@ -44,7 +46,7 @@ impl ImageResourceDao {
             .order_by_desc(sys_image_resource::Column::Id)
             .offset(page.offset())
             .limit(page.page_size())
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
 
         Ok((results, total))
@@ -53,7 +55,7 @@ impl ImageResourceDao {
     pub async fn info(&self, id: i32) -> Result<Option<sys_image_resource::Model>, DbErr> {
         SysImageResource::find()
             .filter(sys_image_resource::Column::Id.eq(id))
-            .one(self.db.rdb())
+            .one(self.db.db())
             .await
     }
 
@@ -64,7 +66,7 @@ impl ImageResourceDao {
     ) -> Result<Option<sys_image_resource::Model>, DbErr> {
         SysImageResource::find()
             .filter(sys_image_resource::Column::Hash.eq(hash))
-            .one(self.db.rdb())
+            .one(self.db.db())
             .await
     }
 
@@ -73,7 +75,7 @@ impl ImageResourceDao {
         &self,
         active_model: sys_image_resource::ActiveModel,
     ) -> Result<sys_image_resource::Model, DbErr> {
-        active_model.insert(self.db.wdb()).await
+        active_model.insert(self.db.db()).await
     }
 
     /// 批量添加数据
@@ -82,7 +84,7 @@ impl ImageResourceDao {
         active_models: Vec<sys_image_resource::ActiveModel>,
     ) -> Result<i32, DbErr> {
         let result = SysImageResource::insert_many(active_models)
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
         Ok(result.last_insert_id)
     }
@@ -96,7 +98,7 @@ impl ImageResourceDao {
         let result = SysImageResource::update_many()
             .set(active_model)
             .filter(sys_image_resource::Column::Id.eq(id))
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
 
         Ok(result.rows_affected)
@@ -105,7 +107,7 @@ impl ImageResourceDao {
     /// 按主键删除信息
     pub async fn delete(&self, id: i32) -> Result<u64, DbErr> {
         let result = SysImageResource::delete_by_id(id)
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
         Ok(result.rows_affected)
     }
@@ -114,7 +116,7 @@ impl ImageResourceDao {
     pub async fn batch_delete(&self, ids: Vec<i32>) -> Result<u64, DbErr> {
         let result = SysImageResource::delete_many()
             .filter(sys_image_resource::Column::Id.is_in(ids))
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
         Ok(result.rows_affected)
     }

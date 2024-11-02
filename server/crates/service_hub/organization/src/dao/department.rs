@@ -1,7 +1,9 @@
 //! 部门管理
+use std::sync::Arc;
+
 use crate::dto::department::GetDepartmentListReq;
 
-use database::{ArcDbRepo, Pagination};
+use database::{Pagination, PoolTrait};
 use entity::organization::{department, Department};
 use nject::injectable;
 
@@ -13,7 +15,7 @@ use sea_orm::{
 /// 数据访问
 #[injectable]
 pub struct DepartmentDao {
-    db: ArcDbRepo,
+    db: Arc<dyn PoolTrait>,
 }
 
 impl DepartmentDao {
@@ -21,7 +23,7 @@ impl DepartmentDao {
     pub async fn all(&self) -> Result<(Vec<department::Model>, u64), DbErr> {
         let results = Department::find()
             .order_by_asc(department::Column::Id)
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
         let total = results.len() as u64;
         Ok((results, total))
@@ -45,7 +47,7 @@ impl DepartmentDao {
                 query.filter(department::Column::Name.like(format!("{v}%")))
             });
 
-        let total = states.clone().count(self.db.rdb()).await?;
+        let total = states.clone().count(self.db.db()).await?;
         if total == 0 {
             return Ok((vec![], total));
         }
@@ -54,7 +56,7 @@ impl DepartmentDao {
             .order_by_desc(department::Column::Id)
             .offset(page.offset())
             .limit(page.page_size())
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
 
         Ok((results, total))
@@ -64,20 +66,20 @@ impl DepartmentDao {
     pub async fn children(&self, pid: i32) -> Result<Vec<department::Model>, DbErr> {
         Department::find()
             .filter(department::Column::Pid.eq(pid))
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await
     }
 
     /// 获取详情信息
     pub async fn info(&self, id: i32) -> Result<Option<department::Model>, DbErr> {
-        Department::find_by_id(id).one(self.db.rdb()).await
+        Department::find_by_id(id).one(self.db.db()).await
     }
 
     /// 通过名称获取详情信息
     pub async fn info_by_name(&self, name: String) -> Result<Option<department::Model>, DbErr> {
         Department::find()
             .filter(department::Column::Name.eq(name))
-            .one(self.db.rdb())
+            .one(self.db.db())
             .await
     }
 
@@ -86,7 +88,7 @@ impl DepartmentDao {
         &self,
         active_model: department::ActiveModel,
     ) -> Result<department::Model, DbErr> {
-        active_model.insert(self.db.wdb()).await
+        active_model.insert(self.db.db()).await
     }
 
     /// 更新数据
@@ -95,7 +97,7 @@ impl DepartmentDao {
         let result = Department::update_many()
             .set(active_model)
             .filter(department::Column::Id.eq(id))
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
 
         Ok(result.rows_affected)
@@ -108,13 +110,13 @@ impl DepartmentDao {
             status: Set(status),
             ..Default::default()
         };
-        let _ = active_model.update(self.db.wdb()).await?;
+        let _ = active_model.update(self.db.db()).await?;
         Ok(())
     }
 
     /// 按主键删除信息
     pub async fn delete(&self, id: i32) -> Result<u64, DbErr> {
-        let result = Department::delete_by_id(id).exec(self.db.wdb()).await?;
+        let result = Department::delete_by_id(id).exec(self.db.db()).await?;
         Ok(result.rows_affected)
     }
 }

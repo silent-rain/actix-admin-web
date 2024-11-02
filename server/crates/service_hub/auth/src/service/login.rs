@@ -1,11 +1,13 @@
 //! 登陆
 
+use std::sync::Arc;
+
 use crate::{
     common::captcha::check_captcha,
     dto::login::{BrowserInfo, LoginReq, LoginRsp},
 };
 
-use database::ArcDbRepo;
+use database::PoolTrait;
 use log::UserLoginDao;
 use system::ImageCaptchaDao;
 use user::{EmailDao, PhoneDao, UserBaseDao};
@@ -22,7 +24,7 @@ use utils::browser::parse_user_agent_async;
 /// 服务层
 #[injectable]
 pub struct LoginService {
-    db: ArcDbRepo,
+    db: Arc<dyn PoolTrait>,
     user_dao: UserBaseDao,
     email_dao: EmailDao,
     phone_dao: PhoneDao,

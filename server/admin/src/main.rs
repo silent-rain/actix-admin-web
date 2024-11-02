@@ -10,6 +10,7 @@ mod server;
 use crate::asset::{AssetAdminWebDist, AssetConfigFile, AssetDbDataFile};
 
 use app_state::{AppState, AssetState};
+use database::PoolTrait;
 use service_hub::inject::InjectProvider;
 use timer::{TimerRegister, TimerShutdown};
 
@@ -41,13 +42,9 @@ async fn main() -> std::io::Result<()> {
     // let database_url = conf.sqlite.dns();
 
     // 初始化数据库
-    let db = database::Pool::init(
-        database_url.clone(),
-        database_url,
-        conf.mysql.options.clone(),
-    )
-    .await
-    .expect("初始化数据库失败");
+    let db_pool = database::Pool::new(database_url, conf.mysql.options.clone())
+        .await
+        .expect("初始化数据库失败");
 
     // if conf.mysql.migrator {
     //     // 库表迁移器
@@ -55,7 +52,7 @@ async fn main() -> std::io::Result<()> {
     //         error!("表迁移失败. err: {e}");
     //     }
     // }
-    TimerRegister::start(db.clone());
+    TimerRegister::start(db_pool.clone());
     // let current = Handle::current();
     // let t_db = db.clone();
     // current.spawn(async {
@@ -72,7 +69,8 @@ async fn main() -> std::io::Result<()> {
     });
 
     // Using an Arc to share the provider across multiple threads.
-    let provider = InjectProvider::anew(Arc::new(db.clone()));
+    let provider = InjectProvider::new(Arc::new(db_pool.clone()));
+    let provider = Arc::new(provider);
 
     // 启动服务, 并阻塞
     if let Err(e) = server::start(app_state, asset_state, provider, conf).await {
@@ -83,7 +81,7 @@ async fn main() -> std::io::Result<()> {
     TimerShutdown::shutdown().await.expect("关闭定时任务失败");
 
     // 关闭数据库
-    let _ = db.close().await;
+    let _ = db_pool.close().await;
     info!("close database...");
 
     warn!("{}", "See you again~".yellow());

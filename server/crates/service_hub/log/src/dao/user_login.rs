@@ -1,8 +1,10 @@
 //! 登陆日志管理
 
+use std::sync::Arc;
+
 use crate::dto::user_login::GetUserLoginListReq;
 
-use database::{ArcDbRepo, Pagination};
+use database::{Pagination, PoolTrait};
 use entity::log_user_login;
 use entity::prelude::LogUserLogin;
 
@@ -15,11 +17,11 @@ use sea_orm::{
 /// 数据访问
 #[injectable]
 pub struct UserLoginDao {
-    db: ArcDbRepo,
+    db: Arc<dyn PoolTrait>,
 }
 
 impl UserLoginDao {
-    pub fn new(db: ArcDbRepo) -> Self {
+    pub fn new(db: Arc<dyn PoolTrait>) -> Self {
         UserLoginDao { db }
     }
 
@@ -44,7 +46,7 @@ impl UserLoginDao {
                 query.filter(log_user_login::Column::Username.like(format!("{v}%")))
             });
 
-        let total = states.clone().count(self.db.rdb()).await?;
+        let total = states.clone().count(self.db.db()).await?;
         if total == 0 {
             return Ok((vec![], total));
         }
@@ -53,7 +55,7 @@ impl UserLoginDao {
             .order_by_desc(log_user_login::Column::Id)
             .offset(page.offset())
             .limit(page.page_size())
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
 
         Ok((results, total))
@@ -61,7 +63,7 @@ impl UserLoginDao {
 
     /// 获取详情信息
     pub async fn info(&self, id: i32) -> Result<Option<log_user_login::Model>, DbErr> {
-        LogUserLogin::find_by_id(id).one(self.db.rdb()).await
+        LogUserLogin::find_by_id(id).one(self.db.db()).await
     }
 
     /// 根据Token获取详情信息
@@ -72,7 +74,7 @@ impl UserLoginDao {
         LogUserLogin::find()
             .filter(log_user_login::Column::Token.eq(token))
             .order_by_desc(log_user_login::Column::Id)
-            .one(self.db.rdb())
+            .one(self.db.db())
             .await
     }
 
@@ -81,7 +83,7 @@ impl UserLoginDao {
         &self,
         active_model: log_user_login::ActiveModel,
     ) -> Result<log_user_login::Model, DbErr> {
-        active_model.insert(self.db.wdb()).await
+        active_model.insert(self.db.db()).await
     }
 
     /// 更新数据
@@ -90,7 +92,7 @@ impl UserLoginDao {
         let result = LogUserLogin::update_many()
             .set(active_model)
             .filter(log_user_login::Column::Id.eq(id))
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
 
         Ok(result.rows_affected)
@@ -103,7 +105,7 @@ impl UserLoginDao {
             status: Set(status),
             ..Default::default()
         };
-        let _ = active_model.update(self.db.wdb()).await?;
+        let _ = active_model.update(self.db.db()).await?;
         Ok(())
     }
 }

@@ -1,6 +1,8 @@
 //! 注册
 
-use database::ArcDbRepo;
+use std::sync::Arc;
+
+use database::PoolTrait;
 use entity::user::{user_base, user_email, user_phone};
 
 use nject::injectable;
@@ -11,13 +13,13 @@ use crate::dto::register::RegisterReq;
 /// 数据访问
 #[injectable]
 pub struct RegisterDao {
-    db: ArcDbRepo,
+    db: Arc<dyn PoolTrait>,
 }
 
 impl RegisterDao {
     /// 添加用户
     pub async fn add_user(&self, req: RegisterReq) -> Result<user_base::Model, DbErr> {
-        let txn = self.db.wdb().begin().await?;
+        let txn = self.db.db().begin().await?;
 
         // 添加用户
         let user = self.txn_add_user(&txn, req.clone()).await?;

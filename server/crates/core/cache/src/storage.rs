@@ -140,7 +140,7 @@ impl Cache {
     pub async fn get_with_expiry(&self, key: &str) -> Option<Entry> {
         if let Some(entry) = self.cache.get(&key.to_string()).await {
             if entry.is_expired() {
-                self.cache.invalidate(&key.to_string()).await; // 如果过期，则移除缓存条目。
+                self.cache.remove(&key.to_string()).await; // 如果过期，则移除缓存条目。
                 None
             } else {
                 Some(entry) // 如果未过期，则返回缓存条目。
@@ -172,11 +172,12 @@ mod tests {
     }
 
     #[tokio::test]
+    // #[should_panic]
     async fn test_cache_expiry() {
         let cache = Cache::default();
 
         cache
-            .set_with_expiry("silent", "rain".to_string(), time::Duration::from_secs(5))
+            .set_with_expiry("silent", "rain".to_string(), time::Duration::from_secs(3))
             .await;
 
         tokio::time::sleep(time::Duration::from_secs(2)).await;
@@ -187,7 +188,7 @@ mod tests {
         assert!(!result.is_expired());
         // println!("result: {:#?}", result);
 
-        tokio::time::sleep(time::Duration::from_secs(3)).await;
+        tokio::time::sleep(time::Duration::from_secs(5)).await;
 
         assert!((cache.get_with_expiry("silent").await).is_none());
     }

@@ -19,22 +19,22 @@ async fn mock_pool() -> Result<(), DbErr> {
         `status` INT(10) NOT NULL,
         PRIMARY KEY (`id`)
     );"#;
-    let result = pool.wdb().execute_unprepared(sql).await?;
+    let result = pool.db().execute_unprepared(sql).await?;
     info!("result1: {:#?}", result);
 
     // 插入数据
     let sql = r#"INSERT INTO user (id,user_id, status)
      VALUES (1,1,1);"#;
-    pool.wdb().execute_unprepared(sql).await?;
+    pool.db().execute_unprepared(sql).await?;
 
     // 查看数据
     let stmt = Statement::from_sql_and_values(DbBackend::MySql, r#"SELECT * FROM  user"#, []);
-    let result = pool.wdb().query_one(stmt).await?;
+    let result = pool.db().query_one(stmt).await?;
     info!("result2: {:#?}", result);
     assert!(result.is_some());
 
     // 获取数据
-    let user = User::find().one(pool.wdb()).await?;
+    let user = User::find().one(pool.db()).await?;
     info!("user: {:#?}", user);
     assert!(user.is_some());
     Ok(())
@@ -47,16 +47,16 @@ async fn mock_entity() -> Result<(), DbErr> {
     // 插入数据
     let sql = r#"INSERT INTO user (id,user_id, status)
      VALUES (1,1,1);"#;
-    pool.wdb().execute_unprepared(sql).await?;
+    pool.db().execute_unprepared(sql).await?;
 
     // 查看数据
     let stmt = Statement::from_sql_and_values(DbBackend::Sqlite, r#"SELECT * FROM  user"#, []);
-    let result = pool.wdb().query_one(stmt).await?;
+    let result = pool.db().query_one(stmt).await?;
     info!("result: {:#?}", result);
     assert!(result.is_some());
 
     // 获取数据
-    let user = User::find().one(pool.wdb()).await?;
+    let user = User::find().one(pool.db()).await?;
     info!("user: {:#?}", user);
     assert!(user.is_some());
     Ok(())
@@ -76,16 +76,16 @@ async fn mock_str() -> Result<(), DbErr> {
     // 插入数据
     let sql = r#"INSERT INTO user (id,user_id, status)
      VALUES (1,1,1);"#;
-    pool.wdb().execute_unprepared(sql).await?;
+    pool.db().execute_unprepared(sql).await?;
 
     // 查看数据
     let stmt = Statement::from_sql_and_values(DbBackend::Sqlite, r#"SELECT * FROM  user"#, []);
-    let result = pool.wdb().query_one(stmt).await?;
+    let result = pool.db().query_one(stmt).await?;
     info!("result: {:#?}", result);
     assert!(result.is_some());
 
     // 获取数据
-    let user = User::find().one(pool.wdb()).await?;
+    let user = User::find().one(pool.db()).await?;
     info!("user: {:#?}", user);
     assert!(user.is_some());
 

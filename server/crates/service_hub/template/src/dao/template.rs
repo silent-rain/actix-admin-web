@@ -1,10 +1,10 @@
 //! 模板管理
 
-use std::str::FromStr;
+use std::{str::FromStr, sync::Arc};
 
 use crate::dto::template::GetAppTemplateListReq;
 
-use database::{ArcDbRepo, Pagination};
+use database::{Pagination, PoolTrait};
 use entity::{app_template, prelude::AppTemplate};
 
 use nject::injectable;
@@ -16,7 +16,7 @@ use sea_orm::{
 /// 数据访问
 #[injectable]
 pub struct AppTemplateDao {
-    pub db: ArcDbRepo,
+    pub db: Arc<dyn PoolTrait>,
 }
 
 impl AppTemplateDao {
@@ -24,7 +24,7 @@ impl AppTemplateDao {
     pub async fn all(&self) -> Result<(Vec<app_template::Model>, u64), DbErr> {
         let results = AppTemplate::find()
             .order_by_asc(app_template::Column::Id)
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
         let total = results.len() as u64;
         Ok((results, total))
@@ -45,7 +45,7 @@ impl AppTemplateDao {
                 query.filter(app_template::Column::CreatedAt.lt(v))
             });
 
-        let total = states.clone().count(self.db.rdb()).await?;
+        let total = states.clone().count(self.db.db()).await?;
         if total == 0 {
             return Ok((vec![], total));
         }
@@ -59,7 +59,7 @@ impl AppTemplateDao {
             .order_by_desc(order_by_col)
             .offset(page.offset())
             .limit(page.page_size())
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
 
         Ok((results, total))
@@ -67,7 +67,7 @@ impl AppTemplateDao {
 
     /// 获取详情数据
     pub async fn info(&self, id: i32) -> Result<Option<app_template::Model>, DbErr> {
-        AppTemplate::find_by_id(id).one(self.db.rdb()).await
+        AppTemplate::find_by_id(id).one(self.db.db()).await
     }
 
     /// 添加数据
@@ -75,7 +75,7 @@ impl AppTemplateDao {
         &self,
         active_model: app_template::ActiveModel,
     ) -> Result<app_template::Model, DbErr> {
-        active_model.insert(self.db.wdb()).await
+        active_model.insert(self.db.db()).await
     }
 
     /// 批量添加数据
@@ -84,7 +84,7 @@ impl AppTemplateDao {
         active_models: Vec<app_template::ActiveModel>,
     ) -> Result<i32, DbErr> {
         let result = AppTemplate::insert_many(active_models)
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
         Ok(result.last_insert_id)
     }
@@ -95,7 +95,7 @@ impl AppTemplateDao {
         let result = AppTemplate::update_many()
             .set(active_model)
             .filter(app_template::Column::Id.eq(id))
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
 
         Ok(result.rows_affected)
@@ -108,13 +108,13 @@ impl AppTemplateDao {
             status: Set(status),
             ..Default::default()
         };
-        let _ = active_model.update(self.db.wdb()).await?;
+        let _ = active_model.update(self.db.db()).await?;
         Ok(())
     }
 
     /// 删除数据
     pub async fn delete(&self, id: i32) -> Result<u64, DbErr> {
-        let result = AppTemplate::delete_by_id(id).exec(self.db.wdb()).await?;
+        let result = AppTemplate::delete_by_id(id).exec(self.db.db()).await?;
         Ok(result.rows_affected)
     }
 
@@ -122,7 +122,7 @@ impl AppTemplateDao {
     pub async fn batch_delete(&self, ids: Vec<i32>) -> Result<u64, DbErr> {
         let result = AppTemplate::delete_many()
             .filter(app_template::Column::Id.is_in(ids))
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
         Ok(result.rows_affected)
     }

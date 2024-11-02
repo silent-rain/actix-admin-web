@@ -8,7 +8,7 @@ use scheduler::{Job, JobScheduler};
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let database_url = "mysql://one:pass@127.0.0.1:3306/actix_admin_web".to_owned();
     let options = DbOptions::default();
-    let db = database::Pool::init(database_url.clone(), database_url, options)
+    let db = database::Pool::new(database_url, options)
         .await
         .expect("初始化数据库失败");
 

@@ -1,7 +1,9 @@
 //! 会员等级管理
+use std::sync::Arc;
+
 use crate::dto::member_level::GetMemberLevelListReq;
 
-use database::{ArcDbRepo, Pagination};
+use database::{Pagination, PoolTrait};
 use entity::user::{member_level, MemberLevel};
 use nject::injectable;
 
@@ -13,7 +15,7 @@ use sea_orm::{
 /// 数据访问
 #[injectable]
 pub struct MemberLevelDao {
-    db: ArcDbRepo,
+    db: Arc<dyn PoolTrait>,
 }
 
 impl MemberLevelDao {
@@ -21,7 +23,7 @@ impl MemberLevelDao {
     pub async fn all(&self) -> Result<(Vec<member_level::Model>, u64), DbErr> {
         let results = MemberLevel::find()
             .order_by_asc(member_level::Column::Id)
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
         let total = results.len() as u64;
         Ok((results, total))
@@ -45,7 +47,7 @@ impl MemberLevelDao {
                 query.filter(member_level::Column::Name.like(format!("{v}%")))
             });
 
-        let total = states.clone().count(self.db.rdb()).await?;
+        let total = states.clone().count(self.db.db()).await?;
         if total == 0 {
             return Ok((vec![], total));
         }
@@ -54,7 +56,7 @@ impl MemberLevelDao {
             .order_by_desc(member_level::Column::Id)
             .offset(page.offset())
             .limit(page.page_size())
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
 
         Ok((results, total))
@@ -62,14 +64,14 @@ impl MemberLevelDao {
 
     /// 获取详情信息
     pub async fn info(&self, id: i32) -> Result<Option<member_level::Model>, DbErr> {
-        MemberLevel::find_by_id(id).one(self.db.rdb()).await
+        MemberLevel::find_by_id(id).one(self.db.db()).await
     }
 
     /// 通过名称获取详情信息
     pub async fn info_by_name(&self, name: String) -> Result<Option<member_level::Model>, DbErr> {
         MemberLevel::find()
             .filter(member_level::Column::Name.eq(name))
-            .one(self.db.rdb())
+            .one(self.db.db())
             .await
     }
 
@@ -77,7 +79,7 @@ impl MemberLevelDao {
     pub async fn info_by_level(&self, level: u16) -> Result<Option<member_level::Model>, DbErr> {
         MemberLevel::find()
             .filter(member_level::Column::Level.eq(level))
-            .one(self.db.rdb())
+            .one(self.db.db())
             .await
     }
 
@@ -86,7 +88,7 @@ impl MemberLevelDao {
         &self,
         active_model: member_level::ActiveModel,
     ) -> Result<member_level::Model, DbErr> {
-        active_model.insert(self.db.wdb()).await
+        active_model.insert(self.db.db()).await
     }
 
     /// 更新数据
@@ -95,7 +97,7 @@ impl MemberLevelDao {
         let result = MemberLevel::update_many()
             .set(active_model)
             .filter(member_level::Column::Id.eq(id))
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
 
         Ok(result.rows_affected)
@@ -108,13 +110,13 @@ impl MemberLevelDao {
             status: Set(status),
             ..Default::default()
         };
-        let _ = active_model.update(self.db.wdb()).await?;
+        let _ = active_model.update(self.db.db()).await?;
         Ok(())
     }
 
     /// 按主键删除信息
     pub async fn delete(&self, id: i32) -> Result<u64, DbErr> {
-        let result = MemberLevel::delete_by_id(id).exec(self.db.wdb()).await?;
+        let result = MemberLevel::delete_by_id(id).exec(self.db.db()).await?;
         Ok(result.rows_affected)
     }
 }

@@ -9,7 +9,7 @@
 //!     - 添加任务运行状态日志
 use crate::{dao::Dao, error::Error, Job, JobScheduler};
 
-use database::DbRepo;
+use database::PoolTrait;
 use entity::schedule::schedule_job;
 
 use async_trait::async_trait;
@@ -19,7 +19,7 @@ use tracing::{error, info};
 #[async_trait]
 pub trait SysTaskTrait<DB>
 where
-    DB: DbRepo + Clone + Send + Sync + 'static,
+    DB: PoolTrait + Clone + Send + Sync + 'static,
     Self: Send + Sync + 'static,
 {
     /// 系统定时任务编码
@@ -37,7 +37,7 @@ where
 /// 系统定时任务注册
 pub struct SysTaskRegister<DB>
 where
-    DB: DbRepo + Clone + Send + Sync + 'static,
+    DB: PoolTrait + Clone + Send + Sync + 'static,
 {
     dao: Dao<DB>,
     tasks: Vec<Box<dyn SysTaskTrait<DB>>>,
@@ -45,7 +45,7 @@ where
 
 impl<DB> SysTaskRegister<DB>
 where
-    DB: DbRepo + Clone + Send + Sync + 'static,
+    DB: PoolTrait + Clone + Send + Sync + 'static,
 {
     pub fn new(db: DB) -> Self {
         SysTaskRegister {
@@ -136,7 +136,7 @@ where
 /// 用户定时任务注册
 pub struct UserTaskRegister<DB>
 where
-    DB: DbRepo + Clone + Send + Sync + 'static,
+    DB: PoolTrait + Clone + Send + Sync + 'static,
 {
     db: DB,
     dao: Dao<DB>,
@@ -144,7 +144,7 @@ where
 
 impl<DB> UserTaskRegister<DB>
 where
-    DB: DbRepo + Clone + Send + Sync + 'static,
+    DB: PoolTrait + Clone + Send + Sync + 'static,
 {
     pub fn new(db: DB) -> Self {
         UserTaskRegister {
