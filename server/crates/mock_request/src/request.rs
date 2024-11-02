@@ -48,7 +48,7 @@ where
             return self;
         }
         tracing_subscriber::fmt()
-            .with_max_level(tracing::Level::WARN)
+            .with_max_level(tracing::Level::DEBUG)
             .with_level(true)
             .with_line_number(true)
             .init();
@@ -81,6 +81,7 @@ where
         &self,
     ) -> impl Service<Request, Response = ServiceResponse, Error = actix_web::Error> {
         let provider = InjectProvider::new(self.pool.clone());
+        let provider = Arc::new(provider);
 
         test::init_service(
             App::new()
@@ -138,6 +139,7 @@ where
             );
 
             error!("match_info: {:#?}", response.request().match_info());
+            error!("response body: {:#?}", response.response().body());
         }
         assert!(response.status().is_success());
         let body: Response = Self::json(response).await?;
