@@ -2,7 +2,7 @@
 
 use crate::dto::schedule_event_log::GetScheduleEventLogListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::schedule::{schedule_event_log, ScheduleEventLog};
 
 use nject::injectable;
@@ -13,11 +13,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct ScheduleEventLogDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct ScheduleEventLogDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> ScheduleEventLogDao<'a> {
+impl ScheduleEventLogDao {
     /// 获取数据列表
     pub async fn list(
         &self,

@@ -1,7 +1,7 @@
 //! 会员等级管理
 use crate::dto::member_level::GetMemberLevelListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::user::{member_level, MemberLevel};
 use nject::injectable;
 
@@ -12,11 +12,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct MemberLevelDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct MemberLevelDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> MemberLevelDao<'a> {
+impl MemberLevelDao {
     /// 获取所有数据
     pub async fn all(&self) -> Result<(Vec<member_level::Model>, u64), DbErr> {
         let results = MemberLevel::find()

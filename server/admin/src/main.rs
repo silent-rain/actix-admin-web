@@ -72,7 +72,7 @@ async fn main() -> std::io::Result<()> {
     });
 
     // Using an Arc to share the provider across multiple threads.
-    let provider = InjectProvider::anew(db.clone());
+    let provider = InjectProvider::anew(Arc::new(db.clone()));
 
     // 启动服务, 并阻塞
     if let Err(e) = server::start(app_state, asset_state, provider, conf).await {

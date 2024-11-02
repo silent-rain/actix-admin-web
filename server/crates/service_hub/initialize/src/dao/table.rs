@@ -3,7 +3,7 @@
 use crate::dto::table::AddAdminUserReq;
 use crate::dto::table::TableDataSql;
 
-use database::DbRepo;
+use database::ArcDbRepo;
 use entity::{
     perm_menu_role_rel, perm_openapi_role_rel,
     prelude::{PermMenu, PermMenuRoleRel, PermOpenapi, PermOpenapiRoleRel},
@@ -20,11 +20,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct TableDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct TableDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> TableDao<'a> {
+impl TableDao {
     /// 获取第一个用户即为管理员
     pub async fn admin_user(&self) -> Result<Option<user_base::Model>, DbErr> {
         let result = UserBase::find()

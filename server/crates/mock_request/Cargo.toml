@@ -1,0 +1,43 @@
+[package]
+name = "mock_request"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+database = { path = "../core/database" }
+entity = { path = "../core/entity" }
+migration = { path = "../core/migration" }
+response = { path = "../core/response" }
+
+inject = { path = "../inject" }
+
+
+actix-web = { workspace = true }
+actix-http = { workspace = true }
+
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true, features = [
+    "env-filter",
+    "time",
+    "local-time",
+    "tracing-log",
+] }
+
+serde = { workspace = true, features = ["derive"] }
+serde_repr = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+sea-orm-migration = { workspace = true, features = [
+    # Enable at least one `ASYNC_RUNTIME` and `DATABASE_DRIVER` feature if you want to run migration via CLI.
+    # View the list of supported features at https://www.sea-ql.org/SeaORM/docs/install-and-config/database-and-async-runtime.
+    # e.g.
+    "runtime-tokio-rustls", # `ASYNC_RUNTIME` feature
+    # `DATABASE_DRIVER` feature
+    "sqlx-mysql",
+    "sqlx-sqlite",
+] }
+tokio = { workspace = true, features = [
+    "macros",
+    "rt-multi-thread",
+    "test-util",
+] }

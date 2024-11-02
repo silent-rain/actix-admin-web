@@ -2,7 +2,7 @@
 
 use crate::dto::department_role_rel::GetDepartmentRoleRelListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::organization::{department_role_rel, DepartmentRoleRel};
 
 use nject::injectable;
@@ -13,12 +13,12 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct DepartmentRoleRelDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct DepartmentRoleRelDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> DepartmentRoleRelDao<'a> {
-    pub fn new(db: &'a dyn DbRepo) -> Self {
+impl DepartmentRoleRelDao {
+    pub fn new(db: ArcDbRepo) -> Self {
         DepartmentRoleRelDao { db }
     }
     /// 获取数据列表

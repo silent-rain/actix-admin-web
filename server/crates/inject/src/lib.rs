@@ -1,23 +1,23 @@
 //! 依赖注入
 use std::sync::Arc;
 
-use database::{DbRepo, Pool};
+use database::ArcDbRepo;
 
 use nject::provider;
 
 #[provider]
 pub struct InjectProvider {
-    #[provide(dyn DbRepo)]
-    db: Pool,
+    #[provide(ArcDbRepo, |x| x.clone())]
+    adb: ArcDbRepo,
 }
 
 impl InjectProvider {
-    pub fn new(db: Pool) -> Self {
-        InjectProvider { db }
+    pub fn new(db: ArcDbRepo) -> Self {
+        InjectProvider { adb: db }
     }
 
-    pub fn anew(db: Pool) -> Arc<Self> {
-        let provide = InjectProvider { db };
+    pub fn anew(db: ArcDbRepo) -> Arc<Self> {
+        let provide = InjectProvider { adb: db };
 
         Arc::new(provide)
     }

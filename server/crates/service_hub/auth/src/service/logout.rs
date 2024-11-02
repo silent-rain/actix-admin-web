@@ -11,11 +11,11 @@ use tracing::error;
 
 /// 服务层
 #[injectable]
-pub struct Logoutervice<'a> {
-    user_login_dao: UserLoginDao<'a>,
+pub struct Logoutervice {
+    user_login_dao: UserLoginDao,
 }
 
-impl<'a> Logoutervice<'a> {
+impl Logoutervice {
     /// 登出
     pub async fn logout(&self, user_id: i32, user_login_id: i32) -> Result<(), ErrorMsg> {
         // 移除用户鉴权缓存

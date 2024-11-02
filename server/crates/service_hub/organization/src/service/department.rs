@@ -14,11 +14,11 @@ use utils::list_tree::GenericTree;
 
 /// 服务层
 #[injectable]
-pub struct DepartmentService<'a> {
-    department_dao: DepartmentDao<'a>,
+pub struct DepartmentService {
+    department_dao: DepartmentDao,
 }
 
-impl<'a> DepartmentService<'a> {
+impl DepartmentService {
     /// 获取列表数据
     pub async fn list(
         &self,

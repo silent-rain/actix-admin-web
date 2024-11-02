@@ -14,11 +14,11 @@ use uuid::Uuid;
 
 /// 服务层
 #[injectable]
-pub struct TokenService<'a> {
-    token_dao: TokenDao<'a>,
+pub struct TokenService {
+    token_dao: TokenDao,
 }
 
-impl<'a> TokenService<'a> {
+impl TokenService {
     /// 获取列表数据
     pub async fn list(
         &self,

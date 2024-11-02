@@ -1,7 +1,7 @@
 //! 用户手机号管理
 use crate::dto::phone::GetPhoneListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::user::{user_phone, UserPhone};
 
 use nject::injectable;
@@ -12,11 +12,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct PhoneDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct PhoneDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> PhoneDao<'a> {
+impl PhoneDao {
     /// 获取数据列表
     pub async fn list(&self, req: GetPhoneListReq) -> Result<(Vec<user_phone::Model>, u64), DbErr> {
         let page = Pagination::new(req.page, req.page_size);

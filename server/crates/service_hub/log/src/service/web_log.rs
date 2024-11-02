@@ -13,11 +13,11 @@ use tracing::error;
 
 /// 服务层
 #[injectable]
-pub struct WebLogService<'a> {
-    log_web_dao: WebLogDao<'a>,
+pub struct WebLogService {
+    log_web_dao: WebLogDao,
 }
 
-impl<'a> WebLogService<'a> {
+impl WebLogService {
     /// 获取列表数据
     pub async fn list(
         &self,

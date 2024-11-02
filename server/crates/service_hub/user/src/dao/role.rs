@@ -1,7 +1,7 @@
 //! 角色管理
 use crate::dto::role::GetRoleListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::user::{user_role, UserRole};
 use nject::injectable;
 
@@ -12,11 +12,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct RoleDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct RoleDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> RoleDao<'a> {
+impl RoleDao {
     /// 获取所有数据
     pub async fn all(&self) -> Result<(Vec<user_role::Model>, u64), DbErr> {
         let results = UserRole::find()

@@ -13,11 +13,11 @@ use tracing::error;
 
 /// 服务层
 #[injectable]
-pub struct DictDataService<'a> {
-    dict_data_dao: DictDataDao<'a>,
+pub struct DictDataService {
+    dict_data_dao: DictDataDao,
 }
 
-impl<'a> DictDataService<'a> {
+impl DictDataService {
     /// 获取列表数据
     pub async fn list(
         &self,

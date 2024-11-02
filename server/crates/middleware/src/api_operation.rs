@@ -172,12 +172,12 @@ impl<S> ApiOperationMiddlewareService<S> {
         let (res, body) = res.into_parts();
         // TODO body 最大值限制, 防止日志刺穿
         let body_bytes = to_bytes(body).await.unwrap();
-        let body = String::from_utf8_lossy(&body_bytes).to_string();
+        let body_str = String::from_utf8_lossy(&body_bytes).to_string();
 
-        let res = res.set_body(BoxBody::new(body.clone()));
+        let res = res.set_body(BoxBody::new(body_bytes));
         let service = ServiceResponse::new(req, res);
 
-        (service, body)
+        (service, body_str)
     }
 
     /// 解析请求信息

@@ -1,7 +1,7 @@
 //! 菜单管理
 use crate::dto::menu::GetMenuListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::{perm_menu, prelude::PermMenu};
 use nject::injectable;
 
@@ -12,11 +12,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct MenuDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct MenuDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> MenuDao<'a> {
+impl MenuDao {
     /// 获取所有数据
     pub async fn all(&self) -> Result<(Vec<perm_menu::Model>, u64), DbErr> {
         let results = PermMenu::find()

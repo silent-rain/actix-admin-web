@@ -1,7 +1,7 @@
 //! 部门管理
 use crate::dto::department::GetDepartmentListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::organization::{department, Department};
 use nject::injectable;
 
@@ -12,11 +12,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct DepartmentDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct DepartmentDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> DepartmentDao<'a> {
+impl DepartmentDao {
     /// 获取所有数据
     pub async fn all(&self) -> Result<(Vec<department::Model>, u64), DbErr> {
         let results = Department::find()

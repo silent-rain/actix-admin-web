@@ -1,7 +1,7 @@
 //! 用户邮箱管理
 use crate::dto::email::GetEmailListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::user::{user_email, UserEmail};
 
 use nject::injectable;
@@ -12,11 +12,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct EmailDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct EmailDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> EmailDao<'a> {
+impl EmailDao {
     /// 获取数据列表
     pub async fn list(&self, req: GetEmailListReq) -> Result<(Vec<user_email::Model>, u64), DbErr> {
         let page = Pagination::new(req.page, req.page_size);

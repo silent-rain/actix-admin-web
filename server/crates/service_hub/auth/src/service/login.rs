@@ -5,6 +5,7 @@ use crate::{
     dto::login::{BrowserInfo, LoginReq, LoginRsp},
 };
 
+use database::ArcDbRepo;
 use log::UserLoginDao;
 use system::ImageCaptchaDao;
 use user::{EmailDao, PhoneDao, UserBaseDao};
@@ -16,19 +17,19 @@ use jwt::encode_token;
 use nject::injectable;
 use sea_orm::Set;
 use tracing::error;
-use utils::browser::parse_user_agent;
+use utils::browser::parse_user_agent_async;
 
 /// 服务层
 #[injectable]
-pub struct LoginService<'a> {
-    user_dao: UserBaseDao<'a>,
-    email_dao: EmailDao<'a>,
-    phone_dao: PhoneDao<'a>,
-    user_login_dao: UserLoginDao<'a>,
-    captcha_dao: ImageCaptchaDao<'a>,
+pub struct LoginService {
+    db: ArcDbRepo,
+    user_dao: UserBaseDao,
+    email_dao: EmailDao,
+    phone_dao: PhoneDao,
+    captcha_dao: ImageCaptchaDao,
 }
 
-impl<'a> LoginService<'a> {
+impl LoginService {
     /// 登陆
     pub async fn login(
         &self,
@@ -54,8 +55,7 @@ impl<'a> LoginService<'a> {
                 "".to_owned(),
                 Some("用户已被禁用".to_owned()),
                 log_user_login::enums::Status::Failed,
-            )
-            .await?;
+            );
             error!("用户已被禁用");
             return Err(Error::LoginUserDisableError
                 .into_msg()
@@ -70,8 +70,7 @@ impl<'a> LoginService<'a> {
                 "".to_owned(),
                 Some("账号或密码错误".to_owned()),
                 log_user_login::enums::Status::Failed,
-            )
-            .await?;
+            );
             error!("账号或密码错误");
             return Err(Error::LoginPasswordError
                 .into_msg()
@@ -91,8 +90,7 @@ impl<'a> LoginService<'a> {
             token.clone(),
             None,
             log_user_login::enums::Status::Success,
-        )
-        .await?;
+        );
 
         // 返回Token
         Ok(LoginRsp {
@@ -184,41 +182,50 @@ impl<'a> LoginService<'a> {
     }
 
     /// 添加登陆日志
-    async fn add_login_log(
+    fn add_login_log(
         &self,
         user: user_base::Model,
         browser_info: BrowserInfo,
         token: String,
         desc: Option<String>,
         status: log_user_login::enums::Status,
-    ) -> Result<log_user_login::Model, ErrorMsg> {
-        let (device, system, browser) =
-            parse_user_agent(browser_info.user_agent.clone()).map_err(|err| {
-                error!("User-Agent解析错误, err: {:#?}", err);
-                Error::UserAgentParserError(err)
-            })?;
+    ) {
+        let db = self.db.clone();
 
-        let data = log_user_login::ActiveModel {
-            user_id: Set(user.id),
-            username: Set(user.username),
-            token: Set(token),
-            remote_addr: Set(browser_info.remote_addr),
-            user_agent: Set(browser_info.user_agent),
-            status: Set(status as i8),
-            device: Set(Some(device)),
-            system: Set(Some(system)),
-            browser: Set(Some(browser)),
-            desc: Set(desc),
-            ..Default::default()
-        };
+        actix_web::rt::spawn(async move {
+            let (device, system, browser) =
+                match parse_user_agent_async(browser_info.user_agent.clone()).await {
+                    Ok(v) => v,
+                    Err(err) => {
+                        error!("User-Agent解析错误, err: {:#?}", err);
+                        return;
+                    }
+                };
 
-        let result = self.user_login_dao.add(data).await.map_err(|err| {
-            error!("添加登陆日志失败, err: {:#?}", err);
-            code::Error::DbAddError
-                .into_msg()
-                .with_msg("添加登陆日志失败")
-        })?;
+            let data = log_user_login::ActiveModel {
+                user_id: Set(user.id),
+                username: Set(user.username),
+                token: Set(token),
+                remote_addr: Set(browser_info.remote_addr),
+                user_agent: Set(browser_info.user_agent),
+                status: Set(status as i8),
+                device: Set(Some(device)),
+                system: Set(Some(system)),
+                browser: Set(Some(browser)),
+                desc: Set(desc),
+                ..Default::default()
+            };
 
-        Ok(result)
+            let user_login_dao = UserLoginDao::new(db);
+            let result = user_login_dao.add(data).await.map_err(|err| {
+                error!("添加登陆日志失败, err: {:#?}", err);
+                code::Error::DbAddError
+                    .into_msg()
+                    .with_msg("添加登陆日志失败")
+            });
+            if let Err(err) = result {
+                error!("添加登陆日志失败, err: {:#?}", err);
+            }
+        });
     }
 }
