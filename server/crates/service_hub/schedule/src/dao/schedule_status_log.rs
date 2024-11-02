@@ -1,8 +1,10 @@
 //! 任务调度状态日志管理
 
+use std::sync::Arc;
+
 use crate::dto::schedule_status_log::GetScheduleStatusLogListLogReq;
 
-use database::{ArcDbRepo, Pagination};
+use database::{Pagination, PoolTrait};
 use entity::schedule::{schedule_status_log, ScheduleStatusLog};
 
 use nject::injectable;
@@ -14,7 +16,7 @@ use sea_orm::{
 /// 数据访问
 #[injectable]
 pub struct ScheduleStatusLogDao {
-    db: ArcDbRepo,
+    db: Arc<dyn PoolTrait>,
 }
 
 impl ScheduleStatusLogDao {
@@ -42,7 +44,7 @@ impl ScheduleStatusLogDao {
                 query.filter(schedule_status_log::Column::Status.eq(v))
             });
 
-        let total = states.clone().count(self.db.rdb()).await?;
+        let total = states.clone().count(self.db.db()).await?;
         if total == 0 {
             return Ok((vec![], total));
         }
@@ -51,7 +53,7 @@ impl ScheduleStatusLogDao {
             .order_by_desc(schedule_status_log::Column::Id)
             .offset(page.offset())
             .limit(page.page_size())
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
 
         Ok((results, total))
@@ -59,7 +61,7 @@ impl ScheduleStatusLogDao {
 
     /// 获取详情信息
     pub async fn info(&self, id: i32) -> Result<Option<schedule_status_log::Model>, DbErr> {
-        ScheduleStatusLog::find_by_id(id).one(self.db.rdb()).await
+        ScheduleStatusLog::find_by_id(id).one(self.db.db()).await
     }
 
     /// 获取最新的UUID数据
@@ -70,7 +72,7 @@ impl ScheduleStatusLogDao {
         ScheduleStatusLog::find()
             .filter(schedule_status_log::Column::JobId.eq(job_id))
             .order_by_desc(schedule_status_log::Column::Id)
-            .one(self.db.rdb())
+            .one(self.db.db())
             .await
     }
 
@@ -79,7 +81,7 @@ impl ScheduleStatusLogDao {
         &self,
         active_model: schedule_status_log::ActiveModel,
     ) -> Result<schedule_status_log::Model, DbErr> {
-        active_model.insert(self.db.wdb()).await
+        active_model.insert(self.db.db()).await
     }
 
     /// 更新数据
@@ -91,7 +93,7 @@ impl ScheduleStatusLogDao {
         let result = ScheduleStatusLog::update_many()
             .set(active_model)
             .filter(schedule_status_log::Column::Id.eq(id))
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
 
         Ok(result.rows_affected)
@@ -104,14 +106,14 @@ impl ScheduleStatusLogDao {
             status: Set(status),
             ..Default::default()
         };
-        let _ = active_model.update(self.db.wdb()).await?;
+        let _ = active_model.update(self.db.db()).await?;
         Ok(())
     }
 
     /// 按主键删除
     pub async fn delete(&self, id: i32) -> Result<u64, DbErr> {
         let result = ScheduleStatusLog::delete_by_id(id)
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
         Ok(result.rows_affected)
     }

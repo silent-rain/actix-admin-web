@@ -5,7 +5,7 @@ use super::visitor::Storage;
 use crate::config::DbConfig;
 use crate::dao::Dao;
 
-use database::Pool;
+use database::{Pool, PoolTrait};
 use entity::log_system::Model;
 
 use chrono::Local;
@@ -29,13 +29,9 @@ pub struct DbWriter {
 impl DbWriter {
     pub async fn new(config: DbConfig) -> Self {
         // 初始化数据库
-        let db = database::Pool::init(
-            config.address.clone(),
-            config.address.clone(),
-            config.options.clone(),
-        )
-        .await
-        .expect("初始化数据库失败");
+        let db = database::Pool::new(config.address.clone(), config.options.clone())
+            .await
+            .expect("初始化数据库失败");
         let dao = Dao::new(db.clone());
 
         let (tx, rx) = mpsc::channel::<Model>(1000);

@@ -1,7 +1,9 @@
 //! 任务调度作业管理
+use std::sync::Arc;
+
 use crate::dto::schedule_job::GetScheduleJobReq;
 
-use database::{ArcDbRepo, Pagination};
+use database::{Pagination, PoolTrait};
 use entity::schedule::{schedule_job, ScheduleJob};
 use nject::injectable;
 
@@ -13,7 +15,7 @@ use sea_orm::{
 /// 数据访问
 #[injectable]
 pub struct ScheduleJobDao {
-    db: ArcDbRepo,
+    db: Arc<dyn PoolTrait>,
 }
 
 impl ScheduleJobDao {
@@ -41,7 +43,7 @@ impl ScheduleJobDao {
                 query.filter(schedule_job::Column::Status.eq(v))
             });
 
-        let total = states.clone().count(self.db.rdb()).await?;
+        let total = states.clone().count(self.db.db()).await?;
         if total == 0 {
             return Ok((vec![], total));
         }
@@ -50,7 +52,7 @@ impl ScheduleJobDao {
             .order_by_desc(schedule_job::Column::Id)
             .offset(page.offset())
             .limit(page.page_size())
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
 
         Ok((results, total))
@@ -58,14 +60,14 @@ impl ScheduleJobDao {
 
     /// 获取详情信息
     pub async fn info(&self, id: i32) -> Result<Option<schedule_job::Model>, DbErr> {
-        ScheduleJob::find_by_id(id).one(self.db.rdb()).await
+        ScheduleJob::find_by_id(id).one(self.db.db()).await
     }
 
     /// 通过名称获取详情信息
     pub async fn info_by_name(&self, name: String) -> Result<Option<schedule_job::Model>, DbErr> {
         ScheduleJob::find()
             .filter(schedule_job::Column::Name.eq(name))
-            .one(self.db.rdb())
+            .one(self.db.db())
             .await
     }
 
@@ -74,7 +76,7 @@ impl ScheduleJobDao {
         &self,
         active_model: schedule_job::ActiveModel,
     ) -> Result<schedule_job::Model, DbErr> {
-        active_model.insert(self.db.wdb()).await
+        active_model.insert(self.db.db()).await
     }
 
     /// 更新数据
@@ -83,7 +85,7 @@ impl ScheduleJobDao {
         let result = ScheduleJob::update_many()
             .set(active_model)
             .filter(schedule_job::Column::Id.eq(id))
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
 
         Ok(result.rows_affected)
@@ -96,13 +98,13 @@ impl ScheduleJobDao {
             status: Set(status),
             ..Default::default()
         };
-        let _ = active_model.update(self.db.wdb()).await?;
+        let _ = active_model.update(self.db.db()).await?;
         Ok(())
     }
 
     /// 按主键删除信息
     pub async fn delete(&self, id: i32) -> Result<u64, DbErr> {
-        let result = ScheduleJob::delete_by_id(id).exec(self.db.wdb()).await?;
+        let result = ScheduleJob::delete_by_id(id).exec(self.db.db()).await?;
         Ok(result.rows_affected)
     }
 }

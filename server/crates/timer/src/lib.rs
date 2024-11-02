@@ -3,7 +3,7 @@
 mod demo;
 mod demo2;
 
-use database::DbRepo;
+use database::PoolTrait;
 use scheduler::{
     error::Error,
     register::{SysTaskRegister, UserTaskRegister},
@@ -14,7 +14,7 @@ use tokio::runtime::Handle;
 /// 任务注册
 pub struct TimerRegister<DB>
 where
-    DB: DbRepo + Clone + Send + Sync + 'static,
+    DB: PoolTrait + Clone + Send + Sync + 'static,
 {
     sys_task: SysTaskRegister<DB>,
     user_task: UserTaskRegister<DB>,
@@ -23,7 +23,7 @@ where
 
 impl<DB> TimerRegister<DB>
 where
-    DB: DbRepo + Clone + Send + Sync + 'static,
+    DB: PoolTrait + Clone + Send + Sync + 'static,
 {
     pub fn new(db: DB) -> Self {
         TimerRegister {
@@ -60,7 +60,7 @@ where
 
 impl<DB> TimerRegister<DB>
 where
-    DB: DbRepo + Clone + Send + Sync + 'static,
+    DB: PoolTrait + Clone + Send + Sync + 'static,
 {
     pub fn start(db: DB) {
         let handle = Handle::current();

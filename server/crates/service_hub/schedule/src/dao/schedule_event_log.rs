@@ -1,8 +1,10 @@
 //! 任务调度事件日志管理
 
+use std::sync::Arc;
+
 use crate::dto::schedule_event_log::GetScheduleEventLogListReq;
 
-use database::{ArcDbRepo, Pagination};
+use database::{Pagination, PoolTrait};
 use entity::schedule::{schedule_event_log, ScheduleEventLog};
 
 use nject::injectable;
@@ -14,7 +16,7 @@ use sea_orm::{
 /// 数据访问
 #[injectable]
 pub struct ScheduleEventLogDao {
-    db: ArcDbRepo,
+    db: Arc<dyn PoolTrait>,
 }
 
 impl ScheduleEventLogDao {
@@ -36,7 +38,7 @@ impl ScheduleEventLogDao {
                 query.filter(schedule_event_log::Column::JobId.eq(v))
             });
 
-        let total = states.clone().count(self.db.rdb()).await?;
+        let total = states.clone().count(self.db.db()).await?;
         if total == 0 {
             return Ok((vec![], total));
         }
@@ -45,7 +47,7 @@ impl ScheduleEventLogDao {
             .order_by_desc(schedule_event_log::Column::Id)
             .offset(page.offset())
             .limit(page.page_size())
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
 
         Ok((results, total))
@@ -53,7 +55,7 @@ impl ScheduleEventLogDao {
 
     /// 获取详情信息
     pub async fn info(&self, id: i32) -> Result<Option<schedule_event_log::Model>, DbErr> {
-        ScheduleEventLog::find_by_id(id).one(self.db.rdb()).await
+        ScheduleEventLog::find_by_id(id).one(self.db.db()).await
     }
 
     /// 添加详情信息
@@ -61,13 +63,13 @@ impl ScheduleEventLogDao {
         &self,
         active_model: schedule_event_log::ActiveModel,
     ) -> Result<schedule_event_log::Model, DbErr> {
-        active_model.insert(self.db.wdb()).await
+        active_model.insert(self.db.db()).await
     }
 
     /// 按主键删除
     pub async fn delete(&self, id: i32) -> Result<u64, DbErr> {
         let result = ScheduleEventLog::delete_by_id(id)
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
         Ok(result.rows_affected)
     }

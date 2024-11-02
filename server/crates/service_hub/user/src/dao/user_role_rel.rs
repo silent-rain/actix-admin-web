@@ -1,8 +1,10 @@
 //! 用户角色关系管理
 
+use std::sync::Arc;
+
 use crate::dto::user_role_rel::GetUserRoleRelListReq;
 
-use database::{ArcDbRepo, Pagination};
+use database::{Pagination, PoolTrait};
 use entity::user::{user_role_rel, UserRoleRel};
 
 use nject::injectable;
@@ -14,7 +16,7 @@ use sea_orm::{
 /// 数据访问
 #[injectable]
 pub struct UserRoleRelDao {
-    db: ArcDbRepo,
+    db: Arc<dyn PoolTrait>,
 }
 
 impl UserRoleRelDao {
@@ -22,7 +24,7 @@ impl UserRoleRelDao {
     pub async fn all(&self) -> Result<(Vec<user_role_rel::Model>, u64), DbErr> {
         let results = UserRoleRel::find()
             .order_by_asc(user_role_rel::Column::Id)
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
         let total = results.len() as u64;
         Ok((results, total))
@@ -46,7 +48,7 @@ impl UserRoleRelDao {
                 query.filter(user_role_rel::Column::UserId.eq(v))
             });
 
-        let total = states.clone().count(self.db.rdb()).await?;
+        let total = states.clone().count(self.db.db()).await?;
         if total == 0 {
             return Ok((vec![], total));
         }
@@ -55,7 +57,7 @@ impl UserRoleRelDao {
             .order_by_desc(user_role_rel::Column::Id)
             .offset(page.offset())
             .limit(page.page_size())
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
 
         Ok((results, total))
@@ -66,7 +68,7 @@ impl UserRoleRelDao {
         &self,
         active_model: user_role_rel::ActiveModel,
     ) -> Result<user_role_rel::Model, DbErr> {
-        active_model.insert(self.db.wdb()).await
+        active_model.insert(self.db.db()).await
     }
 
     /// 批量添加数据
@@ -75,7 +77,7 @@ impl UserRoleRelDao {
         active_models: Vec<user_role_rel::ActiveModel>,
     ) -> Result<i32, DbErr> {
         let result = UserRoleRel::insert_many(active_models)
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
         Ok(result.last_insert_id)
     }
@@ -84,7 +86,7 @@ impl UserRoleRelDao {
     pub async fn delete(&self, id: i32) -> Result<u64, DbErr> {
         let result = UserRoleRel::delete_many()
             .filter(user_role_rel::Column::Id.eq(id))
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
         Ok(result.rows_affected)
     }
@@ -93,7 +95,7 @@ impl UserRoleRelDao {
     pub async fn batch_delete(&self, ids: Vec<i32>) -> Result<u64, DbErr> {
         let result = UserRoleRel::delete_many()
             .filter(user_role_rel::Column::Id.is_in(ids))
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
         Ok(result.rows_affected)
     }
@@ -107,7 +109,7 @@ impl UserRoleRelDao {
     ) -> Result<(Vec<user_role_rel::Model>, u64), DbErr> {
         let results = UserRoleRel::find()
             .filter(user_role_rel::Column::UserId.eq(user_id))
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
 
         let total = results.len() as u64;

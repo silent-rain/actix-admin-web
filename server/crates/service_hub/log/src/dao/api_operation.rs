@@ -1,8 +1,10 @@
 //! API操作日志
 
+use std::sync::Arc;
+
 use crate::dto::api_operation::GetApiOperationListReq;
 
-use database::{ArcDbRepo, Pagination};
+use database::{Pagination, PoolTrait};
 use entity::log_api_operation;
 use entity::prelude::LogApiOperation;
 
@@ -15,7 +17,7 @@ use sea_orm::{
 /// 数据访问
 #[injectable]
 pub struct ApiOperationDao {
-    db: ArcDbRepo,
+    db: Arc<dyn PoolTrait>,
 }
 
 impl ApiOperationDao {
@@ -34,7 +36,7 @@ impl ApiOperationDao {
                 query.filter(log_api_operation::Column::CreatedAt.lt(v))
             });
 
-        let total = states.clone().count(self.db.rdb()).await?;
+        let total = states.clone().count(self.db.db()).await?;
         if total == 0 {
             return Ok((vec![], total));
         }
@@ -43,7 +45,7 @@ impl ApiOperationDao {
             .order_by_desc(log_api_operation::Column::Id)
             .offset(page.offset())
             .limit(page.page_size())
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
 
         Ok((results, total))
@@ -51,7 +53,7 @@ impl ApiOperationDao {
 
     /// 获取详情信息
     pub async fn info(&self, id: i32) -> Result<Option<log_api_operation::Model>, DbErr> {
-        LogApiOperation::find_by_id(id).one(self.db.rdb()).await
+        LogApiOperation::find_by_id(id).one(self.db.db()).await
     }
 
     /// 添加详情信息
@@ -59,14 +61,12 @@ impl ApiOperationDao {
         &self,
         active_model: log_api_operation::ActiveModel,
     ) -> Result<log_api_operation::Model, DbErr> {
-        active_model.insert(self.db.wdb()).await
+        active_model.insert(self.db.db()).await
     }
 
     /// 按主键删除
     pub async fn delete(&self, id: i32) -> Result<u64, DbErr> {
-        let result = LogApiOperation::delete_by_id(id)
-            .exec(self.db.wdb())
-            .await?;
+        let result = LogApiOperation::delete_by_id(id).exec(self.db.db()).await?;
         Ok(result.rows_affected)
     }
 }

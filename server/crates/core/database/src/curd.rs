@@ -1,6 +1,6 @@
 //! 通用 CURD
 
-use crate::{DbRepo, Pagination};
+use crate::{Pagination, PoolTrait};
 
 use async_trait::async_trait;
 use sea_orm::{
@@ -13,7 +13,7 @@ pub trait Curd<E>: Sync
 where
     E: EntityTrait,
 {
-    type Db: DbRepo;
+    type Db: PoolTrait;
 
     fn db(&self) -> &Self::Db;
 
@@ -21,33 +21,17 @@ where
     where
         E::Model: FromQueryResult,
     {
-        let result = E::find().all(self.db().rdb()).await?;
+        let result = E::find().all(self.db().db()).await?;
         let total = result.len() as u64;
         Ok((result, total))
     }
-
-    /*
-    /// 获取数据列表, 仅供参考的写法
-    async fn _list(&self, page: Pagination) -> Result<(Vec<E::Model>, u64), DbErr>
-    where
-        E::Model: FromQueryResult + Sized + Send + Sync,
-    {
-        let total: u64 = E::find().paginate(self.db().rdb(), 1).num_items().await?;
-        let results = E::find()
-            .offset(page.offset())
-            .limit(page.page_size())
-            .all(self.db().rdb())
-            .await?;
-        Ok((results, total))
-    }
-     */
 
     /// 获取数据列表
     async fn list(&self, page: Pagination) -> Result<(Vec<E::Model>, u64), DbErr>
     where
         E::Model: FromQueryResult + Sized + Send + Sync,
     {
-        let paginator = E::find().paginate(self.db().rdb(), page.page_size());
+        let paginator = E::find().paginate(self.db().db(), page.page_size());
 
         let total = paginator.num_items().await?;
 
@@ -62,7 +46,7 @@ where
     where
         <E::PrimaryKey as PrimaryKeyTrait>::ValueType: From<i32>,
     {
-        E::find_by_id(id).one(self.db().rdb()).await
+        E::find_by_id(id).one(self.db().db()).await
     }
 
     /// 插入数据
@@ -78,7 +62,7 @@ where
         <<A as ActiveModelTrait>::Entity as EntityTrait>::Model: IntoActiveModel<A>,
     {
         let active_model: A = model.into();
-        active_model.insert(self.db().wdb()).await
+        active_model.insert(self.db().db()).await
     }
 
     /// 插入数据
@@ -91,7 +75,7 @@ where
         A: ActiveModelTrait + ActiveModelBehavior + Send,
         <<A as ActiveModelTrait>::Entity as EntityTrait>::Model: IntoActiveModel<A>,
     {
-        bean.insert(self.db().wdb()).await
+        bean.insert(self.db().db()).await
     }
 
     /// 更新数据
@@ -107,7 +91,7 @@ where
         <<A as ActiveModelTrait>::Entity as EntityTrait>::Model: IntoActiveModel<A>,
     {
         let active_model: A = model.into();
-        active_model.update(self.db().wdb()).await
+        active_model.update(self.db().db()).await
     }
 
     /// 更新数据
@@ -120,7 +104,7 @@ where
         A: ActiveModelTrait + ActiveModelBehavior + std::marker::Send,
         <<A as ActiveModelTrait>::Entity as EntityTrait>::Model: IntoActiveModel<A>,
     {
-        bean.update(self.db().wdb()).await
+        bean.update(self.db().db()).await
     }
 
     /// 按主键删除
@@ -128,7 +112,7 @@ where
     where
         <E::PrimaryKey as PrimaryKeyTrait>::ValueType: From<i32>,
     {
-        let result = E::delete_by_id(id).exec(self.db().wdb()).await?;
+        let result = E::delete_by_id(id).exec(self.db().db()).await?;
         Ok(result.rows_affected)
     }
 
@@ -142,7 +126,7 @@ where
             let col = key.into_column();
             state = state.filter(col.is_in(ids.clone()));
         }
-        let result = state.exec(self.db().wdb()).await?;
+        let result = state.exec(self.db().db()).await?;
         Ok(result.rows_affected)
     }
 }

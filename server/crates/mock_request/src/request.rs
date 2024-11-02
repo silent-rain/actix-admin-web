@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use database::{mock::Mock, DbRepo};
+use database::{mock::Mock, PoolTrait};
 use migration::Migrator;
 use response::Response;
 
@@ -29,7 +29,7 @@ pub struct MockRequest<F>
 where
     F: Fn() -> Scope + 'static,
 {
-    pool: Arc<dyn DbRepo>,
+    pool: Arc<dyn PoolTrait>,
     routes: F,
 }
 
@@ -59,7 +59,7 @@ where
     /// 迁移库表列表
     pub async fn migrations(self, migrations: Vec<&dyn MigrationTrait>) -> Result<Self, Error> {
         for migration in migrations {
-            let manager = SchemaManager::new(self.pool.wdb());
+            let manager = SchemaManager::new(self.pool.db());
             migration
                 .up(&manager)
                 .await
@@ -70,7 +70,7 @@ where
 
     /// 迁移所有库表
     pub async fn all_migrations(self) -> Result<Self, Error> {
-        Migrator::up(self.pool.wdb(), None)
+        Migrator::up(self.pool.db(), None)
             .await
             .map_err(|err| Error::DbInit(err.to_string()))?;
         Ok(self)
@@ -80,11 +80,11 @@ where
     async fn test_service(
         &self,
     ) -> impl Service<Request, Response = ServiceResponse, Error = actix_web::Error> {
-        let provider = InjectProvider::anew(self.pool.clone());
+        let provider = InjectProvider::new(self.pool.clone());
 
         test::init_service(
             App::new()
-                .app_data(web::Data::new(provider.clone()))
+                .app_data(web::Data::new(provider))
                 .service((self.routes)()),
         )
         .await

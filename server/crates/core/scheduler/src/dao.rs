@@ -1,5 +1,5 @@
 //! 数据库操作
-use database::DbRepo;
+use database::PoolTrait;
 use entity::schedule::{
     schedule_event_log, schedule_job, schedule_status_log, ScheduleJob, ScheduleStatusLog,
 };
@@ -8,16 +8,16 @@ use sea_orm::{ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, QueryFilter, Se
 
 pub struct Dao<DB>
 where
-    DB: DbRepo + Send + Sync + 'static,
+    DB: PoolTrait + Send + Sync + 'static,
 {
     pub schedule_job_dao: ScheduleJobDao<DB>,
     pub schedule_status_log_dao: ScheduleStatusLogDao<DB>,
     pub schedule_event_log_dao: ScheduleEventLogDao<DB>,
 }
 
-impl<DB: DbRepo> Dao<DB>
+impl<DB: PoolTrait> Dao<DB>
 where
-    DB: DbRepo + Clone + Send + Sync + 'static,
+    DB: PoolTrait + Clone + Send + Sync + 'static,
 {
     /// 创建对象
     pub fn new(db: DB) -> Self {
@@ -31,14 +31,14 @@ where
 
 pub struct ScheduleJobDao<DB>
 where
-    DB: DbRepo + Send + Sync + 'static,
+    DB: PoolTrait + Send + Sync + 'static,
 {
     db: DB,
 }
 
-impl<DB: DbRepo> ScheduleJobDao<DB>
+impl<DB: PoolTrait> ScheduleJobDao<DB>
 where
-    DB: DbRepo + Send + Sync + 'static,
+    DB: PoolTrait + Send + Sync + 'static,
 {
     /// 创建对象
     pub fn new(db: DB) -> Self {
@@ -47,25 +47,25 @@ where
 
     /// 获取任务调度列表
     pub async fn list(&self) -> Result<Vec<schedule_job::Model>, DbErr> {
-        ScheduleJob::find().all(self.db.rdb()).await
+        ScheduleJob::find().all(self.db.db()).await
     }
 
     /// 获取任务调度详情
     pub async fn info(&self, id: i32) -> Result<Option<schedule_job::Model>, DbErr> {
-        ScheduleJob::find_by_id(id).one(self.db.rdb()).await
+        ScheduleJob::find_by_id(id).one(self.db.db()).await
     }
 }
 
 pub struct ScheduleStatusLogDao<DB>
 where
-    DB: DbRepo + Send + Sync + 'static,
+    DB: PoolTrait + Send + Sync + 'static,
 {
     db: DB,
 }
 
-impl<DB: DbRepo> ScheduleStatusLogDao<DB>
+impl<DB: PoolTrait> ScheduleStatusLogDao<DB>
 where
-    DB: DbRepo + Send + Sync + 'static,
+    DB: PoolTrait + Send + Sync + 'static,
 {
     /// 创建对象
     pub fn new(db: DB) -> Self {
@@ -85,7 +85,7 @@ where
             status: Set(schedule_status_log::enums::Status::Running as i8),
             ..Default::default()
         };
-        active_model.insert(self.db.wdb()).await
+        active_model.insert(self.db.db()).await
     }
 
     /// 更新任务调度状态日志
@@ -106,7 +106,7 @@ where
         let result = ScheduleStatusLog::update_many()
             .set(active_model)
             .filter(schedule_status_log::Column::Id.eq(id))
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
         Ok(result.rows_affected)
     }
@@ -125,7 +125,7 @@ where
         let result = ScheduleStatusLog::update_many()
             .set(active_model)
             .filter(schedule_status_log::Column::Id.eq(id))
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
         Ok(result.rows_affected)
     }
@@ -133,14 +133,14 @@ where
 
 pub struct ScheduleEventLogDao<DB>
 where
-    DB: DbRepo + Send + Sync + 'static,
+    DB: PoolTrait + Send + Sync + 'static,
 {
     db: DB,
 }
 
-impl<DB: DbRepo> ScheduleEventLogDao<DB>
+impl<DB: PoolTrait> ScheduleEventLogDao<DB>
 where
-    DB: DbRepo + Send + Sync + 'static,
+    DB: PoolTrait + Send + Sync + 'static,
 {
     /// 创建对象
     pub fn new(db: DB) -> Self {
@@ -160,6 +160,6 @@ where
             status: Set(status as i8),
             ..Default::default()
         };
-        active_model.insert(self.db.wdb()).await
+        active_model.insert(self.db.db()).await
     }
 }

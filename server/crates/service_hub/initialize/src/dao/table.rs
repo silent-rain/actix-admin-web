@@ -1,9 +1,11 @@
 //! 库表初始化
 
+use std::sync::Arc;
+
 use crate::dto::table::AddAdminUserReq;
 use crate::dto::table::TableDataSql;
 
-use database::ArcDbRepo;
+use database::PoolTrait;
 use entity::{
     perm_menu_role_rel, perm_openapi_role_rel,
     prelude::{PermMenu, PermMenuRoleRel, PermOpenapi, PermOpenapiRoleRel},
@@ -21,7 +23,7 @@ use sea_orm::{
 /// 数据访问
 #[injectable]
 pub struct TableDao {
-    db: ArcDbRepo,
+    db: Arc<dyn PoolTrait>,
 }
 
 impl TableDao {
@@ -29,7 +31,7 @@ impl TableDao {
     pub async fn admin_user(&self) -> Result<Option<user_base::Model>, DbErr> {
         let result = UserBase::find()
             .order_by_asc(user_base::Column::Id)
-            .one(self.db.rdb())
+            .one(self.db.db())
             .await?;
 
         Ok(result)
@@ -37,7 +39,7 @@ impl TableDao {
 
     /// 初始化库表
     pub async fn init_table(&self, db_sql: String) -> Result<u64, DbErr> {
-        let result: ExecResult = self.db.wdb().execute_unprepared(&db_sql).await?;
+        let result: ExecResult = self.db.db().execute_unprepared(&db_sql).await?;
         Ok(result.rows_affected())
     }
 
@@ -47,7 +49,7 @@ impl TableDao {
         req: AddAdminUserReq,
         table_sql: TableDataSql,
     ) -> Result<user_base::Model, DbErr> {
-        let txn = self.db.wdb().begin().await?;
+        let txn = self.db.db().begin().await?;
 
         // 初始化角色表
         let _ = self.txn_init_role(&txn, table_sql.role_sql).await?;

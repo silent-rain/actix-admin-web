@@ -1,7 +1,9 @@
 //! 令牌管理
+use std::sync::Arc;
+
 use crate::dto::token::GetTokenListReq;
 
-use database::{ArcDbRepo, Pagination};
+use database::{Pagination, PoolTrait};
 use entity::{perm_token, prelude::PermToken};
 use nject::injectable;
 
@@ -13,7 +15,7 @@ use sea_orm::{
 /// 数据访问
 #[injectable]
 pub struct TokenDao {
-    db: ArcDbRepo,
+    db: Arc<dyn PoolTrait>,
 }
 
 impl TokenDao {
@@ -35,7 +37,7 @@ impl TokenDao {
                 query.filter(perm_token::Column::Token.eq(v))
             });
 
-        let total = states.clone().count(self.db.rdb()).await?;
+        let total = states.clone().count(self.db.db()).await?;
         if total == 0 {
             return Ok((vec![], total));
         }
@@ -44,7 +46,7 @@ impl TokenDao {
             .order_by_desc(perm_token::Column::Id)
             .offset(page.offset())
             .limit(page.page_size())
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
 
         Ok((results, total))
@@ -52,7 +54,7 @@ impl TokenDao {
 
     /// 获取详情信息
     pub async fn info(&self, id: i32) -> Result<Option<perm_token::Model>, DbErr> {
-        PermToken::find_by_id(id).one(self.db.rdb()).await
+        PermToken::find_by_id(id).one(self.db.db()).await
     }
 
     /// 通过Token获取详情信息
@@ -64,7 +66,7 @@ impl TokenDao {
         PermToken::find()
             .filter(perm_token::Column::Token.eq(token))
             .filter(perm_token::Column::Passphrase.eq(passphrase))
-            .one(self.db.rdb())
+            .one(self.db.db())
             .await
     }
 
@@ -73,7 +75,7 @@ impl TokenDao {
         &self,
         active_model: perm_token::ActiveModel,
     ) -> Result<perm_token::Model, DbErr> {
-        active_model.insert(self.db.wdb()).await
+        active_model.insert(self.db.db()).await
     }
 
     /// 更新数据
@@ -82,7 +84,7 @@ impl TokenDao {
         let result = PermToken::update_many()
             .set(active_model)
             .filter(perm_token::Column::Id.eq(id))
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
 
         Ok(result.rows_affected)
@@ -95,13 +97,13 @@ impl TokenDao {
             status: Set(status),
             ..Default::default()
         };
-        let _ = active_model.update(self.db.wdb()).await?;
+        let _ = active_model.update(self.db.db()).await?;
         Ok(())
     }
 
     /// 按主键删除信息
     pub async fn delete(&self, id: i32) -> Result<u64, DbErr> {
-        let result = PermToken::delete_by_id(id).exec(self.db.wdb()).await?;
+        let result = PermToken::delete_by_id(id).exec(self.db.db()).await?;
         Ok(result.rows_affected)
     }
 }

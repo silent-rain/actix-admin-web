@@ -1,7 +1,9 @@
 //! OpenApi接口管理
+use std::sync::Arc;
+
 use crate::dto::openapi::{GetOpenapiListReq, RoleOpenapiPermission};
 
-use database::{ArcDbRepo, Pagination};
+use database::{Pagination, PoolTrait};
 use entity::{perm_openapi, perm_openapi_role_rel, prelude::PermOpenapi};
 use nject::injectable;
 
@@ -13,7 +15,7 @@ use sea_orm::{
 /// 数据访问
 #[injectable]
 pub struct OpenapiDao {
-    db: ArcDbRepo,
+    db: Arc<dyn PoolTrait>,
 }
 
 impl OpenapiDao {
@@ -21,7 +23,7 @@ impl OpenapiDao {
     pub async fn all(&self) -> Result<(Vec<perm_openapi::Model>, u64), DbErr> {
         let results = PermOpenapi::find()
             .order_by_asc(perm_openapi::Column::Id)
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
         let total = results.len() as u64;
         Ok((results, total))
@@ -45,7 +47,7 @@ impl OpenapiDao {
                 query.filter(perm_openapi::Column::Name.like(format!("{v}%")))
             });
 
-        let total = states.clone().count(self.db.rdb()).await?;
+        let total = states.clone().count(self.db.db()).await?;
         if total == 0 {
             return Ok((vec![], total));
         }
@@ -54,7 +56,7 @@ impl OpenapiDao {
             .order_by_desc(perm_openapi::Column::Id)
             .offset(page.offset())
             .limit(page.page_size())
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
 
         Ok((results, total))
@@ -64,13 +66,13 @@ impl OpenapiDao {
     pub async fn children(&self, pid: i32) -> Result<Vec<perm_openapi::Model>, DbErr> {
         PermOpenapi::find()
             .filter(perm_openapi::Column::Pid.eq(pid))
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await
     }
 
     /// 获取详情信息
     pub async fn info(&self, id: i32) -> Result<Option<perm_openapi::Model>, DbErr> {
-        PermOpenapi::find_by_id(id).one(self.db.rdb()).await
+        PermOpenapi::find_by_id(id).one(self.db.db()).await
     }
 
     /// 通过资源路径和请求类型获取详情信息
@@ -82,7 +84,7 @@ impl OpenapiDao {
         PermOpenapi::find()
             .filter(perm_openapi::Column::Path.eq(path))
             .filter(perm_openapi::Column::Method.eq(method))
-            .one(self.db.rdb())
+            .one(self.db.db())
             .await
     }
 
@@ -91,7 +93,7 @@ impl OpenapiDao {
         &self,
         active_model: perm_openapi::ActiveModel,
     ) -> Result<perm_openapi::Model, DbErr> {
-        active_model.insert(self.db.wdb()).await
+        active_model.insert(self.db.db()).await
     }
 
     /// 更新数据
@@ -100,7 +102,7 @@ impl OpenapiDao {
         let result = PermOpenapi::update_many()
             .set(active_model)
             .filter(perm_openapi::Column::Id.eq(id))
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
 
         Ok(result.rows_affected)
@@ -113,13 +115,13 @@ impl OpenapiDao {
             status: Set(status),
             ..Default::default()
         };
-        let _ = active_model.update(self.db.wdb()).await?;
+        let _ = active_model.update(self.db.db()).await?;
         Ok(())
     }
 
     /// 按主键删除信息
     pub async fn delete(&self, id: i32) -> Result<u64, DbErr> {
-        let result = PermOpenapi::delete_by_id(id).exec(self.db.wdb()).await?;
+        let result = PermOpenapi::delete_by_id(id).exec(self.db.db()).await?;
         Ok(result.rows_affected)
     }
 }
@@ -140,7 +142,7 @@ impl OpenapiDao {
             )
             .filter(perm_openapi::Column::Status.eq(perm_openapi::enums::Status::Enabled as i8))
             .into_model::<RoleOpenapiPermission>()
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
         Ok(results)
     }

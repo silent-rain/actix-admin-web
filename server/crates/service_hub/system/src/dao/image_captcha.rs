@@ -1,7 +1,9 @@
 //! 图片验证码管理
+use std::sync::Arc;
+
 use crate::dto::image_captcha::GetImageCaptchaListReq;
 
-use database::{ArcDbRepo, Pagination};
+use database::{Pagination, PoolTrait};
 use entity::{prelude::SysImageCaptcha, sys_image_captcha};
 use nject::injectable;
 
@@ -13,7 +15,7 @@ use sea_orm::{
 /// 数据访问
 #[injectable]
 pub struct ImageCaptchaDao {
-    db: ArcDbRepo,
+    db: Arc<dyn PoolTrait>,
 }
 
 impl ImageCaptchaDao {
@@ -32,7 +34,7 @@ impl ImageCaptchaDao {
                 query.filter(sys_image_captcha::Column::CreatedAt.lt(v))
             });
 
-        let total = states.clone().count(self.db.rdb()).await?;
+        let total = states.clone().count(self.db.db()).await?;
         if total == 0 {
             return Ok((vec![], total));
         }
@@ -41,7 +43,7 @@ impl ImageCaptchaDao {
             .order_by_desc(sys_image_captcha::Column::Id)
             .offset(page.offset())
             .limit(page.page_size())
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
 
         Ok((results, total))
@@ -50,7 +52,7 @@ impl ImageCaptchaDao {
     pub async fn info(&self, id: i32) -> Result<Option<sys_image_captcha::Model>, DbErr> {
         SysImageCaptcha::find()
             .filter(sys_image_captcha::Column::Id.eq(id))
-            .one(self.db.rdb())
+            .one(self.db.db())
             .await
     }
 
@@ -61,7 +63,7 @@ impl ImageCaptchaDao {
     ) -> Result<Option<sys_image_captcha::Model>, DbErr> {
         SysImageCaptcha::find()
             .filter(sys_image_captcha::Column::CaptchaId.eq(captcha_id))
-            .one(self.db.rdb())
+            .one(self.db.db())
             .await
     }
 
@@ -70,7 +72,7 @@ impl ImageCaptchaDao {
         &self,
         active_model: sys_image_captcha::ActiveModel,
     ) -> Result<sys_image_captcha::Model, DbErr> {
-        active_model.insert(self.db.wdb()).await
+        active_model.insert(self.db.db()).await
     }
 
     /// 更新信息
@@ -81,7 +83,7 @@ impl ImageCaptchaDao {
         let result = SysImageCaptcha::update_many()
             .set(pear)
             .filter(sys_image_captcha::Column::Id.eq(data.id))
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
 
         Ok(result.rows_affected)
@@ -94,15 +96,13 @@ impl ImageCaptchaDao {
             status: Set(status),
             ..Default::default()
         };
-        let _ = active_model.update(self.db.wdb()).await?;
+        let _ = active_model.update(self.db.db()).await?;
         Ok(())
     }
 
     /// 按主键删除信息
     pub async fn delete(&self, id: i32) -> Result<u64, DbErr> {
-        let result = SysImageCaptcha::delete_by_id(id)
-            .exec(self.db.wdb())
-            .await?;
+        let result = SysImageCaptcha::delete_by_id(id).exec(self.db.db()).await?;
         Ok(result.rows_affected)
     }
 
@@ -110,7 +110,7 @@ impl ImageCaptchaDao {
     pub async fn batch_delete(&self, ids: Vec<i32>) -> Result<u64, DbErr> {
         let result = SysImageCaptcha::delete_many()
             .filter(sys_image_captcha::Column::Id.is_in(ids))
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
         Ok(result.rows_affected)
     }

@@ -13,7 +13,7 @@ use std::{
 
 use crate::{dao::Dao, error::Error};
 
-use database::DbRepo;
+use database::PoolTrait;
 use entity::schedule::{schedule_event_log, schedule_job, schedule_status_log};
 
 use chrono::Local;
@@ -24,7 +24,7 @@ use uuid::Uuid;
 #[derive(Clone)]
 pub struct Job<DB>
 where
-    DB: DbRepo + Clone + Send + Sync + 'static,
+    DB: PoolTrait + Clone + Send + Sync + 'static,
 {
     dao: Arc<Dao<DB>>,
     job: TokioJob,
@@ -33,7 +33,7 @@ where
 
 impl<DB> Job<DB>
 where
-    DB: DbRepo + Clone + Send + Sync + 'static,
+    DB: PoolTrait + Clone + Send + Sync + 'static,
 {
     pub fn new(sys_id: i32, db: DB) -> Result<Self, Error> {
         let job = Job {

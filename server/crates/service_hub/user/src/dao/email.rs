@@ -1,7 +1,9 @@
 //! 用户邮箱管理
+use std::sync::Arc;
+
 use crate::dto::email::GetEmailListReq;
 
-use database::{ArcDbRepo, Pagination};
+use database::{Pagination, PoolTrait};
 use entity::user::{user_email, UserEmail};
 
 use nject::injectable;
@@ -13,7 +15,7 @@ use sea_orm::{
 /// 数据访问
 #[injectable]
 pub struct EmailDao {
-    db: ArcDbRepo,
+    db: Arc<dyn PoolTrait>,
 }
 
 impl EmailDao {
@@ -35,7 +37,7 @@ impl EmailDao {
                 query.filter(user_email::Column::Email.like(format!("{v}%")))
             });
 
-        let total = states.clone().count(self.db.rdb()).await?;
+        let total = states.clone().count(self.db.db()).await?;
         if total == 0 {
             return Ok((vec![], total));
         }
@@ -44,7 +46,7 @@ impl EmailDao {
             .order_by_desc(user_email::Column::Id)
             .offset(page.offset())
             .limit(page.page_size())
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
 
         Ok((results, total))
@@ -52,14 +54,14 @@ impl EmailDao {
 
     /// 获取详情信息
     pub async fn info(&self, id: i32) -> Result<Option<user_email::Model>, DbErr> {
-        UserEmail::find_by_id(id).one(self.db.rdb()).await
+        UserEmail::find_by_id(id).one(self.db.db()).await
     }
 
     /// 通过邮箱获取详情信息
     pub async fn info_by_email(&self, email: String) -> Result<Option<user_email::Model>, DbErr> {
         UserEmail::find()
             .filter(user_email::Column::Email.eq(email))
-            .one(self.db.rdb())
+            .one(self.db.db())
             .await
     }
 
@@ -68,7 +70,7 @@ impl EmailDao {
         &self,
         active_model: user_email::ActiveModel,
     ) -> Result<user_email::Model, DbErr> {
-        active_model.insert(self.db.wdb()).await
+        active_model.insert(self.db.db()).await
     }
 
     /// 更新信息
@@ -77,7 +79,7 @@ impl EmailDao {
         let result = UserEmail::update_many()
             .set(active_model)
             .filter(user_email::Column::Id.eq(id))
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
 
         Ok(result.rows_affected)
@@ -85,7 +87,7 @@ impl EmailDao {
 
     /// 按主键删除信息
     pub async fn delete(&self, id: i32) -> Result<u64, DbErr> {
-        let result = UserEmail::delete_by_id(id).exec(self.db.wdb()).await?;
+        let result = UserEmail::delete_by_id(id).exec(self.db.db()).await?;
         Ok(result.rows_affected)
     }
 }

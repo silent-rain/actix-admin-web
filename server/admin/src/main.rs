@@ -10,6 +10,7 @@ mod server;
 use crate::asset::{AssetAdminWebDist, AssetConfigFile, AssetDbDataFile};
 
 use app_state::{AppState, AssetState};
+use database::PoolTrait;
 use service_hub::inject::InjectProvider;
 use timer::{TimerRegister, TimerShutdown};
 
@@ -41,13 +42,9 @@ async fn main() -> std::io::Result<()> {
     // let database_url = conf.sqlite.dns();
 
     // 初始化数据库
-    let db = database::Pool::init(
-        database_url.clone(),
-        database_url,
-        conf.mysql.options.clone(),
-    )
-    .await
-    .expect("初始化数据库失败");
+    let db = database::Pool::new(database_url, conf.mysql.options.clone())
+        .await
+        .expect("初始化数据库失败");
 
     // if conf.mysql.migrator {
     //     // 库表迁移器
@@ -72,10 +69,10 @@ async fn main() -> std::io::Result<()> {
     });
 
     // Using an Arc to share the provider across multiple threads.
-    let provider = InjectProvider::anew(Arc::new(db.clone()));
+    let provider = InjectProvider::new(Arc::new(db.clone()));
 
     // 启动服务, 并阻塞
-    if let Err(e) = server::start(app_state, asset_state, provider, conf).await {
+    if let Err(e) = server::start(app_state, asset_state, provider.into(), conf).await {
         panic!("server start faild. err: {e}");
     }
     info!("close service...");

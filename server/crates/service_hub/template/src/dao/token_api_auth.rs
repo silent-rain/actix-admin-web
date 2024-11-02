@@ -49,7 +49,7 @@ impl<'a> AppTemplateEtxDao<'a> {
                             .into_condition()
                     }),
             )
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
         Ok(results)
     }
@@ -80,7 +80,7 @@ impl<'a> AppTemplateEtxDao<'a> {
                     .to(app_template::Column::UserId)
                     .into(),
             )
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
         Ok(results)
     }

@@ -1,8 +1,10 @@
 //! WEB日志管理
 
+use std::sync::Arc;
+
 use crate::dto::web_log::GetWebLogListReq;
 
-use database::{ArcDbRepo, Pagination};
+use database::{Pagination, PoolTrait};
 use entity::log_web;
 use entity::prelude::LogWeb;
 
@@ -15,7 +17,7 @@ use sea_orm::{
 /// 数据访问
 #[injectable]
 pub struct WebLogDao {
-    db: ArcDbRepo,
+    db: Arc<dyn PoolTrait>,
 }
 
 impl WebLogDao {
@@ -37,7 +39,7 @@ impl WebLogDao {
                 query.filter(log_web::Column::Username.like(format!("{v}%")))
             });
 
-        let total = states.clone().count(self.db.rdb()).await?;
+        let total = states.clone().count(self.db.db()).await?;
         if total == 0 {
             return Ok((vec![], total));
         }
@@ -46,7 +48,7 @@ impl WebLogDao {
             .order_by_desc(log_web::Column::Id)
             .offset(page.offset())
             .limit(page.page_size())
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
 
         Ok((results, total))
@@ -54,12 +56,12 @@ impl WebLogDao {
 
     /// 获取详情信息
     pub async fn info(&self, id: i32) -> Result<Option<log_web::Model>, DbErr> {
-        LogWeb::find_by_id(id).one(self.db.rdb()).await
+        LogWeb::find_by_id(id).one(self.db.db()).await
     }
 
     /// 添加详情信息
     pub async fn add(&self, active_model: log_web::ActiveModel) -> Result<log_web::Model, DbErr> {
-        active_model.insert(self.db.wdb()).await
+        active_model.insert(self.db.db()).await
     }
 
     /// 更新数据
@@ -68,7 +70,7 @@ impl WebLogDao {
         let result = LogWeb::update_many()
             .set(active_model)
             .filter(log_web::Column::Id.eq(id))
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
 
         Ok(result.rows_affected)

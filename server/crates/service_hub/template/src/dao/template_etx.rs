@@ -30,7 +30,7 @@ impl<'a> AppTemplateEtxDao<'a> {
 
         let paginator = AppTemplate::find()
             .order_by_desc(app_template::Column::Id)
-            .paginate(self.db.rdb(), page.page_size());
+            .paginate(self.db.db(), page.page_size());
 
         let total = paginator.num_items().await?;
 
@@ -44,7 +44,7 @@ impl<'a> AppTemplateEtxDao<'a> {
     pub async fn info(&self, id: i32) -> Result<Option<serde_json::Value>, DbErr> {
         let result: Option<serde_json::Value> = AppTemplate::find_by_id(id)
             .into_json()
-            .one(self.db.rdb())
+            .one(self.db.db())
             .await?;
         Ok(result)
     }
@@ -64,7 +64,7 @@ impl<'a> AppTemplateEtxDao<'a> {
             status: Set(data.status),
             ..Default::default()
         }
-        .save(self.db.wdb())
+        .save(self.db.db())
         .await
     }
 
@@ -86,7 +86,7 @@ impl<'a> AppTemplateEtxDao<'a> {
             "status": data2.get("status").unwrap(),
         }))?;
 
-        users.save(self.db.wdb()).await
+        users.save(self.db.db()).await
     }
 
     /// 保存 - json 数据
@@ -99,7 +99,7 @@ impl<'a> AppTemplateEtxDao<'a> {
             "nickname": "Apple",
         }))?;
 
-        users.save(self.db.wdb()).await
+        users.save(self.db.db()).await
     }
 
     /// 插入活动模型并取回最后一个插入 ID。
@@ -110,7 +110,7 @@ impl<'a> AppTemplateEtxDao<'a> {
             ..Default::default() // all other attributes are `NotSet`
         };
 
-        let result = AppTemplate::insert(pear).exec(self.db.wdb()).await?;
+        let result = AppTemplate::insert(pear).exec(self.db.db()).await?;
         Ok(result.last_insert_id)
     }
 
@@ -127,7 +127,7 @@ impl<'a> AppTemplateEtxDao<'a> {
         };
 
         let result = AppTemplate::insert_many([apple, orange])
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
         Ok(result.last_insert_id)
     }
@@ -142,13 +142,13 @@ impl<'a> AppTemplateEtxDao<'a> {
             status: Set(data.status),
             ..Default::default()
         }
-        .update(self.db.wdb())
+        .update(self.db.db())
         .await
     }
 
     /// 删除所有数据
     pub async fn delete_all(&self) -> Result<DeleteResult, DbErr> {
-        AppTemplate::delete_many().exec(self.db.wdb()).await
+        AppTemplate::delete_many().exec(self.db.db()).await
     }
 }
 
@@ -159,7 +159,7 @@ impl<'a> AppTemplateEtxDao<'a> {
         let result: Vec<serde_json::Value> = AppTemplate::find()
             .order_by_asc(app_template::Column::UserId)
             .into_json()
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
 
         Ok(result)
@@ -176,7 +176,7 @@ impl<'a> AppTemplateEtxDao<'a> {
             .filter(app_template::Column::UserId.contains(user_id))
             .order_by_asc(app_template::Column::UserId)
             .into_json()
-            .paginate(self.db.rdb(), page_size);
+            .paginate(self.db.db(), page_size);
 
         let total = paginator.num_items().await?;
 
@@ -202,7 +202,7 @@ impl<'a> AppTemplateEtxDao<'a> {
                 r#"SELECT "users"."id", "users"."name" FROM "users" WHERE "id" = $1"#,
                 [name.into()],
             ))
-            .one(self.db.rdb())
+            .one(self.db.db())
             .await?;
         Ok(results)
     }
@@ -215,7 +215,7 @@ impl<'a> AppTemplateEtxDao<'a> {
                 r#"SELECT "users"."name" FROM "users" GROUP BY "users"."name"#,
                 [],
             ))
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
         Ok(results)
     }
@@ -227,7 +227,7 @@ impl<'a> AppTemplateEtxDao<'a> {
             r#"SELECT "users"."name" FROM "users" GROUP BY "users"."name"#,
             [],
         ))
-        .all(self.db.rdb())
+        .all(self.db.db())
         .await?;
         Ok(results)
     }
@@ -245,7 +245,7 @@ impl<'a> AppTemplateEtxDao<'a> {
                 r#"SELECT "users"."id", "users"."name" FROM "users" WHERE "name" = $1"#,
                 [name.into()],
             ))
-            .paginate(self.db.rdb(), page_size);
+            .paginate(self.db.db(), page_size);
 
         let total = paginator.num_items().await?;
 
@@ -263,7 +263,7 @@ impl<'a> AppTemplateEtxDao<'a> {
     pub async fn execute_raw_sql(&self) -> Result<u64, DbErr> {
         let exec_res: ExecResult = self
             .db
-            .wdb()
+            .db()
             .execute(Statement::from_string(
                 DatabaseBackend::MySql,
                 "DROP DATABASE IF EXISTS `sea`;".to_owned(),

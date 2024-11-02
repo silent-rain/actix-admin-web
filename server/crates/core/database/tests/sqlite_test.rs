@@ -3,7 +3,7 @@ use std::env;
 mod common;
 use common::{schem::create_user_table, user, User};
 
-use database::{Curd, DbOptions, DbRepo, Pagination, Pool};
+use database::{Curd, DbOptions, Pagination, Pool, PoolTrait};
 
 use sea_orm::{DbErr, EntityTrait, Set};
 
@@ -15,7 +15,7 @@ async fn testcase(db: &Pool) -> Result<(), DbErr> {
     };
 
     let result = User::insert(active_model)
-        .exec(db.wdb())
+        .exec(db.db())
         .await
         .expect("could not insert baker");
 
@@ -153,7 +153,7 @@ async fn main() -> Result<(), DbErr> {
     let db = Pool::connect(db_url, DbOptions::default())
         .await
         .expect("db init failed");
-    let pool = Pool::form_connect(db.clone(), db);
+    let pool = Pool::form_connect(db);
 
     // Setup database schema
     create_user_table(&pool).await?;
@@ -161,29 +161,23 @@ async fn main() -> Result<(), DbErr> {
     // Performing tests
     testcase(&pool).await?;
     test_info(&pool).await?;
-    println!("============");
 
     test_insert(&pool).await?;
     test_insert2(&pool).await?;
 
     test_list(&pool).await?;
-    println!("============");
 
     test_update(&pool).await?;
     test_update2(&pool).await?;
 
     test_list(&pool).await?;
-    println!("============");
 
     test_delete(&pool).await?;
-
-    println!("============");
 
     test_all(&pool).await?;
 
     test_batch_delete(&pool).await?;
 
-    println!("============");
     test_list(&pool).await?;
 
     Ok(())

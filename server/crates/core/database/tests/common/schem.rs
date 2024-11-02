@@ -1,5 +1,5 @@
 #![allow(unused)]
-use database::{DbRepo, Pool};
+use database::{Pool, PoolTrait};
 
 use sea_orm::{
     sea_query::{ColumnDef, Table, TableCreateStatement},
@@ -46,7 +46,7 @@ pub async fn create_table<E>(
 where
     E: EntityTrait,
 {
-    let builder = db.wdb().get_database_backend();
+    let builder = db.db().get_database_backend();
     let schema = Schema::new(builder);
     assert_eq!(
         builder.build(&schema.create_table_from_entity(entity)),
@@ -60,7 +60,7 @@ pub async fn create_table_without_asserts(
     db: &Pool,
     create: &TableCreateStatement,
 ) -> Result<ExecResult, DbErr> {
-    let builder = db.wdb().get_database_backend();
+    let builder = db.db().get_database_backend();
     if builder != DbBackend::Sqlite {
         let stmt = builder.build(
             Table::drop()
@@ -68,7 +68,7 @@ pub async fn create_table_without_asserts(
                 .if_exists()
                 .cascade(),
         );
-        db.wdb().execute(stmt).await?;
+        db.db().execute(stmt).await?;
     }
-    db.wdb().execute(builder.build(create)).await
+    db.db().execute(builder.build(create)).await
 }

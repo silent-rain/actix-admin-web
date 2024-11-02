@@ -1,7 +1,9 @@
 //! 字典维度管理
+use std::sync::Arc;
+
 use crate::dto::dict_dimension::GetDictDimensionListReq;
 
-use database::{ArcDbRepo, Pagination};
+use database::{Pagination, PoolTrait};
 use entity::{prelude::SysDictDimension, sys_dict_dimension};
 use nject::injectable;
 
@@ -13,7 +15,7 @@ use sea_orm::{
 /// 数据访问
 #[injectable]
 pub struct DictDimensionDao {
-    db: ArcDbRepo,
+    db: Arc<dyn PoolTrait>,
 }
 
 impl DictDimensionDao {
@@ -21,7 +23,7 @@ impl DictDimensionDao {
     pub async fn all(&self) -> Result<(Vec<sys_dict_dimension::Model>, u64), DbErr> {
         let results = SysDictDimension::find()
             .order_by_asc(sys_dict_dimension::Column::Id)
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
         let total = results.len() as u64;
         Ok((results, total))
@@ -48,7 +50,7 @@ impl DictDimensionDao {
                 query.filter(sys_dict_dimension::Column::Code.like(format!("{v}%")))
             });
 
-        let total = states.clone().count(self.db.rdb()).await?;
+        let total = states.clone().count(self.db.db()).await?;
         if total == 0 {
             return Ok((vec![], total));
         }
@@ -57,7 +59,7 @@ impl DictDimensionDao {
             .order_by_desc(sys_dict_dimension::Column::Id)
             .offset(page.offset())
             .limit(page.page_size())
-            .all(self.db.rdb())
+            .all(self.db.db())
             .await?;
 
         Ok((results, total))
@@ -65,7 +67,7 @@ impl DictDimensionDao {
 
     /// 获取详情信息
     pub async fn info(&self, id: i32) -> Result<Option<sys_dict_dimension::Model>, DbErr> {
-        SysDictDimension::find_by_id(id).one(self.db.rdb()).await
+        SysDictDimension::find_by_id(id).one(self.db.db()).await
     }
 
     /// 通过名称获取详情信息
@@ -75,7 +77,7 @@ impl DictDimensionDao {
     ) -> Result<Option<sys_dict_dimension::Model>, DbErr> {
         SysDictDimension::find()
             .filter(sys_dict_dimension::Column::Name.eq(name))
-            .one(self.db.rdb())
+            .one(self.db.db())
             .await
     }
 
@@ -86,7 +88,7 @@ impl DictDimensionDao {
     ) -> Result<Option<sys_dict_dimension::Model>, DbErr> {
         SysDictDimension::find()
             .filter(sys_dict_dimension::Column::Code.eq(code))
-            .one(self.db.rdb())
+            .one(self.db.db())
             .await
     }
 
@@ -95,7 +97,7 @@ impl DictDimensionDao {
         &self,
         active_model: sys_dict_dimension::ActiveModel,
     ) -> Result<sys_dict_dimension::Model, DbErr> {
-        active_model.insert(self.db.wdb()).await
+        active_model.insert(self.db.db()).await
     }
 
     /// 更新数据
@@ -107,7 +109,7 @@ impl DictDimensionDao {
         let result = SysDictDimension::update_many()
             .set(active_model)
             .filter(sys_dict_dimension::Column::Id.eq(id))
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
 
         Ok(result.rows_affected)
@@ -120,14 +122,14 @@ impl DictDimensionDao {
             status: Set(status),
             ..Default::default()
         };
-        let _ = active_model.update(self.db.wdb()).await?;
+        let _ = active_model.update(self.db.db()).await?;
         Ok(())
     }
 
     /// 按主键删除信息
     pub async fn delete(&self, id: i32) -> Result<u64, DbErr> {
         let result = SysDictDimension::delete_by_id(id)
-            .exec(self.db.wdb())
+            .exec(self.db.db())
             .await?;
         Ok(result.rows_affected)
     }
