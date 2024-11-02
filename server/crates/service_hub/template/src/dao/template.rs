@@ -144,7 +144,7 @@ mod tests {
             .build(DbBackend::MySql)
             .to_string();
 
-        let sql = r#"SELECT `t_app_template`.`id`, `t_app_template`.`user_id`, `t_app_template`.`status`, `t_app_template`.`created_at`, `t_app_template`.`updated_at` FROM `t_app_template` ORDER BY `t_app_template`.`id` ASC"#;
+        let sql = r#"SELECT `t_app_template`.`id`, `t_app_template`.`user_id`, `t_app_template`.`desc`, `t_app_template`.`status`, `t_app_template`.`created_at`, `t_app_template`.`updated_at` FROM `t_app_template` ORDER BY `t_app_template`.`id` ASC"#;
 
         assert_eq!(result, sql);
     }
@@ -158,7 +158,7 @@ mod tests {
             .build(DbBackend::MySql)
             .to_string();
 
-        let sql = r#"SELECT `t_app_template`.`id`, `t_app_template`.`user_id`, `t_app_template`.`status`, `t_app_template`.`created_at`, `t_app_template`.`updated_at` FROM `t_app_template` WHERE `t_app_template`.`id` = 1"#;
+        let sql = r#"SELECT `t_app_template`.`id`, `t_app_template`.`user_id`, `t_app_template`.`desc`, `t_app_template`.`status`, `t_app_template`.`created_at`, `t_app_template`.`updated_at` FROM `t_app_template` WHERE `t_app_template`.`id` = 1"#;
 
         assert_eq!(result, sql);
     }
