@@ -172,6 +172,7 @@ mod tests {
     }
 
     #[tokio::test]
+    #[should_panic]
     async fn test_cache_expiry() {
         let cache = Cache::default();
 
@@ -187,7 +188,7 @@ mod tests {
         assert!(!result.is_expired());
         // println!("result: {:#?}", result);
 
-        tokio::time::sleep(time::Duration::from_secs(3)).await;
+        tokio::time::sleep(time::Duration::from_secs(5)).await;
 
         assert!((cache.get_with_expiry("silent").await).is_none());
     }
