@@ -48,7 +48,7 @@ where
             return self;
         }
         tracing_subscriber::fmt()
-            .with_max_level(tracing::Level::DEBUG)
+            .with_max_level(tracing::Level::WARN)
             .with_level(true)
             .with_line_number(true)
             .init();
