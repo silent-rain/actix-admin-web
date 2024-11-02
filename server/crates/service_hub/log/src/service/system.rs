@@ -9,11 +9,11 @@ use tracing::error;
 
 /// 服务层
 #[injectable]
-pub struct SystemService<'a> {
-    system_dao: SystemDao<'a>,
+pub struct SystemService {
+    system_dao: SystemDao,
 }
 
-impl<'a> SystemService<'a> {
+impl SystemService {
     /// 获取列表数据
     pub async fn list(
         &self,

@@ -1,7 +1,7 @@
 //! 令牌管理
 use crate::dto::token::GetTokenListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::{perm_token, prelude::PermToken};
 use nject::injectable;
 
@@ -12,11 +12,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct TokenDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct TokenDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> TokenDao<'a> {
+impl TokenDao {
     /// 获取数据列表
     pub async fn list(&self, req: GetTokenListReq) -> Result<(Vec<perm_token::Model>, u64), DbErr> {
         let page = Pagination::new(req.page, req.page_size);

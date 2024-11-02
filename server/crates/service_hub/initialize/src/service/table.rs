@@ -15,11 +15,11 @@ use utils::{asset::EmbedAssetTrait, crypto::sha2_256};
 
 /// 服务层
 #[injectable]
-pub struct TableService<'a> {
-    table_dao: TableDao<'a>,
+pub struct TableService {
+    table_dao: TableDao,
 }
 
-impl<'a> TableService<'a> {
+impl TableService {
     /// 初始化库表
     pub async fn table(&self, req: AddAdminUserReq) -> Result<user_base::Model, ErrorMsg> {
         // 初始化库表, 如果已存在则不会重复初始化

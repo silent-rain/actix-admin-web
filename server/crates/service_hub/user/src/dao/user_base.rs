@@ -1,7 +1,7 @@
 //! 用户信息管理
 use crate::dto::user_base::GetUserBaserListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::user::{user_base, user_role, user_role_rel, UserBase, UserRole, UserRoleRel};
 
 use nject::injectable;
@@ -12,11 +12,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct UserBaseDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct UserBaseDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> UserBaseDao<'a> {
+impl UserBaseDao {
     /// 获取所有数据
     pub async fn all(&self) -> Result<(Vec<user_base::Model>, u64), DbErr> {
         let results = UserBase::find()
@@ -146,7 +146,7 @@ impl<'a> UserBaseDao<'a> {
     }
 }
 
-impl<'a> UserBaseDao<'a> {
+impl UserBaseDao {
     /// 添加用户及对应用户的角色
     pub async fn add_user(
         &self,
@@ -261,7 +261,7 @@ impl<'a> UserBaseDao<'a> {
     }
 }
 
-impl<'a> UserBaseDao<'a> {
+impl UserBaseDao {
     /// 通过用户ID获角色色列表
     pub async fn roles(&self, user_id: i32) -> Result<(Vec<user_role::Model>, u64), DbErr> {
         let results = UserRole::find()

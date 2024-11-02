@@ -16,12 +16,12 @@ use uuid::Uuid;
 
 /// 服务层
 #[injectable]
-pub struct ScheduleJobService<'a> {
-    schedule_job_dao: ScheduleJobDao<'a>,
-    schedule_status_log_dao: ScheduleStatusLogDao<'a>,
+pub struct ScheduleJobService {
+    schedule_job_dao: ScheduleJobDao,
+    schedule_status_log_dao: ScheduleStatusLogDao,
 }
 
-impl<'a> ScheduleJobService<'a> {
+impl ScheduleJobService {
     /// 获取列表数据
     pub async fn list(
         &self,

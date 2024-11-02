@@ -13,11 +13,11 @@ use tracing::error;
 
 /// 服务层
 #[injectable]
-pub struct RankService<'a> {
-    rank_dao: RankDao<'a>,
+pub struct RankService {
+    rank_dao: RankDao,
 }
 
-impl<'a> RankService<'a> {
+impl RankService {
     /// 获取列表数据
     pub async fn list(&self, req: GetRankListReq) -> Result<(Vec<rank::Model>, u64), ErrorMsg> {
         // 获取所有数据

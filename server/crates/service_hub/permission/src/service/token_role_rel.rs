@@ -13,11 +13,11 @@ use tracing::error;
 
 /// 服务层
 #[injectable]
-pub struct TokenRoleRelService<'a> {
-    token_role_rel_dao: TokenRoleRelDao<'a>,
+pub struct TokenRoleRelService {
+    token_role_rel_dao: TokenRoleRelDao,
 }
 
-impl<'a> TokenRoleRelService<'a> {
+impl TokenRoleRelService {
     /// 获取列表数据
     pub async fn list(
         &self,

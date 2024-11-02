@@ -1,7 +1,7 @@
 //! 岗位管理
 use crate::dto::position::GetPositionListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::organization::{position, Position};
 use nject::injectable;
 
@@ -12,11 +12,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct PositionDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct PositionDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> PositionDao<'a> {
+impl PositionDao {
     /// 获取所有数据
     pub async fn all(&self) -> Result<(Vec<position::Model>, u64), DbErr> {
         let results = Position::find()

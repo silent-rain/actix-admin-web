@@ -25,13 +25,13 @@ const SHARE_CODE_COUNT: i32 = 100;
 
 /// 服务层
 #[injectable]
-pub struct UserBaseService<'a> {
-    user_base_dao: UserBaseDao<'a>,
-    user_role_rel_dao: UserRoleRelDao<'a>,
-    token_dao: TokenDao<'a>,
+pub struct UserBaseService {
+    user_base_dao: UserBaseDao,
+    user_role_rel_dao: UserRoleRelDao,
+    token_dao: TokenDao,
 }
 
-impl<'a> UserBaseService<'a> {
+impl UserBaseService {
     /// 获取列表数据
     pub async fn list(
         &self,
@@ -183,7 +183,7 @@ impl<'a> UserBaseService<'a> {
     }
 }
 
-impl<'a> UserBaseService<'a> {
+impl UserBaseService {
     /// 后台添加用户信息及对应用户信息的角色
     pub async fn add(&self, data: AddUserBaseReq) -> Result<user_base::Model, ErrorMsg> {
         // 检查用户名, 查看用户名是否已注册
@@ -331,7 +331,7 @@ impl<'a> UserBaseService<'a> {
     }
 }
 
-impl<'a> UserBaseService<'a> {
+impl UserBaseService {
     /// 通过用户信息ID获角色色列表
     pub async fn roles(&self, user_id: i32) -> Result<(Vec<user_role::Model>, u64), ErrorMsg> {
         let (results, total) = self.user_base_dao.roles(user_id).await.map_err(|err| {
@@ -343,7 +343,7 @@ impl<'a> UserBaseService<'a> {
     }
 }
 
-impl<'a> UserBaseService<'a> {
+impl UserBaseService {
     /// 获取系统用户权限
     pub async fn get_sys_user_permission(&self, user_id: i32) -> Result<UserPermission, ErrorMsg> {
         // 获取用户信息

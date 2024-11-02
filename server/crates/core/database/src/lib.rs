@@ -7,7 +7,7 @@ mod pagination;
 pub use pagination::Pagination;
 
 mod pool;
-pub use pool::{DbRepo, Pool};
+pub use pool::{ArcDbRepo, DbRepo, Pool};
 pub use sea_orm::DatabaseConnection;
 
 pub mod config;

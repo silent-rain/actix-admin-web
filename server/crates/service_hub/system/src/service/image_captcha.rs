@@ -19,11 +19,11 @@ use uuid::Uuid;
 
 /// 服务层
 #[injectable]
-pub struct ImageCaptchaService<'a> {
-    image_captcha_dao: ImageCaptchaDao<'a>,
+pub struct ImageCaptchaService {
+    image_captcha_dao: ImageCaptchaDao,
 }
 
-impl<'a> ImageCaptchaService<'a> {
+impl ImageCaptchaService {
     /// 获取列表数据
     pub async fn list(
         &self,

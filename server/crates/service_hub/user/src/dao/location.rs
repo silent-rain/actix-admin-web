@@ -1,7 +1,7 @@
 //! 用户地理位置管理
 use crate::dto::location::GetLocationListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::user::{location, Location};
 use nject::injectable;
 
@@ -12,11 +12,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct LocationDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct LocationDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> LocationDao<'a> {
+impl LocationDao {
     /// 获取数据列表
     pub async fn list(
         &self,

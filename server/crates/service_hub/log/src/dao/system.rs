@@ -2,7 +2,7 @@
 
 use crate::dto::system::GetSystemListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::log_system;
 use entity::prelude::LogSystem;
 
@@ -14,11 +14,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct SystemDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct SystemDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> SystemDao<'a> {
+impl SystemDao {
     /// 获取数据列表
     pub async fn list(
         &self,

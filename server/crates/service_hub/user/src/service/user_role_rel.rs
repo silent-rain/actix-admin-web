@@ -13,11 +13,11 @@ use tracing::error;
 
 /// 服务层
 #[injectable]
-pub struct UserRoleRelService<'a> {
-    user_role_rel_dao: UserRoleRelDao<'a>,
+pub struct UserRoleRelService {
+    user_role_rel_dao: UserRoleRelDao,
 }
 
-impl<'a> UserRoleRelService<'a> {
+impl UserRoleRelService {
     /// 获取所有数据
     pub async fn all(&self) -> Result<(Vec<user_role_rel::Model>, u64), ErrorMsg> {
         let (results, total) = self.user_role_rel_dao.all().await.map_err(|err| {

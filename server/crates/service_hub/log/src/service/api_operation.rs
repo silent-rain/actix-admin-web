@@ -13,11 +13,11 @@ use tracing::error;
 
 /// 服务层
 #[injectable]
-pub struct ApiOperationService<'a> {
-    system_dao: ApiOperationDao<'a>,
+pub struct ApiOperationService {
+    system_dao: ApiOperationDao,
 }
 
-impl<'a> ApiOperationService<'a> {
+impl ApiOperationService {
     /// 获取列表数据
     pub async fn list(
         &self,

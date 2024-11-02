@@ -657,6 +657,7 @@ dependencies = [
  "serde",
  "serde_json",
  "system",
+ "tokio",
  "tracing",
  "user",
  "utils",
@@ -2329,6 +2330,27 @@ dependencies = [
  "log 0.4.22",
  "wasi 0.11.0+wasi-snapshot-preview1",
  "windows-sys 0.52.0",
+]
+
+[[package]]
+name = "mock_request"
+version = "0.1.0"
+dependencies = [
+ "actix-http",
+ "actix-web",
+ "database",
+ "entity",
+ "inject",
+ "migration",
+ "response",
+ "sea-orm-migration",
+ "serde",
+ "serde_json",
+ "serde_repr",
+ "thiserror",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]
@@ -4272,6 +4294,7 @@ dependencies = [
  "entity",
  "inject",
  "migration",
+ "mock_request",
  "nject",
  "response",
  "sea-orm",
@@ -4760,6 +4783,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sha2",
+ "tokio",
  "tracing",
  "uap-rust",
 ]

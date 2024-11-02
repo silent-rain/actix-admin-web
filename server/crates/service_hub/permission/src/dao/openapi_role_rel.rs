@@ -2,7 +2,7 @@
 
 use crate::dto::openapi_role_rel::GetOpenapiRoleRelListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::{perm_openapi_role_rel, prelude::PermOpenapiRoleRel};
 
 use nject::injectable;
@@ -13,11 +13,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct OpenapiRoleRelDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct OpenapiRoleRelDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> OpenapiRoleRelDao<'a> {
+impl OpenapiRoleRelDao {
     /// 获取数据列表
     pub async fn list(
         &self,

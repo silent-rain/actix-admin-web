@@ -2,7 +2,7 @@
 
 use crate::dto::schedule_status_log::GetScheduleStatusLogListLogReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::schedule::{schedule_status_log, ScheduleStatusLog};
 
 use nject::injectable;
@@ -13,11 +13,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct ScheduleStatusLogDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct ScheduleStatusLogDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> ScheduleStatusLogDao<'a> {
+impl ScheduleStatusLogDao {
     /// 获取数据列表
     pub async fn list(
         &self,

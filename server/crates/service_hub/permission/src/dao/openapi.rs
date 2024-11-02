@@ -1,7 +1,7 @@
 //! OpenApi接口管理
 use crate::dto::openapi::{GetOpenapiListReq, RoleOpenapiPermission};
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::{perm_openapi, perm_openapi_role_rel, prelude::PermOpenapi};
 use nject::injectable;
 
@@ -12,11 +12,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct OpenapiDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct OpenapiDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> OpenapiDao<'a> {
+impl OpenapiDao {
     /// 获取所有数据
     pub async fn all(&self) -> Result<(Vec<perm_openapi::Model>, u64), DbErr> {
         let results = PermOpenapi::find()
@@ -124,7 +124,7 @@ impl<'a> OpenapiDao<'a> {
     }
 }
 
-impl<'a> OpenapiDao<'a> {
+impl OpenapiDao {
     /// 角色接口关系权限
     pub async fn role_openapi_permissions(&self) -> Result<Vec<RoleOpenapiPermission>, DbErr> {
         let results = PermOpenapi::find()

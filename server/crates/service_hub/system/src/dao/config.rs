@@ -1,7 +1,7 @@
 //! 配置管理
 use crate::dto::config::GetConfigListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::{prelude::SysConfig, sys_config};
 use nject::injectable;
 
@@ -12,11 +12,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct ConfigDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct ConfigDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> ConfigDao<'a> {
+impl ConfigDao {
     /// 获取所有数据
     pub async fn all(&self) -> Result<(Vec<sys_config::Model>, u64), DbErr> {
         let results = SysConfig::find()

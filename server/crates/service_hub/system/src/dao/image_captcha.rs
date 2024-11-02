@@ -1,7 +1,7 @@
 //! 图片验证码管理
 use crate::dto::image_captcha::GetImageCaptchaListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::{prelude::SysImageCaptcha, sys_image_captcha};
 use nject::injectable;
 
@@ -12,11 +12,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct ImageCaptchaDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct ImageCaptchaDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> ImageCaptchaDao<'a> {
+impl ImageCaptchaDao {
     /// 获取数据列表
     pub async fn list(
         &self,

@@ -2,7 +2,7 @@
 
 use crate::dto::user_login::GetUserLoginListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::log_user_login;
 use entity::prelude::LogUserLogin;
 
@@ -14,11 +14,15 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct UserLoginDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct UserLoginDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> UserLoginDao<'a> {
+impl UserLoginDao {
+    pub fn new(db: ArcDbRepo) -> Self {
+        UserLoginDao { db }
+    }
+
     /// 获取数据列表
     pub async fn list(
         &self,

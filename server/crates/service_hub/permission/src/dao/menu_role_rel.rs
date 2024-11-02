@@ -2,7 +2,7 @@
 
 use crate::dto::menu_role_rel::GetMenuRoleRelListReq;
 
-use database::{DbRepo, Pagination};
+use database::{ArcDbRepo, Pagination};
 use entity::{perm_menu_role_rel, prelude::PermMenuRoleRel};
 
 use nject::injectable;
@@ -13,11 +13,11 @@ use sea_orm::{
 
 /// 数据访问
 #[injectable]
-pub struct MenuRoleRelDao<'a> {
-    db: &'a dyn DbRepo,
+pub struct MenuRoleRelDao {
+    db: ArcDbRepo,
 }
 
-impl<'a> MenuRoleRelDao<'a> {
+impl MenuRoleRelDao {
     /// 获取数据列表
     pub async fn list(
         &self,

@@ -9,8 +9,8 @@ use chrono::Local;
 use tracing::error;
 
 /// 检测验证码
-pub async fn check_captcha<'a>(
-    captcha_dao: &'a ImageCaptchaDao<'a>,
+pub async fn check_captcha(
+    captcha_dao: &ImageCaptchaDao,
     captcha_id: String,
     captcha: String,
 ) -> Result<(), ErrorMsg> {
