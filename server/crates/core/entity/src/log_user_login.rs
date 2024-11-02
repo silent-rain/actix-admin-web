@@ -4,7 +4,7 @@ use chrono::Local;
 use sea_orm::{
     prelude::{async_trait::async_trait, DateTimeLocal},
     ActiveModelBehavior, ConnectionTrait, DbErr, DeriveEntityModel, DerivePrimaryKey,
-    DeriveRelation, EntityTrait, EnumIter, PrimaryKeyTrait, Set,
+    DeriveRelation, EnumIter, PrimaryKeyTrait, Set,
 };
 use serde::{Deserialize, Serialize};
 

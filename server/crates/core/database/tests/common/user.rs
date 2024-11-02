@@ -1,6 +1,6 @@
 use sea_orm::{
-    ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey, DeriveRelation, EntityTrait,
-    EnumIter, PrimaryKeyTrait,
+    ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey, DeriveRelation, EnumIter,
+    PrimaryKeyTrait,
 };
 
 #[derive(Clone, Default, Debug, PartialEq, DeriveEntityModel, Eq)]

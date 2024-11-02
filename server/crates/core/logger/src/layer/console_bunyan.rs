@@ -8,8 +8,6 @@ use tracing_subscriber::{
     fmt::writer::MakeWriterExt, layer::SubscriberExt, registry::LookupSpan, Layer,
 };
 
-#[allow(unused)]
-
 /// 输出到控制台中
 pub fn layer<S>(config: &ConsoleBunyanConfig) -> Box<dyn Layer<S> + Send + Sync + 'static>
 where

@@ -96,7 +96,7 @@ where
 /// 记录 fields 字典
 struct JsonVisitor<'a>(&'a mut BTreeMap<String, Value>);
 
-impl<'a> tracing::field::Visit for JsonVisitor<'a> {
+impl tracing::field::Visit for JsonVisitor<'_> {
     fn record_f64(&mut self, field: &tracing::field::Field, value: f64) {
         self.0
             .insert(field.name().to_string(), serde_json::json!(value));

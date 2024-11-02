@@ -2,7 +2,7 @@
 //! Entity: [`entity::prelude::SysImageCaptcha`]
 
 use sea_orm::{
-    sea_query::{BlobSize, ColumnDef, Expr, Table},
+    sea_query::{ColumnDef, Expr, Table},
     DatabaseBackend, DeriveIden, DeriveMigrationName,
 };
 use sea_orm_migration::{async_trait, DbErr, MigrationTrait, SchemaManager};
@@ -45,7 +45,7 @@ impl MigrationTrait for Migration {
                     )
                     .col(
                         ColumnDef::new(SysImageCaptcha::Data)
-                            .blob(BlobSize::Medium)
+                            .blob()
                             .not_null()
                             .comment("图片数据, Base64编码"),
                     )

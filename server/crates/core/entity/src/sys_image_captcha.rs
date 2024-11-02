@@ -1,9 +1,8 @@
 //! 图片验证码表
 
 use sea_orm::{
-    prelude::{BlobSize, DateTimeLocal},
-    ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey, DeriveRelation, EntityTrait,
-    EnumIter, PrimaryKeyTrait,
+    prelude::DateTimeLocal, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey,
+    DeriveRelation, EnumIter, PrimaryKeyTrait,
 };
 use serde::{Deserialize, Serialize};
 
@@ -19,7 +18,6 @@ pub struct Model {
     /// 验证码
     pub captcha: String,
     /// 图片数据, Base64编码
-    #[sea_orm(column_type = "Binary(BlobSize::Medium)")]
     pub data: Vec<u8>,
     /// 过期时间,秒
     pub expire: u32,

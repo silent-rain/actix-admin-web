@@ -31,10 +31,10 @@ where
         true
     }
 
-    /// 用于处理每次创建 span 时，指定了 follows from 关系的事件，也就是每次调用 span! 宏或其简写形式时，
-    /// 传入了 opentracing.followsFrom(span) 参数时触发的事件。
-    /// 在这个方法中，您可以获取 span 的 ID、follows from 的 span 的 ID 和上下文，
-    /// 这些信息可以用来记录或过滤 span，或者执行一些初始化工作。
+    //  /// 用于处理每次创建 span 时，指定了 follows from 关系的事件，也就是每次调用 span! 宏或其简写形式时，
+    //  /// 传入了 opentracing.followsFrom(span) 参数时触发的事件。
+    //   /// 在这个方法中，您可以获取 span 的 ID、follows from 的 span 的 ID 和上下文，
+    //   /// 这些信息可以用来记录或过滤 span，或者执行一些初始化工作。
     // fn on_follows_from(&self, _span: &span::Id, _follows: &span::Id, _ctx: Context<'_, S>) {
     // }
 

@@ -194,7 +194,7 @@ impl From<io::Error> for Error {
     }
 }
 
-/// Utf8 错误转换
+// Utf8 错误转换
 // impl From<std::string::FromUtf8Error> for Error {
 //     fn from(err: std::string::FromUtf8Error) -> Error {
 //         Error::FromUtf8Error(err)

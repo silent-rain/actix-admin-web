@@ -1,9 +1,8 @@
 //! 图片资源表
 
 use sea_orm::{
-    prelude::{BlobSize, DateTimeLocal},
-    ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey, DeriveRelation, EntityTrait,
-    EnumIter, PrimaryKeyTrait,
+    prelude::DateTimeLocal, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey,
+    DeriveRelation, EnumIter, PrimaryKeyTrait,
 };
 use serde::{Deserialize, Serialize};
 
@@ -20,7 +19,6 @@ pub struct Model {
     #[sea_orm(unique)]
     pub hash: String,
     /// 图片数据, Base64编码
-    #[sea_orm(column_type = "Binary(BlobSize::Medium)")]
     pub data: Vec<u8>,
     /// 图片文件扩展名, 如svg, png
     pub extension: String,

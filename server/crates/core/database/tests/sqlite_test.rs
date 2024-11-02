@@ -28,7 +28,7 @@ struct UserDao<'a> {
     db: &'a Pool,
 }
 
-impl<'a> Curd<user::Entity> for UserDao<'a> {
+impl Curd<user::Entity> for UserDao<'_> {
     type Db = Pool;
 
     fn db(&self) -> &Self::Db {
