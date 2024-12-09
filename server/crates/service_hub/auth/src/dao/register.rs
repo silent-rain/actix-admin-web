@@ -3,7 +3,7 @@
 use std::sync::Arc;
 
 use database::PoolTrait;
-use entity::user::{user_base, user_email, user_phone};
+use entity::user::{email, phone, user_base};
 
 use nject::injectable;
 use sea_orm::{ActiveModelTrait, DatabaseTransaction, DbErr, Set, TransactionTrait};
@@ -62,8 +62,8 @@ impl RegisterDao {
         txn: &DatabaseTransaction,
         user_id: i32,
         phone: String,
-    ) -> Result<user_phone::Model, DbErr> {
-        let active_model = user_phone::ActiveModel {
+    ) -> Result<phone::Model, DbErr> {
+        let active_model = phone::ActiveModel {
             user_id: Set(user_id),
             phone: Set(phone),
             ..Default::default()
@@ -77,8 +77,8 @@ impl RegisterDao {
         txn: &DatabaseTransaction,
         user_id: i32,
         email: String,
-    ) -> Result<user_email::Model, DbErr> {
-        let active_model = user_email::ActiveModel {
+    ) -> Result<email::Model, DbErr> {
+        let active_model = email::ActiveModel {
             user_id: Set(user_id),
             email: Set(email),
             ..Default::default()

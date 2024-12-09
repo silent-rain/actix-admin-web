@@ -57,9 +57,9 @@ pub struct Model {
 pub enum Relation {
     #[sea_orm(has_many = "super::user_role_rel::Entity")]
     UserRoleRel,
-    #[sea_orm(has_many = "super::user_phone::Entity")]
+    #[sea_orm(has_many = "super::phone::Entity")]
     UserPhone,
-    #[sea_orm(has_many = "super::user_email::Entity")]
+    #[sea_orm(has_many = "super::email::Entity")]
     UserEmail,
     #[sea_orm(has_many = "super::blockchain_wallet::Entity")]
     UserBlockchainWallet,
@@ -71,13 +71,13 @@ impl Related<super::user_role_rel::Entity> for Entity {
     }
 }
 
-impl Related<super::user_phone::Entity> for Entity {
+impl Related<super::phone::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::UserPhone.def()
     }
 }
 
-impl Related<super::user_email::Entity> for Entity {
+impl Related<super::email::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::UserEmail.def()
     }

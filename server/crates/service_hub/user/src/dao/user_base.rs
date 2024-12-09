@@ -4,7 +4,7 @@ use std::sync::Arc;
 use crate::dto::user_base::GetUserBaserListReq;
 
 use database::{Pagination, PoolTrait};
-use entity::user::{user_base, user_role, user_role_rel, UserBase, UserRole, UserRoleRel};
+use entity::user::{role, user_base, user_role_rel, Role, UserBase, UserRoleRel};
 
 use nject::injectable;
 use sea_orm::{
@@ -265,17 +265,17 @@ impl UserBaseDao {
 
 impl UserBaseDao {
     /// 通过用户ID获角色色列表
-    pub async fn roles(&self, user_id: i32) -> Result<(Vec<user_role::Model>, u64), DbErr> {
-        let results = UserRole::find()
+    pub async fn roles(&self, user_id: i32) -> Result<(Vec<role::Model>, u64), DbErr> {
+        let results = Role::find()
             .join_rev(
                 JoinType::InnerJoin,
-                UserRoleRel::belongs_to(UserRole)
+                UserRoleRel::belongs_to(Role)
                     .from(user_role_rel::Column::RoleId)
-                    .to(user_role::Column::Id)
+                    .to(role::Column::Id)
                     .into(),
             )
             .filter(user_role_rel::Column::UserId.eq(user_id))
-            .order_by_asc(user_role::Column::Id)
+            .order_by_asc(role::Column::Id)
             .all(self.db.db())
             .await?;
         let total = results.len() as u64;
@@ -292,14 +292,14 @@ mod tests {
 
     #[test]
     fn test_role_list() {
-        let result = UserRole::find()
+        let result = Role::find()
             .select_only()
-            .columns([user_role::Column::Id])
+            .columns([role::Column::Id])
             .join_rev(
                 JoinType::InnerJoin,
-                UserRoleRel::belongs_to(UserRole)
+                UserRoleRel::belongs_to(Role)
                     .from(user_role_rel::Column::RoleId)
-                    .to(user_role::Column::Id)
+                    .to(role::Column::Id)
                     .into(),
             )
             .filter(user_role_rel::Column::UserId.eq(10))

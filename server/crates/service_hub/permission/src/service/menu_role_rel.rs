@@ -5,7 +5,7 @@ use crate::{
 };
 
 use code::{Error, ErrorMsg};
-use entity::perm_menu_role_rel;
+use entity::permission::menu_role_rel;
 
 use nject::injectable;
 use sea_orm::Set;
@@ -22,7 +22,7 @@ impl MenuRoleRelService {
     pub async fn list(
         &self,
         req: GetMenuRoleRelListReq,
-    ) -> Result<(Vec<perm_menu_role_rel::Model>, u64), ErrorMsg> {
+    ) -> Result<(Vec<menu_role_rel::Model>, u64), ErrorMsg> {
         let (results, total) = self.menu_role_rel_dao.list(req).await.map_err(|err| {
             error!("查询菜单角色关系列表失败, err: {:#?}", err);
             Error::DbQueryError
@@ -37,7 +37,7 @@ impl MenuRoleRelService {
     pub async fn batch_add(&self, req: BatchAddMenuRoleRelReq) -> Result<i32, ErrorMsg> {
         let mut models = Vec::new();
         for role_id in req.role_ids {
-            let model = perm_menu_role_rel::ActiveModel {
+            let model = menu_role_rel::ActiveModel {
                 menu_id: Set(req.menu_id),
                 role_id: Set(role_id),
                 ..Default::default()

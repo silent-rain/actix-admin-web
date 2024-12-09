@@ -1,7 +1,6 @@
-//! 用户手机号表
-//! Entity: [`entity::prelude::UserPhone`]
-
-use crate::m20240218_145453_create_user_base::UserBase;
+//! 令牌角色关系表
+//! Entity: [`entity::prelude::PermTokenRoleRel`]
+use crate::{permission::token::Token, user::role::UserRole};
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, ForeignKey, ForeignKeyAction, Index, Table},
@@ -19,75 +18,53 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(UserPhone::Table)
-                    .comment("用户手机号表")
+                    .table(TokenRoleRel::Table)
+                    .comment("令牌角色关系表")
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(UserPhone::Id)
+                        ColumnDef::new(TokenRoleRel::Id)
                             .integer()
                             .primary_key()
                             .auto_increment()
                             .not_null()
-                            .comment("手机号ID"),
+                            .comment("自增ID"),
                     )
                     .col(
-                        ColumnDef::new(UserPhone::UserId)
+                        ColumnDef::new(TokenRoleRel::TokenId)
                             .integer()
-                            .unique_key()
                             .not_null()
-                            .comment("用户ID"),
+                            .comment("令牌ID"),
                     )
                     .col(
-                        ColumnDef::new(UserPhone::Phone)
-                            .string()
-                            .string_len(16)
-                            .unique_key()
+                        ColumnDef::new(TokenRoleRel::RoleId)
+                            .integer()
                             .not_null()
-                            .comment("手机号码"),
+                            .comment("角色ID"),
                     )
                     .col(
-                        ColumnDef::new(UserPhone::Desc)
-                            .string()
-                            .string_len(200)
-                            .default("")
-                            .null()
-                            .default("")
-                            .comment("描述信息"),
-                    )
-                    .col(
-                        ColumnDef::new(UserPhone::CreatedAt)
+                        ColumnDef::new(TokenRoleRel::CreatedAt)
                             .date_time()
                             .not_null()
                             .default(Expr::current_timestamp())
                             .comment("创建时间"),
-                    )
-                    .col(
-                        ColumnDef::new(UserPhone::UpdatedAt)
-                            .date_time()
-                            .not_null()
-                            .extra({
-                                match manager.get_database_backend() {
-                                    DatabaseBackend::Sqlite => "DEFAULT CURRENT_TIMESTAMP",
-                                    _ => "DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
-                                }
-                            })
-                            .comment("更新时间"),
                     )
                     .to_owned(),
             )
             .await?;
 
         if !manager
-            .has_index(UserPhone::Table.to_string(), "idx_user_id")
+            .has_index(TokenRoleRel::Table.to_string(), "uk_token_id_role_id")
             .await?
         {
             manager
                 .create_index(
                     Index::create()
                         .if_not_exists()
-                        .name("idx_user_id")
-                        .table(UserPhone::Table)
-                        .col(UserPhone::UserId)
+                        .table(TokenRoleRel::Table)
+                        .name("uk_token_id_role_id")
+                        .unique()
+                        .col(TokenRoleRel::TokenId)
+                        .col(TokenRoleRel::RoleId)
                         .to_owned(),
                 )
                 .await?;
@@ -99,15 +76,38 @@ impl MigrationTrait for Migration {
         }
 
         if !manager
-            .has_index(UserPhone::Table.to_string(), "fk_phone_user_id")
+            .has_index(
+                TokenRoleRel::Table.to_string(),
+                "fk_perm_token_role_rel_token_id",
+            )
             .await?
         {
             manager
                 .create_foreign_key(
                     ForeignKey::create()
-                        .name("fk_phone_user_id")
-                        .from(UserPhone::Table, UserPhone::UserId)
-                        .to(UserBase::Table, UserBase::Id)
+                        .name("fk_perm_token_role_rel_token_id")
+                        .from(TokenRoleRel::Table, TokenRoleRel::TokenId)
+                        .to(Token::Table, Token::Id)
+                        .on_update(ForeignKeyAction::Cascade)
+                        .on_delete(ForeignKeyAction::Cascade)
+                        .to_owned(),
+                )
+                .await?;
+        }
+
+        if !manager
+            .has_index(
+                TokenRoleRel::Table.to_string(),
+                "fk_perm_token_role_rel_role_id",
+            )
+            .await?
+        {
+            manager
+                .create_foreign_key(
+                    ForeignKey::create()
+                        .name("fk_perm_token_role_rel_role_id")
+                        .from(TokenRoleRel::Table, TokenRoleRel::RoleId)
+                        .to(UserRole::Table, UserRole::Id)
                         .on_update(ForeignKeyAction::Cascade)
                         .on_delete(ForeignKeyAction::Cascade)
                         .to_owned(),
@@ -121,19 +121,17 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
         manager
-            .drop_table(Table::drop().table(UserPhone::Table).to_owned())
+            .drop_table(Table::drop().table(TokenRoleRel::Table).to_owned())
             .await
     }
 }
 
 #[derive(DeriveIden)]
-pub enum UserPhone {
-    #[sea_orm(iden = "t_user_phone")]
+pub enum TokenRoleRel {
+    #[sea_orm(iden = "t_perm_token_role_rel")]
     Table,
     Id,
-    UserId,
-    Phone,
-    Desc,
+    TokenId,
+    RoleId,
     CreatedAt,
-    UpdatedAt,
 }

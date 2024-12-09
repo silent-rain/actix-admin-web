@@ -1,8 +1,7 @@
-//! OpenApi接口角色关系表
-//! Entity: [`entity::prelude::PermOpenapiRoleRel`]
-use crate::{
-    m20240218_145453_create_perm_openapi::PermOpenapi, m20240218_145453_create_user_role::UserRole,
-};
+//! 用户角色关系表
+//! Entity: [`entity::prelude::UserRoleRel`]
+
+use crate::{user::role::UserRole, user::user_base::UserBase};
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, ForeignKey, ForeignKeyAction, Index, Table},
@@ -20,31 +19,31 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(PermOpenapiRoleRel::Table)
-                    .comment("OpenApi接口角色关系表")
+                    .table(UserRoleRel::Table)
+                    .comment("用户角色关系表")
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(PermOpenapiRoleRel::Id)
+                        ColumnDef::new(UserRoleRel::Id)
                             .integer()
                             .primary_key()
                             .auto_increment()
                             .not_null()
-                            .comment("自增ID"),
+                            .comment("ID"),
                     )
                     .col(
-                        ColumnDef::new(PermOpenapiRoleRel::ApiId)
+                        ColumnDef::new(UserRoleRel::UserId)
                             .integer()
                             .not_null()
-                            .comment("接口ID"),
+                            .comment("用户ID"),
                     )
                     .col(
-                        ColumnDef::new(PermOpenapiRoleRel::RoleId)
+                        ColumnDef::new(UserRoleRel::RoleId)
                             .integer()
                             .not_null()
                             .comment("角色ID"),
                     )
                     .col(
-                        ColumnDef::new(PermOpenapiRoleRel::CreatedAt)
+                        ColumnDef::new(UserRoleRel::CreatedAt)
                             .date_time()
                             .not_null()
                             .default(Expr::current_timestamp())
@@ -55,21 +54,18 @@ impl MigrationTrait for Migration {
             .await?;
 
         if !manager
-            .has_index(
-                PermOpenapiRoleRel::Table.to_string(),
-                "uk_openapi_id_role_id",
-            )
+            .has_index(UserRoleRel::Table.to_string(), "uk_user_id_role_id")
             .await?
         {
             manager
                 .create_index(
                     Index::create()
                         .if_not_exists()
-                        .table(PermOpenapiRoleRel::Table)
-                        .name("uk_openapi_id_role_id")
+                        .table(UserRoleRel::Table)
+                        .name("uk_user_id_role_id")
                         .unique()
-                        .col(PermOpenapiRoleRel::ApiId)
-                        .col(PermOpenapiRoleRel::RoleId)
+                        .col(UserRoleRel::UserId)
+                        .col(UserRoleRel::RoleId)
                         .to_owned(),
                 )
                 .await?;
@@ -81,18 +77,15 @@ impl MigrationTrait for Migration {
         }
 
         if !manager
-            .has_index(
-                PermOpenapiRoleRel::Table.to_string(),
-                "fk_openapi_role_rel_openapi_id",
-            )
+            .has_index(UserRoleRel::Table.to_string(), "fk_user_role_rel_user_id")
             .await?
         {
             manager
                 .create_foreign_key(
                     ForeignKey::create()
-                        .name("fk_openapi_role_rel_openapi_id")
-                        .from(PermOpenapiRoleRel::Table, PermOpenapiRoleRel::ApiId)
-                        .to(PermOpenapi::Table, PermOpenapi::Id)
+                        .name("fk_user_role_rel_user_id")
+                        .from(UserRoleRel::Table, UserRoleRel::UserId)
+                        .to(UserBase::Table, UserBase::Id)
                         .on_update(ForeignKeyAction::Cascade)
                         .on_delete(ForeignKeyAction::Cascade)
                         .to_owned(),
@@ -101,17 +94,14 @@ impl MigrationTrait for Migration {
         }
 
         if !manager
-            .has_index(
-                PermOpenapiRoleRel::Table.to_string(),
-                "fk_openapi_role_rel_role_id",
-            )
+            .has_index(UserRoleRel::Table.to_string(), "fk_user_role_rel_role_id")
             .await?
         {
             manager
                 .create_foreign_key(
                     ForeignKey::create()
-                        .name("fk_openapi_role_rel_role_id")
-                        .from(PermOpenapiRoleRel::Table, PermOpenapiRoleRel::RoleId)
+                        .name("fk_user_role_rel_role_id")
+                        .from(UserRoleRel::Table, UserRoleRel::RoleId)
                         .to(UserRole::Table, UserRole::Id)
                         .on_update(ForeignKeyAction::Cascade)
                         .on_delete(ForeignKeyAction::Cascade)
@@ -126,17 +116,17 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
         manager
-            .drop_table(Table::drop().table(PermOpenapiRoleRel::Table).to_owned())
+            .drop_table(Table::drop().table(UserRoleRel::Table).to_owned())
             .await
     }
 }
 
 #[derive(DeriveIden)]
-pub enum PermOpenapiRoleRel {
-    #[sea_orm(iden = "t_perm_openapi_role_rel")]
+pub enum UserRoleRel {
+    #[sea_orm(iden = "t_user_role_rel")]
     Table,
     Id,
-    ApiId,
+    UserId,
     RoleId,
     CreatedAt,
 }

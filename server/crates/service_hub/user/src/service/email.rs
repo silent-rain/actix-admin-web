@@ -5,7 +5,7 @@ use crate::{
 };
 
 use code::{Error, ErrorMsg};
-use entity::user::user_email;
+use entity::user::email;
 
 use nject::injectable;
 use sea_orm::Set;
@@ -19,10 +19,7 @@ pub struct EmailService {
 
 impl EmailService {
     /// 获取列表数据
-    pub async fn list(
-        &self,
-        req: GetEmailListReq,
-    ) -> Result<(Vec<user_email::Model>, u64), ErrorMsg> {
+    pub async fn list(&self, req: GetEmailListReq) -> Result<(Vec<email::Model>, u64), ErrorMsg> {
         let (results, total) = self.email_dao.list(req).await.map_err(|err| {
             error!("查询邮箱列表失败, err: {:#?}", err);
             Error::DbQueryError.into_msg().with_msg("查询邮箱列表失败")
@@ -32,7 +29,7 @@ impl EmailService {
     }
 
     /// 获取详情数据
-    pub async fn info(&self, id: i32) -> Result<user_email::Model, ErrorMsg> {
+    pub async fn info(&self, id: i32) -> Result<email::Model, ErrorMsg> {
         let result = self
             .email_dao
             .info(id)
@@ -50,7 +47,7 @@ impl EmailService {
     }
 
     /// 添加数据
-    pub async fn add(&self, req: AddEmailReq) -> Result<user_email::Model, ErrorMsg> {
+    pub async fn add(&self, req: AddEmailReq) -> Result<email::Model, ErrorMsg> {
         // 查询邮箱是否已存在
         let email = self
             .email_dao
@@ -68,7 +65,7 @@ impl EmailService {
         // 检查邮箱名称是否已存在
         self.check_email_exist(req.email.clone(), None).await?;
 
-        let model = user_email::ActiveModel {
+        let model = email::ActiveModel {
             user_id: Set(req.user_id),
             email: Set(req.email),
             desc: Set(req.desc),
@@ -87,7 +84,7 @@ impl EmailService {
         // 检查邮箱是否已存在且不属于当前ID
         self.check_email_exist(req.email.clone(), Some(id)).await?;
 
-        let model = user_email::ActiveModel {
+        let model = email::ActiveModel {
             id: Set(id),
             email: Set(req.email),
             desc: Set(req.desc),

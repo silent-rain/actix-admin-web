@@ -5,7 +5,7 @@ use crate::{
 };
 
 use code::{Error, ErrorMsg};
-use entity::perm_token_role_rel;
+use entity::permission::token_role_rel;
 
 use nject::injectable;
 use sea_orm::Set;
@@ -22,7 +22,7 @@ impl TokenRoleRelService {
     pub async fn list(
         &self,
         req: GetTokenRoleRelListReq,
-    ) -> Result<(Vec<perm_token_role_rel::Model>, u64), ErrorMsg> {
+    ) -> Result<(Vec<token_role_rel::Model>, u64), ErrorMsg> {
         let (results, total) = self.token_role_rel_dao.list(req).await.map_err(|err| {
             error!("查询令牌角色关系列表失败, err: {:#?}", err);
             Error::DbQueryError
@@ -37,7 +37,7 @@ impl TokenRoleRelService {
     pub async fn batch_add(&self, req: BatchAddTokenRoleRelReq) -> Result<i32, ErrorMsg> {
         let mut models = Vec::new();
         for role_id in req.role_ids {
-            let model = perm_token_role_rel::ActiveModel {
+            let model = token_role_rel::ActiveModel {
                 token_id: Set(req.token_id),
                 role_id: Set(role_id),
                 ..Default::default()

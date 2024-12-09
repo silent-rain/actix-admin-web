@@ -8,8 +8,8 @@ use crate::{
 
 use code::{Error, ErrorMsg};
 use entity::{
-    perm_token,
-    user::{user_base, user_role, user_role_rel},
+    permission::token,
+    user::{role, user_base, user_role_rel},
 };
 
 use base64::Engine;
@@ -333,7 +333,7 @@ impl UserBaseService {
 
 impl UserBaseService {
     /// 通过用户信息ID获角色色列表
-    pub async fn roles(&self, user_id: i32) -> Result<(Vec<user_role::Model>, u64), ErrorMsg> {
+    pub async fn roles(&self, user_id: i32) -> Result<(Vec<role::Model>, u64), ErrorMsg> {
         let (results, total) = self.user_base_dao.roles(user_id).await.map_err(|err| {
             error!("查询用户信息失败, err: {:#?}", err);
             Error::DbQueryError.into_msg().with_msg("查询用户信息失败")
@@ -405,7 +405,7 @@ impl UserBaseService {
         &self,
         openapi_token: String,
         passphrase: String,
-    ) -> Result<perm_token::Model, ErrorMsg> {
+    ) -> Result<token::Model, ErrorMsg> {
         let token = self
             .token_dao
             .info_by_token(openapi_token.clone(), passphrase)
@@ -420,7 +420,7 @@ impl UserBaseService {
                     .into_msg()
                     .with_msg("用户令牌不存在")
             })?;
-        if token.status == perm_token::enums::Status::Disabled as i8 {
+        if token.status == token::enums::Status::Disabled as i8 {
             error!("openapi_token: {}, 用户令牌已被禁用", openapi_token.clone());
             return Err(code::Error::LoginStatusDisabled
                 .into_msg()

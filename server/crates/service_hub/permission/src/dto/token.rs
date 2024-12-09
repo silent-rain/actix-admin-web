@@ -1,6 +1,6 @@
 //! 令牌管理
 
-use entity::perm_token;
+use entity::permission::token;
 
 use actix_validator::Validate;
 use utils::time::{default_local_date_time, str_to_local_date_time};
@@ -31,7 +31,7 @@ pub struct AddTokenReq {
     /// 用户ID
     pub user_id: i32,
     /// 权限范围:GET,POST,PUT,DELETE
-    /// Enum: [`perm_token::enums::Permission`]
+    /// Enum: [`token::enums::Permission`]
     pub permission: String,
     /// 授权到期时间
     #[serde(
@@ -41,7 +41,7 @@ pub struct AddTokenReq {
     )]
     pub expire: DateTimeLocal,
     /// 状态,0:禁用,1:启用
-    pub status: perm_token::enums::Status,
+    pub status: token::enums::Status,
     /// 描述信息
     pub desc: Option<String>,
 }
@@ -62,7 +62,7 @@ pub struct UpdateTokenReq {
     )]
     pub expire: DateTimeLocal,
     /// 状态,0:禁用,1:启用
-    pub status: perm_token::enums::Status,
+    pub status: token::enums::Status,
     /// 描述信息
     pub desc: Option<String>,
 }
@@ -71,5 +71,5 @@ pub struct UpdateTokenReq {
 #[derive(Clone, Serialize, Deserialize, Validate)]
 pub struct UpdateTokenStatusReq {
     /// 状态(0:停用,1:正常)
-    pub status: perm_token::enums::Status,
+    pub status: token::enums::Status,
 }

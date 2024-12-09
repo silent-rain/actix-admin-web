@@ -18,11 +18,11 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(PermMenu::Table)
+                    .table(Menu::Table)
                     .comment("菜单表")
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(PermMenu::Id)
+                        ColumnDef::new(Menu::Id)
                             .integer()
                             .primary_key()
                             .auto_increment()
@@ -30,21 +30,21 @@ impl MigrationTrait for Migration {
                             .comment("菜单ID"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::Pid)
+                        ColumnDef::new(Menu::Pid)
                             .integer()
                             .null()
                             .default(0)
                             .comment("父菜单ID"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::Title)
+                        ColumnDef::new(Menu::Title)
                             .string()
                             .string_len(20)
                             .not_null()
                             .comment("菜单名称"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::IconClass)
+                        ColumnDef::new(Menu::IconClass)
                             .string()
                             .string_len(20)
                             .null()
@@ -52,19 +52,19 @@ impl MigrationTrait for Migration {
                             .comment("Icon图标类"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::MenuType)
+                        ColumnDef::new(Menu::MenuType)
                             .integer()
                             .not_null()
                             .comment("菜单类型(0:菜单,1:按钮)"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::OpenMethod)
+                        ColumnDef::new(Menu::OpenMethod)
                             .integer()
                             .not_null()
                             .comment("打开方式(0:组件,1:内链,2:外链)"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::Path)
+                        ColumnDef::new(Menu::Path)
                             .string()
                             .string_len(500)
                             .null()
@@ -72,7 +72,7 @@ impl MigrationTrait for Migration {
                             .comment("路由地址"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::ComponentPath)
+                        ColumnDef::new(Menu::ComponentPath)
                             .string()
                             .string_len(500)
                             .null()
@@ -80,7 +80,7 @@ impl MigrationTrait for Migration {
                             .comment("组件路径"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::RedirectTo)
+                        ColumnDef::new(Menu::RedirectTo)
                             .string()
                             .string_len(200)
                             .null()
@@ -88,7 +88,7 @@ impl MigrationTrait for Migration {
                             .comment("路由重定向"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::Link)
+                        ColumnDef::new(Menu::Link)
                             .string()
                             .string_len(200)
                             .null()
@@ -96,7 +96,7 @@ impl MigrationTrait for Migration {
                             .comment("链接地址:站内链地址/站外链地址"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::LinkTarget)
+                        ColumnDef::new(Menu::LinkTarget)
                             .string()
                             .string_len(20)
                             .null()
@@ -104,21 +104,21 @@ impl MigrationTrait for Migration {
                             .comment("链接跳转方式,_blank/_self"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::IsHidden)
+                        ColumnDef::new(Menu::IsHidden)
                             .integer()
                             .null()
                             .default(1)
                             .comment("是否隐藏(0:显示,1:隐藏)"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::IsAlwaysDisplayed)
+                        ColumnDef::new(Menu::IsAlwaysDisplayed)
                             .integer()
                             .null()
                             .default(1)
                             .comment("是否始终显示根菜单(0:隐藏,1:显示)"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::Permission)
+                        ColumnDef::new(Menu::Permission)
                             .string()
                             .string_len(200)
                             .null()
@@ -126,14 +126,14 @@ impl MigrationTrait for Migration {
                             .comment("权限标识"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::Sort)
+                        ColumnDef::new(Menu::Sort)
                             .integer()
                             .null()
                             .default(0)
                             .comment("排序"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::Desc)
+                        ColumnDef::new(Menu::Desc)
                             .string()
                             .string_len(200)
                             .null()
@@ -141,21 +141,21 @@ impl MigrationTrait for Migration {
                             .comment("描述信息"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::Status)
+                        ColumnDef::new(Menu::Status)
                             .tiny_integer()
                             .not_null()
                             .default(1)
                             .comment("状态(0:停用,1:正常)"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::CreatedAt)
+                        ColumnDef::new(Menu::CreatedAt)
                             .date_time()
                             .not_null()
                             .default(Expr::current_timestamp())
                             .comment("创建时间"),
                     )
                     .col(
-                        ColumnDef::new(PermMenu::UpdatedAt)
+                        ColumnDef::new(Menu::UpdatedAt)
                             .date_time()
                             .not_null()
                             .extra({
@@ -175,19 +175,20 @@ impl MigrationTrait for Migration {
         // Replace the sample below with your own migration scripts
 
         manager
-            .drop_table(Table::drop().table(PermMenu::Table).to_owned())
+            .drop_table(Table::drop().table(Menu::Table).to_owned())
             .await
     }
 }
 
 #[derive(DeriveIden)]
-pub enum PermMenu {
+pub enum Menu {
     #[sea_orm(iden = "t_perm_menu")]
     Table,
     Id,
     Pid,
     Title,
     IconClass,
+    #[allow(clippy::enum_variant_names)]
     MenuType,
     OpenMethod,
     Path,

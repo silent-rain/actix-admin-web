@@ -1,9 +1,6 @@
-//! 用户角色关系表
-//! Entity: [`entity::prelude::UserRoleRel`]
-
-use crate::{
-    m20240218_145453_create_user_base::UserBase, m20240218_145453_create_user_role::UserRole,
-};
+//! 部门角色关系表
+//! Entity: [`entity::organization::DepartmentRoleRel`]
+use crate::{organization::department::Department, user::role::UserRole};
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, ForeignKey, ForeignKeyAction, Index, Table},
@@ -21,31 +18,31 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(UserRoleRel::Table)
-                    .comment("用户角色关系表")
+                    .table(DepartmentRoleRel::Table)
+                    .comment("部门角色关系表")
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(UserRoleRel::Id)
+                        ColumnDef::new(DepartmentRoleRel::Id)
                             .integer()
                             .primary_key()
                             .auto_increment()
                             .not_null()
-                            .comment("ID"),
+                            .comment("自增ID"),
                     )
                     .col(
-                        ColumnDef::new(UserRoleRel::UserId)
+                        ColumnDef::new(DepartmentRoleRel::DepartmentId)
                             .integer()
                             .not_null()
-                            .comment("用户ID"),
+                            .comment("部门ID"),
                     )
                     .col(
-                        ColumnDef::new(UserRoleRel::RoleId)
+                        ColumnDef::new(DepartmentRoleRel::RoleId)
                             .integer()
                             .not_null()
                             .comment("角色ID"),
                     )
                     .col(
-                        ColumnDef::new(UserRoleRel::CreatedAt)
+                        ColumnDef::new(DepartmentRoleRel::CreatedAt)
                             .date_time()
                             .not_null()
                             .default(Expr::current_timestamp())
@@ -56,18 +53,21 @@ impl MigrationTrait for Migration {
             .await?;
 
         if !manager
-            .has_index(UserRoleRel::Table.to_string(), "uk_user_id_role_id")
+            .has_index(
+                DepartmentRoleRel::Table.to_string(),
+                "uk_department_id_role_id",
+            )
             .await?
         {
             manager
                 .create_index(
                     Index::create()
                         .if_not_exists()
-                        .table(UserRoleRel::Table)
-                        .name("uk_user_id_role_id")
+                        .table(DepartmentRoleRel::Table)
+                        .name("uk_department_id_role_id")
                         .unique()
-                        .col(UserRoleRel::UserId)
-                        .col(UserRoleRel::RoleId)
+                        .col(DepartmentRoleRel::DepartmentId)
+                        .col(DepartmentRoleRel::RoleId)
                         .to_owned(),
                 )
                 .await?;
@@ -79,15 +79,18 @@ impl MigrationTrait for Migration {
         }
 
         if !manager
-            .has_index(UserRoleRel::Table.to_string(), "fk_user_role_rel_user_id")
+            .has_index(
+                DepartmentRoleRel::Table.to_string(),
+                "fk_org_department_role_rel_department_id",
+            )
             .await?
         {
             manager
                 .create_foreign_key(
                     ForeignKey::create()
-                        .name("fk_user_role_rel_user_id")
-                        .from(UserRoleRel::Table, UserRoleRel::UserId)
-                        .to(UserBase::Table, UserBase::Id)
+                        .name("fk_org_department_role_rel_department_id")
+                        .from(DepartmentRoleRel::Table, DepartmentRoleRel::DepartmentId)
+                        .to(Department::Table, Department::Id)
                         .on_update(ForeignKeyAction::Cascade)
                         .on_delete(ForeignKeyAction::Cascade)
                         .to_owned(),
@@ -96,14 +99,17 @@ impl MigrationTrait for Migration {
         }
 
         if !manager
-            .has_index(UserRoleRel::Table.to_string(), "fk_user_role_rel_role_id")
+            .has_index(
+                DepartmentRoleRel::Table.to_string(),
+                "fk_org_department_role_rel_role_id",
+            )
             .await?
         {
             manager
                 .create_foreign_key(
                     ForeignKey::create()
-                        .name("fk_user_role_rel_role_id")
-                        .from(UserRoleRel::Table, UserRoleRel::RoleId)
+                        .name("fk_org_department_role_rel_role_id")
+                        .from(DepartmentRoleRel::Table, DepartmentRoleRel::RoleId)
                         .to(UserRole::Table, UserRole::Id)
                         .on_update(ForeignKeyAction::Cascade)
                         .on_delete(ForeignKeyAction::Cascade)
@@ -118,17 +124,17 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
         manager
-            .drop_table(Table::drop().table(UserRoleRel::Table).to_owned())
+            .drop_table(Table::drop().table(DepartmentRoleRel::Table).to_owned())
             .await
     }
 }
 
 #[derive(DeriveIden)]
-pub enum UserRoleRel {
-    #[sea_orm(iden = "t_user_role_rel")]
+pub enum DepartmentRoleRel {
+    #[sea_orm(iden = "t_org_department_role_rel")]
     Table,
     Id,
-    UserId,
+    DepartmentId,
     RoleId,
     CreatedAt,
 }

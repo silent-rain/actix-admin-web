@@ -1,6 +1,6 @@
 //! OpenApi接口管理
 
-use entity::perm_openapi;
+use entity::permission::openapi;
 
 use actix_validator::Validate;
 
@@ -30,7 +30,7 @@ pub struct AddOpenapiReq {
     /// 父ID
     pub pid: Option<i32>,
     /// 类别,0:目录,1:接口
-    pub category: perm_openapi::enums::Category,
+    pub category: openapi::enums::Category,
     /// 接口名称
     pub name: String,
     /// 请求类型
@@ -42,7 +42,7 @@ pub struct AddOpenapiReq {
     /// 描述信息
     pub desc: Option<String>,
     /// 状态, 0:停用,1:正常
-    pub status: perm_openapi::enums::Status,
+    pub status: openapi::enums::Status,
 }
 
 /// 更新数据
@@ -51,7 +51,7 @@ pub struct UpdateOpenapiReq {
     /// 父ID
     pub pid: Option<i32>,
     /// 类别,0:目录,1:接口
-    pub category: perm_openapi::enums::Category,
+    pub category: openapi::enums::Category,
     /// 接口名称
     pub name: String,
     /// 请求类型
@@ -63,14 +63,14 @@ pub struct UpdateOpenapiReq {
     /// 描述信息
     pub desc: Option<String>,
     /// 状态(0:停用,1:正常)
-    pub status: perm_openapi::enums::Status,
+    pub status: openapi::enums::Status,
 }
 
 /// 更新数据状态
 #[derive(Clone, Serialize, Deserialize, Validate)]
 pub struct UpdateOpenapiStatusReq {
     /// 状态(0:停用,1:正常)
-    pub status: perm_openapi::enums::Status,
+    pub status: openapi::enums::Status,
 }
 
 /// 角色接口关系权限

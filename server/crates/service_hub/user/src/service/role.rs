@@ -5,7 +5,7 @@ use crate::{
 };
 
 use code::{Error, ErrorMsg};
-use entity::user::user_role;
+use entity::user::role;
 
 use nject::injectable;
 use sea_orm::{DbErr::RecordNotUpdated, Set};
@@ -19,10 +19,7 @@ pub struct RoleService {
 
 impl RoleService {
     /// 获取列表数据
-    pub async fn list(
-        &self,
-        req: GetRoleListReq,
-    ) -> Result<(Vec<user_role::Model>, u64), ErrorMsg> {
+    pub async fn list(&self, req: GetRoleListReq) -> Result<(Vec<role::Model>, u64), ErrorMsg> {
         // 获取所有数据
         if let Some(true) = req.all {
             return self.role_dao.all().await.map_err(|err| {
@@ -40,7 +37,7 @@ impl RoleService {
     }
 
     /// 获取详情数据
-    pub async fn info(&self, id: i32) -> Result<user_role::Model, ErrorMsg> {
+    pub async fn info(&self, id: i32) -> Result<role::Model, ErrorMsg> {
         let result = self
             .role_dao
             .info(id)
@@ -58,15 +55,15 @@ impl RoleService {
     }
 
     /// 添加数据
-    pub async fn add(&self, req: AddRoleReq) -> Result<user_role::Model, ErrorMsg> {
+    pub async fn add(&self, req: AddRoleReq) -> Result<role::Model, ErrorMsg> {
         // 检查角色名称是否已存在
         self.check_name_exist(req.name.clone(), None).await?;
 
-        let model = user_role::ActiveModel {
+        let model = role::ActiveModel {
             name: Set(req.name),
             sort: Set(req.sort),
             desc: Set(req.desc),
-            status: Set(user_role::enums::Status::Enabled as i8),
+            status: Set(role::enums::Status::Enabled as i8),
             ..Default::default()
         };
         let result = self.role_dao.add(model).await.map_err(|err| {
@@ -82,7 +79,7 @@ impl RoleService {
         // 检查角色名称是否已存在且不属于当前ID
         self.check_name_exist(req.name.clone(), Some(id)).await?;
 
-        let model = user_role::ActiveModel {
+        let model = role::ActiveModel {
             id: Set(id),
             name: Set(req.name),
             sort: Set(req.sort),

@@ -5,7 +5,7 @@ use crate::{
 };
 
 use code::{Error, ErrorMsg};
-use entity::perm_openapi_role_rel;
+use entity::permission::openapi_role_rel;
 
 use nject::injectable;
 use sea_orm::Set;
@@ -22,7 +22,7 @@ impl OpenapiRoleRelService {
     pub async fn list(
         &self,
         req: GetOpenapiRoleRelListReq,
-    ) -> Result<(Vec<perm_openapi_role_rel::Model>, u64), ErrorMsg> {
+    ) -> Result<(Vec<openapi_role_rel::Model>, u64), ErrorMsg> {
         let (results, total) = self.openapi_role_rel_dao.list(req).await.map_err(|err| {
             error!("查询OpenApi接口角色关系列表失败, err: {:#?}", err);
             Error::DbQueryError
@@ -37,7 +37,7 @@ impl OpenapiRoleRelService {
     pub async fn batch_add(&self, req: BatchAddOpenapiRoleRelReq) -> Result<i32, ErrorMsg> {
         let mut models = Vec::new();
         for role_id in req.role_ids {
-            let model = perm_openapi_role_rel::ActiveModel {
+            let model = openapi_role_rel::ActiveModel {
                 openapi_id: Set(req.openapi_id),
                 role_id: Set(role_id),
                 ..Default::default()

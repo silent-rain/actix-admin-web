@@ -5,7 +5,7 @@ use crate::{
 };
 
 use code::{Error, ErrorMsg};
-use entity::user::user_phone;
+use entity::user::phone;
 
 use nject::injectable;
 use sea_orm::Set;
@@ -19,10 +19,7 @@ pub struct PhoneService {
 
 impl PhoneService {
     /// 获取列表数据
-    pub async fn list(
-        &self,
-        req: GetPhoneListReq,
-    ) -> Result<(Vec<user_phone::Model>, u64), ErrorMsg> {
+    pub async fn list(&self, req: GetPhoneListReq) -> Result<(Vec<phone::Model>, u64), ErrorMsg> {
         let (results, total) = self.phone_dao.list(req).await.map_err(|err| {
             error!("查询用户手机号列表失败, err: {:#?}", err);
             Error::DbQueryError
@@ -34,7 +31,7 @@ impl PhoneService {
     }
 
     /// 获取详情数据
-    pub async fn info(&self, id: i32) -> Result<user_phone::Model, ErrorMsg> {
+    pub async fn info(&self, id: i32) -> Result<phone::Model, ErrorMsg> {
         let result = self
             .phone_dao
             .info(id)
@@ -56,11 +53,11 @@ impl PhoneService {
     }
 
     /// 添加数据
-    pub async fn add(&self, req: AddPhoneReq) -> Result<user_phone::Model, ErrorMsg> {
+    pub async fn add(&self, req: AddPhoneReq) -> Result<phone::Model, ErrorMsg> {
         // 检查用户手机号是否已存在
         self.check_phone_exist(req.phone.clone(), None).await?;
 
-        let model = user_phone::ActiveModel {
+        let model = phone::ActiveModel {
             user_id: Set(req.user_id),
             phone: Set(req.phone),
             desc: Set(req.desc),
@@ -81,7 +78,7 @@ impl PhoneService {
         // 检查用户手机号是否已存在且不属于当前ID
         self.check_phone_exist(req.phone.clone(), Some(id)).await?;
 
-        let model = user_phone::ActiveModel {
+        let model = phone::ActiveModel {
             id: Set(id),
             phone: Set(req.phone),
             desc: Set(req.desc),

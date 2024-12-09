@@ -1,6 +1,6 @@
 //! 角色管理
 
-use entity::user::user_role;
+use entity::user::role;
 
 use actix_validator::Validate;
 
@@ -34,7 +34,7 @@ pub struct AddRoleReq {
     /// 描述信息
     pub desc: Option<String>,
     /// 状态(0:停用,1:正常)
-    pub status: user_role::enums::Status,
+    pub status: role::enums::Status,
 }
 
 /// 更新数据 请求体
@@ -47,14 +47,14 @@ pub struct UpdateRoleReq {
     /// 描述信息
     pub desc: Option<String>,
     /// 状态(0:停用,1:正常)
-    pub status: user_role::enums::Status,
+    pub status: role::enums::Status,
 }
 
 /// 更新数据状态
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Validate)]
 pub struct UpdateRoleStatusReq {
     /// 状态(0:停用,1:正常)
-    pub status: user_role::enums::Status,
+    pub status: role::enums::Status,
 }
 
 #[cfg(test)]
@@ -66,7 +66,7 @@ mod tests {
     #[test]
     fn test_status() {
         let expected = UpdateRoleStatusReq {
-            status: user_role::enums::Status::Enabled,
+            status: role::enums::Status::Enabled,
         };
         let json_data = json!({ "status":1 });
         let result: UpdateRoleStatusReq = serde_json::from_value(json_data).unwrap();

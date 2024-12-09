@@ -5,7 +5,7 @@ use crate::{
 };
 
 use code::{Error, ErrorMsg};
-use entity::perm_menu;
+use entity::permission::menu;
 
 use nject::injectable;
 use sea_orm::Set;
@@ -20,10 +20,7 @@ pub struct MenuService {
 
 impl MenuService {
     /// 获取列表数据
-    pub async fn list(
-        &self,
-        req: GetMenuListReq,
-    ) -> Result<(Vec<perm_menu::Model>, u64), ErrorMsg> {
+    pub async fn list(&self, req: GetMenuListReq) -> Result<(Vec<menu::Model>, u64), ErrorMsg> {
         // 获取所有数据
         if let Some(true) = req.all {
             return self.menu_dao.all().await.map_err(|err| {
@@ -41,7 +38,7 @@ impl MenuService {
     }
 
     /// 获取树列表数据
-    pub async fn tree(&self) -> Result<Vec<GenericTree<perm_menu::Model>>, ErrorMsg> {
+    pub async fn tree(&self) -> Result<Vec<GenericTree<menu::Model>>, ErrorMsg> {
         let (results, _total) = self.menu_dao.all().await.map_err(|err| {
             error!("查询菜单列表失败, err: {:#?}", err);
             Error::DbQueryError.into_msg().with_msg("查询菜单列表失败")
@@ -53,7 +50,7 @@ impl MenuService {
     }
 
     /// 获取子列表数据
-    pub async fn children(&self, pid: i32) -> Result<(Vec<perm_menu::Model>, u64), ErrorMsg> {
+    pub async fn children(&self, pid: i32) -> Result<(Vec<menu::Model>, u64), ErrorMsg> {
         let results = self.menu_dao.children(pid).await.map_err(|err| {
             error!("查询子菜单列表失败, err: {:#?}", err);
             Error::DbQueryError
@@ -65,7 +62,7 @@ impl MenuService {
     }
 
     /// 获取详情数据
-    pub async fn info(&self, id: i32) -> Result<perm_menu::Model, ErrorMsg> {
+    pub async fn info(&self, id: i32) -> Result<menu::Model, ErrorMsg> {
         let result = self
             .menu_dao
             .info(id)
@@ -83,8 +80,8 @@ impl MenuService {
     }
 
     /// 添加数据
-    pub async fn add(&self, req: AddMenuReq) -> Result<perm_menu::Model, ErrorMsg> {
-        let model = perm_menu::ActiveModel {
+    pub async fn add(&self, req: AddMenuReq) -> Result<menu::Model, ErrorMsg> {
+        let model = menu::ActiveModel {
             pid: Set(req.pid),
             title: Set(req.title),
             icon_class: Set(req.icon_class),
@@ -100,7 +97,7 @@ impl MenuService {
             permission: Set(req.permission),
             sort: Set(req.sort),
             desc: Set(req.desc),
-            status: Set(perm_menu::enums::Status::Enabled as i8),
+            status: Set(menu::enums::Status::Enabled as i8),
             ..Default::default()
         };
         let result = self
@@ -117,7 +114,7 @@ impl MenuService {
 
     /// 更新数据
     pub async fn update(&self, id: i32, req: UpdateMenuReq) -> Result<u64, ErrorMsg> {
-        let model = perm_menu::ActiveModel {
+        let model = menu::ActiveModel {
             id: Set(id),
             pid: Set(req.pid),
             title: Set(req.title),
@@ -134,7 +131,7 @@ impl MenuService {
             permission: Set(req.permission),
             sort: Set(req.sort),
             desc: Set(req.desc),
-            status: Set(perm_menu::enums::Status::Enabled as i8),
+            status: Set(menu::enums::Status::Enabled as i8),
             ..Default::default()
         };
 

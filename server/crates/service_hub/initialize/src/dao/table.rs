@@ -7,9 +7,10 @@ use crate::dto::table::TableDataSql;
 
 use database::PoolTrait;
 use entity::{
-    perm_menu_role_rel, perm_openapi_role_rel,
-    prelude::{PermMenu, PermMenuRoleRel, PermOpenapi, PermOpenapiRoleRel},
-    user::{user_base, user_email, user_phone, user_role, user_role_rel, UserBase, UserRole},
+    permission::menu_role_rel,
+    permission::openapi_role_rel,
+    permission::{Menu, MenuRoleRel, Openapi, OpenapiRoleRel},
+    user::{email, phone, role, user_base, user_role_rel, Role, UserBase},
 };
 
 use nject::injectable;
@@ -116,8 +117,8 @@ impl TableDao {
         txn: &DatabaseTransaction,
         user_id: i32,
         phone: String,
-    ) -> Result<user_phone::Model, DbErr> {
-        let active_model = user_phone::ActiveModel {
+    ) -> Result<phone::Model, DbErr> {
+        let active_model = phone::ActiveModel {
             user_id: Set(user_id),
             phone: Set(phone),
             ..Default::default()
@@ -132,8 +133,8 @@ impl TableDao {
         txn: &DatabaseTransaction,
         user_id: i32,
         email: String,
-    ) -> Result<user_email::Model, DbErr> {
-        let active_model = user_email::ActiveModel {
+    ) -> Result<email::Model, DbErr> {
+        let active_model = email::ActiveModel {
             user_id: Set(user_id),
             email: Set(email),
             ..Default::default()
@@ -146,11 +147,8 @@ impl TableDao {
     pub async fn txn_admin_role(
         &self,
         txn: &DatabaseTransaction,
-    ) -> Result<Option<user_role::Model>, DbErr> {
-        let result = UserRole::find()
-            .order_by_asc(user_role::Column::Id)
-            .one(txn)
-            .await?;
+    ) -> Result<Option<role::Model>, DbErr> {
+        let result = Role::find().order_by_asc(role::Column::Id).one(txn).await?;
 
         Ok(result)
     }
@@ -197,11 +195,11 @@ impl TableDao {
         txn: &DatabaseTransaction,
         role_id: i32,
     ) -> Result<i32, DbErr> {
-        let menus = PermMenu::find().all(txn).await?;
+        let menus = Menu::find().all(txn).await?;
 
         let mut models = Vec::new();
         for menu in menus {
-            let model = perm_menu_role_rel::ActiveModel {
+            let model = menu_role_rel::ActiveModel {
                 menu_id: Set(menu.id),
                 role_id: Set(role_id),
                 ..Default::default()
@@ -209,7 +207,7 @@ impl TableDao {
             models.push(model);
         }
 
-        let result = PermMenuRoleRel::insert_many(models).exec(txn).await?;
+        let result = MenuRoleRel::insert_many(models).exec(txn).await?;
         Ok(result.last_insert_id)
     }
 
@@ -229,11 +227,11 @@ impl TableDao {
         txn: &DatabaseTransaction,
         role_id: i32,
     ) -> Result<i32, DbErr> {
-        let open_apis = PermOpenapi::find().all(txn).await?;
+        let open_apis = Openapi::find().all(txn).await?;
 
         let mut models = Vec::new();
         for open_api in open_apis {
-            let model = perm_openapi_role_rel::ActiveModel {
+            let model = openapi_role_rel::ActiveModel {
                 openapi_id: Set(open_api.id),
                 role_id: Set(role_id),
                 ..Default::default()
@@ -241,7 +239,7 @@ impl TableDao {
             models.push(model);
         }
 
-        let result = PermOpenapiRoleRel::insert_many(models).exec(txn).await?;
+        let result = OpenapiRoleRel::insert_many(models).exec(txn).await?;
         Ok(result.last_insert_id)
     }
 

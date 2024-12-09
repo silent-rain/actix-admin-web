@@ -54,11 +54,11 @@ pub struct Model {
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
-    #[sea_orm(has_many = "super::perm_menu_role_rel::Entity")]
+    #[sea_orm(has_many = "super::menu_role_rel::Entity")]
     PermMenuRoleRel,
 }
 
-impl Related<super::perm_menu_role_rel::Entity> for Entity {
+impl Related<super::menu_role_rel::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::PermMenuRoleRel.def()
     }

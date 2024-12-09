@@ -24,30 +24,30 @@ pub struct Model {
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
     #[sea_orm(
-        belongs_to = "super::perm_menu::Entity",
+        belongs_to = "super::menu::Entity",
         from = "Column::MenuId",
-        to = "super::perm_menu::Column::Id",
+        to = "super::menu::Column::Id",
         on_update = "Cascade",
         on_delete = "Cascade"
     )]
     PermMenu,
     #[sea_orm(
-        belongs_to = "crate::user::user_role::Entity",
+        belongs_to = "crate::user::role::Entity",
         from = "Column::RoleId",
-        to = "crate::user::user_role::Column::Id",
+        to = "crate::user::role::Column::Id",
         on_update = "Cascade",
         on_delete = "Cascade"
     )]
     UserRole,
 }
 
-impl Related<super::perm_menu::Entity> for Entity {
+impl Related<crate::permission::menu::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::PermMenu.def()
     }
 }
 
-impl Related<super::user::user_role::Entity> for Entity {
+impl Related<crate::user::role::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::UserRole.def()
     }

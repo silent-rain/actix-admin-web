@@ -5,7 +5,7 @@ use crate::{
 };
 
 use code::{Error, ErrorMsg};
-use entity::perm_openapi;
+use entity::permission::openapi;
 
 use nject::injectable;
 use sea_orm::Set;
@@ -23,7 +23,7 @@ impl OpenapiService {
     pub async fn list(
         &self,
         req: GetOpenapiListReq,
-    ) -> Result<(Vec<perm_openapi::Model>, u64), ErrorMsg> {
+    ) -> Result<(Vec<openapi::Model>, u64), ErrorMsg> {
         // 获取所有数据
         if let Some(true) = req.all {
             return self.openapi_dao.all().await.map_err(|err| {
@@ -45,7 +45,7 @@ impl OpenapiService {
     }
 
     /// 获取树列表数据
-    pub async fn tree(&self) -> Result<Vec<GenericTree<perm_openapi::Model>>, ErrorMsg> {
+    pub async fn tree(&self) -> Result<Vec<GenericTree<openapi::Model>>, ErrorMsg> {
         let (results, _total) = self.openapi_dao.all().await.map_err(|err| {
             error!("查询OpenApi接口列表失败, err: {:#?}", err);
             Error::DbQueryError
@@ -59,7 +59,7 @@ impl OpenapiService {
     }
 
     /// 获取详情数据
-    pub async fn info(&self, id: i32) -> Result<perm_openapi::Model, ErrorMsg> {
+    pub async fn info(&self, id: i32) -> Result<openapi::Model, ErrorMsg> {
         let result = self
             .openapi_dao
             .info(id)
@@ -81,7 +81,7 @@ impl OpenapiService {
     }
 
     /// 添加数据
-    pub async fn add(&self, req: AddOpenapiReq) -> Result<perm_openapi::Model, ErrorMsg> {
+    pub async fn add(&self, req: AddOpenapiReq) -> Result<openapi::Model, ErrorMsg> {
         // 查询OpenApi接口是否已存在
         let open_api = self
             .openapi_dao
@@ -100,7 +100,7 @@ impl OpenapiService {
                 .with_msg("OpenApi接口已存在, 请不要重复注册"));
         }
 
-        let model = perm_openapi::ActiveModel {
+        let model = openapi::ActiveModel {
             pid: Set(req.pid),
             category: Set(req.category as i8),
             name: Set(req.name),
@@ -108,7 +108,7 @@ impl OpenapiService {
             path: Set(req.path),
             sort: Set(req.sort),
             desc: Set(req.desc),
-            status: Set(perm_openapi::enums::Status::Enabled as i8),
+            status: Set(openapi::enums::Status::Enabled as i8),
             ..Default::default()
         };
         let result =
@@ -127,7 +127,7 @@ impl OpenapiService {
 
     /// 更新数据
     pub async fn update(&self, id: i32, req: UpdateOpenapiReq) -> Result<u64, ErrorMsg> {
-        let model = perm_openapi::ActiveModel {
+        let model = openapi::ActiveModel {
             id: Set(id),
             pid: Set(req.pid),
             category: Set(req.category as i8),

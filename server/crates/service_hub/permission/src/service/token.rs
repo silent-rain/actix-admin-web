@@ -5,7 +5,7 @@ use crate::{
 };
 
 use code::{Error, ErrorMsg};
-use entity::perm_token;
+use entity::permission::token;
 
 use nject::injectable;
 use sea_orm::Set;
@@ -20,10 +20,7 @@ pub struct TokenService {
 
 impl TokenService {
     /// 获取列表数据
-    pub async fn list(
-        &self,
-        req: GetTokenListReq,
-    ) -> Result<(Vec<perm_token::Model>, u64), ErrorMsg> {
+    pub async fn list(&self, req: GetTokenListReq) -> Result<(Vec<token::Model>, u64), ErrorMsg> {
         let (mut results, total) = self.token_dao.list(req).await.map_err(|err| {
             error!("查询令牌列表失败, err: {:#?}", err);
             Error::DbQueryError.into_msg().with_msg("查询令牌列表失败")
@@ -38,7 +35,7 @@ impl TokenService {
     }
 
     /// 获取详情数据
-    pub async fn info(&self, id: i32) -> Result<perm_token::Model, ErrorMsg> {
+    pub async fn info(&self, id: i32) -> Result<token::Model, ErrorMsg> {
         let mut result = self
             .token_dao
             .info(id)
@@ -62,7 +59,7 @@ impl TokenService {
         &self,
         token: String,
         passphrase: String,
-    ) -> Result<perm_token::Model, ErrorMsg> {
+    ) -> Result<token::Model, ErrorMsg> {
         let mut result = self
             .token_dao
             .info_by_token(token, passphrase)
@@ -82,17 +79,17 @@ impl TokenService {
     }
 
     /// 添加数据
-    pub async fn add(&self, req: AddTokenReq) -> Result<perm_token::Model, ErrorMsg> {
+    pub async fn add(&self, req: AddTokenReq) -> Result<token::Model, ErrorMsg> {
         let token = Uuid::new_v4().to_string();
         let passphrase = Uuid::new_v4().to_string().replace('-', "");
-        let model = perm_token::ActiveModel {
+        let model = token::ActiveModel {
             user_id: Set(req.user_id),
             token: Set(token),
             passphrase: Set(passphrase),
             permission: Set(req.permission),
             expire: Set(req.expire),
             desc: Set(req.desc),
-            status: Set(perm_token::enums::Status::Enabled as i8),
+            status: Set(token::enums::Status::Enabled as i8),
             ..Default::default()
         };
         let result = self
@@ -110,7 +107,7 @@ impl TokenService {
     /// 更新数据
     pub async fn update(&self, id: i32, req: UpdateTokenReq) -> Result<u64, ErrorMsg> {
         let passphrase = Uuid::new_v4().to_string();
-        let model = perm_token::ActiveModel {
+        let model = token::ActiveModel {
             id: Set(id),
             user_id: Set(req.user_id),
             passphrase: Set(passphrase),

@@ -5,7 +5,7 @@ use std::sync::Arc;
 use crate::dto::openapi_role_rel::GetOpenapiRoleRelListReq;
 
 use database::{Pagination, PoolTrait};
-use entity::{perm_openapi_role_rel, prelude::PermOpenapiRoleRel};
+use entity::{permission::openapi_role_rel, permission::OpenapiRoleRel};
 
 use nject::injectable;
 use sea_orm::{
@@ -24,18 +24,18 @@ impl OpenapiRoleRelDao {
     pub async fn list(
         &self,
         req: GetOpenapiRoleRelListReq,
-    ) -> Result<(Vec<perm_openapi_role_rel::Model>, u64), DbErr> {
+    ) -> Result<(Vec<openapi_role_rel::Model>, u64), DbErr> {
         let page = Pagination::new(req.page, req.page_size);
 
-        let states = PermOpenapiRoleRel::find()
+        let states = OpenapiRoleRel::find()
             .apply_if(req.start_time, |query, v| {
-                query.filter(perm_openapi_role_rel::Column::CreatedAt.gte(v))
+                query.filter(openapi_role_rel::Column::CreatedAt.gte(v))
             })
             .apply_if(req.end_time, |query, v| {
-                query.filter(perm_openapi_role_rel::Column::CreatedAt.lt(v))
+                query.filter(openapi_role_rel::Column::CreatedAt.lt(v))
             })
             .apply_if(req.openapi_id, |query, v| {
-                query.filter(perm_openapi_role_rel::Column::OpenapiId.eq(v))
+                query.filter(openapi_role_rel::Column::OpenapiId.eq(v))
             });
 
         let total = states.clone().count(self.db.db()).await?;
@@ -44,7 +44,7 @@ impl OpenapiRoleRelDao {
         }
 
         let results = states
-            .order_by_desc(perm_openapi_role_rel::Column::Id)
+            .order_by_desc(openapi_role_rel::Column::Id)
             .offset(page.offset())
             .limit(page.page_size())
             .all(self.db.db())
@@ -56,17 +56,17 @@ impl OpenapiRoleRelDao {
     /// 添加数据
     pub async fn add(
         &self,
-        active_model: perm_openapi_role_rel::ActiveModel,
-    ) -> Result<perm_openapi_role_rel::Model, DbErr> {
+        active_model: openapi_role_rel::ActiveModel,
+    ) -> Result<openapi_role_rel::Model, DbErr> {
         active_model.insert(self.db.db()).await
     }
 
     /// 批量添加数据
     pub async fn batch_add(
         &self,
-        active_models: Vec<perm_openapi_role_rel::ActiveModel>,
+        active_models: Vec<openapi_role_rel::ActiveModel>,
     ) -> Result<i32, DbErr> {
-        let result = PermOpenapiRoleRel::insert_many(active_models)
+        let result = OpenapiRoleRel::insert_many(active_models)
             .exec(self.db.db())
             .await?;
         Ok(result.last_insert_id)
@@ -74,8 +74,8 @@ impl OpenapiRoleRelDao {
 
     /// 删除数据
     pub async fn delete(&self, id: i32) -> Result<u64, DbErr> {
-        let result = PermOpenapiRoleRel::delete_many()
-            .filter(perm_openapi_role_rel::Column::Id.eq(id))
+        let result = OpenapiRoleRel::delete_many()
+            .filter(openapi_role_rel::Column::Id.eq(id))
             .exec(self.db.db())
             .await?;
         Ok(result.rows_affected)
@@ -83,8 +83,8 @@ impl OpenapiRoleRelDao {
 
     /// 批量删除数据
     pub async fn batch_delete(&self, ids: Vec<i32>) -> Result<u64, DbErr> {
-        let result = PermOpenapiRoleRel::delete_many()
-            .filter(perm_openapi_role_rel::Column::Id.is_in(ids))
+        let result = OpenapiRoleRel::delete_many()
+            .filter(openapi_role_rel::Column::Id.is_in(ids))
             .exec(self.db.db())
             .await?;
         Ok(result.rows_affected)
