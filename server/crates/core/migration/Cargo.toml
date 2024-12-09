@@ -25,7 +25,6 @@ sea-orm-migration = { workspace = true, features = [
 [dev-dependencies]
 database = { path = "../database" }
 entity = { path = "../entity" }
-logger = { path = "../logger" }
 
 sqlx = { workspace = true }
 dotenv = { workspace = true }
@@ -36,3 +35,9 @@ tokio = { workspace = true, features = [
     "test-util",
 ] }
 colored = { workspace = true }
+tracing-subscriber = { workspace = true, features = [
+    "env-filter",
+    "time",
+    "local-time",
+    "tracing-log",
+] }

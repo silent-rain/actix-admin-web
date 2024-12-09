@@ -3,7 +3,6 @@
 use std::env;
 
 use database::DbOptions;
-use logger::config::{ConsoleConfig, Level, Logger};
 use migration::Migrator;
 
 use colored::Colorize;
@@ -17,18 +16,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 读取配置环境变量
     dotenv().ok();
 
-    let conf = Logger {
-        color_eyre: false,
-        console: ConsoleConfig {
-            level: Level::Info,
-            enable: true,
-        },
-        console_bunyan: Default::default(),
-        file: Default::default(),
-        db: Default::default(),
-    };
     // 初始化日志
-    let _guards = logger::Logger::build(&conf).expect("初始化日志失败");
+    tracing_subscriber::fmt()
+        .with_max_level(tracing::Level::DEBUG)
+        .with_level(true)
+        .with_line_number(true)
+        .init();
 
     // 初始化数据库
     let database_url = env::var("DATABASE_URL").expect("read DATABASE_URL failed");

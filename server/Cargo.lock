@@ -2416,12 +2416,12 @@ dependencies = [
  "database",
  "dotenv",
  "entity",
- "logger",
  "sea-orm",
  "sea-orm-migration",
  "sqlx",
  "tokio",
  "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]
