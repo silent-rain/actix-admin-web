@@ -6,11 +6,11 @@ use crate::{
 
 use code::{Error, ErrorMsg};
 use entity::permission::openapi;
+use entity::utils::GenericTree;
 
 use nject::injectable;
 use sea_orm::Set;
 use tracing::error;
-use utils::list_tree::GenericTree;
 
 /// 服务层
 #[injectable]

@@ -1,11 +1,12 @@
 //! OpenApi接口表
-use utils::list_tree::GenericTreeTrait;
 
 use sea_orm::{
     prelude::DateTimeLocal, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey,
     DeriveRelation, EnumIter, PrimaryKeyTrait,
 };
 use serde::{Deserialize, Serialize};
+
+use crate::utils::list_tree::GenericTreeTrait;
 
 /// OpenApi接口表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]

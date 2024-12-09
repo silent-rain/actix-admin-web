@@ -8,8 +8,6 @@ publish = false
 path = "src/lib.rs"
 
 [dependencies]
-utils = { path = "../utils" }
-
 sea-orm = { workspace = true }
 
 serde = { workspace = true, features = ["derive"] }

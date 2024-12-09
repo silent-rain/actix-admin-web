@@ -1,11 +1,12 @@
 //! 菜单表
-use utils::list_tree::GenericTreeTrait;
 
 use sea_orm::{
     prelude::DateTimeLocal, ActiveModelBehavior, DeriveEntityModel, DerivePrimaryKey,
     DeriveRelation, EntityTrait, EnumIter, PrimaryKeyTrait, Related, RelationDef, RelationTrait,
 };
 use serde::{Deserialize, Serialize};
+
+use crate::utils::list_tree::GenericTreeTrait;
 
 /// 菜单表
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
