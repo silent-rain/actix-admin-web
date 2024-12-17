@@ -5,7 +5,7 @@ use std::{str::FromStr, sync::Arc};
 use crate::dto::template::GetAppTemplateListReq;
 
 use database::{Pagination, PoolTrait};
-use entity::{app_template, prelude::AppTemplate};
+use entity::template::{app_template, AppTemplate};
 
 use nject::injectable;
 use sea_orm::{
@@ -133,7 +133,7 @@ mod tests {
     use super::*;
 
     use database::mock::Mock;
-    use migration::m20230210_145453_create_app_template::Migration;
+    use migration::template::app_template::Migration;
 
     use sea_orm::DbBackend;
 

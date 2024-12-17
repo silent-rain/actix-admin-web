@@ -1,6 +1,6 @@
 //! 模板管理
 
-use entity::app_template::enums::Status;
+use entity::template::app_template::enums::Status;
 
 use actix_validator::Validate;
 

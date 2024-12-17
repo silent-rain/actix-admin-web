@@ -1,5 +1,5 @@
 //! WEB日志表
-//! Entity: [`entity::prelude::LogWeb`]
+//! Entity: [`entity::log::LogWeb`]
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},

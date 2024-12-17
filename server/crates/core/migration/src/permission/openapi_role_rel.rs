@@ -1,5 +1,5 @@
 //! OpenApi接口角色关系表
-//! Entity: [`entity::prelude::PermOpenapiRoleRel`]
+//! Entity: [`entity::permission::OpenapiRoleRel`]
 use crate::{permission::openapi::Openapi, user::role::UserRole};
 
 use sea_orm::{

@@ -6,7 +6,7 @@ use crate::config::DbConfig;
 use crate::dao::Dao;
 
 use database::{Pool, PoolTrait};
-use entity::log_system::Model;
+use entity::log::log_system;
 
 use chrono::Local;
 use tokio::sync::{
@@ -22,8 +22,8 @@ pub struct DbWriter {
     db: Pool,
     dao: Arc<Dao<Pool>>,
     /// 通道发送者, 可以有多个发送者
-    tx: Sender<Model>,
-    rx: Arc<Mutex<Receiver<Model>>>,
+    tx: Sender<log_system::Model>,
+    rx: Arc<Mutex<Receiver<log_system::Model>>>,
 }
 
 impl DbWriter {
@@ -34,7 +34,7 @@ impl DbWriter {
             .expect("初始化数据库失败");
         let dao = Dao::new(db.clone());
 
-        let (tx, rx) = mpsc::channel::<Model>(1000);
+        let (tx, rx) = mpsc::channel::<log_system::Model>(1000);
 
         DbWriter {
             config,
@@ -46,7 +46,7 @@ impl DbWriter {
     }
 
     /// 写入日志
-    pub async fn _write(&self, data: Model) {
+    pub async fn _write(&self, data: log_system::Model) {
         if let Err(err) = self.dao.add(data.clone()).await {
             println!("log add filed, data: {:?} \nerr: {:?}", data, err);
         }
@@ -100,7 +100,7 @@ impl DbWriter {
         metadata: &Metadata,
         storage: Storage,
         kind: &str,
-    ) -> Option<Model> {
+    ) -> Option<log_system::Model> {
         // 日志级别过滤
         if self.filter_level(metadata.level()) {
             return None;
@@ -117,7 +117,7 @@ impl DbWriter {
             stack = Some(backtrace.to_string());
         }
 
-        let output = Model {
+        let output = log_system::Model {
             // user_id: todo!(),
             // username: todo!(),
             span_pid: span_pid.map(|v| v as u32),

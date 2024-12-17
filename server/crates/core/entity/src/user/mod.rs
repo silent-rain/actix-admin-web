@@ -6,6 +6,7 @@ pub mod member_level;
 pub mod phone;
 pub mod role;
 pub mod user_base;
+pub mod user_login_log;
 pub mod user_role_rel;
 
 pub use blockchain_wallet::Entity as BlockchainWallet;
@@ -18,3 +19,5 @@ pub use user_role_rel::Entity as UserRoleRel;
 
 pub use location::Entity as Location;
 pub use member_level::Entity as MemberLevel;
+
+pub use user_login_log::Entity as UserLoginLog;

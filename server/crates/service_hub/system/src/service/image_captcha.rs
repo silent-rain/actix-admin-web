@@ -9,7 +9,7 @@ use crate::{
 };
 
 use code::{Error, ErrorMsg};
-use entity::sys_image_captcha;
+use entity::system::sys_image_captcha;
 use utils::captcha::generate_captcha;
 
 use nject::injectable;

@@ -1,5 +1,5 @@
 //! 图片验证码表
-//! Entity: [`entity::prelude::SysImageCaptcha`]
+//! Entity: [`entity::system::SysImageCaptcha`]
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},

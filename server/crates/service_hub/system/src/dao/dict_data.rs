@@ -4,7 +4,7 @@ use std::sync::Arc;
 use crate::dto::dict_data::GetDictDataListReq;
 
 use database::{Pagination, PoolTrait};
-use entity::{prelude::SysDictData, sys_dict_data};
+use entity::system::{sys_dict_data, SysDictData};
 use nject::injectable;
 
 use sea_orm::{

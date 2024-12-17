@@ -1,5 +1,5 @@
 //! 登陆日志管理
-use entity::log_user_login;
+use entity::user::user_login_log;
 
 use serde::{Deserialize, Serialize};
 
@@ -35,7 +35,7 @@ pub struct AddUserLoginInfoReq {
     /// 描述信息
     pub desc: Option<String>,
     /// 登录状态
-    pub status: log_user_login::enums::Status,
+    pub status: user_login_log::enums::Status,
 }
 
 /// 更新登陆日志信息
@@ -44,7 +44,7 @@ pub struct UpdateUserLoginInfoReq {
     /// 描述信息
     pub desc: Option<String>,
     /// 登录状态
-    pub status: log_user_login::enums::Status,
+    pub status: user_login_log::enums::Status,
 }
 
 /// 更新登录日志状态
@@ -53,5 +53,5 @@ pub struct UpdateUserLoginStatusReq {
     /// ID
     pub id: i32,
     /// 登录状态
-    pub status: log_user_login::enums::Status,
+    pub status: user_login_log::enums::Status,
 }

@@ -1,5 +1,5 @@
 //! 用户登录日志表
-//! Entity: [`entity::prelude::LogUserLogin`]
+//! Entity: [`entity::user::UserLoginLog`]
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},
@@ -17,11 +17,11 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(LogUserLogin::Table)
+                    .table(UserLoginLog::Table)
                     .comment("用户登录日志表")
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(LogUserLogin::Id)
+                        ColumnDef::new(UserLoginLog::Id)
                             .integer()
                             .primary_key()
                             .auto_increment()
@@ -29,27 +29,27 @@ impl MigrationTrait for Migration {
                             .comment("自增ID"),
                     )
                     .col(
-                        ColumnDef::new(LogUserLogin::UserId)
+                        ColumnDef::new(UserLoginLog::UserId)
                             .integer()
                             .not_null()
                             .comment("用户ID"),
                     )
                     .col(
-                        ColumnDef::new(LogUserLogin::Username)
+                        ColumnDef::new(UserLoginLog::Username)
                             .string()
                             .string_len(32)
                             .not_null()
                             .comment("用户名称"),
                     )
                     .col(
-                        ColumnDef::new(LogUserLogin::Token)
+                        ColumnDef::new(UserLoginLog::Token)
                             .string()
                             .string_len(300)
                             .null()
                             .comment("登陆令牌"),
                     )
                     .col(
-                        ColumnDef::new(LogUserLogin::RemoteAddr)
+                        ColumnDef::new(UserLoginLog::RemoteAddr)
                             .string()
                             .string_len(64)
                             .null()
@@ -57,7 +57,7 @@ impl MigrationTrait for Migration {
                             .comment("登录IP"),
                     )
                     .col(
-                        ColumnDef::new(LogUserLogin::UserAgent)
+                        ColumnDef::new(UserLoginLog::UserAgent)
                             .string()
                             .string_len(256)
                             .null()
@@ -65,7 +65,7 @@ impl MigrationTrait for Migration {
                             .comment("用户代理"),
                     )
                     .col(
-                        ColumnDef::new(LogUserLogin::Device)
+                        ColumnDef::new(UserLoginLog::Device)
                             .string()
                             .string_len(20)
                             .null()
@@ -73,7 +73,7 @@ impl MigrationTrait for Migration {
                             .comment("设备"),
                     )
                     .col(
-                        ColumnDef::new(LogUserLogin::System)
+                        ColumnDef::new(UserLoginLog::System)
                             .string()
                             .string_len(20)
                             .null()
@@ -81,7 +81,7 @@ impl MigrationTrait for Migration {
                             .comment("系统"),
                     )
                     .col(
-                        ColumnDef::new(LogUserLogin::Browser)
+                        ColumnDef::new(UserLoginLog::Browser)
                             .string()
                             .string_len(20)
                             .null()
@@ -89,7 +89,7 @@ impl MigrationTrait for Migration {
                             .comment("浏览器"),
                     )
                     .col(
-                        ColumnDef::new(LogUserLogin::Desc)
+                        ColumnDef::new(UserLoginLog::Desc)
                             .string()
                             .string_len(200)
                             .null()
@@ -97,21 +97,21 @@ impl MigrationTrait for Migration {
                             .comment("描述信息"),
                     )
                     .col(
-                        ColumnDef::new(LogUserLogin::Status)
+                        ColumnDef::new(UserLoginLog::Status)
                             .tiny_integer()
                             .not_null()
                             .default(0)
                             .comment("登录状态(0:登陆成功,1:登陆失败,2:已禁用,3:登出)"),
                     )
                     .col(
-                        ColumnDef::new(LogUserLogin::CreatedAt)
+                        ColumnDef::new(UserLoginLog::CreatedAt)
                             .date_time()
                             .not_null()
                             .default(Expr::current_timestamp())
                             .comment("创建时间"),
                     )
                     .col(
-                        ColumnDef::new(LogUserLogin::UpdatedAt)
+                        ColumnDef::new(UserLoginLog::UpdatedAt)
                             .date_time()
                             .not_null()
                             .extra({
@@ -130,14 +130,14 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
         manager
-            .drop_table(Table::drop().table(LogUserLogin::Table).to_owned())
+            .drop_table(Table::drop().table(UserLoginLog::Table).to_owned())
             .await
     }
 }
 
 #[derive(DeriveIden)]
-pub enum LogUserLogin {
-    #[sea_orm(iden = "t_log_user_login")]
+pub enum UserLoginLog {
+    #[sea_orm(iden = "t_user_login_log")]
     Table,
     Id,
     UserId,

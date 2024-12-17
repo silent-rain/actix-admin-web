@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 
 /// 用户登录日志表
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, DeriveEntityModel)]
-#[sea_orm(table_name = "t_log_user_login")]
+#[sea_orm(table_name = "t_user_login_log")]
 pub struct Model {
     /// 自增ID
     #[sea_orm(primary_key)]

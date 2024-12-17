@@ -5,8 +5,7 @@ use std::sync::Arc;
 use crate::dto::system::GetSystemListReq;
 
 use database::{Pagination, PoolTrait};
-use entity::log_system;
-use entity::prelude::LogSystem;
+use entity::log::{log_system, LogSystem};
 
 use nject::injectable;
 use sea_orm::{

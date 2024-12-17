@@ -1,5 +1,5 @@
 //! 用户邮箱表
-//! Entity: [`entity::prelude::UserEmail`]
+//! Entity: [`entity::user::Email`]
 
 use crate::user::user_base::UserBase;
 

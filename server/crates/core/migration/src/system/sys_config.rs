@@ -1,5 +1,5 @@
 //! 配置表
-//! Entity: [`entity::prelude::SysConfig`]
+//! Entity: [`entity::system::SysConfig`]
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},

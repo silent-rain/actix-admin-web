@@ -1,7 +1,7 @@
 //! 系统日志
 
 use database::PoolTrait;
-use entity::log_system;
+use entity::log::log_system;
 
 use sea_orm::ActiveValue::NotSet;
 use sea_orm::{ActiveModelTrait, DbErr};

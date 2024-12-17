@@ -1,5 +1,5 @@
 //! 图片资源表
-//! Entity: [`entity::prelude::SysImage`]
+//! Entity: [`entity::system::SysImage`]
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},

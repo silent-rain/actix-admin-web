@@ -5,8 +5,7 @@ use std::sync::Arc;
 use crate::dto::api_operation::GetApiOperationListReq;
 
 use database::{Pagination, PoolTrait};
-use entity::log_api_operation;
-use entity::prelude::LogApiOperation;
+use entity::log::{log_api_operation, LogApiOperation};
 
 use nject::injectable;
 use sea_orm::{

@@ -1,6 +1,6 @@
 //! WEB日志管理
 
-use entity::log_web;
+use entity::log::log_web;
 
 use serde::{Deserialize, Serialize};
 use validator::Validate;

@@ -2,7 +2,7 @@
 
 use crate::{dto::system::GetSystemListReq, service::system::SystemService};
 
-use entity::log_system;
+use entity::log::log_system;
 use inject::AInjectProvider;
 use response::Response;
 

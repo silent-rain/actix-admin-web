@@ -5,7 +5,7 @@ use crate::{
 };
 
 use code::{Error, ErrorMsg};
-use entity::log_web;
+use entity::log::log_web;
 
 use nject::injectable;
 use sea_orm::Set;

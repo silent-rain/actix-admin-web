@@ -4,7 +4,7 @@ use std::sync::Arc;
 use crate::dto::config::GetConfigListReq;
 
 use database::{Pagination, PoolTrait};
-use entity::{prelude::SysConfig, sys_config};
+use entity::system::{sys_config, SysConfig};
 use nject::injectable;
 
 use sea_orm::{

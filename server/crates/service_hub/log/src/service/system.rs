@@ -2,7 +2,7 @@
 use crate::{dao::system::SystemDao, dto::system::GetSystemListReq};
 
 use code::{Error, ErrorMsg};
-use entity::log_system;
+use entity::log::log_system;
 
 use nject::injectable;
 use tracing::error;

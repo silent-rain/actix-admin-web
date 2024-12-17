@@ -1,7 +1,7 @@
 /*日志相关表*/
 -- 用户登录日志表
 CREATE TABLE IF NOT EXISTS
-    `t_log_user_login` (
+    `t_user_login_log` (
         `id` INT(11) AUTO_INCREMENT NOT NULL COMMENT '自增ID',
         `user_id` INT(11) NOT NULL COMMENT '用户ID',
         `username` VARCHAR(32) NOT NULL COMMENT '用户名称',

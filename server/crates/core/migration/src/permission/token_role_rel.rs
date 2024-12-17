@@ -1,5 +1,5 @@
 //! 令牌角色关系表
-//! Entity: [`entity::prelude::PermTokenRoleRel`]
+//! Entity: [`entity::permission::TokenRoleRel`]
 use crate::{permission::token::Token, user::role::UserRole};
 
 use sea_orm::{

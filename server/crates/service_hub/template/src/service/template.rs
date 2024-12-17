@@ -7,7 +7,7 @@ use crate::{
 };
 
 use code::{Error, ErrorMsg};
-use entity::app_template;
+use entity::template::app_template;
 
 use nject::injectable;
 use sea_orm::Set;
@@ -183,7 +183,7 @@ mod tests {
     use super::*;
 
     use database::mock::Mock;
-    use migration::m20230210_145453_create_app_template::Migration;
+    use migration::template::app_template::Migration;
 
     #[tokio::test]
     async fn test_mock_add() -> Result<(), ErrorMsg> {

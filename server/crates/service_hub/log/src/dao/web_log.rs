@@ -5,8 +5,7 @@ use std::sync::Arc;
 use crate::dto::web_log::GetWebLogListReq;
 
 use database::{Pagination, PoolTrait};
-use entity::log_web;
-use entity::prelude::LogWeb;
+use entity::log::{log_web, LogWeb};
 
 use nject::injectable;
 use sea_orm::{

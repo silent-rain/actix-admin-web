@@ -1,5 +1,5 @@
 //! 角色表
-//! Entity: [`entity::prelude::UserRole`]
+//! Entity: [`entity::user::Role`]
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Index, Table},

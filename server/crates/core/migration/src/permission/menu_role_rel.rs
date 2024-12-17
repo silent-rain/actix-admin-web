@@ -1,5 +1,5 @@
 //! 菜单角色关系表
-//! Entity: [`entity::prelude::PermMenuRoleRel`]
+//! Entity: [`entity::permission::MenuRoleRel`]
 use crate::{permission::menu::Menu, user::role::UserRole};
 
 use sea_orm::{

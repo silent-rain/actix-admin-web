@@ -1,5 +1,5 @@
 //! 用户手机号表
-//! Entity: [`entity::prelude::UserPhone`]
+//! Entity: [`entity::user::Phone`]
 
 use crate::user::user_base::UserBase;
 

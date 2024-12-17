@@ -1,5 +1,5 @@
 //! API操作日志表
-//! Entity: [`entity::prelude::LogApiOperation`]
+//! Entity: [`entity::log::LogApiOperation`]
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},

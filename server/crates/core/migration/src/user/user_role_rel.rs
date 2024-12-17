@@ -1,5 +1,5 @@
 //! 用户角色关系表
-//! Entity: [`entity::prelude::UserRoleRel`]
+//! Entity: [`entity::user::UserRoleRel`]
 
 use crate::{user::role::UserRole, user::user_base::UserBase};
 

@@ -13,7 +13,7 @@ use system::ImageCaptchaDao;
 use user::{EmailDao, PhoneDao, UserBaseDao};
 
 use code::{Error, ErrorMsg};
-use entity::{log_user_login, user::user_base};
+use entity::{user::user_base, user::user_login_log};
 use jwt::encode_token;
 
 use nject::injectable;
@@ -56,7 +56,7 @@ impl LoginService {
                 browser_info,
                 "".to_owned(),
                 Some("用户已被禁用".to_owned()),
-                log_user_login::enums::Status::Failed,
+                user_login_log::enums::Status::Failed,
             );
             error!("用户已被禁用");
             return Err(Error::LoginUserDisableError
@@ -71,7 +71,7 @@ impl LoginService {
                 browser_info,
                 "".to_owned(),
                 Some("账号或密码错误".to_owned()),
-                log_user_login::enums::Status::Failed,
+                user_login_log::enums::Status::Failed,
             );
             error!("账号或密码错误");
             return Err(Error::LoginPasswordError
@@ -91,7 +91,7 @@ impl LoginService {
             browser_info,
             token.clone(),
             None,
-            log_user_login::enums::Status::Success,
+            user_login_log::enums::Status::Success,
         );
 
         // 返回Token
@@ -190,7 +190,7 @@ impl LoginService {
         browser_info: BrowserInfo,
         token: String,
         desc: Option<String>,
-        status: log_user_login::enums::Status,
+        status: user_login_log::enums::Status,
     ) {
         let db = self.db.clone();
 
@@ -204,7 +204,7 @@ impl LoginService {
                     }
                 };
 
-            let data = log_user_login::ActiveModel {
+            let data = user_login_log::ActiveModel {
                 user_id: Set(user.id),
                 username: Set(user.username),
                 token: Set(token),

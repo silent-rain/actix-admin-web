@@ -10,7 +10,7 @@ use crate::{
 };
 
 use code::{Error, ErrorMsg};
-use entity::sys_image_resource;
+use entity::system::sys_image_resource;
 
 use nject::injectable;
 use sea_orm::Set;

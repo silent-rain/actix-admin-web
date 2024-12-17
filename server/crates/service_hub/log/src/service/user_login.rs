@@ -5,7 +5,7 @@ use crate::{
 };
 
 use code::{Error, ErrorMsg};
-use entity::log_user_login;
+use entity::user::user_login_log;
 use utils::browser::parse_user_agent_async;
 
 use nject::injectable;
@@ -23,7 +23,7 @@ impl UserLoginService {
     pub async fn list(
         &self,
         req: GetUserLoginListReq,
-    ) -> Result<(Vec<log_user_login::Model>, u64), ErrorMsg> {
+    ) -> Result<(Vec<user_login_log::Model>, u64), ErrorMsg> {
         let (mut results, total) = self.user_login_dao.list(req).await.map_err(|err| {
             error!("查询登陆日志列表失败, err: {:#?}", err);
             Error::DbQueryError
@@ -40,7 +40,7 @@ impl UserLoginService {
     }
 
     /// 获取详情数据
-    pub async fn info(&self, id: i32) -> Result<log_user_login::Model, ErrorMsg> {
+    pub async fn info(&self, id: i32) -> Result<user_login_log::Model, ErrorMsg> {
         let mut result = self
             .user_login_dao
             .info(id)
@@ -63,7 +63,7 @@ impl UserLoginService {
     }
 
     /// 根据Token获取详情信息
-    pub async fn info_by_token(&self, token: String) -> Result<log_user_login::Model, ErrorMsg> {
+    pub async fn info_by_token(&self, token: String) -> Result<user_login_log::Model, ErrorMsg> {
         let mut result = self
             .user_login_dao
             .info_by_token(token)
@@ -85,7 +85,7 @@ impl UserLoginService {
     }
 
     /// 添加数据
-    pub async fn add(&self, req: AddUserLoginInfoReq) -> Result<log_user_login::Model, ErrorMsg> {
+    pub async fn add(&self, req: AddUserLoginInfoReq) -> Result<user_login_log::Model, ErrorMsg> {
         let (device, system, browser) = parse_user_agent_async(req.user_agent.clone())
             .await
             .map_err(|err| {
@@ -93,7 +93,7 @@ impl UserLoginService {
                 Error::UserAgentParserError(err)
             })?;
 
-        let model = log_user_login::ActiveModel {
+        let model = user_login_log::ActiveModel {
             user_id: Set(req.user_id),
             username: Set(req.username),
             token: Set(req.token),
@@ -118,7 +118,7 @@ impl UserLoginService {
 
     /// 更新数据
     pub async fn update(&self, id: i32, req: UpdateUserLoginInfoReq) -> Result<u64, ErrorMsg> {
-        let model = log_user_login::ActiveModel {
+        let model = user_login_log::ActiveModel {
             id: Set(id),
             desc: Set(req.desc),
             status: Set(req.status as i8),

@@ -1,6 +1,6 @@
 //! API操作日志
 
-use entity::log_api_operation;
+use entity::log::log_api_operation;
 
 use actix_validator::Validate;
 

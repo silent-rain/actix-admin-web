@@ -1,6 +1,6 @@
 //! 字典数据表
-//! Entity: [`entity::prelude::SysDictData`]
-use crate::m20240218_161916_create_sys_dict_dimension::SysDictDimension;
+//! Entity: [`entity::system::SysDictData`]
+use crate::system::sys_dict_dimension::SysDictDimension;
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, ForeignKey, Index, Table},

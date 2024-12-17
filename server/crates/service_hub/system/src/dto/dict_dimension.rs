@@ -1,6 +1,6 @@
 //! 字典维度管理
 
-use entity::sys_dict_dimension;
+use entity::system::sys_dict_dimension;
 
 use actix_validator::Validate;
 

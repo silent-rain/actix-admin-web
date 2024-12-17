@@ -1,6 +1,6 @@
 //! 配置管理
 
-use entity::sys_config;
+use entity::system::sys_config;
 
 use actix_validator::Validate;
 

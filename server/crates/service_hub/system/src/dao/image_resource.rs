@@ -4,7 +4,7 @@ use std::sync::Arc;
 use crate::dto::image_resource::GetImageResourceListReq;
 
 use database::{Pagination, PoolTrait};
-use entity::{prelude::SysImageResource, sys_image_resource};
+use entity::system::{sys_image_resource, SysImageResource};
 use nject::injectable;
 
 use sea_orm::{

@@ -27,7 +27,7 @@ impl AppTemplateRouter {
 
 #[cfg(test)]
 mod tests {
-    use migration::m20230210_145453_create_app_template::Migration;
+    use migration::template::app_template::Migration;
     use mock_request::Error;
     use mock_request::MockRequest;
 

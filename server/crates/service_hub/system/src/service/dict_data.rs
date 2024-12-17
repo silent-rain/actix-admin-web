@@ -5,7 +5,7 @@ use crate::{
 };
 
 use code::{Error, ErrorMsg};
-use entity::sys_dict_data;
+use entity::system::sys_dict_data;
 
 use nject::injectable;
 use sea_orm::{DbErr::RecordNotUpdated, Set};

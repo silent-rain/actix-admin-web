@@ -1,5 +1,5 @@
 //! 用户信息表
-//! Entity: [`entity::prelude::UserBase`]
+//! Entity: [`entity::user::UserBase`]
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Index, Table},

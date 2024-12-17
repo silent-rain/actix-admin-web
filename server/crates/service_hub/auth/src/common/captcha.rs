@@ -1,6 +1,6 @@
 //! 验证码
 
-use entity::sys_image_captcha;
+use entity::system::sys_image_captcha;
 use system::ImageCaptchaDao;
 
 use code::{Error, ErrorMsg};

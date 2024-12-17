@@ -4,7 +4,7 @@ use std::sync::Arc;
 use crate::dto::image_captcha::GetImageCaptchaListReq;
 
 use database::{Pagination, PoolTrait};
-use entity::{prelude::SysImageCaptcha, sys_image_captcha};
+use entity::system::{sys_image_captcha, SysImageCaptcha};
 use nject::injectable;
 
 use sea_orm::{

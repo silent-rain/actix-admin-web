@@ -4,7 +4,7 @@ use std::sync::Arc;
 use crate::dto::dict_dimension::GetDictDimensionListReq;
 
 use database::{Pagination, PoolTrait};
-use entity::{prelude::SysDictDimension, sys_dict_dimension};
+use entity::system::{sys_dict_dimension, SysDictDimension};
 use nject::injectable;
 
 use sea_orm::{

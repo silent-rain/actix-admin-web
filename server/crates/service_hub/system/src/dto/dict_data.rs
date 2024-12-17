@@ -1,6 +1,6 @@
 //! 字典数据管理
 
-use entity::sys_dict_data;
+use entity::system::sys_dict_data;
 
 use actix_validator::Validate;
 

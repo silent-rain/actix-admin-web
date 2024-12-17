@@ -5,7 +5,7 @@ use crate::{
 };
 
 use code::{Error, ErrorMsg};
-use entity::sys_config;
+use entity::system::sys_config;
 use entity::utils::GenericTree;
 
 use nject::injectable;

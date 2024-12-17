@@ -1,5 +1,5 @@
 //! 菜单表
-//! Entity: [`entity::prelude::PermMenu`]
+//! Entity: [`entity::permission::Menu`]
 
 use sea_orm::{
     sea_query::{ColumnDef, Expr, Table},

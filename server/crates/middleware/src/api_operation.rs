@@ -7,7 +7,7 @@ use std::{
 
 use code::ErrorMsg;
 use context::Context;
-use entity::log_api_operation;
+use entity::log::log_api_operation;
 use response::Response;
 use service_hub::{
     inject::AInjectProvider,
